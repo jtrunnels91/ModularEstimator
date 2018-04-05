@@ -488,7 +488,6 @@ class AttitudeState6DOF():
     # numerical integration of kinematics equation.
     #
     # @return Returns the error-state time update matrix, \f$\boldsymbol{\Phi}\f$
-    
     def errorStateTimeUpdateMatrix(
             self,
             myOmega,
