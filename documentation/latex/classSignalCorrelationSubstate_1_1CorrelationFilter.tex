@@ -1,0 +1,82 @@
+\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter}{}\section{Signal\+Correlation\+Substate.\+Correlation\+Filter Class Reference}
+\label{classSignalCorrelationSubstate_1_1CorrelationFilter}\index{Signal\+Correlation\+Substate.\+Correlation\+Filter@{Signal\+Correlation\+Substate.\+Correlation\+Filter}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def {\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self, signal, filter\+Order, dT, correlation\+Vector, correlation\+Vector\+Covariance, signal\+Delay=0, delay\+Var=0, center\+Peak=True)\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_a824dfd77c5bb3cdafac7436147fe28fe}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_a824dfd77c5bb3cdafac7436147fe28fe}
+
+\item 
+def \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a6f498c6905d1c8aab4efef99a98b353e}{dimension} (self)
+\begin{DoxyCompactList}\small\item\em Functions Required To Function as a \char`\"{}\+Substate\char`\"{} \# \# The following functions are required in order for this class to be used \# as a substate in Modular\+Filter. \end{DoxyCompactList}\item 
+def {\bfseries get\+State\+Vector} (self)\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_ad5a7ad0c1796ca7ba7e0f25d4e553478}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_ad5a7ad0c1796ca7ba7e0f25d4e553478}
+
+\item 
+def {\bfseries store\+State\+Vector} (self, delta\+X\+Plus, P\+Plus, time, a\+Priori=False)\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_af7eb96af58ba70eefcf85a3529939afe}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_af7eb96af58ba70eefcf85a3529939afe}
+
+\item 
+def {\bfseries covariance} (self)\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_a134b27eecbbcdab8ebe31ed3e8aaf186}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_a134b27eecbbcdab8ebe31ed3e8aaf186}
+
+\item 
+def {\bfseries time\+Update} (self, dT, dynamics=None)\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_a07a8c37a30c3d0a057049e0ff2eac67f}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_a07a8c37a30c3d0a057049e0ff2eac67f}
+
+\item 
+def {\bfseries get\+Measurement\+Matrices} (self, measurement, source=None)\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_ae7338456be781e322eba5bce4e41199f}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_ae7338456be781e322eba5bce4e41199f}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries signal}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_aa8d4b67731322e27598866d1cec84877}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_aa8d4b67731322e27598866d1cec84877}
+
+\item 
+{\bfseries filter\+Order}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_a4b49b7bd52c1346cca0342942a5bbbb6}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_a4b49b7bd52c1346cca0342942a5bbbb6}
+
+\item 
+{\bfseries dT}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_a500e4823c314d54a21f236b6b896c8eb}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_a500e4823c314d54a21f236b6b896c8eb}
+
+\item 
+{\bfseries c\+Hat}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_ad07b1d484b9ab77a1a8fc215f10faf15}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_ad07b1d484b9ab77a1a8fc215f10faf15}
+
+\item 
+{\bfseries P\+Hat}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_a9b079080abde4a661f95687e8ea89827}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_a9b079080abde4a661f95687e8ea89827}
+
+\item 
+{\bfseries delay}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_ae32dc6df9ef5f56e5238cb79dded0681}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_ae32dc6df9ef5f56e5238cb79dded0681}
+
+\item 
+{\bfseries delay\+Var}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_a34d52beb18c131f2305689d48f612a5a}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_a34d52beb18c131f2305689d48f612a5a}
+
+\item 
+{\bfseries center\+Peak}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_a8e53182c2ff431a6a545a265cda6ba48}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_a8e53182c2ff431a6a545a265cda6ba48}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 15 of file Signal\+Correlation\+Substate.\+py.
+
+
+
+\subsection{Member Function Documentation}
+\index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!dimension@{dimension}}
+\index{dimension@{dimension}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
+\subsubsection[{\texorpdfstring{dimension(self)}{dimension(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def Signal\+Correlation\+Substate.\+Correlation\+Filter.\+dimension (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_a6f498c6905d1c8aab4efef99a98b353e}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_a6f498c6905d1c8aab4efef99a98b353e}
+
+
+Functions Required To Function as a \char`\"{}\+Substate\char`\"{} \# \# The following functions are required in order for this class to be used \# as a substate in Modular\+Filter. 
+
+The inside of the functions may be \# changed or updated, but their \char`\"{}black box\char`\"{} behavior must remain the \# same; i.\+e. they must still perform the same essential functions and \# return the same things. \# 
+
+Definition at line 55 of file Signal\+Correlation\+Substate.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Signal\+Correlation\+Substate.\+py\end{DoxyCompactItemize}

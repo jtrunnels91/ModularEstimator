@@ -1,0 +1,71 @@
+\hypertarget{classState_1_1ModularFilter}{}\section{State.\+Modular\+Filter Class Reference}
+\label{classState_1_1ModularFilter}\index{State.\+Modular\+Filter@{State.\+Modular\+Filter}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def {\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self, measurement\+Validation\+Threshold=1e-\/3, time=0)\hypertarget{classState_1_1ModularFilter_adfd8a992021bd65553e9def54c5dff3b}{}\label{classState_1_1ModularFilter_adfd8a992021bd65553e9def54c5dff3b}
+
+\item 
+def {\bfseries add\+States} (self, name, state\+Object)\hypertarget{classState_1_1ModularFilter_adca05e3ee0d9fc67f136e9530a8cbc7e}{}\label{classState_1_1ModularFilter_adca05e3ee0d9fc67f136e9530a8cbc7e}
+
+\item 
+def {\bfseries add\+Signal\+Source} (self, name, signal\+Source\+Object)\hypertarget{classState_1_1ModularFilter_a1b349f50ec22b30eb007a014c045cc94}{}\label{classState_1_1ModularFilter_a1b349f50ec22b30eb007a014c045cc94}
+
+\item 
+def {\bfseries time\+Update\+E\+KF} (self, dT, dynamics=None)\hypertarget{classState_1_1ModularFilter_ac9d579bcc4e100cd46bbfc2a0c86e51a}{}\label{classState_1_1ModularFilter_ac9d579bcc4e100cd46bbfc2a0c86e51a}
+
+\item 
+def {\bfseries compute\+Association\+Probabilities} (self, measurement)\hypertarget{classState_1_1ModularFilter_aa04c2b4d007a4bc5e98d5da00d6683ea}{}\label{classState_1_1ModularFilter_aa04c2b4d007a4bc5e98d5da00d6683ea}
+
+\item 
+def {\bfseries measurement\+Update\+E\+KF} (self, measurement, source\+Name)\hypertarget{classState_1_1ModularFilter_a1e6b78bdafffb5298fd6e5d2a022a878}{}\label{classState_1_1ModularFilter_a1e6b78bdafffb5298fd6e5d2a022a878}
+
+\item 
+def {\bfseries measurement\+Update\+ML} (self, measurement)\hypertarget{classState_1_1ModularFilter_ac2d6be561f461f0501e451fc5be0811f}{}\label{classState_1_1ModularFilter_ac2d6be561f461f0501e451fc5be0811f}
+
+\item 
+def {\bfseries measurement\+Update\+J\+P\+D\+AF} (self, measurement)\hypertarget{classState_1_1ModularFilter_a0da499cc21acaf9753711553102b5469}{}\label{classState_1_1ModularFilter_a0da499cc21acaf9753711553102b5469}
+
+\item 
+def {\bfseries get\+Global\+State\+Vector} (self)\hypertarget{classState_1_1ModularFilter_a6547493c7b2ad077dfae3e76b5619a0e}{}\label{classState_1_1ModularFilter_a6547493c7b2ad077dfae3e76b5619a0e}
+
+\item 
+def {\bfseries store\+Global\+State\+Vector} (self, global\+State\+Vector, covariance, a\+Priori=False)\hypertarget{classState_1_1ModularFilter_a3c510ca8c96da3b0e26215935e18beaa}{}\label{classState_1_1ModularFilter_a3c510ca8c96da3b0e26215935e18beaa}
+
+\item 
+def {\bfseries local\+State\+Update\+Matrices} (self, measurement, signal\+Source\+Name, x\+Minus, P\+Minus)\hypertarget{classState_1_1ModularFilter_a90d6a9c3ae7a248577d4be06dd58a0c8}{}\label{classState_1_1ModularFilter_a90d6a9c3ae7a248577d4be06dd58a0c8}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries total\+Dimension}\hypertarget{classState_1_1ModularFilter_a40c2ac71e5d1d363f0410ce94b9e8345}{}\label{classState_1_1ModularFilter_a40c2ac71e5d1d363f0410ce94b9e8345}
+
+\item 
+{\bfseries covariance\+Matrix}\hypertarget{classState_1_1ModularFilter_a1981026f261047a45a6a7d89bbf1b7de}{}\label{classState_1_1ModularFilter_a1981026f261047a45a6a7d89bbf1b7de}
+
+\item 
+{\bfseries sub\+States}\hypertarget{classState_1_1ModularFilter_af6128daa99126397f282ec0fcdcd3e56}{}\label{classState_1_1ModularFilter_af6128daa99126397f282ec0fcdcd3e56}
+
+\item 
+{\bfseries signal\+Sources}\hypertarget{classState_1_1ModularFilter_a23afc4a8d6b45e56b68ab99d8b9d9efa}{}\label{classState_1_1ModularFilter_a23afc4a8d6b45e56b68ab99d8b9d9efa}
+
+\item 
+{\bfseries t\+Current}\hypertarget{classState_1_1ModularFilter_a2b816cacd5988012193b17fcc0032d9d}{}\label{classState_1_1ModularFilter_a2b816cacd5988012193b17fcc0032d9d}
+
+\item 
+{\bfseries measurement\+Validation\+Threshold}\hypertarget{classState_1_1ModularFilter_adf637093941f85a6ca14a122f232657a}{}\label{classState_1_1ModularFilter_adf637093941f85a6ca14a122f232657a}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 14 of file State.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+State.\+py\end{DoxyCompactItemize}
