@@ -498,7 +498,10 @@ class AttitudeState6DOF():
         omegaNormDT = omegaNorm * deltaT
         omegaSkew = self.skewSymmetric(myOmega)
         omegaSkewSquare = power(omegaSkew, 2)
-        if omegaNorm>1e-100:
+
+        # Check to see if omega is very close to zero.  If it is, avoid error
+        # dividing by zero.
+        if omegaNorm > 1e-100:
             phi11 = (
                 np.eye(3) -
                 (omegaSkew * sin(omegaNormDT)/omegaNorm) +
