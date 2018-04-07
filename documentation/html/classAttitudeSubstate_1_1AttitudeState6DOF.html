@@ -98,21 +98,34 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <p>Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states.  
  <a href="classAttitudeSubstate_1_1AttitudeState6DOF.html#details">More...</a></p>
+<div class="dynheader">
+Inheritance diagram for AttitudeSubstate.AttitudeState6DOF:</div>
+<div class="dyncontent">
+<div class="center"><img src="classAttitudeSubstate_1_1AttitudeState6DOF__inherit__graph.png" border="0" usemap="#AttitudeSubstate_8AttitudeState6DOF_inherit__map" alt="Inheritance graph"/></div>
+<map name="AttitudeSubstate_8AttitudeState6DOF_inherit__map" id="AttitudeSubstate_8AttitudeState6DOF_inherit__map">
+<area shape="rect" id="node2" href="classSubStates_1_1SubState.html" title="SubStates.SubState" alt="" coords="19,5,160,32"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for AttitudeSubstate.AttitudeState6DOF:</div>
+<div class="dyncontent">
+<div class="center"><img src="classAttitudeSubstate_1_1AttitudeState6DOF__coll__graph.png" border="0" usemap="#AttitudeSubstate_8AttitudeState6DOF_coll__map" alt="Collaboration graph"/></div>
+<map name="AttitudeSubstate_8AttitudeState6DOF_coll__map" id="AttitudeSubstate_8AttitudeState6DOF_coll__map">
+<area shape="rect" id="node2" href="classSubStates_1_1SubState.html" title="SubStates.SubState" alt="" coords="19,5,160,32"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a03f5d73d42bacb8b381e637a3a679fda"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a03f5d73d42bacb8b381e637a3a679fda">__init__</a> (self, attitudeQuaternion=Quaternion([1, 0, 0, 0]), attitudeErrorCovariance=np.eye(3), gyroBias=np.zeros(3), gyroBiasCovariance=np.eye(3))</td></tr>
-<tr class="memdesc:a03f5d73d42bacb8b381e637a3a679fda"><td class="mdescLeft">&#160;</td><td class="mdescRight"><b>init</b>  <a href="#a03f5d73d42bacb8b381e637a3a679fda">More...</a><br /></td></tr>
-<tr class="separator:a03f5d73d42bacb8b381e637a3a679fda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a337e9fa07d0211f86b359e5d9deee1b8"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a337e9fa07d0211f86b359e5d9deee1b8">__init__</a> (self, attitudeQuaternion=Quaternion([1, 0, 0, 0]), attitudeErrorCovariance=np.eye(3), gyroBias=np.zeros(3), gyroBiasCovariance=np.eye(3), t=0)</td></tr>
+<tr class="memdesc:a337e9fa07d0211f86b359e5d9deee1b8"><td class="mdescLeft">&#160;</td><td class="mdescRight"><b>init</b>  <a href="#a337e9fa07d0211f86b359e5d9deee1b8">More...</a><br /></td></tr>
+<tr class="separator:a337e9fa07d0211f86b359e5d9deee1b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e420e4a7806669c1286a1a70ce019da"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a8e420e4a7806669c1286a1a70ce019da">getStateVector</a> (self)</td></tr>
 <tr class="memdesc:a8e420e4a7806669c1286a1a70ce019da"><td class="mdescLeft">&#160;</td><td class="mdescRight">getStateVector is responsible for passing whatever version of the state vector should be used for time or measurement updates.  <a href="#a8e420e4a7806669c1286a1a70ce019da">More...</a><br /></td></tr>
 <tr class="separator:a8e420e4a7806669c1286a1a70ce019da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad1116f42d28a7f8b72a621f31a2fc19"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#aad1116f42d28a7f8b72a621f31a2fc19">storeStateVector</a> (self, xPlus, PPlus, time, aPriori=False)</td></tr>
 <tr class="memdesc:aad1116f42d28a7f8b72a621f31a2fc19"><td class="mdescLeft">&#160;</td><td class="mdescRight">storeStateVector is responsible for taking an updated version of the state vector, and storing it in the class variables.  <a href="#aad1116f42d28a7f8b72a621f31a2fc19">More...</a><br /></td></tr>
 <tr class="separator:aad1116f42d28a7f8b72a621f31a2fc19"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed3a65b9959a471748426c89e7a31b4a"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#aed3a65b9959a471748426c89e7a31b4a">dimension</a> (self)</td></tr>
-<tr class="memdesc:aed3a65b9959a471748426c89e7a31b4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">dimension returns the dimension of the sub-state vector  <a href="#aed3a65b9959a471748426c89e7a31b4a">More...</a><br /></td></tr>
-<tr class="separator:aed3a65b9959a471748426c89e7a31b4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44691ece9ee2a36d3c11f12e72004e41"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a44691ece9ee2a36d3c11f12e72004e41">covariance</a> (self)</td></tr>
 <tr class="memdesc:a44691ece9ee2a36d3c11f12e72004e41"><td class="mdescLeft">&#160;</td><td class="mdescRight">dimension returns the covariance of the sub-state vector  <a href="#a44691ece9ee2a36d3c11f12e72004e41">More...</a><br /></td></tr>
 <tr class="separator:a44691ece9ee2a36d3c11f12e72004e41"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -128,24 +141,31 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a98463a04f2b7f78389d7cce944139afd"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a98463a04f2b7f78389d7cce944139afd">errorStateTimeUpdateMatrix</a> (self, myOmega, deltaT)</td></tr>
 <tr class="memdesc:a98463a04f2b7f78389d7cce944139afd"><td class="mdescLeft">&#160;</td><td class="mdescRight">errorStateTimeUpdateMatrix produces a time-update matrix for the attitude error state  <a href="#a98463a04f2b7f78389d7cce944139afd">More...</a><br /></td></tr>
 <tr class="separator:a98463a04f2b7f78389d7cce944139afd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc5b2c8345bcd948d35b438fce184dee"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc5b2c8345bcd948d35b438fce184dee"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>processNoiseMatrix</b> (self, deltaT, omegaVar, biasVar)</td></tr>
+<tr class="memitem:abc5b2c8345bcd948d35b438fce184dee"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#abc5b2c8345bcd948d35b438fce184dee">processNoiseMatrix</a> (self, deltaT, omegaVar, biasVar)</td></tr>
+<tr class="memdesc:abc5b2c8345bcd948d35b438fce184dee"><td class="mdescLeft">&#160;</td><td class="mdescRight">processNoiseMatrix generates a the process noise matrix  <a href="#abc5b2c8345bcd948d35b438fce184dee">More...</a><br /></td></tr>
 <tr class="separator:abc5b2c8345bcd948d35b438fce184dee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3292931688716329fb80cbeac83f7ee7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3292931688716329fb80cbeac83f7ee7"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>RaDecMeasMatrices</b> (self, source, measurement)</td></tr>
+<tr class="memitem:a3292931688716329fb80cbeac83f7ee7"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a3292931688716329fb80cbeac83f7ee7">RaDecMeasMatrices</a> (self, source, measurement)</td></tr>
+<tr class="memdesc:a3292931688716329fb80cbeac83f7ee7"><td class="mdescLeft">&#160;</td><td class="mdescRight">RaDecMeasMatrices generates measurement matrices for a angle measurement of a point source.  <a href="#a3292931688716329fb80cbeac83f7ee7">More...</a><br /></td></tr>
 <tr class="separator:a3292931688716329fb80cbeac83f7ee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34f52f0e701e78ba8e92bff57f56110d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a34f52f0e701e78ba8e92bff57f56110d"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>eulerAngles</b> (self)</td></tr>
+<tr class="memitem:a34f52f0e701e78ba8e92bff57f56110d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a34f52f0e701e78ba8e92bff57f56110d">eulerAngles</a> (self)</td></tr>
+<tr class="memdesc:a34f52f0e701e78ba8e92bff57f56110d"><td class="mdescLeft">&#160;</td><td class="mdescRight">eulerAngles computes the Euler angles (roll, pitch and yaw) based on the current attitude.  <a href="#a34f52f0e701e78ba8e92bff57f56110d">More...</a><br /></td></tr>
 <tr class="separator:a34f52f0e701e78ba8e92bff57f56110d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4728d7547aee8612fdd5e2875a37f8a2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4728d7547aee8612fdd5e2875a37f8a2"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>RaDecRoll</b> (self)</td></tr>
+<tr class="memitem:a4728d7547aee8612fdd5e2875a37f8a2"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a4728d7547aee8612fdd5e2875a37f8a2">RaDecRoll</a> (self)</td></tr>
+<tr class="memdesc:a4728d7547aee8612fdd5e2875a37f8a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">RaDecRoll returns the current attitude in terms of right ascension, declination, and roll  <a href="#a4728d7547aee8612fdd5e2875a37f8a2">More...</a><br /></td></tr>
 <tr class="separator:a4728d7547aee8612fdd5e2875a37f8a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5afc5e0352e10e5c11e45d5b3fa8f4e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae5afc5e0352e10e5c11e45d5b3fa8f4e"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>sidUnitVec</b> (self, RaDec)</td></tr>
+<tr class="memitem:ae5afc5e0352e10e5c11e45d5b3fa8f4e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#ae5afc5e0352e10e5c11e45d5b3fa8f4e">sidUnitVec</a> (self, RaDec)</td></tr>
+<tr class="memdesc:ae5afc5e0352e10e5c11e45d5b3fa8f4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">sidUnitVec generates a unit vector from two angles  <a href="#ae5afc5e0352e10e5c11e45d5b3fa8f4e">More...</a><br /></td></tr>
 <tr class="separator:ae5afc5e0352e10e5c11e45d5b3fa8f4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe4e6f5ef09bd1fab2e390f3748af76a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe4e6f5ef09bd1fab2e390f3748af76a"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>skewSymmetric</b> (self, vector)</td></tr>
+<tr class="memitem:afe4e6f5ef09bd1fab2e390f3748af76a"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#afe4e6f5ef09bd1fab2e390f3748af76a">skewSymmetric</a> (self, vector)</td></tr>
+<tr class="memdesc:afe4e6f5ef09bd1fab2e390f3748af76a"><td class="mdescLeft">&#160;</td><td class="mdescRight">skewSymmetric generates a skew-symmetric matrix from a 3x1 vector  <a href="#afe4e6f5ef09bd1fab2e390f3748af76a">More...</a><br /></td></tr>
 <tr class="separator:afe4e6f5ef09bd1fab2e390f3748af76a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classSubStates_1_1SubState"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classSubStates_1_1SubState')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classSubStates_1_1SubState.html">SubStates.SubState</a></td></tr>
+<tr class="memitem:a5ff829fb892680db4e3643e6b1f6cc9b inherit pub_methods_classSubStates_1_1SubState"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ff829fb892680db4e3643e6b1f6cc9b"></a>
+def&#160;</td><td class="memItemRight" valign="bottom"><b>__init__</b> (self, stateDimension=None, stateVectorHistory=None)</td></tr>
+<tr class="separator:a5ff829fb892680db4e3643e6b1f6cc9b inherit pub_methods_classSubStates_1_1SubState"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4aebea19a134cb871a7c0b6c2709546a inherit pub_methods_classSubStates_1_1SubState"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a">dimension</a> (self)</td></tr>
+<tr class="memdesc:a4aebea19a134cb871a7c0b6c2709546a inherit pub_methods_classSubStates_1_1SubState"><td class="mdescLeft">&#160;</td><td class="mdescRight">dimension returns the dimension of the sub-state vector  <a href="#a4aebea19a134cb871a7c0b6c2709546a">More...</a><br /></td></tr>
+<tr class="separator:a4aebea19a134cb871a7c0b6c2709546a inherit pub_methods_classSubStates_1_1SubState"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -173,6 +193,10 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:af87f4ef871d05fbd84e7e7c91a2865a3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#af87f4ef871d05fbd84e7e7c91a2865a3">eulerAngleVec</a></td></tr>
 <tr class="memdesc:af87f4ef871d05fbd84e7e7c91a2865a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Euler angle history.  <a href="#af87f4ef871d05fbd84e7e7c91a2865a3">More...</a><br /></td></tr>
 <tr class="separator:af87f4ef871d05fbd84e7e7c91a2865a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_attribs_classSubStates_1_1SubState"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classSubStates_1_1SubState')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classSubStates_1_1SubState.html">SubStates.SubState</a></td></tr>
+<tr class="memitem:a24bf2de56fc3037d91cba43d28f3bf60 inherit pub_attribs_classSubStates_1_1SubState"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a24bf2de56fc3037d91cba43d28f3bf60"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>stateVectorHistory</b></td></tr>
+<tr class="separator:a24bf2de56fc3037d91cba43d28f3bf60 inherit pub_attribs_classSubStates_1_1SubState"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states. </p>
@@ -181,9 +205,9 @@ Public Attributes</h2></td></tr>
 <p>The state uses quaternions to store attitude, which avoids issues of gimbal lock and increases numerical stability over other approaches, such as Euler angles. The quaternion itself is not treated as a part of the state vector. Rather, the state vector includes three attitude "error states," which are updated at each measurement, then used to correct the attitude quaternion. After each correction, the error states are set back to zero.</p>
 <p>The algorithms used for the state update mostly come from the book "Fundamentals of Spacecraft Attitude Determination and Control" (FSADC) by Markley and Crassidis. Chapter, section and page numbers will be referenced where appropriate. </p>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00042">42</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00041">41</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a03f5d73d42bacb8b381e637a3a679fda"></a>
+<a class="anchor" id="a337e9fa07d0211f86b359e5d9deee1b8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -215,7 +239,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>gyroBiasCovariance</em> = <code>np.eye(3)</code>&#160;</td>
+          <td class="paramname"><em>gyroBiasCovariance</em> = <code>np.eye(3)</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>t</em> = <code>0</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -268,35 +298,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns covariance matrix, <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a6aac27efa4d5962865f7d3f701c919ab" title="Current joint covariance matrix. ">PHat</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00220">220</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
-
-</div>
-</div>
-<a class="anchor" id="aed3a65b9959a471748426c89e7a31b4a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">def AttitudeSubstate.AttitudeState6DOF.dimension </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>dimension returns the dimension of the sub-state vector </p>
-<dl class="section note"><dt>Note</dt><dd>This function is one of mandatory functions required for <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html" title="Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states...">AttitudeState6DOF</a> to function as a sub-state of <a class="el" href="classState_1_1ModularFilter.html">State.ModularFilter</a>.</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">self</td><td>The object pointer</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Returns the dimension of state vector, 6 </dd></dl>
-
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00207">207</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00224">224</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -360,7 +362,36 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the error-state time update matrix, <img class="formulaInl" alt="$\boldsymbol{\Phi}$" src="form_28.png"/> </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00496">496</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00499">499</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a34f52f0e701e78ba8e92bff57f56110d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def AttitudeSubstate.AttitudeState6DOF.eulerAngles </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>eulerAngles computes the Euler angles (roll, pitch and yaw) based on the current attitude. </p>
+<p>This function computes the Euler angles (or, technically the "Tait-Bryan angles"), i.e. roll, pitch and yaw from the current attitude quaternion <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a36a58a47280151dd544762d9a1d5c35d" title="Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as  ...">qHat</a>.</p>
+<dl class="section note"><dt>Note</dt><dd>See Wikipedia's article on the <a href="https://en.wikipedia.org/wiki/Euler_angles">equatorial coordinate system</a> for more details.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>The object pointer</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A list containing the three angles </dd></dl>
+
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00730">730</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -407,7 +438,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A dictionary containing the measurement matrices H, R, and dY </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00316">316</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00320">320</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -435,7 +466,65 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00135">135</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00152">152</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abc5b2c8345bcd948d35b438fce184dee"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def AttitudeSubstate.AttitudeState6DOF.processNoiseMatrix </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>deltaT</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>omegaVar</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>biasVar</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>processNoiseMatrix generates a the process noise matrix </p>
+<p>This function generates the process noise matrix for time update of attitude error covariance and gyro bias covariance. The process noise matrix is a function propagation time, angular velocity noise, and gyro bias noise. It is defined as follows:</p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \mathbf{Q} = \begin{bmatrix} \left(\sigma_v^2 \Delta t + \frac{1}{3}\sigma_u^2 \Delta t^3\right) \eye[3] &amp; -\left( \frac{1}{2} \sigma_u^2 \Delta t^2 \right) \eye[3] \\ -\left( \frac{1}{2} \sigma_u^2 \Delta t^2 \right) \eye[3] &amp; \left( \sigma_u^2 \Delta t \right) \eye[3] \end{bmatrix} \]" src="form_32.png"/>
+</p>
+<p>where <img class="formulaInl" alt="$\sigma_v^2$" src="form_33.png"/> is the angular velocity noise (i.e. gyro measurement noise) and <img class="formulaInl" alt="$ \sigma_u^2 $" src="form_34.png"/> is the gyro bias process noise.</p>
+<p>See Fundamentals of Spacecraft Attitude Determination and Control, Section 6.2.4, page 260, equation 6.93 for derivation and more details.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>The object pointer </td></tr>
+    <tr><td class="paramname">deltaT</td><td>The amount of time corresponding to the time update </td></tr>
+    <tr><td class="paramname">omegaVar</td><td>The variance of the angular velocity (gyro) measurement </td></tr>
+    <tr><td class="paramname">biasVar</td><td>The variance of the gias bias process noise (indicates how much the gyro bias changes over time) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns the comibined 6x6 process noise matrix </dd></dl>
+
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00569">569</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -494,7 +583,173 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The quaternion time-update matrix <img class="formulaInl" alt="$\bar{\Theta}(\omegaVec[est=True,aPriori=True, t=k], \Delta T)$" src="form_20.png"/> </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00411">411</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00415">415</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a3292931688716329fb80cbeac83f7ee7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def AttitudeSubstate.AttitudeState6DOF.RaDecMeasMatrices </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>measurement</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>RaDecMeasMatrices generates measurement matrices for a angle measurement of a point source. </p>
+<p>This function generates the set of measurement matrices <img class="formulaInl" alt="$ \mathbf{H} $" src="form_42.png"/>, <img class="formulaInl" alt="$ \mathbf{dY} $" src="form_40.png"/>, and <img class="formulaInl" alt="$ \mathbf{R} $" src="form_39.png"/> corresponding to an inferred unit vector measurement from a set of two angle measurments (local right ascension and declination of a point source).</p>
+<p>The measurement matrices are a function of the measurement itself, the source from which the measurement originated, and the current estimate of attitude, <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a36a58a47280151dd544762d9a1d5c35d" title="Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as  ...">qHat</a>. They are defined as follows:</p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \mathbf{H}_k[\sv[aPriori=True,timeIndex=k]] = A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \times \]" src="form_44.png"/>
+</p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \mathbf{dY} = \measurementVec[S](\RADEC) - A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \]" src="form_50.png"/>
+</p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \mathbf{R} = \eye[3] \sigma^2_{\RADEC} \]" src="form_54.png"/>
+</p>
+<p>The measured unit vector is a unit vector computed from the measured angles, using <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#ae5afc5e0352e10e5c11e45d5b3fa8f4e" title="sidUnitVec generates a unit vector from two angles ">sidUnitVec</a>.</p>
+<p>See Fundamentals of Spacecraft Attitude Determination and Control, Section 6.2.4, page 257, Table 6.3 for more details and derivation.</p>
+<dl class="section note"><dt>Note</dt><dd>Currently, the measurement noise matrix is an identity matrix mutiplied by the angle measurement error. This is my interpretation of Section 6.2.3 in FSADC. However, if we derive the measurement noise matrix using the usual EKF method, we get a different result which results in an unstable estimator. I'm not convinced I understand why this method is right, or why the EKF method is unstable, but it works, so we're using it for now.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>The object pointer </td></tr>
+    <tr><td class="paramname">source</td><td>A <a class="el" href="classSignals_1_1PointSource.html">Signals.PointSource</a> object from which the measurement was generated. </td></tr>
+    <tr><td class="paramname">measurement</td><td>A dictionary containing the right ascension and declination measurements as sub-dictionaries, each with their own value and variance.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A dictionary containing the measurement matrices H, R, and dY </dd></dl>
+
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00648">648</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4728d7547aee8612fdd5e2875a37f8a2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def AttitudeSubstate.AttitudeState6DOF.RaDecRoll </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>RaDecRoll returns the current attitude in terms of right ascension, declination, and roll </p>
+<p>This function essentially computes the euler angles (1-2-3) from the current attitude quaternion <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a36a58a47280151dd544762d9a1d5c35d" title="Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as  ...">qHat</a> and returns them in reverse order (3-2-1). This is helpful because the attitude of spacecraft is commonly expressed in terms of RA-Dec-Roll, rather than roll-pitch-yaw which is more standard in other aerospace applications.</p>
+<dl class="section note"><dt>Note</dt><dd>See Wikipedia's article on the <a href="https://en.wikipedia.org/wiki/Equatorial_coordinate_system">equatorial coordinate system</a> for more details.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>The object pointer</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A list containing the three angles </dd></dl>
+
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00754">754</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ae5afc5e0352e10e5c11e45d5b3fa8f4e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def AttitudeSubstate.AttitudeState6DOF.sidUnitVec </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>RaDec</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>sidUnitVec generates a unit vector from two angles </p>
+<p>This function computes the unit vector in siderial coordinates from a measurement of right ascension and declination. This is a "helper" function; it doesn't really need to be included in the class and could be moved to a seperate library probably.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>Object pointer </td></tr>
+    <tr><td class="paramname">RaDec</td><td>A dictionary containing the two angles</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A unit vector generated from the angles given </dd></dl>
+
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00773">773</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="afe4e6f5ef09bd1fab2e390f3748af76a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def AttitudeSubstate.AttitudeState6DOF.skewSymmetric </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>vector</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>skewSymmetric generates a skew-symmetric matrix from a 3x1 vector </p>
+<p>This function generates a skew symmetric matrix from a 3x1 vector. It is a "helper" function and doesn't actually need to be a member function. It could (should?) be moved to its own library.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>Object pointer </td></tr>
+    <tr><td class="paramname">vector</td><td>The vector</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The skew symmetric matrix </dd></dl>
+
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00795">795</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -555,7 +810,7 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00168">168</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00185">185</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -603,7 +858,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A dict containing the state transition matrix ("F") and the process noise matrix ("Q") </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00250">250</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00254">254</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -621,7 +876,7 @@ Public Attributes</h2></td></tr>
 <p>Array of Euler angle history. </p>
 <p>This is a SmartPanda array that stores the history of time, Euler angles, and Euler angle covariances. </p>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00102">102</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00103">103</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -638,7 +893,7 @@ Public Attributes</h2></td></tr>
 <p>Last set of measurement matrices. </p>
 <p>This allows class to avoid redundant computation of the same set of measurement matrices. </p>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00097">97</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00098">98</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -655,7 +910,7 @@ Public Attributes</h2></td></tr>
 <p>Current joint covariance matrix. </p>
 <p>Upper 3x3 diagonal contains covariance of the attitude estimate (related to <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a36a58a47280151dd544762d9a1d5c35d" title="Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as  ...">qHat</a>), while lower 3x3 diagonal contains the covariance of the gyro bias <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a1b8eff7c89a7a03875dc04263da7ec18" title="Current estimate of gyro bias. ">bHat</a>. </p>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00083">83</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00084">84</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -671,7 +926,7 @@ Public Attributes</h2></td></tr>
 
 <p>Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as <img class="formulaInl" alt="$\mathbf{\hat{q}}^{-}_{k}$" src="form_11.png"/> for the a priori value, or <img class="formulaInl" alt="$\mathbf{\hat{q}}^{+}_{k}$" src="form_12.png"/> for the a posteriori value. </p>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00074">74</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00075">75</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>

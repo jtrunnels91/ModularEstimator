@@ -83,7 +83,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>State</b></li><li class="navelem"><a class="el" href="classState_1_1ModularFilter.html">ModularFilter</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespaceState.html">State</a></li><li class="navelem"><a class="el" href="classState_1_1ModularFilter.html">ModularFilter</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -154,8 +154,11 @@ Public Attributes</h2></td></tr>
 <tr class="separator:adf637093941f85a6ca14a122f232657a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock">
-<p>Definition at line <a class="el" href="State_8py_source.html#l00014">14</a> of file <a class="el" href="State_8py_source.html">State.py</a>.</p>
+<div class="textblock"><p>This class is designed to facilitate a variety of estimation algorithms in a modular way, i.e. in a way that allows maximum amount of flexibility with minimum amount of code duplication.</p>
+<p>The idea behind this class is that all of the functions which are "generic" to an estimation algorithm can be written just once, as a part of this class. Then the code contained here can be implemented on a variety of different estimation problems without having to duplicate code.</p>
+<p>The basic estimation model implemented here works as follows. The overall state, i.e. all of the quantities to be estimated, are represented by <a class="el" href="classSubStates_1_1SubState.html">SubStates.SubState</a> objects. Measurements of these states are represented by <a class="el" href="classSignals_1_1SignalSource.html">Signals.SignalSource</a> objects. The <a class="el" href="classState_1_1ModularFilter.html">ModularFilter</a> class is responsible for doing time-updates and measurement-updates on these states. These objects are responsible for doing all of the things that are particular to those states, and those signals, respectively. For instance, generation of time-update and measurement update matrices is handled by the <a class="el" href="classSubStates_1_1SubState.html">SubStates.SubState</a> objects. </p>
+
+<p>Definition at line <a class="el" href="State_8py_source.html#l00035">35</a> of file <a class="el" href="State_8py_source.html">State.py</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="State_8py_source.html">State.py</a></li>
 </ul>

@@ -1,9 +1,8 @@
 ## @package AttitudeSubstate
 # This package contains the AttitudeState6DOF class.
-
 import numpy as np
 from scipy.linalg import block_diag
-from numpy import sin, cos, arcsin, arccos, arctan2, square, sqrt, abs, power
+from numpy import sin, cos, arcsin, arccos, arctan2, square, sqrt, power
 from numpy.linalg import norm
 from pyquaternion import Quaternion
 
@@ -11,9 +10,9 @@ import sys
 import os
 sys.path.append("/home/joel/Documents/astroSourceTracking/libraries")
 from SpaceGeometry import *
+from SubStates import SubState
 from Signals import PointSource
 from SmartPanda import SmartPanda
-
 
 ## @class AttitudeState6DOF
 # @brief Estimates the attitude of a vehicle in three dimensions, along with
@@ -39,7 +38,7 @@ from SmartPanda import SmartPanda
 # "Fundamentals of Spacecraft Attitude Determination and Control" (FSADC) by
 # Markley and Crassidis.  Chapter, section and page numbers will be referenced
 # where appropriate.
-class AttitudeState6DOF():
+class AttitudeState6DOF(SubState):
     
     ## @fun __init__
     # @brief This function initializes the 6DOF attitude estimator
@@ -64,8 +63,10 @@ class AttitudeState6DOF():
             attitudeQuaternion=Quaternion([1,0,0,0]),
             attitudeErrorCovariance=np.eye(3),
             gyroBias=np.zeros(3),
-            gyroBiasCovariance=np.eye(3)
+            gyroBiasCovariance=np.eye(3),
+            t=0
             ):
+
         
         ## @brief Current estimate of attitude, stored as a Quaternion object
         # Mathematically generally referred to as \f$\mathbf{\hat{q}}^{-}_{k}\f$
@@ -100,8 +101,24 @@ class AttitudeState6DOF():
         # @details This is a SmartPanda array that stores the history of time,
         # Euler angles, and Euler angle covariances.
         self.eulerAngleVec = SmartPanda(
-            ['t', 'eulerAngles', 'eulerSTD'],
-            [1, 3, 3]
+            {'t': t,
+             'eulerAngles': self.eulerAngles,
+             'eulerSTD': np.sqrt(self.PHat.diagonal()[0:3])
+             }
+        )
+
+        super().__init__(
+            stateDimension=6,
+            stateVectorHistory=SmartPanda(
+                {
+                    't': t,
+                    'q': self.qHat.q,
+                    'attitudeError': np.zeros(3),
+                    'bHat': self.bHat,
+                    'P': self.covariance,
+                    'aPrior': True
+                }
+            )
         )
 
         return
@@ -193,19 +210,6 @@ class AttitudeState6DOF():
         self.PHat = PPlus
         
         return
-
-    ## @fun dimension returns the dimension of the sub-state vector
-    #
-    # @note This function is one of mandatory functions required for
-    # AttitudeState6DOF to function as a sub-state of State.ModularFilter.
-    #
-    # @param self The object pointer
-    #
-    # @return Returns the dimension of state vector, 6
-    def dimension(
-            self
-            ):
-        return(6)
     
     ## @fun dimension returns the covariance of the sub-state vector
     #
@@ -527,11 +531,36 @@ class AttitudeState6DOF():
             ])
                     
         return(phi)
-    
-    """
-    See Fundamentals of Spacecraft Attitude Determination and Control,
-    Section 6.2.4, page 260, equation 6.93
-    """
+
+    ## @fun processNoiseMatrix generates a the process noise matrix
+    #
+    # @details
+    # This function generates the process noise matrix for time update of
+    # attitude error covariance and gyro bias covariance.  The process noise
+    # matrix is a function propagation time, angular velocity noise, and gyro
+    # bias noise.  It is defined as follows:
+    #
+    # \f[
+    # \mathbf{Q} = \begin{bmatrix}
+    # \left(\sigma_v^2 \Delta t + \frac{1}{3}\sigma_u^2 \Delta t^3\right) \eye[3] &
+    # -\left( \frac{1}{2} \sigma_u^2 \Delta t^2 \right) \eye[3] \\
+    # -\left( \frac{1}{2} \sigma_u^2 \Delta t^2 \right) \eye[3] &
+    # \left( \sigma_u^2 \Delta t \right) \eye[3]
+    # \end{bmatrix}
+    # \f]
+    #
+    # where \f$\sigma_v^2\f$ is the angular velocity noise (i.e. gyro
+    # measurement noise) and \f$ \sigma_u^2 \f$ is the gyro bias process noise.
+    #
+    # See Fundamentals of Spacecraft Attitude Determination and Control,
+    # Section 6.2.4, page 260, equation 6.93 for derivation and more details.
+    #
+    # @param self The object pointer
+    # @param deltaT The amount of time corresponding to the time update
+    # @param omegaVar The variance of the angular velocity (gyro) measurement
+    # @param biasVar The variance of the gias bias process noise (indicates
+    # how much the gyro bias changes over time)
+    # @return Returns the comibined 6x6 process noise matrix
     def processNoiseMatrix(
             self,
             deltaT,
@@ -558,7 +587,60 @@ class AttitudeState6DOF():
             ])
                     
         return(Q)
-    
+
+    ## @fun RaDecMeasMatrices generates measurement matrices for a angle
+    # measurement of a point source.
+    #
+    # @details
+    # This function generates the set of measurement matrices
+    # \f$ \mathbf{H} \f$, \f$ \mathbf{dY} \f$, and \f$ \mathbf{R} \f$
+    # corresponding to an inferred unit vector measurement from a set of two
+    # angle measurments (local right ascension and declination of a point
+    # source).
+    #
+    # The measurement matrices are a function of the measurement itself, the
+    # source from which the measurement originated, and the current estimate
+    # of attitude, #qHat. They are defined as follows:
+    #
+    # \f[
+    # \mathbf{H}_k[\sv[aPriori=True,timeIndex=k]] =
+    # A(\attVec[est=True,aPriori=True,t=k])
+    # \unitVec[signalSource=S, frame=nav] \times
+    # \f]
+    #
+    # \f[
+    # \mathbf{dY} =
+    # \measurementVec[S](\RADEC) -
+    # A(\attVec[est=True,aPriori=True,t=k])
+    # \unitVec[signalSource=S, frame=nav]
+    # \f]
+    #
+    # \f[
+    # \mathbf{R} =  \eye[3] \sigma^2_{\RADEC}
+    # \f]
+    #
+    # The measured unit vector is a unit vector computed from the measured
+    # angles, using #sidUnitVec.
+    #
+    # See Fundamentals of Spacecraft Attitude Determination and Control,
+    # Section 6.2.4, page 257, Table 6.3 for more details and derivation.
+    #
+    # @note Currently, the measurement noise matrix is an identity matrix
+    # mutiplied by the angle measurement error.  This is my interpretation of
+    # Section 6.2.3 in FSADC.  However, if we derive the measurement noise
+    # matrix using the usual EKF method, we get a different result which
+    # results in an unstable estimator.  I'm not convinced I understand why
+    # this method is right, or why the EKF method is unstable, but it works, so
+    # we're using it for now.
+    #
+    # @param self The object pointer
+    # @param source A Signals.PointSource object from which the measurement
+    # was generated.
+    # @param measurement A dictionary containing the right ascension and
+    # declination measurements as sub-dictionaries, each with their own value
+    # and variance.
+    #
+    # @returns A dictionary containing the measurement matrices H, R, and dY
     def RaDecMeasMatrices(
             self,
             source,
@@ -583,16 +665,16 @@ class AttitudeState6DOF():
         H = np.append(H, np.zeros([3, 3]), axis=1)
 
         varR = measurement['RA']['var']
-        varD = measurement['DEC']['var']
+        # varD = measurement['DEC']['var']
 
-        measR = measurement['RA']['value']
-        measD = measurement['DEC']['value']
+        # measR = measurement['RA']['value']
+        # measD = measurement['DEC']['value']
 
-        sinD = sin(measD)
-        cosD = cos(measD)
+        # sinD = sin(measD)
+        # cosD = cos(measD)
 
-        sinR = sin(measR)
-        cosR = cos(measR)
+        # sinR = sin(measR)
+        # cosR = cos(measR)
 
         # R = np.zeros([2, 2])
         # R[0, 0] = varR
@@ -630,7 +712,21 @@ class AttitudeState6DOF():
             }
         
         return(measMatrices)
-    
+
+    ## @fun eulerAngles computes the Euler angles (roll, pitch and yaw) based
+    # on the current attitude.
+    #
+    # @details This function computes the Euler angles (or, technically the
+    # "Tait-Bryan angles"), i.e. roll, pitch and yaw from the current attitude
+    # quaternion #qHat.
+    #
+    # @note See Wikipedia's article on the
+    # <a href="https://en.wikipedia.org/wiki/Euler_angles">
+    # equatorial coordinate system</a> for more details.
+    #
+    # @param self The object pointer
+    #
+    # @returns A list containing the three angles
     def eulerAngles(self):
         q = self.qHat
         phi = arctan2(2*(q[0]*q[1] + q[2]*q[3]), 1 - 2*(square(q[1]) + square(q[2])))
@@ -639,11 +735,39 @@ class AttitudeState6DOF():
 
         return [phi, theta, psi]
 
+    ## @fun RaDecRoll returns the current attitude in terms of right ascension,
+    # declination, and roll
+    #
+    # @details This function essentially computes the euler angles (1-2-3)
+    # from the current attitude quaternion #qHat and returns them in reverse
+    # order (3-2-1).  This is helpful because the attitude of spacecraft is
+    # commonly expressed in terms of RA-Dec-Roll, rather than roll-pitch-yaw
+    # which is more standard in other aerospace applications.
+    #
+    # @note See Wikipedia's article on the
+    # <a href="https://en.wikipedia.org/wiki/Equatorial_coordinate_system">
+    # equatorial coordinate system</a> for more details.
+    #
+    # @param self The object pointer
+    #
+    # @returns A list containing the three angles
     def RaDecRoll(self):
         eulerAngles = self.eulerAngles()
 
         return([eulerAngles[2], -eulerAngles[1], eulerAngles[0]])
 
+    ## @fun sidUnitVec generates a unit vector from two angles
+    #
+    # @details
+    # This function computes the unit vector in siderial coordinates from a
+    # measurement of right ascension and declination. This is a "helper"
+    # function; it doesn't really need to be included in the class and could
+    # be moved to a seperate library probably.
+    #
+    # @param self Object pointer
+    # @param RaDec A dictionary containing the two angles
+    #
+    # @returns A unit vector generated from the angles given
     def sidUnitVec(
             self,
             RaDec):
@@ -653,7 +777,18 @@ class AttitudeState6DOF():
         sinRA = np.sin(RaDec['RA'])
 
         return np.array([cosD * cosRA, cosD * sinRA, sinD])
-
+    
+    ## @fun skewSymmetric generates a skew-symmetric matrix from a 3x1 vector
+    #
+    # @details
+    # This function generates a skew symmetric matrix from a 3x1 vector.  It
+    # is a "helper" function and doesn't actually need to be a member function.
+    # It could (should?) be moved to its own library.
+    #
+    # @param self Object pointer
+    # @param vector The vector
+    #
+    # @returns The skew symmetric matrix
     def skewSymmetric(
             self,
             vector

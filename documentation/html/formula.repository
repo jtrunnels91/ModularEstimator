@@ -27,3 +27,29 @@
 \form#26:\[ \boldsymbol{\Phi}_{21} = \mathbf{0}_{3 \times 3} \]
 \form#27:\[ \boldsymbol{\Phi}_{22} = \eye[3] \]
 \form#28:$\boldsymbol{\Phi}$
+\form#29:\[ \mathbf{Q} = \begin{bmatrix} \mathbf{Q}_{11} & \mathbf{Q}_{12} \\ \mathbf{Q}_{21} & \mathbf{Q}_{22} \\ \end{bmatrix} \]
+\form#30:\[ \mathbf{Q} = \begin{bmatrix} \left(\sigma_v^2 \Delta t + \frac{1}{3}\sigma_u^2 \Delta t^3 & \mathbf{Q}_{12} \\ \mathbf{Q}_{21} & \mathbf{Q}_{22} \\ \end{bmatrix} \]
+\form#31:\[ \mathbf{Q} = \begin{bmatrix} \left(\sigma_v^2 \Delta t + \frac{1}{3}\sigma_u^2 \Delta t^3\right) \eye[3] & \mathbf{Q}_{12} \\ \mathbf{Q}_{21} & \mathbf{Q}_{22} \\ \end{bmatrix} \]
+\form#32:\[ \mathbf{Q} = \begin{bmatrix} \left(\sigma_v^2 \Delta t + \frac{1}{3}\sigma_u^2 \Delta t^3\right) \eye[3] & -\left( \frac{1}{2} \sigma_u^2 \Delta t^2 \right) \eye[3] \\ -\left( \frac{1}{2} \sigma_u^2 \Delta t^2 \right) \eye[3] & \left( \sigma_u^2 \Delta t \right) \eye[3] \end{bmatrix} \]
+\form#33:$\sigma_v^2$
+\form#34:$ \sigma_u^2 $
+\form#35:$ H $
+\form#36:$ R $
+\form#37:$ dY $
+\form#38:$ mathbf{H} $
+\form#39:$ \mathbf{R} $
+\form#40:$ \mathbf{dY} $
+\form#41:\[ , \]
+\form#42:$ \mathbf{H} $
+\form#43:\[ \mathbf{H}_k[\sv[aPriori=True,timeIndex=k]] = A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \]
+\form#44:\[ \mathbf{H}_k[\sv[aPriori=True,timeIndex=k]] = A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \times \]
+\form#45:\[ \mathbf{R} = \eye[3] \sigma_\RaDec^2 \]
+\form#46:\[ \mathbf{dY} = \measurementVec[S] - A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \]
+\form#47:\[ \mathbf{R} = \eye[3] \sigma_\RADEC^2 \]
+\form#48:\[ \mathbf{dY} = \measurementVec[S](\RADEC[]) - A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \]
+\form#49:\[ \mathbf{R} = \eye[3] \sigma^2_\RADEC[] \]
+\form#50:\[ \mathbf{dY} = \measurementVec[S](\RADEC) - A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \]
+\form#51:\[ \mathbf{R} = \]
+\form#52:\[ \mathbf{R} = \eye[3] \]
+\form#53:\[ \mathbf{R} = \eye[3] \sigma^2 \]
+\form#54:\[ \mathbf{R} = \eye[3] \sigma^2_{\RADEC} \]

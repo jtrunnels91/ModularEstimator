@@ -1,3 +1,6 @@
+## @package State
+# This package contains the ModularFilter class.
+
 import numpy as np
 from scipy.linalg import block_diag
 from numpy import sin, cos, arcsin, arccos, arctan2, square, sqrt, abs, power
@@ -10,7 +13,25 @@ sys.path.append("/home/joel/Documents/astroSourceTracking/libraries")
 from SpaceGeometry import *
 
 
-
+## @class ModularFilter
+# @details
+# This class is designed to facilitate a variety of estimation algorithms in a
+# modular way, i.e. in a way that allows maximum amount of flexibility with
+# minimum amount of code duplication.
+#
+# The idea behind this class is that all of the functions which are "generic"
+# to an estimation algorithm can be written just once, as a part of this class.
+# Then the code contained here can be implemented on a variety of different
+# estimation problems without having to duplicate code.
+#
+# The basic estimation model implemented here works as follows.  The overall
+# state, i.e. all of the quantities to be estimated, are represented by
+# SubStates.SubState objects. Measurements of these states are represented by
+# Signals.SignalSource objects.  The ModularFilter class is responsible for doing time-updates and measurement-updates on these states.
+# These objects are responsible for doing all
+# of the things that are particular to those states, and those signals,
+# respectively.  For instance, generation of time-update and measurement
+# update matrices is handled by the SubStates.SubState objects.
 class ModularFilter():
     def __init__(
             self,

@@ -60,9 +60,13 @@ def {\bfseries local\+State\+Update\+Matrices} (self, measurement, signal\+Sourc
 
 
 \subsection{Detailed Description}
+This class is designed to facilitate a variety of estimation algorithms in a modular way, i.\+e. in a way that allows maximum amount of flexibility with minimum amount of code duplication.
 
+The idea behind this class is that all of the functions which are \char`\"{}generic\char`\"{} to an estimation algorithm can be written just once, as a part of this class. Then the code contained here can be implemented on a variety of different estimation problems without having to duplicate code.
 
-Definition at line 14 of file State.\+py.
+The basic estimation model implemented here works as follows. The overall state, i.\+e. all of the quantities to be estimated, are represented by \hyperlink{classSubStates_1_1SubState}{Sub\+States.\+Sub\+State} objects. Measurements of these states are represented by \hyperlink{classSignals_1_1SignalSource}{Signals.\+Signal\+Source} objects. The \hyperlink{classState_1_1ModularFilter}{Modular\+Filter} class is responsible for doing time-\/updates and measurement-\/updates on these states. These objects are responsible for doing all of the things that are particular to those states, and those signals, respectively. For instance, generation of time-\/update and measurement update matrices is handled by the \hyperlink{classSubStates_1_1SubState}{Sub\+States.\+Sub\+State} objects. 
+
+Definition at line 35 of file State.\+py.
 
 
 
