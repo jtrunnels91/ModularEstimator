@@ -102,7 +102,7 @@ class AttitudeState6DOF(SubState):
         # Euler angles, and Euler angle covariances.
         self.eulerAngleVec = SmartPanda(
             {'t': t,
-             'eulerAngles': self.eulerAngles,
+             'eulerAngles': self.eulerAngles(),
              'eulerSTD': np.sqrt(self.PHat.diagonal()[0:3])
              }
         )
