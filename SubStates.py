@@ -1,4 +1,11 @@
+from abc import ABCMeta, abstractmethod
+
+## @class SubState is designed as a parent-class for 
+#
 class SubState():
+    
+    __metaclass__ = ABCMeta
+    
     def __init__(
             self,
             stateDimension=None,
@@ -21,3 +28,7 @@ class SubState():
             self
             ):
         return(self.__dimension__)
+
+    @abstractmethod
+    def timeUpdate():
+        pass
