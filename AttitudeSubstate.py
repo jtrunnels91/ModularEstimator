@@ -115,7 +115,7 @@ class AttitudeState6DOF(SubState):
                     'q': self.qHat.q,
                     'attitudeError': np.zeros(3),
                     'bHat': self.bHat,
-                    'P': self.covariance,
+                    'P': self.covariance(),
                     'aPrior': True
                 }
             )
