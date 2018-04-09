@@ -344,7 +344,7 @@ class ModularFilter():
         
         for stateName in self.subStates:
             globalStateVector[self.subStates[stateName]['index']] = (
-                self.subStates[stateName]['stateObject'].getStateVector()
+                self.subStates[stateName]['stateObject'].getStateVector()['stateVector']
                 )
         return(globalStateVector)
 
@@ -356,13 +356,15 @@ class ModularFilter():
             ):
         for stateName in self.subStates:
             mySlice = self.subStates[stateName]['index']
-            self.subStates[stateName]['stateObject'].storeStateVector(
-                globalStateVector[mySlice],
-                covariance[mySlice, mySlice],
-                self.tCurrent,
-                aPriori=aPriori
-                )
-        
+            svDict = {
+                'stateVector': globalStateVector[mySlice],
+                'covariance': covariance[mySlice, mySlice],
+                't': self.tCurrent,
+                'aPriori': aPriori
+                }
+
+            self.subStates[stateName]['stateObject'].storeStateVector(svDict)
+            
         return
 
     """

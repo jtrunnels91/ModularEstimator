@@ -14,6 +14,7 @@ from SubStates import SubState
 from Signals import PointSource
 from SmartPanda import SmartPanda
 
+
 ## @class AttitudeState6DOF
 # @brief Estimates the attitude of a vehicle in three dimensions, along with
 # three gyro bias states.
@@ -39,7 +40,7 @@ from SmartPanda import SmartPanda
 # Markley and Crassidis.  Chapter, section and page numbers will be referenced
 # where appropriate.
 class AttitudeState6DOF(SubState):
-    
+
     ## @fun __init__
     # @brief This function initializes the 6DOF attitude estimator
     #
@@ -112,11 +113,10 @@ class AttitudeState6DOF(SubState):
             stateVectorHistory=SmartPanda(
                 {
                     't': t,
-                    'q': self.qHat.q,
-                    'attitudeError': np.zeros(3),
-                    'bHat': self.bHat,
-                    'P': self.covariance(),
-                    'aPrior': True
+                    'stateVector': np.append(np.zeros(3), self.bHat),
+                    'covariance': self.PHat,
+                    'aPriori': True,
+                    'q': self.qHat.q
                 }
             )
         )
@@ -150,7 +150,10 @@ class AttitudeState6DOF(SubState):
     def getStateVector(
             self
             ):
-        return np.append(np.zeros(3), self.bHat)
+        svDict = {
+            'stateVector': np.append(np.zeros(3), self.bHat)
+        }
+        return svDict
 
     ## @fun storeStateVector is responsible for taking an updated version of
     # the state vector, and storing it in the class variables.
@@ -169,24 +172,21 @@ class AttitudeState6DOF(SubState):
     # AttitudeState6DOF to function as a sub-state of State.ModularFilter.
     #
     # @param self The object pointer
-    # @param xPlus A 6 dimensional array (usually numpy) that contains the
-    # updated attitude error state and updated gyro bias state.
-    # @param PPlus A 6x6 array that contains the updated covariance matrix
-    # @param time Contains the time-tag of the new state vector and covariance
-    # matrix
-    # @param aPriori=False An optional tag to indicate whether the updated
+    # @param svDict A dictionary containing the current state vector information.
     # state vector is "a priori" or "a posteriori."
     def storeStateVector(
             self,
-            xPlus,
-            PPlus,
-            time,
-            aPriori=False
+            svDict
             ):
+        xPlus = svDict['stateVector']
+        aPriori = svDict['aPriori']
+        time = svDict['t']
+        PPlus = svDict['covariance']
 
         # Only update the quaternion if the new state vector is the result of
         # a measurement update.  The attitude class is responsible for
         # time-updating the quaternion.
+        
         if aPriori is False:
             errorQ = Quaternion(
                 array=np.array([
@@ -208,7 +208,17 @@ class AttitudeState6DOF(SubState):
         })
 
         self.PHat = PPlus
-        
+
+        super().storeStateVector(
+            {
+                't': time,
+                'stateVector': np.append(np.zeros(3), self.bHat),
+                'covariance': self.PHat,
+                'aPriori': aPriori,
+                'q': self.qHat.q
+            }
+        )
+
         return
     
     ## @fun dimension returns the covariance of the sub-state vector
@@ -258,9 +268,9 @@ class AttitudeState6DOF(SubState):
                 (dynamics is not None) and
                 ('omega' in dynamics)
         ):
-                omegaDict = dynamics['omega']
-                myOmega = omegaDict['value']
-                omegaVar = omegaDict['var']
+            omegaDict = dynamics['omega']
+            myOmega = omegaDict['value']
+            omegaVar = omegaDict['var']
         else:
             myOmega = np.zeros([3])
             omegaVar = 0

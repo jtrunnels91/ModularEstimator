@@ -38,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Packages</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -156,7 +157,7 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class is designed to facilitate a variety of estimation algorithms in a modular way, i.e. in a way that allows maximum amount of flexibility with minimum amount of code duplication.</p>
 <p>The idea behind this class is that all of the functions which are "generic" to an estimation algorithm can be written just once, as a part of this class. Then the code contained here can be implemented on a variety of different estimation problems without having to duplicate code.</p>
-<p>The basic estimation model implemented here works as follows. The overall state, i.e. all of the quantities to be estimated, are represented by <a class="el" href="classSubStates_1_1SubState.html">SubStates.SubState</a> objects. Measurements of these states are represented by <a class="el" href="classSignals_1_1SignalSource.html">Signals.SignalSource</a> objects. The <a class="el" href="classState_1_1ModularFilter.html">ModularFilter</a> class is responsible for doing time-updates and measurement-updates on these states. These objects are responsible for doing all of the things that are particular to those states, and those signals, respectively. For instance, generation of time-update and measurement update matrices is handled by the <a class="el" href="classSubStates_1_1SubState.html">SubStates.SubState</a> objects. </p>
+<p>The basic estimation model implemented here works as follows. The overall state, i.e. all of the quantities to be estimated, are represented by <a class="el" href="classSubStates_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubStates.SubState</a> objects. Measurements of these states are represented by <a class="el" href="classSignals_1_1SignalSource.html">Signals.SignalSource</a> objects. The <a class="el" href="classState_1_1ModularFilter.html">ModularFilter</a> class is responsible for doing time-updates and measurement-updates on these states. These objects are responsible for doing all of the things that are particular to those states, and those signals, respectively. For instance, generation of time-update and measurement update matrices is handled by the <a class="el" href="classSubStates_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubStates.SubState</a> objects. </p>
 
 <p>Definition at line <a class="el" href="State_8py_source.html#l00035">35</a> of file <a class="el" href="State_8py_source.html">State.py</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bhat',['bHat',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a1b8eff7c89a7a03875dc04263da7ec18',1,'AttitudeSubstate::AttitudeState6DOF']]]
+  ['_5f_5fdimension_5f_5f',['__dimension__',['../classSubStates_1_1SubState.html#aea750997b2a75daee4a3147eac68e4f8',1,'SubStates::SubState']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['qhat',['qHat',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a36a58a47280151dd544762d9a1d5c35d',1,'AttitudeSubstate::AttitudeState6DOF']]]
+  ['phat',['PHat',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a6aac27efa4d5962865f7d3f701c919ab',1,'AttitudeSubstate::AttitudeState6DOF']]]
 ];
