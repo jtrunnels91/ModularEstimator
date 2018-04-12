@@ -1,5 +1,0 @@
-class SubState():
-    def __init__(
-            self
-    ):
-        return

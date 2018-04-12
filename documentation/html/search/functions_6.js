@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['quaterniontimeupdatematrix',['quaternionTimeUpdateMatrix',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#aada43a81dfe3ae7b1a22dd24220062e8',1,'AttitudeSubstate::AttitudeState6DOF']]]
+  ['localstateupdatematrices',['localStateUpdateMatrices',['../classState_1_1ModularFilter.html#a90d6a9c3ae7a248577d4be06dd58a0c8',1,'State::ModularFilter']]]
 ];

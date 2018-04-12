@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['errorstatetimeupdatematrix',['errorStateTimeUpdateMatrix',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a98463a04f2b7f78389d7cce944139afd',1,'AttitudeSubstate::AttitudeState6DOF']]],
-  ['eulerangles',['eulerAngles',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a34f52f0e701e78ba8e92bff57f56110d',1,'AttitudeSubstate::AttitudeState6DOF']]]
+  ['dimension',['dimension',['../classSignalCorrelationSubstate_1_1CorrelationFilter.html#a6f498c6905d1c8aab4efef99a98b353e',1,'SignalCorrelationSubstate.CorrelationFilter.dimension()'],['../classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a',1,'SubStates.SubState.dimension()']]]
 ];

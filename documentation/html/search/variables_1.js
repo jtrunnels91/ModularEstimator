@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bhat',['bHat',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a1b8eff7c89a7a03875dc04263da7ec18',1,'AttitudeSubstate::AttitudeState6DOF']]]
+  ['attitudestatename',['attitudeStateName',['../classSignals_1_1PointSource.html#a151f2600c3623d1ca49fb51feb8a1178',1,'Signals::PointSource']]]
 ];

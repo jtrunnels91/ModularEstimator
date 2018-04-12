@@ -7,8 +7,7 @@ Estimates the attitude of a vehicle in three dimensions, along with three gyro b
 
 
 
-Inheritance diagram for Attitude\+Substate.\+Attitude\+State6\+D\+OF\+:
-\nopagebreak
+Inheritance diagram for Attitude\+Substate.\+Attitude\+State6\+D\+OF\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -17,8 +16,7 @@ Inheritance diagram for Attitude\+Substate.\+Attitude\+State6\+D\+OF\+:
 \end{figure}
 
 
-Collaboration diagram for Attitude\+Substate.\+Attitude\+State6\+D\+OF\+:
-\nopagebreak
+Collaboration diagram for Attitude\+Substate.\+Attitude\+State6\+D\+OF\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -29,9 +27,7 @@ Collaboration diagram for Attitude\+Substate.\+Attitude\+State6\+D\+OF\+:
 \begin{DoxyCompactItemize}
 \item 
 def \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a337e9fa07d0211f86b359e5d9deee1b8}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self, attitude\+Quaternion=Quaternion(\mbox{[}1, 0, 0, 0\mbox{]}), attitude\+Error\+Covariance=np.\+eye(3), gyro\+Bias=np.\+zeros(3), gyro\+Bias\+Covariance=np.\+eye(3), t=0)
-\begin{DoxyCompactList}\small\item\em {\bfseries init} \end{DoxyCompactList}\item 
-def \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a8e420e4a7806669c1286a1a70ce019da}{get\+State\+Vector} (self)
-\begin{DoxyCompactList}\small\item\em get\+State\+Vector is responsible for passing whatever version of the state vector should be used for time or measurement updates. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em The \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a337e9fa07d0211f86b359e5d9deee1b8}{\+\_\+\+\_\+init\+\_\+\+\_\+} method initializes the 6\+D\+OF attitude estimator \end{DoxyCompactList}\item 
 def \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a8ed0ab1ebe989bd7d54c12889c7bf2a9}{store\+State\+Vector} (self, sv\+Dict)
 \begin{DoxyCompactList}\small\item\em store\+State\+Vector is responsible for taking an updated version of the state vector, and storing it in the class variables. \end{DoxyCompactList}\item 
 def \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a44691ece9ee2a36d3c11f12e72004e41}{covariance} (self)
@@ -55,27 +51,28 @@ def \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a4728d7547aee8612fdd5e
 def \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_ae5afc5e0352e10e5c11e45d5b3fa8f4e}{sid\+Unit\+Vec} (self, Ra\+Dec)
 \begin{DoxyCompactList}\small\item\em sid\+Unit\+Vec generates a unit vector from two angles \end{DoxyCompactList}\item 
 def \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_afe4e6f5ef09bd1fab2e390f3748af76a}{skew\+Symmetric} (self, vector)
-\begin{DoxyCompactList}\small\item\em skew\+Symmetric generates a skew-\/symmetric matrix from a 3x1 vector \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em skew\+Symmetric generates a skew-\/symmetric matrix from a 3x1 vector \end{DoxyCompactList}\item 
+def \hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} (self)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} returns the most recent value of the state vector \end{DoxyCompactList}\item 
+def \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} (self)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} returns the dimension of the sub-\/state vector \end{DoxyCompactList}\end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a36a58a47280151dd544762d9a1d5c35d}{q\+Hat}
 \begin{DoxyCompactList}\small\item\em Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as $\mathbf{\hat{q}}^{-}_{k}$ for the a priori value, or $\mathbf{\hat{q}}^{+}_{k}$ for the a posteriori value. \end{DoxyCompactList}\item 
-\hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a1b8eff7c89a7a03875dc04263da7ec18}{b\+Hat}\hypertarget{classAttitudeSubstate_1_1AttitudeState6DOF_a1b8eff7c89a7a03875dc04263da7ec18}{}\label{classAttitudeSubstate_1_1AttitudeState6DOF_a1b8eff7c89a7a03875dc04263da7ec18}
-
+\hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a1b8eff7c89a7a03875dc04263da7ec18}{b\+Hat}
 \begin{DoxyCompactList}\small\item\em Current estimate of gyro bias. \end{DoxyCompactList}\item 
 \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a6aac27efa4d5962865f7d3f701c919ab}{P\+Hat}
 \begin{DoxyCompactList}\small\item\em Current joint covariance matrix. \end{DoxyCompactList}\item 
-\hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a1ea482e5536162f74876d1dd23b12e96}{last\+Meas\+ID}\hypertarget{classAttitudeSubstate_1_1AttitudeState6DOF_a1ea482e5536162f74876d1dd23b12e96}{}\label{classAttitudeSubstate_1_1AttitudeState6DOF_a1ea482e5536162f74876d1dd23b12e96}
-
+\hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a1ea482e5536162f74876d1dd23b12e96}{last\+Meas\+ID}
 \begin{DoxyCompactList}\small\item\em Last measurement used to generate measurement matrices. \end{DoxyCompactList}\item 
-\hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a0161cc024a651de854100014872165af}{last\+Source\+ID}\hypertarget{classAttitudeSubstate_1_1AttitudeState6DOF_a0161cc024a651de854100014872165af}{}\label{classAttitudeSubstate_1_1AttitudeState6DOF_a0161cc024a651de854100014872165af}
-
+\hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a0161cc024a651de854100014872165af}{last\+Source\+ID}
 \begin{DoxyCompactList}\small\item\em Last signal used to generate measurement matrices. \end{DoxyCompactList}\item 
 \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_ae23a47fae330703aa8a50b207275c9b0}{last\+Meas\+Mat}
 \begin{DoxyCompactList}\small\item\em Last set of measurement matrices. \end{DoxyCompactList}\item 
-\hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_af87f4ef871d05fbd84e7e7c91a2865a3}{euler\+Angle\+Vec}
-\begin{DoxyCompactList}\small\item\em Array of Euler angle history. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\hyperlink{classSubStates_1_1SubState_a24bf2de56fc3037d91cba43d28f3bf60}{state\+Vector\+History}
+\begin{DoxyCompactList}\small\item\em Stores the time-\/history of the sub-\/state state vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
@@ -108,9 +105,7 @@ Definition at line 42 of file Attitude\+Substate.\+py.
 )}\hypertarget{classAttitudeSubstate_1_1AttitudeState6DOF_a337e9fa07d0211f86b359e5d9deee1b8}{}\label{classAttitudeSubstate_1_1AttitudeState6DOF_a337e9fa07d0211f86b359e5d9deee1b8}
 
 
-{\bfseries init} 
-
-This function initializes the 6\+D\+OF attitude estimator
+The \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a337e9fa07d0211f86b359e5d9deee1b8}{\+\_\+\+\_\+init\+\_\+\+\_\+} method initializes the 6\+D\+OF attitude estimator 
 
 This function is responsible for initializing an instance of the \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF}{Attitude\+State6\+D\+OF} class and storing all the variables as member variables.
 
@@ -129,7 +124,7 @@ This function is responsible for initializing an instance of the \hyperlink{clas
 \end{DoxyParams}
 
 
-Definition at line 69 of file Attitude\+Substate.\+py.
+Definition at line 68 of file Attitude\+Substate.\+py.
 
 
 
@@ -158,7 +153,36 @@ Returns covariance matrix, \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF
 \end{DoxyReturn}
 
 
-Definition at line 234 of file Attitude\+Substate.\+py.
+Definition at line 231 of file Attitude\+Substate.\+py.
+
+\index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!dimension@{dimension}}
+\index{dimension@{dimension}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
+\subsubsection[{\texorpdfstring{dimension(self)}{dimension(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def Sub\+States.\+Sub\+State.\+dimension (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{}\label{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}
+
+
+\hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} returns the dimension of the sub-\/state vector 
+
+The \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} method returns the dimension of the sub-\/state vector estimated by the \hyperlink{classSubStates_1_1SubState}{Sub\+State}. This is the dimension as seen by the Modular\+Filter estimator.
+
+The default implementation is to return the class variable \hyperlink{classSubStates_1_1SubState_aea750997b2a75daee4a3147eac68e4f8}{\+\_\+\+\_\+dimension\+\_\+\+\_\+}, which is saved at initialization. This is designated as a \char`\"{}protected\char`\"{} variable, and should not change during the course of the \hyperlink{classSubStates_1_1SubState}{Sub\+State}\textquotesingle{}s lifetime. If child class overwrites this implementation, care should be taken to ensure that the value returned by \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} does not change over \hyperlink{classSubStates_1_1SubState}{Sub\+State} object lifetime.
+
+For \hyperlink{classSubStates_1_1SubState}{Sub\+State} objects with auxilary states, or other quantities related to the state vector but not directly estimated by the Modular\+Filter, \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} should not count these states as part of the total dimension.
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the dimension of state vector 
+\end{DoxyReturn}
+
+
+Definition at line 181 of file Sub\+States.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!error\+State\+Time\+Update\+Matrix@{error\+State\+Time\+Update\+Matrix}}
 \index{error\+State\+Time\+Update\+Matrix@{error\+State\+Time\+Update\+Matrix}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
@@ -205,7 +229,7 @@ Returns the error-\/state time update matrix, $\boldsymbol{\Phi}$
 \end{DoxyReturn}
 
 
-Definition at line 509 of file Attitude\+Substate.\+py.
+Definition at line 508 of file Attitude\+Substate.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!euler\+Angles@{euler\+Angles}}
 \index{euler\+Angles@{euler\+Angles}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
@@ -233,7 +257,7 @@ A list containing the three angles
 \end{DoxyReturn}
 
 
-Definition at line 740 of file Attitude\+Substate.\+py.
+Definition at line 739 of file Attitude\+Substate.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!get\+Measurement\+Matrices@{get\+Measurement\+Matrices}}
 \index{get\+Measurement\+Matrices@{get\+Measurement\+Matrices}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
@@ -267,32 +291,42 @@ A dictionary containing the measurement matrices H, R, and dY
 \end{DoxyReturn}
 
 
-Definition at line 330 of file Attitude\+Substate.\+py.
+Definition at line 329 of file Attitude\+Substate.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!get\+State\+Vector@{get\+State\+Vector}}
 \index{get\+State\+Vector@{get\+State\+Vector}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
-\subsubsection[{\texorpdfstring{get\+State\+Vector(self)}{getStateVector(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def Attitude\+Substate.\+Attitude\+State6\+D\+O\+F.\+get\+State\+Vector (
+\subsubsection[{\texorpdfstring{get\+State\+Vector(self)}{getStateVector(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def Sub\+States.\+Sub\+State.\+get\+State\+Vector (
 \begin{DoxyParamCaption}
 \item[{}]{self}
 \end{DoxyParamCaption}
-)}\hypertarget{classAttitudeSubstate_1_1AttitudeState6DOF_a8e420e4a7806669c1286a1a70ce019da}{}\label{classAttitudeSubstate_1_1AttitudeState6DOF_a8e420e4a7806669c1286a1a70ce019da}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{}\label{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}
 
 
-get\+State\+Vector is responsible for passing whatever version of the state vector should be used for time or measurement updates. 
+\hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} returns the most recent value of the state vector 
 
-The \char`\"{}state\char`\"{} for this filter does not include the attitude quaternion. Rather, the attitude quaternion is updated internally. Instead, the state that represents attitude is the attitude error state, as described in F\+S\+A\+DC.
+The \hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} method is responsible for returning a dictionary object containing, at minimim, the following items\+:
 
-\begin{DoxyNote}{Note}
-This function is one of mandatory functions required for \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF}{Attitude\+State6\+D\+OF} to function as a sub-\/state of \hyperlink{classState_1_1ModularFilter}{State.\+Modular\+Filter}.
-\end{DoxyNote}
+
+\begin{DoxyItemize}
+\item \textquotesingle{}state\+Vector\textquotesingle{}\+: A length \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} array containing the most recent state vector estimate
+\item \textquotesingle{}covariance\textquotesingle{}\+: A (\hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} x \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension}) array containing the most recent covariance matrix
+\item \textquotesingle{}a\+Priori\textquotesingle{}\+: A boolean indicating if the most recent estimate is the
+\item result of a time update (a\+Priori=True) or a measurement update (a\+Priori=False)
+\end{DoxyItemize}
+
+This function can be used as-\/is
+
 
 \begin{DoxyParams}{Parameters}
-{\em self} & The object pointer \\
+{\em self} & The object pointer\\
 \hline
 \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The dictionary containing the state vector, covariance matrix, and a\+Priori status 
+\end{DoxyReturn}
 
 
-Definition at line 152 of file Attitude\+Substate.\+py.
+Definition at line 113 of file Sub\+States.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!process\+Noise\+Matrix@{process\+Noise\+Matrix}}
 \index{process\+Noise\+Matrix@{process\+Noise\+Matrix}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
@@ -332,7 +366,7 @@ Returns the comibined 6x6 process noise matrix
 \end{DoxyReturn}
 
 
-Definition at line 579 of file Attitude\+Substate.\+py.
+Definition at line 578 of file Attitude\+Substate.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!quaternion\+Time\+Update\+Matrix@{quaternion\+Time\+Update\+Matrix}}
 \index{quaternion\+Time\+Update\+Matrix@{quaternion\+Time\+Update\+Matrix}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
@@ -377,7 +411,7 @@ The quaternion time-\/update matrix $\bar{\Theta}(\omegaVec[est=True,aPriori=Tru
 \end{DoxyReturn}
 
 
-Definition at line 425 of file Attitude\+Substate.\+py.
+Definition at line 424 of file Attitude\+Substate.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!Ra\+Dec\+Meas\+Matrices@{Ra\+Dec\+Meas\+Matrices}}
 \index{Ra\+Dec\+Meas\+Matrices@{Ra\+Dec\+Meas\+Matrices}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
@@ -423,7 +457,7 @@ A dictionary containing the measurement matrices H, R, and dY
 \end{DoxyReturn}
 
 
-Definition at line 658 of file Attitude\+Substate.\+py.
+Definition at line 657 of file Attitude\+Substate.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!Ra\+Dec\+Roll@{Ra\+Dec\+Roll}}
 \index{Ra\+Dec\+Roll@{Ra\+Dec\+Roll}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
@@ -451,7 +485,7 @@ A list containing the three angles
 \end{DoxyReturn}
 
 
-Definition at line 764 of file Attitude\+Substate.\+py.
+Definition at line 763 of file Attitude\+Substate.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!sid\+Unit\+Vec@{sid\+Unit\+Vec}}
 \index{sid\+Unit\+Vec@{sid\+Unit\+Vec}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
@@ -479,7 +513,7 @@ A unit vector generated from the angles given
 \end{DoxyReturn}
 
 
-Definition at line 783 of file Attitude\+Substate.\+py.
+Definition at line 782 of file Attitude\+Substate.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!skew\+Symmetric@{skew\+Symmetric}}
 \index{skew\+Symmetric@{skew\+Symmetric}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
@@ -507,7 +541,7 @@ The skew symmetric matrix
 \end{DoxyReturn}
 
 
-Definition at line 805 of file Attitude\+Substate.\+py.
+Definition at line 804 of file Attitude\+Substate.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!store\+State\+Vector@{store\+State\+Vector}}
 \index{store\+State\+Vector@{store\+State\+Vector}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
@@ -537,7 +571,7 @@ This function is one of mandatory functions required for \hyperlink{classAttitud
 \end{DoxyParams}
 
 
-Definition at line 180 of file Attitude\+Substate.\+py.
+Definition at line 177 of file Attitude\+Substate.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!time\+Update@{time\+Update}}
 \index{time\+Update@{time\+Update}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
@@ -573,21 +607,32 @@ A dict containing the state transition matrix (\char`\"{}\+F\char`\"{}) and the 
 \end{DoxyReturn}
 
 
-Definition at line 264 of file Attitude\+Substate.\+py.
+Definition at line 263 of file Attitude\+Substate.\+py.
 
 
 
 \subsection{Member Data Documentation}
-\index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!euler\+Angle\+Vec@{euler\+Angle\+Vec}}
-\index{euler\+Angle\+Vec@{euler\+Angle\+Vec}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
-\subsubsection[{\texorpdfstring{euler\+Angle\+Vec}{eulerAngleVec}}]{\setlength{\rightskip}{0pt plus 5cm}Attitude\+Substate.\+Attitude\+State6\+D\+O\+F.\+euler\+Angle\+Vec}\hypertarget{classAttitudeSubstate_1_1AttitudeState6DOF_af87f4ef871d05fbd84e7e7c91a2865a3}{}\label{classAttitudeSubstate_1_1AttitudeState6DOF_af87f4ef871d05fbd84e7e7c91a2865a3}
+\index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!b\+Hat@{b\+Hat}}
+\index{b\+Hat@{b\+Hat}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
+\subsubsection[{\texorpdfstring{b\+Hat}{bHat}}]{\setlength{\rightskip}{0pt plus 5cm}Attitude\+Substate.\+Attitude\+State6\+D\+O\+F.\+b\+Hat}\hypertarget{classAttitudeSubstate_1_1AttitudeState6DOF_a1b8eff7c89a7a03875dc04263da7ec18}{}\label{classAttitudeSubstate_1_1AttitudeState6DOF_a1b8eff7c89a7a03875dc04263da7ec18}
 
 
-Array of Euler angle history. 
+Current estimate of gyro bias. 
 
-This is a Smart\+Panda array that stores the history of time, Euler angles, and Euler angle covariances. 
 
-Definition at line 104 of file Attitude\+Substate.\+py.
+
+Definition at line 78 of file Attitude\+Substate.\+py.
+
+\index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!last\+Meas\+ID@{last\+Meas\+ID}}
+\index{last\+Meas\+ID@{last\+Meas\+ID}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
+\subsubsection[{\texorpdfstring{last\+Meas\+ID}{lastMeasID}}]{\setlength{\rightskip}{0pt plus 5cm}Attitude\+Substate.\+Attitude\+State6\+D\+O\+F.\+last\+Meas\+ID}\hypertarget{classAttitudeSubstate_1_1AttitudeState6DOF_a1ea482e5536162f74876d1dd23b12e96}{}\label{classAttitudeSubstate_1_1AttitudeState6DOF_a1ea482e5536162f74876d1dd23b12e96}
+
+
+Last measurement used to generate measurement matrices. 
+
+
+
+Definition at line 90 of file Attitude\+Substate.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!last\+Meas\+Mat@{last\+Meas\+Mat}}
 \index{last\+Meas\+Mat@{last\+Meas\+Mat}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
@@ -598,7 +643,18 @@ Last set of measurement matrices.
 
 This allows class to avoid redundant computation of the same set of measurement matrices. 
 
-Definition at line 99 of file Attitude\+Substate.\+py.
+Definition at line 98 of file Attitude\+Substate.\+py.
+
+\index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!last\+Source\+ID@{last\+Source\+ID}}
+\index{last\+Source\+ID@{last\+Source\+ID}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
+\subsubsection[{\texorpdfstring{last\+Source\+ID}{lastSourceID}}]{\setlength{\rightskip}{0pt plus 5cm}Attitude\+Substate.\+Attitude\+State6\+D\+O\+F.\+last\+Source\+ID}\hypertarget{classAttitudeSubstate_1_1AttitudeState6DOF_a0161cc024a651de854100014872165af}{}\label{classAttitudeSubstate_1_1AttitudeState6DOF_a0161cc024a651de854100014872165af}
+
+
+Last signal used to generate measurement matrices. 
+
+
+
+Definition at line 93 of file Attitude\+Substate.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!P\+Hat@{P\+Hat}}
 \index{P\+Hat@{P\+Hat}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
@@ -609,7 +665,7 @@ Current joint covariance matrix.
 
 Upper 3x3 diagonal contains covariance of the attitude estimate (related to \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a36a58a47280151dd544762d9a1d5c35d}{q\+Hat}), while lower 3x3 diagonal contains the covariance of the gyro bias \hyperlink{classAttitudeSubstate_1_1AttitudeState6DOF_a1b8eff7c89a7a03875dc04263da7ec18}{b\+Hat}. 
 
-Definition at line 85 of file Attitude\+Substate.\+py.
+Definition at line 84 of file Attitude\+Substate.\+py.
 
 \index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!q\+Hat@{q\+Hat}}
 \index{q\+Hat@{q\+Hat}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
@@ -620,10 +676,21 @@ Current estimate of attitude, stored as a Quaternion object Mathematically gener
 
 
 
-Definition at line 76 of file Attitude\+Substate.\+py.
+Definition at line 75 of file Attitude\+Substate.\+py.
+
+\index{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}!state\+Vector\+History@{state\+Vector\+History}}
+\index{state\+Vector\+History@{state\+Vector\+History}!Attitude\+Substate\+::\+Attitude\+State6\+D\+OF@{Attitude\+Substate\+::\+Attitude\+State6\+D\+OF}}
+\subsubsection[{\texorpdfstring{state\+Vector\+History}{stateVectorHistory}}]{\setlength{\rightskip}{0pt plus 5cm}Sub\+States.\+Sub\+State.\+state\+Vector\+History\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classSubStates_1_1SubState_a24bf2de56fc3037d91cba43d28f3bf60}{}\label{classSubStates_1_1SubState_a24bf2de56fc3037d91cba43d28f3bf60}
+
+
+Stores the time-\/history of the sub-\/state state vector. 
+
+
+
+Definition at line 91 of file Sub\+States.\+py.
 
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-Attitude\+Substate.\+py\end{DoxyCompactItemize}
+\hyperlink{AttitudeSubstate_8py}{Attitude\+Substate.\+py}\end{DoxyCompactItemize}

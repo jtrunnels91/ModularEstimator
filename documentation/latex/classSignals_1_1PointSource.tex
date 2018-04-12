@@ -21,34 +21,33 @@ Collaboration diagram for Signals.\+Point\+Source\+:\nopagebreak
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-def {\bfseries \+\_\+\+\_\+init\+\_\+\+\_\+} (self, RA, D\+EC, attitude\+State\+Name=\textquotesingle{}attitude\textquotesingle{})\hypertarget{classSignals_1_1PointSource_a08c5c8fe52979814a725fac08b34c02f}{}\label{classSignals_1_1PointSource_a08c5c8fe52979814a725fac08b34c02f}
-
+def \hyperlink{classSignals_1_1PointSource_a08c5c8fe52979814a725fac08b34c02f}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self, RA, D\+EC, \hyperlink{classSignals_1_1PointSource_a151f2600c3623d1ca49fb51feb8a1178}{attitude\+State\+Name}=\textquotesingle{}attitude\textquotesingle{})
 \item 
-def {\bfseries Ra\+Dec} (self)\hypertarget{classSignals_1_1PointSource_a5fbb36eda0901536d77eff9a3262ae9e}{}\label{classSignals_1_1PointSource_a5fbb36eda0901536d77eff9a3262ae9e}
-
+def \hyperlink{classSignals_1_1PointSource_a5fbb36eda0901536d77eff9a3262ae9e}{Ra\+Dec} (self)
 \item 
-def {\bfseries compute\+Association\+Probability} (self, measurement, state\+Dict, validation\+Threshold=0)\hypertarget{classSignals_1_1PointSource_ab1389987fc68312eed77ae3126a21a2a}{}\label{classSignals_1_1PointSource_ab1389987fc68312eed77ae3126a21a2a}
-
+def \hyperlink{classSignals_1_1PointSource_ab1389987fc68312eed77ae3126a21a2a}{compute\+Association\+Probability} (self, measurement, state\+Dict, validation\+Threshold=0)
+\item 
+def \hyperlink{classSignals_1_1SignalSource_a85016cca8a7f1e188d314ced50577d05}{signal\+ID} (self)
 \end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries attitude\+State\+Name}\hypertarget{classSignals_1_1PointSource_a151f2600c3623d1ca49fb51feb8a1178}{}\label{classSignals_1_1PointSource_a151f2600c3623d1ca49fb51feb8a1178}
-
+\hyperlink{classSignals_1_1PointSource_a151f2600c3623d1ca49fb51feb8a1178}{attitude\+State\+Name}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{classSignals_1_1SignalSource_abcff0d069f17cb5ebe3eff15b6283a64}{next\+Signal\+ID} = 0
 \end{DoxyCompactItemize}
 \subsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
-{\bfseries \+\_\+\+\_\+\+R\+A\+\_\+\+\_\+}\hypertarget{classSignals_1_1PointSource_ab452ac8a968d9ac8759cb95f60424932}{}\label{classSignals_1_1PointSource_ab452ac8a968d9ac8759cb95f60424932}
-
+\hyperlink{classSignals_1_1PointSource_ab452ac8a968d9ac8759cb95f60424932}{\+\_\+\+\_\+\+R\+A\+\_\+\+\_\+}
 \item 
-{\bfseries \+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+}\hypertarget{classSignals_1_1PointSource_a47e98573bcf62bb6e80f1bcbbdb79620}{}\label{classSignals_1_1PointSource_a47e98573bcf62bb6e80f1bcbbdb79620}
-
+\hyperlink{classSignals_1_1PointSource_a47e98573bcf62bb6e80f1bcbbdb79620}{\+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+}
 \item 
-{\bfseries \+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+}\hypertarget{classSignals_1_1PointSource_ac876dc0b41dd3da6bb9b8ec9c41e0dd2}{}\label{classSignals_1_1PointSource_ac876dc0b41dd3da6bb9b8ec9c41e0dd2}
-
+\hyperlink{classSignals_1_1PointSource_ac876dc0b41dd3da6bb9b8ec9c41e0dd2}{\+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+}
 \end{DoxyCompactItemize}
-\subsection*{Additional Inherited Members}
 
 
 \subsection{Detailed Description}
@@ -58,6 +57,100 @@ Definition at line 18 of file Signals.\+py.
 
 
 
+\subsection{Constructor \& Destructor Documentation}
+\index{Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+init\+\_\+\+\_\+(self, R\+A, D\+E\+C, attitude\+State\+Name=\textquotesingle{}attitude\textquotesingle{})}{__init__(self, RA, DEC, attitudeStateName='attitude')}}]{\setlength{\rightskip}{0pt plus 5cm}def Signals.\+Point\+Source.\+\_\+\+\_\+init\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{RA, }
+\item[{}]{D\+EC, }
+\item[{}]{attitude\+State\+Name = {\ttfamily \textquotesingle{}attitude\textquotesingle{}}}
+\end{DoxyParamCaption}
+)}\hypertarget{classSignals_1_1PointSource_a08c5c8fe52979814a725fac08b34c02f}{}\label{classSignals_1_1PointSource_a08c5c8fe52979814a725fac08b34c02f}
+
+
+Definition at line 24 of file Signals.\+py.
+
+
+
+\subsection{Member Function Documentation}
+\index{Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}!compute\+Association\+Probability@{compute\+Association\+Probability}}
+\index{compute\+Association\+Probability@{compute\+Association\+Probability}!Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{compute\+Association\+Probability(self, measurement, state\+Dict, validation\+Threshold=0)}{computeAssociationProbability(self, measurement, stateDict, validationThreshold=0)}}]{\setlength{\rightskip}{0pt plus 5cm}def Signals.\+Point\+Source.\+compute\+Association\+Probability (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{measurement, }
+\item[{}]{state\+Dict, }
+\item[{}]{validation\+Threshold = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\hypertarget{classSignals_1_1PointSource_ab1389987fc68312eed77ae3126a21a2a}{}\label{classSignals_1_1PointSource_ab1389987fc68312eed77ae3126a21a2a}
+
+
+Definition at line 41 of file Signals.\+py.
+
+\index{Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}!Ra\+Dec@{Ra\+Dec}}
+\index{Ra\+Dec@{Ra\+Dec}!Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{Ra\+Dec(self)}{RaDec(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def Signals.\+Point\+Source.\+Ra\+Dec (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\hypertarget{classSignals_1_1PointSource_a5fbb36eda0901536d77eff9a3262ae9e}{}\label{classSignals_1_1PointSource_a5fbb36eda0901536d77eff9a3262ae9e}
+
+
+Definition at line 33 of file Signals.\+py.
+
+\index{Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}!signal\+ID@{signal\+ID}}
+\index{signal\+ID@{signal\+ID}!Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{signal\+I\+D(self)}{signalID(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def Signals.\+Signal\+Source.\+signal\+ID (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classSignals_1_1SignalSource_a85016cca8a7f1e188d314ced50577d05}{}\label{classSignals_1_1SignalSource_a85016cca8a7f1e188d314ced50577d05}
+
+
+Definition at line 14 of file Signals.\+py.
+
+
+
+\subsection{Member Data Documentation}
+\index{Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}!\+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+@{\+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+@{\+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+}!Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+}{__DEC__}}]{\setlength{\rightskip}{0pt plus 5cm}Signals.\+Point\+Source.\+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{classSignals_1_1PointSource_a47e98573bcf62bb6e80f1bcbbdb79620}{}\label{classSignals_1_1PointSource_a47e98573bcf62bb6e80f1bcbbdb79620}
+
+
+Definition at line 27 of file Signals.\+py.
+
+\index{Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}!\+\_\+\+\_\+\+R\+A\+\_\+\+\_\+@{\+\_\+\+\_\+\+R\+A\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+\+R\+A\+\_\+\+\_\+@{\+\_\+\+\_\+\+R\+A\+\_\+\+\_\+}!Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+\+R\+A\+\_\+\+\_\+}{__RA__}}]{\setlength{\rightskip}{0pt plus 5cm}Signals.\+Point\+Source.\+\_\+\+\_\+\+R\+A\+\_\+\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{classSignals_1_1PointSource_ab452ac8a968d9ac8759cb95f60424932}{}\label{classSignals_1_1PointSource_ab452ac8a968d9ac8759cb95f60424932}
+
+
+Definition at line 26 of file Signals.\+py.
+
+\index{Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}!\+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+@{\+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+@{\+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+}!Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+}{__RaDec__}}]{\setlength{\rightskip}{0pt plus 5cm}Signals.\+Point\+Source.\+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{classSignals_1_1PointSource_ac876dc0b41dd3da6bb9b8ec9c41e0dd2}{}\label{classSignals_1_1PointSource_ac876dc0b41dd3da6bb9b8ec9c41e0dd2}
+
+
+Definition at line 28 of file Signals.\+py.
+
+\index{Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}!attitude\+State\+Name@{attitude\+State\+Name}}
+\index{attitude\+State\+Name@{attitude\+State\+Name}!Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{attitude\+State\+Name}{attitudeStateName}}]{\setlength{\rightskip}{0pt plus 5cm}Signals.\+Point\+Source.\+attitude\+State\+Name}\hypertarget{classSignals_1_1PointSource_a151f2600c3623d1ca49fb51feb8a1178}{}\label{classSignals_1_1PointSource_a151f2600c3623d1ca49fb51feb8a1178}
+
+
+Definition at line 29 of file Signals.\+py.
+
+\index{Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}!next\+Signal\+ID@{next\+Signal\+ID}}
+\index{next\+Signal\+ID@{next\+Signal\+ID}!Signals\+::\+Point\+Source@{Signals\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{next\+Signal\+ID}{nextSignalID}}]{\setlength{\rightskip}{0pt plus 5cm}int Signals.\+Signal\+Source.\+next\+Signal\+ID = 0\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}\hypertarget{classSignals_1_1SignalSource_abcff0d069f17cb5ebe3eff15b6283a64}{}\label{classSignals_1_1SignalSource_abcff0d069f17cb5ebe3eff15b6283a64}
+
+
+Definition at line 5 of file Signals.\+py.
+
+
+
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-Signals.\+py\end{DoxyCompactItemize}
+\hyperlink{Signals_8py}{Signals.\+py}\end{DoxyCompactItemize}

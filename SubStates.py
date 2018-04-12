@@ -2,6 +2,12 @@
 # This package contains the SubState class.
 
 from abc import ABC, abstractmethod
+import numpy as np
+
+import sys
+sys.path.append("/home/joel/Documents/astroSourceTracking/libraries")
+from SmartPanda import SmartPanda
+
 
 ## @class SubState
 # @brief This is an abstract base class for objects used as sub-states in
@@ -11,17 +17,43 @@ from abc import ABC, abstractmethod
 # are required for an object to function as a sub-state of State.ModularFilter.
 #
 # Some of these methods are implemented and most likely do not need to be
-# reimplemented in a derived class implementation (for example the #dimension and covariance methods.
+# reimplemented in a derived class implementation (for example the #dimension
+# and #covariance methods.
 #
-# Other methods may have a rudimentary implementation that may be suitable for some derived classes, but not others, depending on the specific functionality of the derived class (for instance getStateVector and storeStateVector).
+# Other methods may have a rudimentary implementation that may be suitable for
+# some derived classes, but not others, depending on the specific
+# functionality of the derived class (for instance #getStateVector and
+# #storeStateVector).
 #
-# Finally, some methods are specifically tagged as abstract methods and are not implemented at all.  These methods must be implemented in the derived class.  This is usually because there is no way to implement even a rudimentary version of what the method is supposed to do without having some knowledge of what kind of substate the derived class contains (for instance timeUpdate and getMeasurementMatrices).
+# Finally, some methods are specifically tagged as abstract methods and are
+# not implemented at all.  These methods must be implemented in the derived
+# class.  This is usually because there is no way to implement even a
+# rudimentary version of what the method is supposed to do without having some
+# knowledge of what kind of substate the derived class contains (for instance
+# #timeUpdate and #getMeasurementMatrices).
 #
-# In any case, the documentation for each method of SubState contains a generalized description of what functionality the implementation should provide in a derived class.
+# In any case, the documentation for each method of SubState contains a
+# generalized description of what functionality the implementation should
+# provide in a derived class.
 class SubState(ABC):
     
     ## @fun #__init__ initializes a SubState object
-    # 
+    #
+    # @details The #__init__ method is responsible for initializing a
+    # generalized SubState object.  The essential functions of #__init__ are
+    # to store the dimension of the state, and to initialize a time-history of
+    # the state in a SmartPanda object.
+    #
+    # If no values are passed for the initial state estimate dictionary, they
+    # will be initialized to the following default values.
+    #
+    # - 'stateVector': A length #dimension array of zeros
+    # - 'covariance': An (#dimension x #dimension) identity matrix
+    # - 't': 0
+    #
+    # @param self The object pointer
+    # @param stateDimension The dimension of the sub-state state vector
+    # @param stateVectorHistory A dictionary containing the initial state.
     def __init__(
             self,
             stateDimension=None,
@@ -37,15 +69,72 @@ class SubState(ABC):
         # implementation.
         self.__dimension__ = stateDimension
 
+        if stateVectorHistory is None:
+            stateVectorHistory = {
+                't': 0,
+                'stateVector': np.zeros(stateDimension),
+                'covariance': np.eye(stateDimension)
+                }
+                
+        # Check to verify that the dictionary contains the correct keys
+        if 't' not in stateVectorHistory:
+            raise ValueError(
+                "State vector history must contain time key, labeled \"t\""
+                )
+        if 'stateVector' not in stateVectorHistory:
+            raise ValueError(
+                "State vector history must contain state vector key, labeled" +
+                "\"stateVector\""
+                )
         
         ## @brief Stores the time-history of the sub-state state vector.
-        self.stateVectorHistory = stateVectorHistory
+        self.stateVectorHistory = SmartPanda(stateVectorHistory)
         return
     
-    @abstractmethod
+    ## @fun #getStateVector returns the most recent value of the state vector
+    #
+    # @details
+    # The #getStateVector method is responsible for returning a dictionary
+    # object containing, at minimim, the following items:
+    #
+    # - 'stateVector': A length #dimension array containing the most recent
+    # state vector estimate
+    # - 'covariance': A (#dimension x #dimension) array containing the most
+    # recent covariance matrix
+    # - 'aPriori': A boolean indicating if the most recent estimate is the
+    # - result of a time update (aPriori=True) or a measurement update (aPriori=False)
+    #
+    # This function can be used as-is 
+    #
+    # @param self The object pointer
+    #
+    # @returns The dictionary containing the state vector, covariance matrix,
+    # and aPriori status
     def getStateVector(self):
-        pass
+        lastSV = self.stateVectorHistory.getDict(-1)
 
+        return(lastSV)
+
+    ## @fun #storeStateVector stores the most recent value of the state vector.
+    #
+    # @details
+    # The #storeStateVector method is responsible for storing a dictionary
+    # containing the most recent state estimate.  In SubState implementation,
+    # the functionality is minimal: the new dictionary is simply appeneded to
+    # the SmartPanda list of state vector estimates.  However, in some derived
+    # classes, it may be nescessary to implement additional functionality.
+    # This is particularly true if there are derived quantities that need to
+    # be calculated from the updated state vector (for instance, calculating
+    # the attitude quaternion from the attitude error states).  Also in some
+    # cases, the actual value of the state vector may need to be "tweaked" by
+    # the SubState derived class.
+    #
+    # If an alternative implementation is written for a derived class, it
+    # should still call this implementation, or at least make sure that it
+    # stores the current state estimate in #stateVectorHistory.
+    #
+    # @param self The object pointer
+    # @param svDict A dictionary containing the current state estimate.
     def storeStateVector(self, svDict):
         self.stateVectorHistory.append(svDict)
         return
@@ -92,6 +181,41 @@ class SubState(ABC):
             ):
         return(self.__dimension__)
 
+    ## @fun #timeUpdate returns time-update matrices
+    #
+    # @details The #timeUpdate method is responsible for returning the EKF
+    # time update measurement matrices.  Specifically, it returns the state
+    # update matrix \f$\mathbf{F}\f$ and the process noise matrix
+    # \f$\mathbf{Q}\f$, following the standard
+    # <a href="https://en.wikipedia.org/wiki/Extended_Kalman_filter">
+    # Extended Kalman Filter</a> time update equations:
+    #
+    # \f[\sv[timeIndex=k+1, aPriori=True] =
+    # \mathbf{F} \sv[timeIndex=k, aPriori=False] \f]
+    # \f[\svVar[timeIndex=k+1, aPriori=True] =
+    # \mathbf{F} \svVar[timeIndex=k+1, aPriori=True] \mathbf{F}^{T}  + \mathbf{Q} \f]
+    #
+    # Because these matrices are nescessarily specific to the type of substate
+    # being updated, there is no default implementation in the SubState class.
+    # Rather, each derived class must implement this method as appropriate for
+    # the dynamics of the state being modeled.
+    #
+    # In addition, some substates may require additional operations to occur
+    # at a time update.  For instance, if a substate includes auxillary values
+    # (for instance, the attitude quaternion derived from the attitude error
+    # state), it may need to be time-updated seperately from the other states.
+    # In this case, the local implementation of the #timeUpdate function is
+    # the place to do these updates.
+    #
+    # @param self The object pointer
+    # @param dT The ellapsed time over which the time update occurs
+    # @param dynamics A dictionary containing any dynamics infomation which
+    # may be needed to update the state, for instance, measured accelerations
+    # or angular velocities.
+    #
+    # @returns A dictionary containing, at minimum, the following items:
+    # - "F": The state time-update matrix
+    # - "Q": The process noise matrix
     @abstractmethod
     def timeUpdate(self, dT, dynamics=None):
         pass

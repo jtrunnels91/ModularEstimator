@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['radecmeasmatrices',['RaDecMeasMatrices',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a3292931688716329fb80cbeac83f7ee7',1,'AttitudeSubstate::AttitudeState6DOF']]],
-  ['radecroll',['RaDecRoll',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a4728d7547aee8612fdd5e2875a37f8a2',1,'AttitudeSubstate::AttitudeState6DOF']]]
+  ['peakphotonflux',['peakPhotonFlux',['../classSignals_1_1StaticXRayPointSource.html#a7e16da6506ee1b83c9858dce9c7856ea',1,'Signals::StaticXRayPointSource']]],
+  ['phat',['PHat',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a6aac27efa4d5962865f7d3f701c919ab',1,'AttitudeSubstate.AttitudeState6DOF.PHat()'],['../classSignalCorrelationSubstate_1_1CorrelationFilter.html#a9b079080abde4a661f95687e8ea89827',1,'SignalCorrelationSubstate.CorrelationFilter.PHat()']]],
+  ['photonflux',['photonFlux',['../classSignals_1_1UniformNoiseXRaySource.html#af240be1882d819db77da73100c4c95c5',1,'Signals::UniformNoiseXRaySource']]],
+  ['pointsource',['PointSource',['../classSignals_1_1PointSource.html',1,'Signals']]],
+  ['poissonsource',['PoissonSource',['../classSignals_1_1PoissonSource.html',1,'Signals']]],
+  ['processnoisematrix',['processNoiseMatrix',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#abc5b2c8345bcd948d35b438fce184dee',1,'AttitudeSubstate::AttitudeState6DOF']]]
 ];

@@ -119,11 +119,8 @@ Collaboration diagram for AttitudeSubstate.AttitudeState6DOF:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a337e9fa07d0211f86b359e5d9deee1b8"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a337e9fa07d0211f86b359e5d9deee1b8">__init__</a> (self, attitudeQuaternion=Quaternion([1, 0, 0, 0]), attitudeErrorCovariance=np.eye(3), gyroBias=np.zeros(3), gyroBiasCovariance=np.eye(3), t=0)</td></tr>
-<tr class="memdesc:a337e9fa07d0211f86b359e5d9deee1b8"><td class="mdescLeft">&#160;</td><td class="mdescRight"><b>init</b>  <a href="#a337e9fa07d0211f86b359e5d9deee1b8">More...</a><br /></td></tr>
+<tr class="memdesc:a337e9fa07d0211f86b359e5d9deee1b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a337e9fa07d0211f86b359e5d9deee1b8" title="The __init__ method initializes the 6DOF attitude estimator ">__init__</a> method initializes the 6DOF attitude estimator  <a href="#a337e9fa07d0211f86b359e5d9deee1b8">More...</a><br /></td></tr>
 <tr class="separator:a337e9fa07d0211f86b359e5d9deee1b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e420e4a7806669c1286a1a70ce019da"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a8e420e4a7806669c1286a1a70ce019da">getStateVector</a> (self)</td></tr>
-<tr class="memdesc:a8e420e4a7806669c1286a1a70ce019da"><td class="mdescLeft">&#160;</td><td class="mdescRight">getStateVector is responsible for passing whatever version of the state vector should be used for time or measurement updates.  <a href="#a8e420e4a7806669c1286a1a70ce019da">More...</a><br /></td></tr>
-<tr class="separator:a8e420e4a7806669c1286a1a70ce019da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8ed0ab1ebe989bd7d54c12889c7bf2a9"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a8ed0ab1ebe989bd7d54c12889c7bf2a9">storeStateVector</a> (self, svDict)</td></tr>
 <tr class="memdesc:a8ed0ab1ebe989bd7d54c12889c7bf2a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">storeStateVector is responsible for taking an updated version of the state vector, and storing it in the class variables.  <a href="#a8ed0ab1ebe989bd7d54c12889c7bf2a9">More...</a><br /></td></tr>
 <tr class="separator:a8ed0ab1ebe989bd7d54c12889c7bf2a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -160,60 +157,36 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afe4e6f5ef09bd1fab2e390f3748af76a"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#afe4e6f5ef09bd1fab2e390f3748af76a">skewSymmetric</a> (self, vector)</td></tr>
 <tr class="memdesc:afe4e6f5ef09bd1fab2e390f3748af76a"><td class="mdescLeft">&#160;</td><td class="mdescRight">skewSymmetric generates a skew-symmetric matrix from a 3x1 vector  <a href="#afe4e6f5ef09bd1fab2e390f3748af76a">More...</a><br /></td></tr>
 <tr class="separator:afe4e6f5ef09bd1fab2e390f3748af76a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classSubStates_1_1SubState"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classSubStates_1_1SubState')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classSubStates_1_1SubState.html">SubStates.SubState</a></td></tr>
-<tr class="memitem:a5ff829fb892680db4e3643e6b1f6cc9b inherit pub_methods_classSubStates_1_1SubState"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5ff829fb892680db4e3643e6b1f6cc9b"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSubStates_1_1SubState.html#a5ff829fb892680db4e3643e6b1f6cc9b">__init__</a> (self, stateDimension=None, <a class="el" href="classSubStates_1_1SubState.html#a24bf2de56fc3037d91cba43d28f3bf60">stateVectorHistory</a>=None)</td></tr>
-<tr class="memdesc:a5ff829fb892680db4e3643e6b1f6cc9b inherit pub_methods_classSubStates_1_1SubState"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSubStates_1_1SubState.html#a5ff829fb892680db4e3643e6b1f6cc9b" title="__init__ initializes a SubState object ">__init__</a> initializes a <a class="el" href="classSubStates_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a> object <br /></td></tr>
-<tr class="separator:a5ff829fb892680db4e3643e6b1f6cc9b inherit pub_methods_classSubStates_1_1SubState"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ebd1a120f63ed477ee76999518a8828 inherit pub_methods_classSubStates_1_1SubState"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3ebd1a120f63ed477ee76999518a8828"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>getStateVector</b> (self)</td></tr>
-<tr class="separator:a3ebd1a120f63ed477ee76999518a8828 inherit pub_methods_classSubStates_1_1SubState"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65edbf44c6d93049cf0b2cb8e4b18b99 inherit pub_methods_classSubStates_1_1SubState"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a65edbf44c6d93049cf0b2cb8e4b18b99"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>storeStateVector</b> (self, svDict)</td></tr>
-<tr class="separator:a65edbf44c6d93049cf0b2cb8e4b18b99 inherit pub_methods_classSubStates_1_1SubState"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d863939fdb98b2739e1e737ec7496ae inherit pub_methods_classSubStates_1_1SubState"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSubStates_1_1SubState.html#a4d863939fdb98b2739e1e737ec7496ae">covariance</a> (self)</td></tr>
-<tr class="memdesc:a4d863939fdb98b2739e1e737ec7496ae inherit pub_methods_classSubStates_1_1SubState"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSubStates_1_1SubState.html#a4d863939fdb98b2739e1e737ec7496ae" title="covariance returns the SubState covariance matrix ">covariance</a> returns the <a class="el" href="classSubStates_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a> covariance matrix  <a href="#a4d863939fdb98b2739e1e737ec7496ae">More...</a><br /></td></tr>
-<tr class="separator:a4d863939fdb98b2739e1e737ec7496ae inherit pub_methods_classSubStates_1_1SubState"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4aebea19a134cb871a7c0b6c2709546a inherit pub_methods_classSubStates_1_1SubState"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a">dimension</a> (self)</td></tr>
-<tr class="memdesc:a4aebea19a134cb871a7c0b6c2709546a inherit pub_methods_classSubStates_1_1SubState"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a" title="dimension returns the dimension of the sub-state vector ">dimension</a> returns the dimension of the sub-state vector  <a href="#a4aebea19a134cb871a7c0b6c2709546a">More...</a><br /></td></tr>
-<tr class="separator:a4aebea19a134cb871a7c0b6c2709546a inherit pub_methods_classSubStates_1_1SubState"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af07ac4d1435fdecff97cff84bae4eeab inherit pub_methods_classSubStates_1_1SubState"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af07ac4d1435fdecff97cff84bae4eeab"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>timeUpdate</b> (self, dT, dynamics=None)</td></tr>
-<tr class="separator:af07ac4d1435fdecff97cff84bae4eeab inherit pub_methods_classSubStates_1_1SubState"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9dcc51af847b7b946089dd73c387ca19 inherit pub_methods_classSubStates_1_1SubState"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9dcc51af847b7b946089dd73c387ca19"></a>
-def&#160;</td><td class="memItemRight" valign="bottom"><b>getMeasurementMatrices</b> (self, measurement, source=None)</td></tr>
-<tr class="separator:a9dcc51af847b7b946089dd73c387ca19 inherit pub_methods_classSubStates_1_1SubState"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ebd1a120f63ed477ee76999518a8828"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSubStates_1_1SubState.html#a3ebd1a120f63ed477ee76999518a8828">getStateVector</a> (self)</td></tr>
+<tr class="memdesc:a3ebd1a120f63ed477ee76999518a8828"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSubStates_1_1SubState.html#a3ebd1a120f63ed477ee76999518a8828" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector  <a href="#a3ebd1a120f63ed477ee76999518a8828">More...</a><br /></td></tr>
+<tr class="separator:a3ebd1a120f63ed477ee76999518a8828"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4aebea19a134cb871a7c0b6c2709546a"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a">dimension</a> (self)</td></tr>
+<tr class="memdesc:a4aebea19a134cb871a7c0b6c2709546a"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a" title="dimension returns the dimension of the sub-state vector ">dimension</a> returns the dimension of the sub-state vector  <a href="#a4aebea19a134cb871a7c0b6c2709546a">More...</a><br /></td></tr>
+<tr class="separator:a4aebea19a134cb871a7c0b6c2709546a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a36a58a47280151dd544762d9a1d5c35d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a36a58a47280151dd544762d9a1d5c35d">qHat</a></td></tr>
 <tr class="memdesc:a36a58a47280151dd544762d9a1d5c35d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as <img class="formulaInl" alt="$\mathbf{\hat{q}}^{-}_{k}$" src="form_11.png"/> for the a priori value, or <img class="formulaInl" alt="$\mathbf{\hat{q}}^{+}_{k}$" src="form_12.png"/> for the a posteriori value.  <a href="#a36a58a47280151dd544762d9a1d5c35d">More...</a><br /></td></tr>
 <tr class="separator:a36a58a47280151dd544762d9a1d5c35d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b8eff7c89a7a03875dc04263da7ec18"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1b8eff7c89a7a03875dc04263da7ec18"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a1b8eff7c89a7a03875dc04263da7ec18">bHat</a></td></tr>
-<tr class="memdesc:a1b8eff7c89a7a03875dc04263da7ec18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current estimate of gyro bias. <br /></td></tr>
+<tr class="memitem:a1b8eff7c89a7a03875dc04263da7ec18"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a1b8eff7c89a7a03875dc04263da7ec18">bHat</a></td></tr>
+<tr class="memdesc:a1b8eff7c89a7a03875dc04263da7ec18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current estimate of gyro bias.  <a href="#a1b8eff7c89a7a03875dc04263da7ec18">More...</a><br /></td></tr>
 <tr class="separator:a1b8eff7c89a7a03875dc04263da7ec18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6aac27efa4d5962865f7d3f701c919ab"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a6aac27efa4d5962865f7d3f701c919ab">PHat</a></td></tr>
 <tr class="memdesc:a6aac27efa4d5962865f7d3f701c919ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current joint covariance matrix.  <a href="#a6aac27efa4d5962865f7d3f701c919ab">More...</a><br /></td></tr>
 <tr class="separator:a6aac27efa4d5962865f7d3f701c919ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1ea482e5536162f74876d1dd23b12e96"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ea482e5536162f74876d1dd23b12e96"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a1ea482e5536162f74876d1dd23b12e96">lastMeasID</a></td></tr>
-<tr class="memdesc:a1ea482e5536162f74876d1dd23b12e96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Last measurement used to generate measurement matrices. <br /></td></tr>
+<tr class="memitem:a1ea482e5536162f74876d1dd23b12e96"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a1ea482e5536162f74876d1dd23b12e96">lastMeasID</a></td></tr>
+<tr class="memdesc:a1ea482e5536162f74876d1dd23b12e96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Last measurement used to generate measurement matrices.  <a href="#a1ea482e5536162f74876d1dd23b12e96">More...</a><br /></td></tr>
 <tr class="separator:a1ea482e5536162f74876d1dd23b12e96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0161cc024a651de854100014872165af"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0161cc024a651de854100014872165af"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a0161cc024a651de854100014872165af">lastSourceID</a></td></tr>
-<tr class="memdesc:a0161cc024a651de854100014872165af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Last signal used to generate measurement matrices. <br /></td></tr>
+<tr class="memitem:a0161cc024a651de854100014872165af"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a0161cc024a651de854100014872165af">lastSourceID</a></td></tr>
+<tr class="memdesc:a0161cc024a651de854100014872165af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Last signal used to generate measurement matrices.  <a href="#a0161cc024a651de854100014872165af">More...</a><br /></td></tr>
 <tr class="separator:a0161cc024a651de854100014872165af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae23a47fae330703aa8a50b207275c9b0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#ae23a47fae330703aa8a50b207275c9b0">lastMeasMat</a></td></tr>
 <tr class="memdesc:ae23a47fae330703aa8a50b207275c9b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Last set of measurement matrices.  <a href="#ae23a47fae330703aa8a50b207275c9b0">More...</a><br /></td></tr>
 <tr class="separator:ae23a47fae330703aa8a50b207275c9b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af87f4ef871d05fbd84e7e7c91a2865a3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#af87f4ef871d05fbd84e7e7c91a2865a3">eulerAngleVec</a></td></tr>
-<tr class="memdesc:af87f4ef871d05fbd84e7e7c91a2865a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array of Euler angle history.  <a href="#af87f4ef871d05fbd84e7e7c91a2865a3">More...</a><br /></td></tr>
-<tr class="separator:af87f4ef871d05fbd84e7e7c91a2865a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_classSubStates_1_1SubState"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classSubStates_1_1SubState')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classSubStates_1_1SubState.html">SubStates.SubState</a></td></tr>
-<tr class="memitem:a24bf2de56fc3037d91cba43d28f3bf60 inherit pub_attribs_classSubStates_1_1SubState"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSubStates_1_1SubState.html#a24bf2de56fc3037d91cba43d28f3bf60">stateVectorHistory</a></td></tr>
-<tr class="memdesc:a24bf2de56fc3037d91cba43d28f3bf60 inherit pub_attribs_classSubStates_1_1SubState"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores the time-history of the sub-state state vector.  <a href="#a24bf2de56fc3037d91cba43d28f3bf60">More...</a><br /></td></tr>
-<tr class="separator:a24bf2de56fc3037d91cba43d28f3bf60 inherit pub_attribs_classSubStates_1_1SubState"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24bf2de56fc3037d91cba43d28f3bf60"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSubStates_1_1SubState.html#a24bf2de56fc3037d91cba43d28f3bf60">stateVectorHistory</a></td></tr>
+<tr class="memdesc:a24bf2de56fc3037d91cba43d28f3bf60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores the time-history of the sub-state state vector.  <a href="#a24bf2de56fc3037d91cba43d28f3bf60">More...</a><br /></td></tr>
+<tr class="separator:a24bf2de56fc3037d91cba43d28f3bf60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states. </p>
@@ -272,8 +245,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p><b>init</b> </p>
-<p>This function initializes the 6DOF attitude estimator</p>
+<p>The <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a337e9fa07d0211f86b359e5d9deee1b8" title="The __init__ method initializes the 6DOF attitude estimator ">__init__</a> method initializes the 6DOF attitude estimator </p>
 <p>This function is responsible for initializing an instance of the <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html" title="Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states...">AttitudeState6DOF</a> class and storing all the variables as member variables.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -286,7 +258,7 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00069">69</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00068">68</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -315,7 +287,45 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns covariance matrix, <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a6aac27efa4d5962865f7d3f701c919ab" title="Current joint covariance matrix. ">PHat</a> </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00234">234</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00231">231</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a4aebea19a134cb871a7c0b6c2709546a"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">def SubStates.SubState.dimension </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a" title="dimension returns the dimension of the sub-state vector ">dimension</a> returns the dimension of the sub-state vector </p>
+<p>The <a class="el" href="classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a" title="dimension returns the dimension of the sub-state vector ">dimension</a> method returns the dimension of the sub-state vector estimated by the <a class="el" href="classSubStates_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a>. This is the dimension as seen by the ModularFilter estimator.</p>
+<p>The default implementation is to return the class variable <a class="el" href="classSubStates_1_1SubState.html#aea750997b2a75daee4a3147eac68e4f8" title="Stores the length of the state vector as seen by the ModularFilter. ">__dimension__</a>, which is saved at initialization. This is designated as a "protected" variable, and should not change during the course of the <a class="el" href="classSubStates_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a>'s lifetime. If child class overwrites this implementation, care should be taken to ensure that the value returned by <a class="el" href="classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a" title="dimension returns the dimension of the sub-state vector ">dimension</a> does not change over <a class="el" href="classSubStates_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a> object lifetime.</p>
+<p>For <a class="el" href="classSubStates_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a> objects with auxilary states, or other quantities related to the state vector but not directly estimated by the ModularFilter, <a class="el" href="classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a" title="dimension returns the dimension of the sub-state vector ">dimension</a> should not count these states as part of the total dimension.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>The object pointer</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Returns the dimension of state vector </dd></dl>
+
+<p>Definition at line <a class="el" href="SubStates_8py_source.html#l00181">181</a> of file <a class="el" href="SubStates_8py_source.html">SubStates.py</a>.</p>
 
 </div>
 </div>
@@ -379,7 +389,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the error-state time update matrix, <img class="formulaInl" alt="$\boldsymbol{\Phi}$" src="form_28.png"/> </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00509">509</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00508">508</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -408,7 +418,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A list containing the three angles </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00740">740</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00739">739</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -455,35 +465,50 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A dictionary containing the measurement matrices H, R, and dY </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00330">330</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00329">329</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a8e420e4a7806669c1286a1a70ce019da"></a>
+<a class="anchor" id="a3ebd1a120f63ed477ee76999518a8828"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">def AttitudeSubstate.AttitudeState6DOF.getStateVector </td>
+          <td class="memname">def SubStates.SubState.getStateVector </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>getStateVector is responsible for passing whatever version of the state vector should be used for time or measurement updates. </p>
-<p>The "state" for this filter does not include the attitude quaternion. Rather, the attitude quaternion is updated internally. Instead, the state that represents attitude is the attitude error state, as described in FSADC.</p>
-<dl class="section note"><dt>Note</dt><dd>This function is one of mandatory functions required for <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html" title="Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states...">AttitudeState6DOF</a> to function as a sub-state of <a class="el" href="classState_1_1ModularFilter.html">State.ModularFilter</a>.</dd></dl>
+<p><a class="el" href="classSubStates_1_1SubState.html#a3ebd1a120f63ed477ee76999518a8828" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector </p>
+<p>The <a class="el" href="classSubStates_1_1SubState.html#a3ebd1a120f63ed477ee76999518a8828" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> method is responsible for returning a dictionary object containing, at minimim, the following items:</p>
+<ul>
+<li>'stateVector': A length <a class="el" href="classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a" title="dimension returns the dimension of the sub-state vector ">dimension</a> array containing the most recent state vector estimate</li>
+<li>'covariance': A (<a class="el" href="classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a" title="dimension returns the dimension of the sub-state vector ">dimension</a> x <a class="el" href="classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a" title="dimension returns the dimension of the sub-state vector ">dimension</a>) array containing the most recent covariance matrix</li>
+<li>'aPriori': A boolean indicating if the most recent estimate is the</li>
+<li>result of a time update (aPriori=True) or a measurement update (aPriori=False)</li>
+</ul>
+<p>This function can be used as-is</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">self</td><td>The object pointer </td></tr>
+    <tr><td class="paramname">self</td><td>The object pointer</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The dictionary containing the state vector, covariance matrix, and aPriori status </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00152">152</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SubStates_8py_source.html#l00113">113</a> of file <a class="el" href="SubStates_8py_source.html">SubStates.py</a>.</p>
 
 </div>
 </div>
@@ -541,7 +566,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the comibined 6x6 process noise matrix </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00579">579</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00578">578</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -600,7 +625,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The quaternion time-update matrix <img class="formulaInl" alt="$\bar{\Theta}(\omegaVec[est=True,aPriori=True, t=k], \Delta T)$" src="form_20.png"/> </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00425">425</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00424">424</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -659,7 +684,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A dictionary containing the measurement matrices H, R, and dY </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00658">658</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00657">657</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -688,7 +713,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A list containing the three angles </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00764">764</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00763">763</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -727,7 +752,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A unit vector generated from the angles given </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00783">783</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00782">782</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -766,7 +791,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The skew symmetric matrix </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00805">805</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00804">804</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -806,7 +831,7 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00180">180</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00177">177</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -854,25 +879,40 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A dict containing the state transition matrix ("F") and the process noise matrix ("Q") </dd></dl>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00264">264</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00263">263</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="af87f4ef871d05fbd84e7e7c91a2865a3"></a>
+<a class="anchor" id="a1b8eff7c89a7a03875dc04263da7ec18"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">AttitudeSubstate.AttitudeState6DOF.eulerAngleVec</td>
+          <td class="memname">AttitudeSubstate.AttitudeState6DOF.bHat</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Array of Euler angle history. </p>
-<p>This is a SmartPanda array that stores the history of time, Euler angles, and Euler angle covariances. </p>
+<p>Current estimate of gyro bias. </p>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00104">104</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00078">78</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1ea482e5536162f74876d1dd23b12e96"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">AttitudeSubstate.AttitudeState6DOF.lastMeasID</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Last measurement used to generate measurement matrices. </p>
+
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00090">90</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -889,7 +929,23 @@ Public Attributes</h2></td></tr>
 <p>Last set of measurement matrices. </p>
 <p>This allows class to avoid redundant computation of the same set of measurement matrices. </p>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00099">99</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00098">98</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0161cc024a651de854100014872165af"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">AttitudeSubstate.AttitudeState6DOF.lastSourceID</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Last signal used to generate measurement matrices. </p>
+
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00093">93</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -906,7 +962,7 @@ Public Attributes</h2></td></tr>
 <p>Current joint covariance matrix. </p>
 <p>Upper 3x3 diagonal contains covariance of the attitude estimate (related to <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a36a58a47280151dd544762d9a1d5c35d" title="Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as  ...">qHat</a>), while lower 3x3 diagonal contains the covariance of the gyro bias <a class="el" href="classAttitudeSubstate_1_1AttitudeState6DOF.html#a1b8eff7c89a7a03875dc04263da7ec18" title="Current estimate of gyro bias. ">bHat</a>. </p>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00085">85</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00084">84</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -922,7 +978,31 @@ Public Attributes</h2></td></tr>
 
 <p>Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as <img class="formulaInl" alt="$\mathbf{\hat{q}}^{-}_{k}$" src="form_11.png"/> for the a priori value, or <img class="formulaInl" alt="$\mathbf{\hat{q}}^{+}_{k}$" src="form_12.png"/> for the a posteriori value. </p>
 
-<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00076">76</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="AttitudeSubstate_8py_source.html#l00075">75</a> of file <a class="el" href="AttitudeSubstate_8py_source.html">AttitudeSubstate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a24bf2de56fc3037d91cba43d28f3bf60"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">SubStates.SubState.stateVectorHistory</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Stores the time-history of the sub-state state vector. </p>
+
+<p>Definition at line <a class="el" href="SubStates_8py_source.html#l00091">91</a> of file <a class="el" href="SubStates_8py_source.html">SubStates.py</a>.</p>
 
 </div>
 </div>

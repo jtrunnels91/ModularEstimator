@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['phat',['PHat',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a6aac27efa4d5962865f7d3f701c919ab',1,'AttitudeSubstate::AttitudeState6DOF']]],
-  ['pointsource',['PointSource',['../classSignals_1_1PointSource.html',1,'Signals']]],
-  ['poissonsource',['PoissonSource',['../classSignals_1_1PoissonSource.html',1,'Signals']]],
-  ['processnoisematrix',['processNoiseMatrix',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#abc5b2c8345bcd948d35b438fce184dee',1,'AttitudeSubstate::AttitudeState6DOF']]]
+  ['measurementupdateekf',['measurementUpdateEKF',['../classState_1_1ModularFilter.html#a1e6b78bdafffb5298fd6e5d2a022a878',1,'State::ModularFilter']]],
+  ['measurementupdatejpdaf',['measurementUpdateJPDAF',['../classState_1_1ModularFilter.html#a0da499cc21acaf9753711553102b5469',1,'State::ModularFilter']]],
+  ['measurementupdateml',['measurementUpdateML',['../classState_1_1ModularFilter.html#ac2d6be561f461f0501e451fc5be0811f',1,'State::ModularFilter']]],
+  ['measurementvalidationthreshold',['measurementValidationThreshold',['../classState_1_1ModularFilter.html#adf637093941f85a6ca14a122f232657a',1,'State::ModularFilter']]],
+  ['modularfilter',['ModularFilter',['../classState_1_1ModularFilter.html',1,'State']]]
 ];

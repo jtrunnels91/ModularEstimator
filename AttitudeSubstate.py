@@ -41,8 +41,7 @@ from SmartPanda import SmartPanda
 # where appropriate.
 class AttitudeState6DOF(SubState):
 
-    ## @fun __init__
-    # @brief This function initializes the 6DOF attitude estimator
+    ## @fun The #__init__ method initializes the 6DOF attitude estimator
     #
     # @details This function is responsible for initializing an instance of
     # the AttitudeState6DOF class and storing all the variables as member
@@ -98,27 +97,25 @@ class AttitudeState6DOF(SubState):
         # same set of measurement matrices.
         self.lastMeasMat = None
 
-        ## @brief Array of Euler angle history
-        # @details This is a SmartPanda array that stores the history of time,
-        # Euler angles, and Euler angle covariances.
-        self.eulerAngleVec = SmartPanda(
-            {'t': t,
-             'eulerAngles': self.eulerAngles(),
-             'eulerSTD': np.sqrt(self.PHat.diagonal()[0:3])
-             }
-        )
+        # ## @brief Array of Euler angle history
+        # # @details This is a SmartPanda array that stores the history of time,
+        # # Euler angles, and Euler angle covariances.
+        # self.eulerAngleVec = SmartPanda(
+        #     {'t': t,
+        #      }
+        # )
 
         super().__init__(
             stateDimension=6,
-            stateVectorHistory=SmartPanda(
-                {
-                    't': t,
-                    'stateVector': np.append(np.zeros(3), self.bHat),
-                    'covariance': self.PHat,
-                    'aPriori': True,
-                    'q': self.qHat.q
-                }
-            )
+            stateVectorHistory={
+                't': t,
+                'stateVector': np.append(np.zeros(3), self.bHat),
+                'covariance': self.PHat,
+                'aPriori': True,
+                'q': self.qHat.q,
+                'eulerAngles': self.eulerAngles(),
+                'eulerSTD': np.sqrt(self.PHat.diagonal()[0:3])
+            }
         )
 
         return
@@ -135,25 +132,25 @@ class AttitudeState6DOF(SubState):
     ###########################################################################
     """
 
-    ## @fun getStateVector is responsible for passing whatever version of the
-    # state vector should be used for time or measurement updates.
-    #
-    # @details The "state" for this filter does not include the attitude
-    # quaternion.  Rather, the attitude quaternion is updated internally.
-    # Instead, the state that represents attitude is the attitude error state,
-    # as described in FSADC.
-    #
-    # @note This function is one of mandatory functions required for
-    # AttitudeState6DOF to function as a sub-state of State.ModularFilter.
-    #
-    # @param self The object pointer
-    def getStateVector(
-            self
-            ):
-        svDict = {
-            'stateVector': np.append(np.zeros(3), self.bHat)
-        }
-        return svDict
+    # ## @fun getStateVector is responsible for passing whatever version of the
+    # # state vector should be used for time or measurement updates.
+    # #
+    # # @details The "state" for this filter does not include the attitude
+    # # quaternion.  Rather, the attitude quaternion is updated internally.
+    # # Instead, the state that represents attitude is the attitude error state,
+    # # as described in FSADC.
+    # #
+    # # @note This function is one of mandatory functions required for
+    # # AttitudeState6DOF to function as a sub-state of State.ModularFilter.
+    # #
+    # # @param self The object pointer
+    # def getStateVector(
+    #         self
+    #         ):
+    #     svDict = {
+    #         'stateVector': np.append(np.zeros(3), self.bHat)
+    #     }
+    #     return svDict
 
     ## @fun storeStateVector is responsible for taking an updated version of
     # the state vector, and storing it in the class variables.
@@ -201,11 +198,9 @@ class AttitudeState6DOF(SubState):
             self.qHat = qPlus
             self.bHat = xPlus[3:6]
 
-        self.eulerAngleVec.append({
-            't': time,
-            'eulerAngles': self.eulerAngles(),
-            'eulerSTD': np.sqrt(self.PHat.diagonal()[0:3])
-        })
+        # self.eulerAngleVec.append({
+        #     't': time,
+        # })
 
         self.PHat = PPlus
 
@@ -215,7 +210,9 @@ class AttitudeState6DOF(SubState):
                 'stateVector': np.append(np.zeros(3), self.bHat),
                 'covariance': self.PHat,
                 'aPriori': aPriori,
-                'q': self.qHat.q
+                'q': self.qHat.q,
+                'eulerAngles': self.eulerAngles(),
+                'eulerSTD': np.sqrt(self.PHat.diagonal()[0:3])
             }
         )
 
@@ -248,6 +245,8 @@ class AttitudeState6DOF(SubState):
     #
     # This function also updates the attitude quaternion internally.  It does
     # not update the covariance matrix however; this must be done externally.
+    #
+    # @implements #SubState.SubStates.timeUpdate
     #
     # @note This function is one of mandatory functions required for
     # AttitudeState6DOF to function as a sub-state of State.ModularFilter.

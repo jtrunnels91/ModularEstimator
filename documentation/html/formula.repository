@@ -53,3 +53,11 @@
 \form#52:\[ \mathbf{R} = \eye[3] \]
 \form#53:\[ \mathbf{R} = \eye[3] \sigma^2 \]
 \form#54:\[ \mathbf{R} = \eye[3] \sigma^2_{\RADEC} \]
+\form#55:$\mathbf{F}$
+\form#56:$\mathbf{Q}$
+\form#57:\[\sv[t=k+1, aPriori=True] = \mathbf{F}\]
+\form#58:\[\sv[timeIndex=k+1, aPriori=True] = \mathbf{F}\]
+\form#59:\[\sv[timeIndex=k+1, aPriori=True] = \mathbf{F} \sv[timeIndex=k, aPriori=False] \]
+\form#60:\[\svVar[timeIndex=k+1, aPriori=True] = \mathbf{F} \sv[timeIndex=k, aPriori=False] \]
+\form#61:\[\svVar[timeIndex=k+1, aPriori=True] = \mathbf{F} \svVar[timeIndex=k+1, aPriori=True] \mathbf{F}^{T} \]
+\form#62:\[\svVar[timeIndex=k+1, aPriori=True] = \mathbf{F} \svVar[timeIndex=k+1, aPriori=True] \mathbf{F}^{T} + \mathbf{Q} \]

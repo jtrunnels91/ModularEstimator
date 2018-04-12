@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['lastmeasid',['lastMeasID',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a1ea482e5536162f74876d1dd23b12e96',1,'AttitudeSubstate::AttitudeState6DOF']]],
-  ['lastmeasmat',['lastMeasMat',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#ae23a47fae330703aa8a50b207275c9b0',1,'AttitudeSubstate::AttitudeState6DOF']]],
-  ['lastsourceid',['lastSourceID',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a0161cc024a651de854100014872165af',1,'AttitudeSubstate::AttitudeState6DOF']]]
+  ['centerpeak',['centerPeak',['../classSignalCorrelationSubstate_1_1CorrelationFilter.html#a8e53182c2ff431a6a545a265cda6ba48',1,'SignalCorrelationSubstate::CorrelationFilter']]],
+  ['chat',['cHat',['../classSignalCorrelationSubstate_1_1CorrelationFilter.html#ad07b1d484b9ab77a1a8fc215f10faf15',1,'SignalCorrelationSubstate::CorrelationFilter']]],
+  ['covariancematrix',['covarianceMatrix',['../classState_1_1ModularFilter.html#a1981026f261047a45a6a7d89bbf1b7de',1,'State::ModularFilter']]]
 ];

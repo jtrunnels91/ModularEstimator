@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['qhat',['qHat',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a36a58a47280151dd544762d9a1d5c35d',1,'AttitudeSubstate::AttitudeState6DOF']]]
+  ['filterorder',['filterOrder',['../classSignalCorrelationSubstate_1_1CorrelationFilter.html#a4b49b7bd52c1346cca0342942a5bbbb6',1,'SignalCorrelationSubstate::CorrelationFilter']]],
+  ['flux',['flux',['../classSignals_1_1PoissonSource.html#a26e7bf25b1d9195bfded2a3ad6790bce',1,'Signals::PoissonSource']]]
 ];

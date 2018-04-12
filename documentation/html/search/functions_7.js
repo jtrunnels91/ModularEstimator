@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['radecmeasmatrices',['RaDecMeasMatrices',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a3292931688716329fb80cbeac83f7ee7',1,'AttitudeSubstate::AttitudeState6DOF']]],
-  ['radecroll',['RaDecRoll',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a4728d7547aee8612fdd5e2875a37f8a2',1,'AttitudeSubstate::AttitudeState6DOF']]]
+  ['measurementupdateekf',['measurementUpdateEKF',['../classState_1_1ModularFilter.html#a1e6b78bdafffb5298fd6e5d2a022a878',1,'State::ModularFilter']]],
+  ['measurementupdatejpdaf',['measurementUpdateJPDAF',['../classState_1_1ModularFilter.html#a0da499cc21acaf9753711553102b5469',1,'State::ModularFilter']]],
+  ['measurementupdateml',['measurementUpdateML',['../classState_1_1ModularFilter.html#ac2d6be561f461f0501e451fc5be0811f',1,'State::ModularFilter']]]
 ];
