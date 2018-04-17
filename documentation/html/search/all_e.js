@@ -1,9 +1,9 @@
 var searchData=
 [
   ['sidunitvec',['sidUnitVec',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#ae5afc5e0352e10e5c11e45d5b3fa8f4e',1,'AttitudeSubstate::AttitudeState6DOF']]],
-  ['signal',['signal',['../classSignalCorrelationSubstate_1_1CorrelationFilter.html#aa8d4b67731322e27598866d1cec84877',1,'SignalCorrelationSubstate::CorrelationFilter']]],
   ['signalcorrelationsubstate',['SignalCorrelationSubstate',['../namespaceSignalCorrelationSubstate.html',1,'']]],
   ['signalcorrelationsubstate_2epy',['SignalCorrelationSubstate.py',['../SignalCorrelationSubstate_8py.html',1,'']]],
+  ['signaldelay',['signalDelay',['../classSignalCorrelationSubstate_1_1CorrelationFilter.html#a01e35890dee1d79bd0e4f9e82cb16e3f',1,'SignalCorrelationSubstate::CorrelationFilter']]],
   ['signalid',['signalID',['../classSignals_1_1SignalSource.html#a85016cca8a7f1e188d314ced50577d05',1,'Signals::SignalSource']]],
   ['signals',['Signals',['../namespaceSignals.html',1,'']]],
   ['signals_2epy',['Signals.py',['../Signals_8py.html',1,'']]],
@@ -16,7 +16,7 @@ var searchData=
   ['staticpoissonsource',['StaticPoissonSource',['../classSignals_1_1StaticPoissonSource.html',1,'Signals']]],
   ['staticxraypointsource',['StaticXRayPointSource',['../classSignals_1_1StaticXRayPointSource.html',1,'Signals']]],
   ['storeglobalstatevector',['storeGlobalStateVector',['../classState_1_1ModularFilter.html#a3c510ca8c96da3b0e26215935e18beaa',1,'State::ModularFilter']]],
-  ['storestatevector',['storeStateVector',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a8ed0ab1ebe989bd7d54c12889c7bf2a9',1,'AttitudeSubstate.AttitudeState6DOF.storeStateVector()'],['../classSignalCorrelationSubstate_1_1CorrelationFilter.html#af7eb96af58ba70eefcf85a3529939afe',1,'SignalCorrelationSubstate.CorrelationFilter.storeStateVector()'],['../classSubStates_1_1SubState.html#a65edbf44c6d93049cf0b2cb8e4b18b99',1,'SubStates.SubState.storeStateVector()']]],
+  ['storestatevector',['storeStateVector',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a8ed0ab1ebe989bd7d54c12889c7bf2a9',1,'AttitudeSubstate.AttitudeState6DOF.storeStateVector()'],['../classSignalCorrelationSubstate_1_1CorrelationFilter.html#a94b5211aa159578344974b52f3b9f92e',1,'SignalCorrelationSubstate.CorrelationFilter.storeStateVector()'],['../classSubStates_1_1SubState.html#a65edbf44c6d93049cf0b2cb8e4b18b99',1,'SubStates.SubState.storeStateVector()']]],
   ['substate',['SubState',['../classSubStates_1_1SubState.html',1,'SubStates']]],
   ['substates',['SubStates',['../namespaceSubStates.html',1,'SubStates'],['../classState_1_1ModularFilter.html#af6128daa99126397f282ec0fcdcd3e56',1,'State.ModularFilter.subStates()']]],
   ['substates_2epy',['SubStates.py',['../SubStates_8py.html',1,'']]]

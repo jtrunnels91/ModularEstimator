@@ -61,3 +61,5 @@
 \form#60:\[\svVar[timeIndex=k+1, aPriori=True] = \mathbf{F} \sv[timeIndex=k, aPriori=False] \]
 \form#61:\[\svVar[timeIndex=k+1, aPriori=True] = \mathbf{F} \svVar[timeIndex=k+1, aPriori=True] \mathbf{F}^{T} \]
 \form#62:\[\svVar[timeIndex=k+1, aPriori=True] = \mathbf{F} \svVar[timeIndex=k+1, aPriori=True] \mathbf{F}^{T} + \mathbf{Q} \]
+\form#63:$2 * n + 1$
+\form#64:$n = $

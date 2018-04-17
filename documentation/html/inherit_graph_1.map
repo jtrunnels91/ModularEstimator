@@ -1,8 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classSignals_1_1SignalSource.html" title="Signals.SignalSource" alt="" coords="5,31,152,57"/>
-<area shape="rect" id="node2" href="$classSignals_1_1PointSource.html" title="Signals.PointSource" alt="" coords="431,5,571,32"/>
-<area shape="rect" id="node4" href="$classSignals_1_1PoissonSource.html" title="Signals.PoissonSource" alt="" coords="200,56,357,83"/>
-<area shape="rect" id="node3" href="$classSignals_1_1StaticXRayPointSource.html" title="Signals.StaticXRayPointSource" alt="" coords="644,5,851,32"/>
-<area shape="rect" id="node5" href="$classSignals_1_1StaticPoissonSource.html" title="Signals.StaticPoissonSource" alt="" coords="405,56,596,83"/>
-<area shape="rect" id="node6" href="$classSignals_1_1UniformNoiseXRaySource.html" title="Signals.UniformNoiseXRay\lSource" alt="" coords="656,57,839,98"/>
+<area shape="rect" id="node1" href="$classState_1_1ModularFilter.html" title="State.ModularFilter" alt="" coords="5,5,137,32"/>
 </map>

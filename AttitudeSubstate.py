@@ -97,13 +97,6 @@ class AttitudeState6DOF(SubState):
         # same set of measurement matrices.
         self.lastMeasMat = None
 
-        # ## @brief Array of Euler angle history
-        # # @details This is a SmartPanda array that stores the history of time,
-        # # Euler angles, and Euler angle covariances.
-        # self.eulerAngleVec = SmartPanda(
-        #     {'t': t,
-        #      }
-        # )
 
         super().__init__(
             stateDimension=6,
@@ -132,30 +125,11 @@ class AttitudeState6DOF(SubState):
     ###########################################################################
     """
 
-    # ## @fun getStateVector is responsible for passing whatever version of the
-    # # state vector should be used for time or measurement updates.
-    # #
-    # # @details The "state" for this filter does not include the attitude
-    # # quaternion.  Rather, the attitude quaternion is updated internally.
-    # # Instead, the state that represents attitude is the attitude error state,
-    # # as described in FSADC.
-    # #
-    # # @note This function is one of mandatory functions required for
-    # # AttitudeState6DOF to function as a sub-state of State.ModularFilter.
-    # #
-    # # @param self The object pointer
-    # def getStateVector(
-    #         self
-    #         ):
-    #     svDict = {
-    #         'stateVector': np.append(np.zeros(3), self.bHat)
-    #     }
-    #     return svDict
 
     ## @fun storeStateVector is responsible for taking an updated version of
     # the state vector, and storing it in the class variables.
     #
-    # @details This function is designed to receive an time or measurement
+    # @details This function is designed to receive a time or measurement
     # updated state vector and covariance, and store it.  This function is
     # used by State.ModularFilter to store a jointly updated state.
     #
@@ -165,12 +139,11 @@ class AttitudeState6DOF(SubState):
     # this class handles the time-update of #qHat internally, so the updated
     # attitude error state is only relevant after a measurement update.
     #
-    # @note This function is one of mandatory functions required for
-    # AttitudeState6DOF to function as a sub-state of State.ModularFilter.
-    #
     # @param self The object pointer
     # @param svDict A dictionary containing the current state vector information.
     # state vector is "a priori" or "a posteriori."
+    #
+    # @sa SubStates.SubState.storeStateVector
     def storeStateVector(
             self,
             svDict
@@ -218,18 +191,6 @@ class AttitudeState6DOF(SubState):
 
         return
     
-    ## @fun dimension returns the covariance of the sub-state vector
-    #
-    # @note This function is one of mandatory functions required for
-    # AttitudeState6DOF to function as a sub-state of State.ModularFilter.
-    #
-    # @param self The object pointer
-    #
-    # @return Returns covariance matrix, #PHat
-    def covariance(
-            self
-            ):
-        return (self.PHat)
 
     ## @fun timeUpdate returns the time-update matrices, and handles the
     # internal time update of the attitude estimate #qHat.
@@ -246,16 +207,13 @@ class AttitudeState6DOF(SubState):
     # This function also updates the attitude quaternion internally.  It does
     # not update the covariance matrix however; this must be done externally.
     #
-    # @implements #SubState.SubStates.timeUpdate
-    #
-    # @note This function is one of mandatory functions required for
-    # AttitudeState6DOF to function as a sub-state of State.ModularFilter.
-    #
     # @param self The object pointer
     # @param dynamics: A dict containing information about the dynamics.
     #
     # @return A dict containing the state transition matrix ("F") and the
     # process noise matrix ("Q")
+    #
+    # @sa SubStates.SubState.timeUpdate
     def timeUpdate(
             self,
             dT,
@@ -322,6 +280,8 @@ class AttitudeState6DOF(SubState):
     # @param source The source object that produced the measurement
     #
     # @return A dictionary containing the measurement matrices H, R, and dY
+    #
+    # @sa SubStates.SubState.getMeasurementMatrices
     def getMeasurementMatrices(
             self,
             measurement,

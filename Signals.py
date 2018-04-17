@@ -33,6 +33,16 @@ class PointSource(SignalSource):
     def RaDec(self):
         return(self.__RaDec__)
 
+    def unitVec(
+            self,
+            RaDec):
+        cosD = np.cos(self.__RaDec__['DEC'])
+        sinD = np.sin(self.__RaDec__['DEC'])
+        cosRA = np.cos(self.__RaDec__['RA'])
+        sinRA = np.sin(self.__RaDec__['RA'])
+
+        return np.array([cosD * cosRA, cosD * sinRA, sinD])
+    
     def computeAssociationProbability(
             self,
             measurement,

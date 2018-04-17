@@ -5,7 +5,7 @@ import numpy as np
 from scipy.linalg import block_diag
 from numpy import sin, cos, arcsin, arccos, arctan2, square, sqrt, abs, power
 from numpy.linalg import norm, inv
-from pyquaternion import Quaternion
+# from pyquaternion import Quaternion
 
 import sys
 import os
