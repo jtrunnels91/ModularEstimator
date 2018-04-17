@@ -63,3 +63,17 @@
 \form#62:\[\svVar[timeIndex=k+1, aPriori=True] = \mathbf{F} \svVar[timeIndex=k+1, aPriori=True] \mathbf{F}^{T} + \mathbf{Q} \]
 \form#63:$2 * n + 1$
 \form#64:$n = $
+\form#65:\[ \mathbf{F}_{j \to k} = \begin{bmatrix} \textrm{sinc}(\hat{\delta}) \end{bmatrix} \]
+\form#66:\[ \mathbf{F}_{j \to k} = \begin{bmatrix} \textrm{sinc}(\hat{\delta}) & \hdots & \textrm{sinc}(\hat{\delta} + N - 1) \end{bmatrix} \]
+\form#67:\[ \mathbf{F}_{j \to k} = \begin{bmatrix} \textrm{sinc}(\hat{\delta}) & \hdots & \textrm{sinc}(\hat{\delta} + N - 1) \\ \vdots & \ddots & \vdots \\ \textrm{sinc}(\hat{\delta} - N + 1) & \hdots & \textrm{sinc}(\hat{\delta}) \end{bmatrix} \]
+\form#68:\[ \mathbf{L}_{j} = \begin{bmatrix} \frac{\textrm{cos}}{(\hat{\delta})} - \frac{\textrm{sin}}{(\hat{\delta}^2)} & \hdots \\ \vdots & \ddots \\ \end{bmatrix} \sv[timeIndex = k] \]
+\form#69:\[ Q_{\delta} = \left(\frac{(k-j)}{c}\right)^2 \LOSVec \]
+\form#70:\[ Q_{\delta} = \left(\frac{(k-j)}{c}\right)^2 \LOSVec[source=S] \]
+\form#71:\[ Q_{\delta} = \left(\frac{(k-j)}{c}\right)^2 {\LOSVec[S]}^T \mathbf{P}_{\mathbf{v}} \LOSVec[S] \]
+\form#72:$\mathbf{v}$
+\form#73:$\mathbf{P}_{\mathbf{v}}$
+\form#74:$\Delta T$
+\form#75:\[ \hat{\delta}_{j \to k} = \frac{\mathbf{v} \LOSVec[S] \Delta T}{c T} \]
+\form#76:$mathbf{L}$
+\form#77:$Q$
+\form#78:$\mathbf{L}$

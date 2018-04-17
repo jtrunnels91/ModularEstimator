@@ -16,7 +16,7 @@ from SubStates import SubState
 from SmartPanda import SmartPanda
 
 ## @class CorrelationFilter
-# @brief #CorrelationFilter estimates the correlation vector and delay between
+# @brief CorrelationFilter estimates the correlation vector and delay between
 # a signal and a time-delayed measurement of that signal
 #
 # @details
@@ -24,6 +24,15 @@ from SmartPanda import SmartPanda
 # between a signal (the #trueSignal) and measurements of that signal.  This
 # correlation vector is then used to estimate the delay between the
 # #trueSignal and the measurements of that signal.
+#
+# @note This class is essentially an implementation of the estimator presented in
+# <a href="https://doi.org/10.2514/1.G002650">
+# Recursive Range Estimation Using Astrophysical Signals of Opportunity</a>,
+# J. Runnels, D. Gebre, Journal of Guidance, Control and Dynamics, 2017.  Some
+# equations from the paper are included in the class documentation for
+# reference.  A more detailed discussion and derivation of the estimator can
+# be found in the journal article..
+
 class CorrelationFilter(SubState):
     def __init__(
             self,
@@ -36,7 +45,8 @@ class CorrelationFilter(SubState):
             delayVar=0,
             centerPeak=True,
             t=0,
-            peakFitPoints=1
+            peakFitPoints=1,
+            processNoise=1e-12
             ):
 
         if isinstance(signal, PointSource):
@@ -80,6 +90,10 @@ class CorrelationFilter(SubState):
         # correlation vector peak
         self.peakFitPoints = peakFitPoints
 
+        ## @brief #processNoise is the scalar value used to generate an
+        # additional process noise term in #timeUpdate.
+        self.processNoise = processNoise
+        
         super().__init__(
             stateDimension=filterOrder,
             stateVectorHistory={
@@ -113,19 +127,38 @@ class CorrelationFilter(SubState):
         
         return
 
+    ## @fun #timeUpdate returns the matrices for performing the correlation
+    # vector time update.
     def timeUpdate(
             self,
             dT,
             dynamics=None
             ):
-        return
+        
+        timeUpdateMatrices = self.buildTimeUpdateMatrices(
+            dT, dynamics, self.cHat
+        )
+        
+        L = timeUpdateMatrices['L']
+        Q = timeUpdateMatrices['Q']
+
+        Qmat = np.outer(L) * Q + (np.eye(self.filterOrder) * self.processNoise)
+        
+        return {'F': timeUpdateMatrices['F'], 'Q': Qmat}
 
     def getMeasurementMatrices(
             self,
             measurement,
             source=None
-            ):
-        return
+    ):
+        if (
+                (source.signalID() == self.trueSignal.signalID()) and
+                ('t' in measurement)
+        ):
+
+            measMat = self.getTOAMeasurementMatrices(measurement)
+        
+        return measMat
     
     """
     ###########################################################################
@@ -137,6 +170,39 @@ class CorrelationFilter(SubState):
     ###########################################################################
     """
 
+    def getTOAMeasurementMatrices(
+            self,
+            measurement,
+            corrVec
+    ):
+        photonTOA = measurement['t']
+            
+        H = np.eye(self.filterOrder)
+
+        timeVector = np.linspace(
+            0,
+            (1-self.filterOrder) * self.dT,
+            self.filterOrder
+        )
+
+        timeVector = timeVector + photonTOA - self.signalDelay
+
+        signalTimeHistory = np.zeros(self.filterOrder)
+
+        for timeIndex in range(len(timeVector)):
+            signalTimeHistory[timeIndex] = (
+                self.trueSignal.flux(timeVector[timeIndex]) * self.dT
+            )
+
+        dY = signalTimeHistory - corrVec
+        
+        measMatDict = {
+            'H': H,
+            'dY': dY
+            }
+        
+        return measMatDict
+        
     ## @fun #computeSignalDelay computes the delay between the #trueSignal and
     # measurements based on a correlation vector
     #
@@ -266,11 +332,52 @@ class CorrelationFilter(SubState):
 
         return {'meanDelay': meanDelay, 'varDelay': varDelay}
 
-    
+    ## @fun #buildTimeUpdateMatrices constructs the correlation vector time
+    # update matrices
+    #
+    # @details The #buildTimeUpdateMatrices method constructs the matrices required to perform the time update of the correlation vector sub-state.
+    #
+    # The time update matrices are a function of the estimated spacecraft velocity (\f$\mathbf{v}\f$), velocity variance (\f$\mathbf{P}_{\mathbf{v}}\f$), and the elapsed time over which the time update occurs (\f$\Delta T\f$).  The matrices are constructed as follows:
+    #
+    # \f[
+    # \mathbf{F}_{j \to k} = \begin{bmatrix}
+    # \textrm{sinc}(\hat{\delta}) & \hdots & \textrm{sinc}(\hat{\delta} + N - 1) \\
+    # \vdots & \ddots & \vdots \\
+    # \textrm{sinc}(\hat{\delta} - N + 1) & \hdots & \textrm{sinc}(\hat{\delta})
+    # \end{bmatrix}
+    # \f]
+    # 
+    # \f[
+    # \mathbf{L}_{j} = \begin{bmatrix}
+    # \frac{\textrm{cos}}{(\hat{\delta})} - \frac{\textrm{sin}}{(\hat{\delta}^2)}   & \hdots \\
+    # \vdots & \ddots  \\
+    # \end{bmatrix} \sv[timeIndex = k]
+    # \f]
+    #
+    # \f[
+    # Q_{\delta} = \left(\frac{(k-j)}{c}\right)^2
+    # {\LOSVec[S]}^T \mathbf{P}_{\mathbf{v}} \LOSVec[S]
+    # \f]
+    #
+    # where
+    #
+    # \f[
+    # \hat{\delta}_{j \to k} = \frac{\mathbf{v} \LOSVec[S] \Delta T}{c T}
+    # \f]
+    #
+    # @param self The object pointer
+    # @param deltaT The amount of time over which the time update is occuring
+    # @param dynamics A dictionary containing the relevant dynamics for the
+    # time update
+    # @param h The current correlation vector
+    #
+    # @returns A dictionary containing the matrices \f$\mathbf{F}\f$,
+    # \f$\mathbf{L}\f$, and the scalar \f$Q\f
     def buildTimeUpdateMatrices(
             self,
             deltaT,
-            dynamics
+            dynamics,
+            h
     ):
         if 'velocity' in dynamics:
 
@@ -284,7 +391,7 @@ class CorrelationFilter(SubState):
                 self.speedOfLight()
             )
 
-            fractionalDelayVar = (
+            Q = (
                 self.unitVecToSignal.dot(vVar).dot(self.unitVecToSignal) *
                 np.square(indexDiff / self.speedOfLight())
                 )
@@ -310,7 +417,7 @@ class CorrelationFilter(SubState):
                     np.linspace(
                         1 - halfLength,
                         halfLength - 1,
-                        order
+                        self.filterOrder
                     ) + fractionalDelay
                 )
 
@@ -320,16 +427,7 @@ class CorrelationFilter(SubState):
 
             for i in range(len(baseVec)):
                 diffBase[i] = self.sincDiff(baseVec[i])
-
-            # If a windowing function was passed (i.e. some kind of low-pass
-            # filter) apply it here
-            if window is not None:
-                sincBase = np.convolve(
-                    sincBase,
-                    window,
-                    mode='same'
-                )
-
+            
             sincBase = np.roll(sincBase, 1 - int(halfLength))
             diffBase = np.roll(diffBase, 1 - int(halfLength))
 
@@ -337,11 +435,38 @@ class CorrelationFilter(SubState):
                 F[i] = np.roll(sincBase, i)
                 L[i] = np.roll(diffBase, i)
 
-            L = L.dot(correlationVector)
+            L = L.dot(h)
 
-        return F, L
+        else:
+            # If no velocity was included in dynamics, then do nothing during
+            # time update
+            F = np.eye(self.filterOrder)
+            L = np.zeros(self.filterOrder)
+            Q = 0
+        
+        timeUpdateDict = {
+            'F': F,
+            'L': L,
+            'Q': Q
+        }
+        
+        return(timeUpdateDict)
 
     def speedOfLight(
             self
     ):
         return (299792)
+
+    @staticmethod
+    def sincDiff(x):
+        if np.abs(x) < 1e-100:
+            myDiff = 0.0
+
+        else:
+            myDiff = np.pi * (
+                ((np.pi * x) * np.cos(x * np.pi) - np.sin(x * np.pi))
+                /
+                np.square(x * np.pi)
+            )
+
+        return myDiff

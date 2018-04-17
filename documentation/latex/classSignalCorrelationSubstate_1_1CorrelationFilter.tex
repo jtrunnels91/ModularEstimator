@@ -2,7 +2,7 @@
 \label{classSignalCorrelationSubstate_1_1CorrelationFilter}\index{Signal\+Correlation\+Substate.\+Correlation\+Filter@{Signal\+Correlation\+Substate.\+Correlation\+Filter}}
 
 
-\#\+Correlation\+Filter estimates the correlation vector and delay between a signal and a time-\/delayed measurement of that signal  
+\hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter}{Correlation\+Filter} estimates the correlation vector and delay between a signal and a time-\/delayed measurement of that signal.  
 
 
 
@@ -26,7 +26,7 @@ Collaboration diagram for Signal\+Correlation\+Substate.\+Correlation\+Filter\+:
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-def \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a861f8f7e6e50ea1f1f3bcd397458cc25}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self, signal, \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a4b49b7bd52c1346cca0342942a5bbbb6}{filter\+Order}, \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a500e4823c314d54a21f236b6b896c8eb}{dT}, correlation\+Vector, correlation\+Vector\+Covariance, \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a01e35890dee1d79bd0e4f9e82cb16e3f}{signal\+Delay}=0, \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a34d52beb18c131f2305689d48f612a5a}{delay\+Var}=0, \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a8e53182c2ff431a6a545a265cda6ba48}{center\+Peak}=True, t=0, \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a85a73739e9bb0a7f20886a812a3afa83}{peak\+Fit\+Points}=1)
+def \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_aae730dbd572e8b43fcab8c78832e8911}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self, signal, \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a4b49b7bd52c1346cca0342942a5bbbb6}{filter\+Order}, \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a500e4823c314d54a21f236b6b896c8eb}{dT}, correlation\+Vector, correlation\+Vector\+Covariance, \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a01e35890dee1d79bd0e4f9e82cb16e3f}{signal\+Delay}=0, \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a34d52beb18c131f2305689d48f612a5a}{delay\+Var}=0, \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a8e53182c2ff431a6a545a265cda6ba48}{center\+Peak}=True, t=0, \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a85a73739e9bb0a7f20886a812a3afa83}{peak\+Fit\+Points}=1, \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_abbd9598dd2d237abb1eef86ba427da7f}{process\+Noise}=1e-\/12)
 \item 
 def \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a94b5211aa159578344974b52f3b9f92e}{store\+State\+Vector} (self, sv\+Dict)
 \item 
@@ -38,14 +38,25 @@ def \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_ace04b6e310f3
 \begin{DoxyCompactList}\small\item\em \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_ace04b6e310f321192715c76ec2ac6b52}{compute\+Signal\+Delay} computes the delay between the \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a67ff75effd8a8a7e34f0f3e8c56ef491}{true\+Signal} and measurements based on a correlation vector \end{DoxyCompactList}\item 
 def \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_aa9e1991566655a89ed084b6918cfb278}{estimate\+Signal\+Delay\+UT} (self, h, P)
 \begin{DoxyCompactList}\small\item\em \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_aa9e1991566655a89ed084b6918cfb278}{estimate\+Signal\+Delay\+UT} uses a unscented tranform to estimate the delay corresponding to a correlation vector \end{DoxyCompactList}\item 
+def \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_ad05512ccd7d825c60f671f8a66306e28}{build\+Time\+Update\+Matrices} (self, deltaT, dynamics, h)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_ad05512ccd7d825c60f671f8a66306e28}{build\+Time\+Update\+Matrices} constructs the correlation vector time update matrices \end{DoxyCompactList}\item 
+def \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_aae801ac673e939678f865f9c0dc23d55}{speed\+Of\+Light} (self)
+\item 
 def \hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} (self)
 \begin{DoxyCompactList}\small\item\em \hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} returns the most recent value of the state vector \end{DoxyCompactList}\item 
 def \hyperlink{classSubStates_1_1SubState_a4d863939fdb98b2739e1e737ec7496ae}{covariance} (self)
 \begin{DoxyCompactList}\small\item\em \hyperlink{classSubStates_1_1SubState_a4d863939fdb98b2739e1e737ec7496ae}{covariance} returns the \hyperlink{classSubStates_1_1SubState}{Sub\+State} covariance matrix \end{DoxyCompactList}\item 
 def \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} (self)
 \begin{DoxyCompactList}\small\item\em \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} returns the dimension of the sub-\/state vector \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a948d71970965e18ecc2f19c3bc49f7f7}{sinc\+Diff} (x)
+\end{DoxyCompactItemize}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
+\item 
+\hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_ac1cfe7d60893f6a9e174a775be166fd6}{unit\+Vec\+To\+Signal}
 \item 
 \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a67ff75effd8a8a7e34f0f3e8c56ef491}{true\+Signal}
 \begin{DoxyCompactList}\small\item\em \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a67ff75effd8a8a7e34f0f3e8c56ef491}{true\+Signal} is a string which identifies which \hyperlink{classSignals_1_1SignalSource}{Signals.\+Signal\+Source} object is the \char`\"{}true\char`\"{} signal for which the correlation vector is being estimated \end{DoxyCompactList}\item 
@@ -65,23 +76,30 @@ def \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dim
 \begin{DoxyCompactList}\small\item\em \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a8e53182c2ff431a6a545a265cda6ba48}{center\+Peak} indicates whether the correlation vector is shifted to maintain the peak at the 0th tap \end{DoxyCompactList}\item 
 \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a85a73739e9bb0a7f20886a812a3afa83}{peak\+Fit\+Points}
 \begin{DoxyCompactList}\small\item\em \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a85a73739e9bb0a7f20886a812a3afa83}{peak\+Fit\+Points} is a variable which controls the number of points used for quadratically estimating the location of the correlation vector peak \end{DoxyCompactList}\item 
+\hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_abbd9598dd2d237abb1eef86ba427da7f}{process\+Noise}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_abbd9598dd2d237abb1eef86ba427da7f}{process\+Noise} is the scalar value used to generate an additional process noise term in \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a07a8c37a30c3d0a057049e0ff2eac67f}{time\+Update}. \end{DoxyCompactList}\item 
 \hyperlink{classSubStates_1_1SubState_a24bf2de56fc3037d91cba43d28f3bf60}{state\+Vector\+History}
 \begin{DoxyCompactList}\small\item\em Stores the time-\/history of the sub-\/state state vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
-\#\+Correlation\+Filter estimates the correlation vector and delay between a signal and a time-\/delayed measurement of that signal 
+\hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter}{Correlation\+Filter} estimates the correlation vector and delay between a signal and a time-\/delayed measurement of that signal. 
 
-This class contains an estimator which estimates the correlation vector between a signal (the \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a67ff75effd8a8a7e34f0f3e8c56ef491}{true\+Signal}) and measurements of that signal. This correlation vector is then used to estimate the delay between the \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a67ff75effd8a8a7e34f0f3e8c56ef491}{true\+Signal} and the measurements of that signal. 
+This class contains an estimator which estimates the correlation vector between a signal (the \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a67ff75effd8a8a7e34f0f3e8c56ef491}{true\+Signal}) and measurements of that signal. This correlation vector is then used to estimate the delay between the \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a67ff75effd8a8a7e34f0f3e8c56ef491}{true\+Signal} and the measurements of that signal.
 
-Definition at line 27 of file Signal\+Correlation\+Substate.\+py.
+\begin{DoxyNote}{Note}
+This class is essentially an implementation of the estimator presented in \href{https://doi.org/10.2514/1.G002650}{\tt Recursive Range Estimation Using Astrophysical Signals of Opportunity}, J. Runnels, D. Gebre, Journal of Guidance, Control and Dynamics, 2017. Some equations from the paper are included in the class documentation for reference. A more detailed discussion and derivation of the estimator can be found in the journal article.. 
+\end{DoxyNote}
+
+
+Definition at line 36 of file Signal\+Correlation\+Substate.\+py.
 
 
 
 \subsection{Constructor \& Destructor Documentation}
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
 \index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
-\subsubsection[{\texorpdfstring{\+\_\+\+\_\+init\+\_\+\+\_\+(self, signal, filter\+Order, d\+T, correlation\+Vector, correlation\+Vector\+Covariance, signal\+Delay=0, delay\+Var=0, center\+Peak=\+True, t=0, peak\+Fit\+Points=1)}{__init__(self, signal, filterOrder, dT, correlationVector, correlationVectorCovariance, signalDelay=0, delayVar=0, centerPeak=True, t=0, peakFitPoints=1)}}]{\setlength{\rightskip}{0pt plus 5cm}def Signal\+Correlation\+Substate.\+Correlation\+Filter.\+\_\+\+\_\+init\+\_\+\+\_\+ (
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+init\+\_\+\+\_\+(self, signal, filter\+Order, d\+T, correlation\+Vector, correlation\+Vector\+Covariance, signal\+Delay=0, delay\+Var=0, center\+Peak=\+True, t=0, peak\+Fit\+Points=1, process\+Noise=1e-\/12)}{__init__(self, signal, filterOrder, dT, correlationVector, correlationVectorCovariance, signalDelay=0, delayVar=0, centerPeak=True, t=0, peakFitPoints=1, processNoise=1e-12)}}]{\setlength{\rightskip}{0pt plus 5cm}def Signal\+Correlation\+Substate.\+Correlation\+Filter.\+\_\+\+\_\+init\+\_\+\+\_\+ (
 \begin{DoxyParamCaption}
 \item[{}]{self, }
 \item[{}]{signal, }
@@ -93,16 +111,63 @@ Definition at line 27 of file Signal\+Correlation\+Substate.\+py.
 \item[{}]{delay\+Var = {\ttfamily 0}, }
 \item[{}]{center\+Peak = {\ttfamily True}, }
 \item[{}]{t = {\ttfamily 0}, }
-\item[{}]{peak\+Fit\+Points = {\ttfamily 1}}
+\item[{}]{peak\+Fit\+Points = {\ttfamily 1}, }
+\item[{}]{process\+Noise = {\ttfamily 1e-\/12}}
 \end{DoxyParamCaption}
-)}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_a861f8f7e6e50ea1f1f3bcd397458cc25}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_a861f8f7e6e50ea1f1f3bcd397458cc25}
+)}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_aae730dbd572e8b43fcab8c78832e8911}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_aae730dbd572e8b43fcab8c78832e8911}
 
 
-Definition at line 40 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 50 of file Signal\+Correlation\+Substate.\+py.
 
 
 
 \subsection{Member Function Documentation}
+\index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!build\+Time\+Update\+Matrices@{build\+Time\+Update\+Matrices}}
+\index{build\+Time\+Update\+Matrices@{build\+Time\+Update\+Matrices}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
+\subsubsection[{\texorpdfstring{build\+Time\+Update\+Matrices(self, delta\+T, dynamics, h)}{buildTimeUpdateMatrices(self, deltaT, dynamics, h)}}]{\setlength{\rightskip}{0pt plus 5cm}def Signal\+Correlation\+Substate.\+Correlation\+Filter.\+build\+Time\+Update\+Matrices (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{deltaT, }
+\item[{}]{dynamics, }
+\item[{}]{h}
+\end{DoxyParamCaption}
+)}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_ad05512ccd7d825c60f671f8a66306e28}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_ad05512ccd7d825c60f671f8a66306e28}
+
+
+\hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_ad05512ccd7d825c60f671f8a66306e28}{build\+Time\+Update\+Matrices} constructs the correlation vector time update matrices 
+
+The \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_ad05512ccd7d825c60f671f8a66306e28}{build\+Time\+Update\+Matrices} method constructs the matrices required to perform the time update of the correlation vector sub-\/state.
+
+The time update matrices are a function of the estimated spacecraft velocity ( $\mathbf{v}$), velocity variance ( $\mathbf{P}_{\mathbf{v}}$), and the elapsed time over which the time update occurs ( $\Delta T$). The matrices are constructed as follows\+:
+
+\[ \mathbf{F}_{j \to k} = \begin{bmatrix} \textrm{sinc}(\hat{\delta}) & \hdots & \textrm{sinc}(\hat{\delta} + N - 1) \\ \vdots & \ddots & \vdots \\ \textrm{sinc}(\hat{\delta} - N + 1) & \hdots & \textrm{sinc}(\hat{\delta}) \end{bmatrix} \]
+
+\[ \mathbf{L}_{j} = \begin{bmatrix} \frac{\textrm{cos}}{(\hat{\delta})} - \frac{\textrm{sin}}{(\hat{\delta}^2)} & \hdots \\ \vdots & \ddots \\ \end{bmatrix} \sv[timeIndex = k] \]
+
+\[ Q_{\delta} = \left(\frac{(k-j)}{c}\right)^2 {\LOSVec[S]}^T \mathbf{P}_{\mathbf{v}} \LOSVec[S] \]
+
+where
+
+\[ \hat{\delta}_{j \to k} = \frac{\mathbf{v} \LOSVec[S] \Delta T}{c T} \]
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer \\
+\hline
+{\em deltaT} & The amount of time over which the time update is occuring \\
+\hline
+{\em dynamics} & A dictionary containing the relevant dynamics for the time update \\
+\hline
+{\em h} & The current correlation vector\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A dictionary containing the matrices $\mathbf{F}$, $\mathbf{L}$, and the scalar 
+\end{DoxyReturn}
+
+
+Definition at line 335 of file Signal\+Correlation\+Substate.\+py.
+
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!compute\+Signal\+Delay@{compute\+Signal\+Delay}}
 \index{compute\+Signal\+Delay@{compute\+Signal\+Delay}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
 \subsubsection[{\texorpdfstring{compute\+Signal\+Delay(self, c, P)}{computeSignalDelay(self, c, P)}}]{\setlength{\rightskip}{0pt plus 5cm}def Signal\+Correlation\+Substate.\+Correlation\+Filter.\+compute\+Signal\+Delay (
@@ -136,7 +201,7 @@ The estimate of the delay
 \end{DoxyReturn}
 
 
-Definition at line 167 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 190 of file Signal\+Correlation\+Substate.\+py.
 
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!covariance@{covariance}}
 \index{covariance@{covariance}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
@@ -227,7 +292,7 @@ A dict containing the estimate of the peak location (\char`\"{}mean\+Delay\char`
 \end{DoxyReturn}
 
 
-Definition at line 242 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 265 of file Signal\+Correlation\+Substate.\+py.
 
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!get\+Measurement\+Matrices@{get\+Measurement\+Matrices}}
 \index{get\+Measurement\+Matrices@{get\+Measurement\+Matrices}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
@@ -240,7 +305,7 @@ Definition at line 242 of file Signal\+Correlation\+Substate.\+py.
 )}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_ae7338456be781e322eba5bce4e41199f}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_ae7338456be781e322eba5bce4e41199f}
 
 
-Definition at line 124 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 147 of file Signal\+Correlation\+Substate.\+py.
 
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!get\+State\+Vector@{get\+State\+Vector}}
 \index{get\+State\+Vector@{get\+State\+Vector}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
@@ -277,6 +342,28 @@ The dictionary containing the state vector, covariance matrix, and a\+Priori sta
 
 Definition at line 113 of file Sub\+States.\+py.
 
+\index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!sinc\+Diff@{sinc\+Diff}}
+\index{sinc\+Diff@{sinc\+Diff}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
+\subsubsection[{\texorpdfstring{sinc\+Diff(x)}{sincDiff(x)}}]{\setlength{\rightskip}{0pt plus 5cm}def Signal\+Correlation\+Substate.\+Correlation\+Filter.\+sinc\+Diff (
+\begin{DoxyParamCaption}
+\item[{}]{x}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_a948d71970965e18ecc2f19c3bc49f7f7}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_a948d71970965e18ecc2f19c3bc49f7f7}
+
+
+Definition at line 415 of file Signal\+Correlation\+Substate.\+py.
+
+\index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!speed\+Of\+Light@{speed\+Of\+Light}}
+\index{speed\+Of\+Light@{speed\+Of\+Light}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
+\subsubsection[{\texorpdfstring{speed\+Of\+Light(self)}{speedOfLight(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def Signal\+Correlation\+Substate.\+Correlation\+Filter.\+speed\+Of\+Light (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_aae801ac673e939678f865f9c0dc23d55}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_aae801ac673e939678f865f9c0dc23d55}
+
+
+Definition at line 411 of file Signal\+Correlation\+Substate.\+py.
+
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!store\+State\+Vector@{store\+State\+Vector}}
 \index{store\+State\+Vector@{store\+State\+Vector}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
 \subsubsection[{\texorpdfstring{store\+State\+Vector(self, sv\+Dict)}{storeStateVector(self, svDict)}}]{\setlength{\rightskip}{0pt plus 5cm}def Signal\+Correlation\+Substate.\+Correlation\+Filter.\+store\+State\+Vector (
@@ -287,7 +374,7 @@ Definition at line 113 of file Sub\+States.\+py.
 )}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_a94b5211aa159578344974b52f3b9f92e}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_a94b5211aa159578344974b52f3b9f92e}
 
 
-Definition at line 109 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 125 of file Signal\+Correlation\+Substate.\+py.
 
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!time\+Update@{time\+Update}}
 \index{time\+Update@{time\+Update}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
@@ -300,7 +387,7 @@ Definition at line 109 of file Signal\+Correlation\+Substate.\+py.
 )}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_a07a8c37a30c3d0a057049e0ff2eac67f}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_a07a8c37a30c3d0a057049e0ff2eac67f}
 
 
-Definition at line 117 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 133 of file Signal\+Correlation\+Substate.\+py.
 
 
 
@@ -314,7 +401,7 @@ Definition at line 117 of file Signal\+Correlation\+Substate.\+py.
 
 
 
-Definition at line 73 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 86 of file Signal\+Correlation\+Substate.\+py.
 
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!c\+Hat@{c\+Hat}}
 \index{c\+Hat@{c\+Hat}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
@@ -325,7 +412,7 @@ Definition at line 73 of file Signal\+Correlation\+Substate.\+py.
 
 
 
-Definition at line 57 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 70 of file Signal\+Correlation\+Substate.\+py.
 
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!delay\+Var@{delay\+Var}}
 \index{delay\+Var@{delay\+Var}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
@@ -336,7 +423,7 @@ Definition at line 57 of file Signal\+Correlation\+Substate.\+py.
 
 
 
-Definition at line 69 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 82 of file Signal\+Correlation\+Substate.\+py.
 
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!dT@{dT}}
 \index{dT@{dT}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
@@ -347,7 +434,7 @@ Definition at line 69 of file Signal\+Correlation\+Substate.\+py.
 
 
 
-Definition at line 53 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 66 of file Signal\+Correlation\+Substate.\+py.
 
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!filter\+Order@{filter\+Order}}
 \index{filter\+Order@{filter\+Order}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
@@ -358,7 +445,7 @@ Definition at line 53 of file Signal\+Correlation\+Substate.\+py.
 
 
 
-Definition at line 49 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 62 of file Signal\+Correlation\+Substate.\+py.
 
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!peak\+Fit\+Points@{peak\+Fit\+Points}}
 \index{peak\+Fit\+Points@{peak\+Fit\+Points}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
@@ -369,7 +456,7 @@ Definition at line 49 of file Signal\+Correlation\+Substate.\+py.
 
 
 
-Definition at line 78 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 91 of file Signal\+Correlation\+Substate.\+py.
 
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!P\+Hat@{P\+Hat}}
 \index{P\+Hat@{P\+Hat}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
@@ -380,7 +467,18 @@ Definition at line 78 of file Signal\+Correlation\+Substate.\+py.
 
 
 
-Definition at line 61 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 74 of file Signal\+Correlation\+Substate.\+py.
+
+\index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!process\+Noise@{process\+Noise}}
+\index{process\+Noise@{process\+Noise}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
+\subsubsection[{\texorpdfstring{process\+Noise}{processNoise}}]{\setlength{\rightskip}{0pt plus 5cm}Signal\+Correlation\+Substate.\+Correlation\+Filter.\+process\+Noise}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_abbd9598dd2d237abb1eef86ba427da7f}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_abbd9598dd2d237abb1eef86ba427da7f}
+
+
+\hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_abbd9598dd2d237abb1eef86ba427da7f}{process\+Noise} is the scalar value used to generate an additional process noise term in \hyperlink{classSignalCorrelationSubstate_1_1CorrelationFilter_a07a8c37a30c3d0a057049e0ff2eac67f}{time\+Update}. 
+
+
+
+Definition at line 94 of file Signal\+Correlation\+Substate.\+py.
 
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!signal\+Delay@{signal\+Delay}}
 \index{signal\+Delay@{signal\+Delay}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
@@ -391,7 +489,7 @@ Definition at line 61 of file Signal\+Correlation\+Substate.\+py.
 
 
 
-Definition at line 65 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 78 of file Signal\+Correlation\+Substate.\+py.
 
 \index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!state\+Vector\+History@{state\+Vector\+History}}
 \index{state\+Vector\+History@{state\+Vector\+History}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
@@ -413,7 +511,14 @@ Definition at line 91 of file Sub\+States.\+py.
 
 
 
-Definition at line 45 of file Signal\+Correlation\+Substate.\+py.
+Definition at line 58 of file Signal\+Correlation\+Substate.\+py.
+
+\index{Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}!unit\+Vec\+To\+Signal@{unit\+Vec\+To\+Signal}}
+\index{unit\+Vec\+To\+Signal@{unit\+Vec\+To\+Signal}!Signal\+Correlation\+Substate\+::\+Correlation\+Filter@{Signal\+Correlation\+Substate\+::\+Correlation\+Filter}}
+\subsubsection[{\texorpdfstring{unit\+Vec\+To\+Signal}{unitVecToSignal}}]{\setlength{\rightskip}{0pt plus 5cm}Signal\+Correlation\+Substate.\+Correlation\+Filter.\+unit\+Vec\+To\+Signal}\hypertarget{classSignalCorrelationSubstate_1_1CorrelationFilter_ac1cfe7d60893f6a9e174a775be166fd6}{}\label{classSignalCorrelationSubstate_1_1CorrelationFilter_ac1cfe7d60893f6a9e174a775be166fd6}
+
+
+Definition at line 53 of file Signal\+Correlation\+Substate.\+py.
 
 
 

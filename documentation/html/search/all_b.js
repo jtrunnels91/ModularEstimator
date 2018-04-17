@@ -6,5 +6,6 @@ var searchData=
   ['photonflux',['photonFlux',['../classSignals_1_1UniformNoiseXRaySource.html#af240be1882d819db77da73100c4c95c5',1,'Signals::UniformNoiseXRaySource']]],
   ['pointsource',['PointSource',['../classSignals_1_1PointSource.html',1,'Signals']]],
   ['poissonsource',['PoissonSource',['../classSignals_1_1PoissonSource.html',1,'Signals']]],
+  ['processnoise',['processNoise',['../classSignalCorrelationSubstate_1_1CorrelationFilter.html#abbd9598dd2d237abb1eef86ba427da7f',1,'SignalCorrelationSubstate::CorrelationFilter']]],
   ['processnoisematrix',['processNoiseMatrix',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#abc5b2c8345bcd948d35b438fce184dee',1,'AttitudeSubstate::AttitudeState6DOF']]]
 ];

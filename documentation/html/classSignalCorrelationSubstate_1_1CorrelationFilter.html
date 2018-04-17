@@ -90,6 +90,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classSignalCorrelationSubstate_1_1CorrelationFilter-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -97,7 +98,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>#CorrelationFilter estimates the correlation vector and delay between a signal and a time-delayed measurement of that signal  
+<p><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html" title="CorrelationFilter estimates the correlation vector and delay between a signal and a time-delayed meas...">CorrelationFilter</a> estimates the correlation vector and delay between a signal and a time-delayed measurement of that signal.  
  <a href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for SignalCorrelationSubstate.CorrelationFilter:</div>
@@ -118,8 +119,8 @@ Collaboration diagram for SignalCorrelationSubstate.CorrelationFilter:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a861f8f7e6e50ea1f1f3bcd397458cc25"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a861f8f7e6e50ea1f1f3bcd397458cc25">__init__</a> (self, signal, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a4b49b7bd52c1346cca0342942a5bbbb6">filterOrder</a>, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a500e4823c314d54a21f236b6b896c8eb">dT</a>, correlationVector, correlationVectorCovariance, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a01e35890dee1d79bd0e4f9e82cb16e3f">signalDelay</a>=0, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a34d52beb18c131f2305689d48f612a5a">delayVar</a>=0, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a8e53182c2ff431a6a545a265cda6ba48">centerPeak</a>=True, t=0, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a85a73739e9bb0a7f20886a812a3afa83">peakFitPoints</a>=1)</td></tr>
-<tr class="separator:a861f8f7e6e50ea1f1f3bcd397458cc25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae730dbd572e8b43fcab8c78832e8911"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#aae730dbd572e8b43fcab8c78832e8911">__init__</a> (self, signal, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a4b49b7bd52c1346cca0342942a5bbbb6">filterOrder</a>, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a500e4823c314d54a21f236b6b896c8eb">dT</a>, correlationVector, correlationVectorCovariance, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a01e35890dee1d79bd0e4f9e82cb16e3f">signalDelay</a>=0, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a34d52beb18c131f2305689d48f612a5a">delayVar</a>=0, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a8e53182c2ff431a6a545a265cda6ba48">centerPeak</a>=True, t=0, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a85a73739e9bb0a7f20886a812a3afa83">peakFitPoints</a>=1, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#abbd9598dd2d237abb1eef86ba427da7f">processNoise</a>=1e-12)</td></tr>
+<tr class="separator:aae730dbd572e8b43fcab8c78832e8911"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94b5211aa159578344974b52f3b9f92e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a94b5211aa159578344974b52f3b9f92e">storeStateVector</a> (self, svDict)</td></tr>
 <tr class="separator:a94b5211aa159578344974b52f3b9f92e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07a8c37a30c3d0a057049e0ff2eac67f"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a07a8c37a30c3d0a057049e0ff2eac67f">timeUpdate</a> (self, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a500e4823c314d54a21f236b6b896c8eb">dT</a>, dynamics=None)</td></tr>
@@ -132,6 +133,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa9e1991566655a89ed084b6918cfb278"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#aa9e1991566655a89ed084b6918cfb278">estimateSignalDelayUT</a> (self, h, P)</td></tr>
 <tr class="memdesc:aa9e1991566655a89ed084b6918cfb278"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#aa9e1991566655a89ed084b6918cfb278" title="estimateSignalDelayUT uses a unscented tranform to estimate the delay corresponding to a correlation ...">estimateSignalDelayUT</a> uses a unscented tranform to estimate the delay corresponding to a correlation vector  <a href="#aa9e1991566655a89ed084b6918cfb278">More...</a><br /></td></tr>
 <tr class="separator:aa9e1991566655a89ed084b6918cfb278"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad05512ccd7d825c60f671f8a66306e28"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#ad05512ccd7d825c60f671f8a66306e28">buildTimeUpdateMatrices</a> (self, deltaT, dynamics, h)</td></tr>
+<tr class="memdesc:ad05512ccd7d825c60f671f8a66306e28"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#ad05512ccd7d825c60f671f8a66306e28" title="buildTimeUpdateMatrices constructs the correlation vector time update matrices ">buildTimeUpdateMatrices</a> constructs the correlation vector time update matrices  <a href="#ad05512ccd7d825c60f671f8a66306e28">More...</a><br /></td></tr>
+<tr class="separator:ad05512ccd7d825c60f671f8a66306e28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae801ac673e939678f865f9c0dc23d55"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#aae801ac673e939678f865f9c0dc23d55">speedOfLight</a> (self)</td></tr>
+<tr class="separator:aae801ac673e939678f865f9c0dc23d55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ebd1a120f63ed477ee76999518a8828"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSubStates_1_1SubState.html#a3ebd1a120f63ed477ee76999518a8828">getStateVector</a> (self)</td></tr>
 <tr class="memdesc:a3ebd1a120f63ed477ee76999518a8828"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSubStates_1_1SubState.html#a3ebd1a120f63ed477ee76999518a8828" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector  <a href="#a3ebd1a120f63ed477ee76999518a8828">More...</a><br /></td></tr>
 <tr class="separator:a3ebd1a120f63ed477ee76999518a8828"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,8 +148,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a4aebea19a134cb871a7c0b6c2709546a"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a" title="dimension returns the dimension of the sub-state vector ">dimension</a> returns the dimension of the sub-state vector  <a href="#a4aebea19a134cb871a7c0b6c2709546a">More...</a><br /></td></tr>
 <tr class="separator:a4aebea19a134cb871a7c0b6c2709546a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a948d71970965e18ecc2f19c3bc49f7f7"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a948d71970965e18ecc2f19c3bc49f7f7">sincDiff</a> (x)</td></tr>
+<tr class="separator:a948d71970965e18ecc2f19c3bc49f7f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:ac1cfe7d60893f6a9e174a775be166fd6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#ac1cfe7d60893f6a9e174a775be166fd6">unitVecToSignal</a></td></tr>
+<tr class="separator:ac1cfe7d60893f6a9e174a775be166fd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67ff75effd8a8a7e34f0f3e8c56ef491"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a67ff75effd8a8a7e34f0f3e8c56ef491">trueSignal</a></td></tr>
 <tr class="memdesc:a67ff75effd8a8a7e34f0f3e8c56ef491"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a67ff75effd8a8a7e34f0f3e8c56ef491" title="trueSignal is a string which identifies which Signals.SignalSource object is the &quot;true&quot; signal for wh...">trueSignal</a> is a string which identifies which <a class="el" href="classSignals_1_1SignalSource.html">Signals.SignalSource</a> object is the "true" signal for which the correlation vector is being estimated  <a href="#a67ff75effd8a8a7e34f0f3e8c56ef491">More...</a><br /></td></tr>
 <tr class="separator:a67ff75effd8a8a7e34f0f3e8c56ef491"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -171,17 +184,21 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a85a73739e9bb0a7f20886a812a3afa83"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a85a73739e9bb0a7f20886a812a3afa83">peakFitPoints</a></td></tr>
 <tr class="memdesc:a85a73739e9bb0a7f20886a812a3afa83"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a85a73739e9bb0a7f20886a812a3afa83" title="peakFitPoints is a variable which controls the number of points used for quadratically estimating the...">peakFitPoints</a> is a variable which controls the number of points used for quadratically estimating the location of the correlation vector peak  <a href="#a85a73739e9bb0a7f20886a812a3afa83">More...</a><br /></td></tr>
 <tr class="separator:a85a73739e9bb0a7f20886a812a3afa83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbd9598dd2d237abb1eef86ba427da7f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#abbd9598dd2d237abb1eef86ba427da7f">processNoise</a></td></tr>
+<tr class="memdesc:abbd9598dd2d237abb1eef86ba427da7f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#abbd9598dd2d237abb1eef86ba427da7f" title="processNoise is the scalar value used to generate an additional process noise term in timeUpdate...">processNoise</a> is the scalar value used to generate an additional process noise term in <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a07a8c37a30c3d0a057049e0ff2eac67f">timeUpdate</a>.  <a href="#abbd9598dd2d237abb1eef86ba427da7f">More...</a><br /></td></tr>
+<tr class="separator:abbd9598dd2d237abb1eef86ba427da7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a24bf2de56fc3037d91cba43d28f3bf60"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSubStates_1_1SubState.html#a24bf2de56fc3037d91cba43d28f3bf60">stateVectorHistory</a></td></tr>
 <tr class="memdesc:a24bf2de56fc3037d91cba43d28f3bf60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores the time-history of the sub-state state vector.  <a href="#a24bf2de56fc3037d91cba43d28f3bf60">More...</a><br /></td></tr>
 <tr class="separator:a24bf2de56fc3037d91cba43d28f3bf60"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>#CorrelationFilter estimates the correlation vector and delay between a signal and a time-delayed measurement of that signal </p>
-<p>This class contains an estimator which estimates the correlation vector between a signal (the <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a67ff75effd8a8a7e34f0f3e8c56ef491" title="trueSignal is a string which identifies which Signals.SignalSource object is the &quot;true&quot; signal for wh...">trueSignal</a>) and measurements of that signal. This correlation vector is then used to estimate the delay between the <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a67ff75effd8a8a7e34f0f3e8c56ef491" title="trueSignal is a string which identifies which Signals.SignalSource object is the &quot;true&quot; signal for wh...">trueSignal</a> and the measurements of that signal. </p>
+<div class="textblock"><p><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html" title="CorrelationFilter estimates the correlation vector and delay between a signal and a time-delayed meas...">CorrelationFilter</a> estimates the correlation vector and delay between a signal and a time-delayed measurement of that signal. </p>
+<p>This class contains an estimator which estimates the correlation vector between a signal (the <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a67ff75effd8a8a7e34f0f3e8c56ef491" title="trueSignal is a string which identifies which Signals.SignalSource object is the &quot;true&quot; signal for wh...">trueSignal</a>) and measurements of that signal. This correlation vector is then used to estimate the delay between the <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a67ff75effd8a8a7e34f0f3e8c56ef491" title="trueSignal is a string which identifies which Signals.SignalSource object is the &quot;true&quot; signal for wh...">trueSignal</a> and the measurements of that signal.</p>
+<dl class="section note"><dt>Note</dt><dd>This class is essentially an implementation of the estimator presented in <a href="https://doi.org/10.2514/1.G002650">Recursive Range Estimation Using Astrophysical Signals of Opportunity</a>, J. Runnels, D. Gebre, Journal of Guidance, Control and Dynamics, 2017. Some equations from the paper are included in the class documentation for reference. A more detailed discussion and derivation of the estimator can be found in the journal article.. </dd></dl>
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00027">27</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00036">36</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a861f8f7e6e50ea1f1f3bcd397458cc25"></a>
+<a class="anchor" id="aae730dbd572e8b43fcab8c78832e8911"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -249,7 +266,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>peakFitPoints</em> = <code>1</code>&#160;</td>
+          <td class="paramname"><em>peakFitPoints</em> = <code>1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>processNoise</em> = <code>1e-12</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -259,11 +282,78 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00040">40</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00050">50</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ad05512ccd7d825c60f671f8a66306e28"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def SignalCorrelationSubstate.CorrelationFilter.buildTimeUpdateMatrices </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>deltaT</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>dynamics</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>h</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#ad05512ccd7d825c60f671f8a66306e28" title="buildTimeUpdateMatrices constructs the correlation vector time update matrices ">buildTimeUpdateMatrices</a> constructs the correlation vector time update matrices </p>
+<p>The <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#ad05512ccd7d825c60f671f8a66306e28" title="buildTimeUpdateMatrices constructs the correlation vector time update matrices ">buildTimeUpdateMatrices</a> method constructs the matrices required to perform the time update of the correlation vector sub-state.</p>
+<p>The time update matrices are a function of the estimated spacecraft velocity ( <img class="formulaInl" alt="$\mathbf{v}$" src="form_72.png"/>), velocity variance ( <img class="formulaInl" alt="$\mathbf{P}_{\mathbf{v}}$" src="form_73.png"/>), and the elapsed time over which the time update occurs ( <img class="formulaInl" alt="$\Delta T$" src="form_74.png"/>). The matrices are constructed as follows:</p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \mathbf{F}_{j \to k} = \begin{bmatrix} \textrm{sinc}(\hat{\delta}) &amp; \hdots &amp; \textrm{sinc}(\hat{\delta} + N - 1) \\ \vdots &amp; \ddots &amp; \vdots \\ \textrm{sinc}(\hat{\delta} - N + 1) &amp; \hdots &amp; \textrm{sinc}(\hat{\delta}) \end{bmatrix} \]" src="form_67.png"/>
+</p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \mathbf{L}_{j} = \begin{bmatrix} \frac{\textrm{cos}}{(\hat{\delta})} - \frac{\textrm{sin}}{(\hat{\delta}^2)} &amp; \hdots \\ \vdots &amp; \ddots \\ \end{bmatrix} \sv[timeIndex = k] \]" src="form_68.png"/>
+</p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ Q_{\delta} = \left(\frac{(k-j)}{c}\right)^2 {\LOSVec[S]}^T \mathbf{P}_{\mathbf{v}} \LOSVec[S] \]" src="form_71.png"/>
+</p>
+<p>where</p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \hat{\delta}_{j \to k} = \frac{\mathbf{v} \LOSVec[S] \Delta T}{c T} \]" src="form_75.png"/>
+</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>The object pointer </td></tr>
+    <tr><td class="paramname">deltaT</td><td>The amount of time over which the time update is occuring </td></tr>
+    <tr><td class="paramname">dynamics</td><td>A dictionary containing the relevant dynamics for the time update </td></tr>
+    <tr><td class="paramname">h</td><td>The current correlation vector</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A dictionary containing the matrices <img class="formulaInl" alt="$\mathbf{F}$" src="form_55.png"/>, <img class="formulaInl" alt="$\mathbf{L}$" src="form_78.png"/>, and the scalar </dd></dl>
+
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00335">335</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="ace04b6e310f321192715c76ec2ac6b52"></a>
 <div class="memitem">
 <div class="memproto">
@@ -308,7 +398,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The estimate of the delay </dd></dl>
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00167">167</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00190">190</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -430,7 +520,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A dict containing the estimate of the peak location ("meanDelay") and the estimate variance ("varDelay") </dd></dl>
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00242">242</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00265">265</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -464,7 +554,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00124">124</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00147">147</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -511,6 +601,50 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a948d71970965e18ecc2f19c3bc49f7f7"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">def SignalCorrelationSubstate.CorrelationFilter.sincDiff </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>x</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00415">415</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aae801ac673e939678f865f9c0dc23d55"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def SignalCorrelationSubstate.CorrelationFilter.speedOfLight </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00411">411</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a94b5211aa159578344974b52f3b9f92e"></a>
 <div class="memitem">
 <div class="memproto">
@@ -535,7 +669,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00109">109</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00125">125</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -569,7 +703,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00117">117</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00133">133</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -586,7 +720,7 @@ Public Attributes</h2></td></tr>
 
 <p><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a8e53182c2ff431a6a545a265cda6ba48" title="centerPeak indicates whether the correlation vector is shifted to maintain the peak at the 0th tap ...">centerPeak</a> indicates whether the correlation vector is shifted to maintain the peak at the 0th tap </p>
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00073">73</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00086">86</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -602,7 +736,7 @@ Public Attributes</h2></td></tr>
 
 <p><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#ad07b1d484b9ab77a1a8fc215f10faf15" title="cHat is the current estimate of the correlation vector between the incoming signal measurements and t...">cHat</a> is the current estimate of the correlation vector between the incoming signal measurements and the <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a67ff75effd8a8a7e34f0f3e8c56ef491" title="trueSignal is a string which identifies which Signals.SignalSource object is the &quot;true&quot; signal for wh...">trueSignal</a> </p>
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00057">57</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00070">70</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -618,7 +752,7 @@ Public Attributes</h2></td></tr>
 
 <p><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a34d52beb18c131f2305689d48f612a5a" title="delayVar is the variance of the signal delay estimate signalDelay ">delayVar</a> is the variance of the signal delay estimate <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a01e35890dee1d79bd0e4f9e82cb16e3f" title="signalDelay is the current estimate of the delay between the incoming signal measurements and the tru...">signalDelay</a> </p>
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00069">69</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00082">82</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -634,7 +768,7 @@ Public Attributes</h2></td></tr>
 
 <p><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a500e4823c314d54a21f236b6b896c8eb" title="dT is the &quot;sample period&quot; or &quot;bin size&quot; of the estimated correlation vector ">dT</a> is the "sample period" or "bin size" of the estimated correlation vector </p>
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00053">53</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00066">66</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -650,7 +784,7 @@ Public Attributes</h2></td></tr>
 
 <p><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a4b49b7bd52c1346cca0342942a5bbbb6" title="filterOrder is the number of &quot;taps&quot; in the estimated correlation vector, cHat. ">filterOrder</a> is the number of "taps" in the estimated correlation vector, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#ad07b1d484b9ab77a1a8fc215f10faf15" title="cHat is the current estimate of the correlation vector between the incoming signal measurements and t...">cHat</a>. </p>
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00049">49</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00062">62</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -666,7 +800,7 @@ Public Attributes</h2></td></tr>
 
 <p><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a85a73739e9bb0a7f20886a812a3afa83" title="peakFitPoints is a variable which controls the number of points used for quadratically estimating the...">peakFitPoints</a> is a variable which controls the number of points used for quadratically estimating the location of the correlation vector peak </p>
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00078">78</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00091">91</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -682,7 +816,23 @@ Public Attributes</h2></td></tr>
 
 <p><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a9b079080abde4a661f95687e8ea89827" title="PHat is the covariance matrix of the correlation vector estimate, cHat ">PHat</a> is the covariance matrix of the correlation vector estimate, <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#ad07b1d484b9ab77a1a8fc215f10faf15" title="cHat is the current estimate of the correlation vector between the incoming signal measurements and t...">cHat</a> </p>
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00061">61</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00074">74</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="abbd9598dd2d237abb1eef86ba427da7f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SignalCorrelationSubstate.CorrelationFilter.processNoise</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#abbd9598dd2d237abb1eef86ba427da7f" title="processNoise is the scalar value used to generate an additional process noise term in timeUpdate...">processNoise</a> is the scalar value used to generate an additional process noise term in <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a07a8c37a30c3d0a057049e0ff2eac67f">timeUpdate</a>. </p>
+
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00094">94</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -698,7 +848,7 @@ Public Attributes</h2></td></tr>
 
 <p><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a01e35890dee1d79bd0e4f9e82cb16e3f" title="signalDelay is the current estimate of the delay between the incoming signal measurements and the tru...">signalDelay</a> is the current estimate of the delay between the incoming signal measurements and the <a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a67ff75effd8a8a7e34f0f3e8c56ef491" title="trueSignal is a string which identifies which Signals.SignalSource object is the &quot;true&quot; signal for wh...">trueSignal</a> </p>
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00065">65</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00078">78</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
@@ -738,7 +888,21 @@ Public Attributes</h2></td></tr>
 
 <p><a class="el" href="classSignalCorrelationSubstate_1_1CorrelationFilter.html#a67ff75effd8a8a7e34f0f3e8c56ef491" title="trueSignal is a string which identifies which Signals.SignalSource object is the &quot;true&quot; signal for wh...">trueSignal</a> is a string which identifies which <a class="el" href="classSignals_1_1SignalSource.html">Signals.SignalSource</a> object is the "true" signal for which the correlation vector is being estimated </p>
 
-<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00045">45</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00058">58</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="ac1cfe7d60893f6a9e174a775be166fd6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SignalCorrelationSubstate.CorrelationFilter.unitVecToSignal</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="SignalCorrelationSubstate_8py_source.html#l00053">53</a> of file <a class="el" href="SignalCorrelationSubstate_8py_source.html">SignalCorrelationSubstate.py</a>.</p>
 
 </div>
 </div>
