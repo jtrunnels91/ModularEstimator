@@ -138,6 +138,19 @@ class StaticPoissonSource(PoissonSource):
         )
         return(poissonProb)
 
+class PeriodicPoissonSource(PoissonSource):
+    def __init__(
+            self,
+            peakFlux,
+            fluxProfile,
+            nonPulsedFlux
+    ):
+        self.peakFlux = peakFlux
+        self.fluxProfile = fluxProfile
+        self.nonPulsedFlux = nonPulsedFlux
+        return
+    
+
 
 class StaticXRayPointSource(PointSource, StaticPoissonSource):
 

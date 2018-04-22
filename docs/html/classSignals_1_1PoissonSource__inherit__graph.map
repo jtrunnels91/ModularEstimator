@@ -1,0 +1,7 @@
+<map id="Signals.PoissonSource" name="Signals.PoissonSource">
+<area shape="rect" id="node3" href="$classSignals_1_1PeriodicPoissonSource.html" title="Signals.PeriodicPoissonSource" alt="" coords="5,155,209,181"/>
+<area shape="rect" id="node4" href="$classSignals_1_1StaticPoissonSource.html" title="Signals.StaticPoissonSource" alt="" coords="233,155,424,181"/>
+<area shape="rect" id="node2" href="$classSignals_1_1SignalSource.html" title="Signals.SignalSource" alt="" coords="145,5,291,32"/>
+<area shape="rect" id="node5" href="$classSignals_1_1StaticXRayPointSource.html" title="Signals.StaticXRayPointSource" alt="" coords="116,237,323,263"/>
+<area shape="rect" id="node6" href="$classSignals_1_1UniformNoiseXRaySource.html" title="Signals.UniformNoiseXRay\lSource" alt="" coords="347,229,529,271"/>
+</map>

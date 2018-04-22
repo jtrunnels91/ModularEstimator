@@ -1,5 +1,17 @@
 ## @package State
 # This package contains the ModularFilter class.
+# @author Joel Runnels
+# @date 2018
+# @copyright GNU General Public License
+#
+# @note
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+# more details.
+# You should have received a copy of the GNU General Public License along with
+# this program.  If not, see
+# <a href="http://www.gnu.org/licenses/">GNU GPL</a>.
 
 import numpy as np
 from scipy.linalg import block_diag
@@ -10,7 +22,6 @@ from numpy.linalg import norm, inv
 import sys
 import os
 sys.path.append("/home/joel/Documents/astroSourceTracking/libraries")
-from SpaceGeometry import *
 
 
 ## @class ModularFilter

@@ -9,11 +9,8 @@ from pyquaternion import Quaternion
 import sys
 import os
 sys.path.append("/home/joel/Documents/astroSourceTracking/libraries")
-from SpaceGeometry import *
 from SubStates import SubState
 from Signals import PointSource
-from SmartPanda import SmartPanda
-
 
 ## @class AttitudeState6DOF
 # @brief Estimates the attitude of a vehicle in three dimensions, along with

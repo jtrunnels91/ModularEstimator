@@ -1,0 +1,408 @@
+\hypertarget{classSubStates_1_1SubState}{}\section{Sub\+States.\+Sub\+State Class Reference}
+\label{classSubStates_1_1SubState}\index{Sub\+States.\+Sub\+State@{Sub\+States.\+Sub\+State}}
+
+
+This is an abstract base class for objects used as sub-\/states in \hyperlink{classState_1_1ModularFilter}{State.\+Modular\+Filter}.  
+
+
+
+
+Inheritance diagram for Sub\+States.\+Sub\+State\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classSubStates_1_1SubState__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Sub\+States.\+Sub\+State\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=186pt]{classSubStates_1_1SubState__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classSubStates_1_1SubState_a5ff829fb892680db4e3643e6b1f6cc9b}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self, state\+Dimension=None, \hyperlink{classSubStates_1_1SubState_a24bf2de56fc3037d91cba43d28f3bf60}{state\+Vector\+History}=None)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classSubStates_1_1SubState_a5ff829fb892680db4e3643e6b1f6cc9b}{\+\_\+\+\_\+init\+\_\+\+\_\+} initializes a \hyperlink{classSubStates_1_1SubState}{Sub\+State} object \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{Indent}{\bf Mandatory Sub\+State Functions}\par
+{\em The following functions are functions which are required for the \hyperlink{classSubStates_1_1SubState}{Sub\+State} to function as a sub-\/state in \hyperlink{classState_1_1ModularFilter}{State.\+Modular\+Filter}. }\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} (self)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} returns the most recent value of the state vector \end{DoxyCompactList}\item 
+def \hyperlink{classSubStates_1_1SubState_a65edbf44c6d93049cf0b2cb8e4b18b99}{store\+State\+Vector} (self, sv\+Dict)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classSubStates_1_1SubState_a65edbf44c6d93049cf0b2cb8e4b18b99}{store\+State\+Vector} stores the most recent value of the state vector. \end{DoxyCompactList}\item 
+def \hyperlink{classSubStates_1_1SubState_a4d863939fdb98b2739e1e737ec7496ae}{covariance} (self)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classSubStates_1_1SubState_a4d863939fdb98b2739e1e737ec7496ae}{covariance} returns the \hyperlink{classSubStates_1_1SubState}{Sub\+State} covariance matrix \end{DoxyCompactList}\item 
+def \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} (self)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} returns the dimension of the sub-\/state vector \end{DoxyCompactList}\item 
+def \hyperlink{classSubStates_1_1SubState_af07ac4d1435fdecff97cff84bae4eeab}{time\+Update} (self, dT, dynamics=None)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classSubStates_1_1SubState_af07ac4d1435fdecff97cff84bae4eeab}{time\+Update} returns time-\/update matrices \end{DoxyCompactList}\item 
+def \hyperlink{classSubStates_1_1SubState_a9dcc51af847b7b946089dd73c387ca19}{get\+Measurement\+Matrices} (self, measurement, source=None)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} returns the most recent value of the state vector \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf Plotting Functions}\par
+{\em These functions provide generalized plotting capabilities }\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classSubStates_1_1SubState_ab1767fb43256809f722a9f6dc73fef19}{initialize\+Real\+Time\+Plot} (self, plot\+Handle=None, axis\+Handle=None)
+\item 
+def \hyperlink{classSubStates_1_1SubState_a8df931305220bef14684e76fd6743b0d}{real\+Time\+Plot} (self, normalized=True)
+\end{DoxyCompactItemize}
+\end{Indent}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classSubStates_1_1SubState_a24bf2de56fc3037d91cba43d28f3bf60}{state\+Vector\+History}
+\begin{DoxyCompactList}\small\item\em Stores the time-\/history of the sub-\/state state vector. \end{DoxyCompactList}\item 
+\hyperlink{classSubStates_1_1SubState_ab92a0fafcfd778b8965e3f649ff94fc7}{R\+T\+Plot\+Handle}
+\begin{DoxyCompactList}\small\item\em Stores handle for real-\/time plotting. \end{DoxyCompactList}\item 
+\hyperlink{classSubStates_1_1SubState_aae3aa07f0d6f54a510db66e0644c958e}{R\+T\+Plot\+Data}
+\item 
+\hyperlink{classSubStates_1_1SubState_a41c912457be8682326d60f82cc651207}{R\+T\+Paxis\+Handle}
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classSubStates_1_1SubState_aea750997b2a75daee4a3147eac68e4f8}{\+\_\+\+\_\+dimension\+\_\+\+\_\+}
+\begin{DoxyCompactList}\small\item\em Stores the length of the state vector as seen by the Modular\+Filter. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This is an abstract base class for objects used as sub-\/states in \hyperlink{classState_1_1ModularFilter}{State.\+Modular\+Filter}. 
+
+\hyperlink{classSubStates_1_1SubState}{Sub\+State} is an abstract base class that specifies the methods which are required for an object to function as a sub-\/state of \hyperlink{classState_1_1ModularFilter}{State.\+Modular\+Filter}.
+
+Some of these methods are implemented and most likely do not need to be reimplemented in a derived class implementation (for example the \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} and \hyperlink{classSubStates_1_1SubState_a4d863939fdb98b2739e1e737ec7496ae}{covariance} methods.
+
+Other methods may have a rudimentary implementation that may be suitable for some derived classes, but not others, depending on the specific functionality of the derived class (for instance \hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} and \hyperlink{classSubStates_1_1SubState_a65edbf44c6d93049cf0b2cb8e4b18b99}{store\+State\+Vector}).
+
+Finally, some methods are specifically tagged as abstract methods and are not implemented at all. These methods must be implemented in the derived class. This is usually because there is no way to implement even a rudimentary version of what the method is supposed to do without having some knowledge of what kind of substate the derived class contains (for instance \hyperlink{classSubStates_1_1SubState_af07ac4d1435fdecff97cff84bae4eeab}{time\+Update} and \hyperlink{classSubStates_1_1SubState_a9dcc51af847b7b946089dd73c387ca19}{get\+Measurement\+Matrices}).
+
+In any case, the documentation for each method of \hyperlink{classSubStates_1_1SubState}{Sub\+State} contains a generalized description of what functionality the implementation should provide in a derived class. 
+
+Definition at line 42 of file Sub\+States.\+py.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+init\+\_\+\+\_\+(self, state\+Dimension=\+None, state\+Vector\+History=\+None)}{__init__(self, stateDimension=None, stateVectorHistory=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def Sub\+States.\+Sub\+State.\+\_\+\+\_\+init\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{state\+Dimension = {\ttfamily None}, }
+\item[{}]{state\+Vector\+History = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\hypertarget{classSubStates_1_1SubState_a5ff829fb892680db4e3643e6b1f6cc9b}{}\label{classSubStates_1_1SubState_a5ff829fb892680db4e3643e6b1f6cc9b}
+
+
+\hyperlink{classSubStates_1_1SubState_a5ff829fb892680db4e3643e6b1f6cc9b}{\+\_\+\+\_\+init\+\_\+\+\_\+} initializes a \hyperlink{classSubStates_1_1SubState}{Sub\+State} object 
+
+The \hyperlink{classSubStates_1_1SubState_a5ff829fb892680db4e3643e6b1f6cc9b}{\+\_\+\+\_\+init\+\_\+\+\_\+} method is responsible for initializing a generalized \hyperlink{classSubStates_1_1SubState}{Sub\+State} object. The essential functions of \hyperlink{classSubStates_1_1SubState_a5ff829fb892680db4e3643e6b1f6cc9b}{\+\_\+\+\_\+init\+\_\+\+\_\+} are to store the dimension of the state, and to initialize a time-\/history of the state in a Smart\+Panda object.
+
+If no values are passed for the initial state estimate dictionary, they will be initialized to the following default values.
+
+
+\begin{DoxyItemize}
+\item \textquotesingle{}state\+Vector\textquotesingle{}\+: A length \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} array of zeros
+\item \textquotesingle{}covariance\textquotesingle{}\+: An (\hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} x \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension}) identity matrix
+\item \textquotesingle{}t\textquotesingle{}\+: 0
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer \\
+\hline
+{\em state\+Dimension} & The dimension of the sub-\/state state vector \\
+\hline
+{\em state\+Vector\+History} & A dictionary containing the initial state. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 65 of file Sub\+States.\+py.
+
+
+
+\subsection{Member Function Documentation}
+\index{Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}!covariance@{covariance}}
+\index{covariance@{covariance}!Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}}
+\subsubsection[{\texorpdfstring{covariance(self)}{covariance(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def Sub\+States.\+Sub\+State.\+covariance (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\hypertarget{classSubStates_1_1SubState_a4d863939fdb98b2739e1e737ec7496ae}{}\label{classSubStates_1_1SubState_a4d863939fdb98b2739e1e737ec7496ae}
+
+
+\hyperlink{classSubStates_1_1SubState_a4d863939fdb98b2739e1e737ec7496ae}{covariance} returns the \hyperlink{classSubStates_1_1SubState}{Sub\+State} covariance matrix 
+
+The \hyperlink{classSubStates_1_1SubState_a4d863939fdb98b2739e1e737ec7496ae}{covariance} method returns the covariance of the estimate of the substate.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000001}{Todo}]Currently, this method only returns the covariance of the most recent state estimate. Ideally, there should be an optional time parameter which would allow the user to get the covaraince matrix at a specified time (or the closest to that specified time).\end{DoxyRefDesc}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the covaraince matrix 
+\end{DoxyReturn}
+
+
+Definition at line 172 of file Sub\+States.\+py.
+
+\index{Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}!dimension@{dimension}}
+\index{dimension@{dimension}!Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}}
+\subsubsection[{\texorpdfstring{dimension(self)}{dimension(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def Sub\+States.\+Sub\+State.\+dimension (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\hypertarget{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{}\label{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}
+
+
+\hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} returns the dimension of the sub-\/state vector 
+
+The \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} method returns the dimension of the sub-\/state vector estimated by the \hyperlink{classSubStates_1_1SubState}{Sub\+State}. This is the dimension as seen by the Modular\+Filter estimator.
+
+The default implementation is to return the class variable \hyperlink{classSubStates_1_1SubState_aea750997b2a75daee4a3147eac68e4f8}{\+\_\+\+\_\+dimension\+\_\+\+\_\+}, which is saved at initialization. This is designated as a \char`\"{}protected\char`\"{} variable, and should not change during the course of the \hyperlink{classSubStates_1_1SubState}{Sub\+State}\textquotesingle{}s lifetime. If child class overwrites this implementation, care should be taken to ensure that the value returned by \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} does not change over \hyperlink{classSubStates_1_1SubState}{Sub\+State} object lifetime.
+
+For \hyperlink{classSubStates_1_1SubState}{Sub\+State} objects with auxilary states, or other quantities related to the state vector but not directly estimated by the Modular\+Filter, \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} should not count these states as part of the total dimension.
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the dimension of state vector 
+\end{DoxyReturn}
+
+
+Definition at line 197 of file Sub\+States.\+py.
+
+\index{Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}!get\+Measurement\+Matrices@{get\+Measurement\+Matrices}}
+\index{get\+Measurement\+Matrices@{get\+Measurement\+Matrices}!Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}}
+\subsubsection[{\texorpdfstring{get\+Measurement\+Matrices(self, measurement, source=\+None)}{getMeasurementMatrices(self, measurement, source=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def Sub\+States.\+Sub\+State.\+get\+Measurement\+Matrices (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{measurement, }
+\item[{}]{source = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\hypertarget{classSubStates_1_1SubState_a9dcc51af847b7b946089dd73c387ca19}{}\label{classSubStates_1_1SubState_a9dcc51af847b7b946089dd73c387ca19}
+
+
+\hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} returns the most recent value of the state vector 
+
+The \hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} method is responsible for returning a dictionary object containing, at minimim, the following items\+:
+
+
+\begin{DoxyItemize}
+\item \textquotesingle{}state\+Vector\textquotesingle{}\+: A length \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} array containing the most recent state vector estimate
+\item \textquotesingle{}covariance\textquotesingle{}\+: A (\hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} x \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension}) array containing the most recent covariance matrix
+\item \textquotesingle{}a\+Priori\textquotesingle{}\+: A boolean indicating if the most recent estimate is the
+\item result of a time update (a\+Priori=True) or a measurement update (a\+Priori=False)
+\end{DoxyItemize}
+
+This function can be used as-\/is
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The dictionary containing the state vector, covariance matrix, and a\+Priori status 
+\end{DoxyReturn}
+
+
+Definition at line 240 of file Sub\+States.\+py.
+
+\index{Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}!get\+State\+Vector@{get\+State\+Vector}}
+\index{get\+State\+Vector@{get\+State\+Vector}!Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}}
+\subsubsection[{\texorpdfstring{get\+State\+Vector(self)}{getStateVector(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def Sub\+States.\+Sub\+State.\+get\+State\+Vector (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\hypertarget{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{}\label{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}
+
+
+\hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} returns the most recent value of the state vector 
+
+The \hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} method is responsible for returning a dictionary object containing, at minimim, the following items\+:
+
+
+\begin{DoxyItemize}
+\item \textquotesingle{}state\+Vector\textquotesingle{}\+: A length \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} array containing the most recent state vector estimate
+\item \textquotesingle{}covariance\textquotesingle{}\+: A (\hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} x \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension}) array containing the most recent covariance matrix
+\item \textquotesingle{}a\+Priori\textquotesingle{}\+: A boolean indicating if the most recent estimate is the
+\item result of a time update (a\+Priori=True) or a measurement update (a\+Priori=False)
+\end{DoxyItemize}
+
+This function can be used as-\/is
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The dictionary containing the state vector, covariance matrix, and a\+Priori status 
+\end{DoxyReturn}
+
+
+Definition at line 129 of file Sub\+States.\+py.
+
+\index{Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}!initialize\+Real\+Time\+Plot@{initialize\+Real\+Time\+Plot}}
+\index{initialize\+Real\+Time\+Plot@{initialize\+Real\+Time\+Plot}!Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}}
+\subsubsection[{\texorpdfstring{initialize\+Real\+Time\+Plot(self, plot\+Handle=\+None, axis\+Handle=\+None)}{initializeRealTimePlot(self, plotHandle=None, axisHandle=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def Sub\+States.\+Sub\+State.\+initialize\+Real\+Time\+Plot (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{plot\+Handle = {\ttfamily None}, }
+\item[{}]{axis\+Handle = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\hypertarget{classSubStates_1_1SubState_ab1767fb43256809f722a9f6dc73fef19}{}\label{classSubStates_1_1SubState_ab1767fb43256809f722a9f6dc73fef19}
+
+
+Definition at line 257 of file Sub\+States.\+py.
+
+\index{Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}!real\+Time\+Plot@{real\+Time\+Plot}}
+\index{real\+Time\+Plot@{real\+Time\+Plot}!Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}}
+\subsubsection[{\texorpdfstring{real\+Time\+Plot(self, normalized=\+True)}{realTimePlot(self, normalized=True)}}]{\setlength{\rightskip}{0pt plus 5cm}def Sub\+States.\+Sub\+State.\+real\+Time\+Plot (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{normalized = {\ttfamily True}}
+\end{DoxyParamCaption}
+)}\hypertarget{classSubStates_1_1SubState_a8df931305220bef14684e76fd6743b0d}{}\label{classSubStates_1_1SubState_a8df931305220bef14684e76fd6743b0d}
+
+
+Definition at line 283 of file Sub\+States.\+py.
+
+\index{Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}!store\+State\+Vector@{store\+State\+Vector}}
+\index{store\+State\+Vector@{store\+State\+Vector}!Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}}
+\subsubsection[{\texorpdfstring{store\+State\+Vector(self, sv\+Dict)}{storeStateVector(self, svDict)}}]{\setlength{\rightskip}{0pt plus 5cm}def Sub\+States.\+Sub\+State.\+store\+State\+Vector (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{sv\+Dict}
+\end{DoxyParamCaption}
+)}\hypertarget{classSubStates_1_1SubState_a65edbf44c6d93049cf0b2cb8e4b18b99}{}\label{classSubStates_1_1SubState_a65edbf44c6d93049cf0b2cb8e4b18b99}
+
+
+\hyperlink{classSubStates_1_1SubState_a65edbf44c6d93049cf0b2cb8e4b18b99}{store\+State\+Vector} stores the most recent value of the state vector. 
+
+The \hyperlink{classSubStates_1_1SubState_a65edbf44c6d93049cf0b2cb8e4b18b99}{store\+State\+Vector} method is responsible for storing a dictionary containing the most recent state estimate. In \hyperlink{classSubStates_1_1SubState}{Sub\+State} implementation, the functionality is minimal\+: the new dictionary is simply appeneded to the Smart\+Panda list of state vector estimates. However, in some derived classes, it may be nescessary to implement additional functionality. This is particularly true if there are derived quantities that need to be calculated from the updated state vector (for instance, calculating the attitude quaternion from the attitude error states). Also in some cases, the actual value of the state vector may need to be \char`\"{}tweaked\char`\"{} by the \hyperlink{classSubStates_1_1SubState}{Sub\+State} derived class.
+
+If an alternative implementation is written for a derived class, it should still call this implementation, or at least make sure that it stores the current state estimate in \hyperlink{classSubStates_1_1SubState_a24bf2de56fc3037d91cba43d28f3bf60}{state\+Vector\+History}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer \\
+\hline
+{\em sv\+Dict} & A dictionary containing the current state estimate. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 154 of file Sub\+States.\+py.
+
+\index{Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}!time\+Update@{time\+Update}}
+\index{time\+Update@{time\+Update}!Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}}
+\subsubsection[{\texorpdfstring{time\+Update(self, d\+T, dynamics=\+None)}{timeUpdate(self, dT, dynamics=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def Sub\+States.\+Sub\+State.\+time\+Update (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{dT, }
+\item[{}]{dynamics = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\hypertarget{classSubStates_1_1SubState_af07ac4d1435fdecff97cff84bae4eeab}{}\label{classSubStates_1_1SubState_af07ac4d1435fdecff97cff84bae4eeab}
+
+
+\hyperlink{classSubStates_1_1SubState_af07ac4d1435fdecff97cff84bae4eeab}{time\+Update} returns time-\/update matrices 
+
+The \hyperlink{classSubStates_1_1SubState_af07ac4d1435fdecff97cff84bae4eeab}{time\+Update} method is responsible for returning the E\+KF time update measurement matrices. Specifically, it returns the state update matrix $\mathbf{F}$ and the process noise matrix $\mathbf{Q}$, following the standard \href{https://en.wikipedia.org/wiki/Extended_Kalman_filter}{\tt Extended Kalman Filter} time update equations\+:
+
+\[\sv[timeIndex=k+1, aPriori=True] = \mathbf{F} \sv[timeIndex=k, aPriori=False] \] \[\svVar[timeIndex=k+1, aPriori=True] = \mathbf{F} \svVar[timeIndex=k+1, aPriori=True] \mathbf{F}^{T} + \mathbf{Q} \]
+
+Because these matrices are nescessarily specific to the type of substate being updated, there is no default implementation in the \hyperlink{classSubStates_1_1SubState}{Sub\+State} class. Rather, each derived class must implement this method as appropriate for the dynamics of the state being modeled.
+
+In addition, some substates may require additional operations to occur at a time update. For instance, if a substate includes auxillary values (for instance, the attitude quaternion derived from the attitude error state), it may need to be time-\/updated seperately from the other states. In this case, the local implementation of the \hyperlink{classSubStates_1_1SubState_af07ac4d1435fdecff97cff84bae4eeab}{time\+Update} function is the place to do these updates.
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer \\
+\hline
+{\em dT} & The ellapsed time over which the time update occurs \\
+\hline
+{\em dynamics} & A dictionary containing any dynamics infomation which may be needed to update the state, for instance, measured accelerations or angular velocities.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A dictionary containing, at minimum, the following items\+:
+\begin{DoxyItemize}
+\item \char`\"{}\+F\char`\"{}\+: The state time-\/update matrix
+\item \char`\"{}\+Q\char`\"{}\+: The process noise matrix 
+\end{DoxyItemize}
+\end{DoxyReturn}
+
+
+Definition at line 236 of file Sub\+States.\+py.
+
+
+
+\subsection{Member Data Documentation}
+\index{Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}!\+\_\+\+\_\+dimension\+\_\+\+\_\+@{\+\_\+\+\_\+dimension\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+dimension\+\_\+\+\_\+@{\+\_\+\+\_\+dimension\+\_\+\+\_\+}!Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+dimension\+\_\+\+\_\+}{__dimension__}}]{\setlength{\rightskip}{0pt plus 5cm}Sub\+States.\+Sub\+State.\+\_\+\+\_\+dimension\+\_\+\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{classSubStates_1_1SubState_aea750997b2a75daee4a3147eac68e4f8}{}\label{classSubStates_1_1SubState_aea750997b2a75daee4a3147eac68e4f8}
+
+
+Stores the length of the state vector as seen by the Modular\+Filter. 
+
+See the \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} function for details on implementation. 
+
+Definition at line 74 of file Sub\+States.\+py.
+
+\index{Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}!R\+T\+Paxis\+Handle@{R\+T\+Paxis\+Handle}}
+\index{R\+T\+Paxis\+Handle@{R\+T\+Paxis\+Handle}!Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}}
+\subsubsection[{\texorpdfstring{R\+T\+Paxis\+Handle}{RTPaxisHandle}}]{\setlength{\rightskip}{0pt plus 5cm}Sub\+States.\+Sub\+State.\+R\+T\+Paxis\+Handle}\hypertarget{classSubStates_1_1SubState_a41c912457be8682326d60f82cc651207}{}\label{classSubStates_1_1SubState_a41c912457be8682326d60f82cc651207}
+
+
+Definition at line 265 of file Sub\+States.\+py.
+
+\index{Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}!R\+T\+Plot\+Data@{R\+T\+Plot\+Data}}
+\index{R\+T\+Plot\+Data@{R\+T\+Plot\+Data}!Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}}
+\subsubsection[{\texorpdfstring{R\+T\+Plot\+Data}{RTPlotData}}]{\setlength{\rightskip}{0pt plus 5cm}Sub\+States.\+Sub\+State.\+R\+T\+Plot\+Data}\hypertarget{classSubStates_1_1SubState_aae3aa07f0d6f54a510db66e0644c958e}{}\label{classSubStates_1_1SubState_aae3aa07f0d6f54a510db66e0644c958e}
+
+
+Definition at line 100 of file Sub\+States.\+py.
+
+\index{Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}!R\+T\+Plot\+Handle@{R\+T\+Plot\+Handle}}
+\index{R\+T\+Plot\+Handle@{R\+T\+Plot\+Handle}!Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}}
+\subsubsection[{\texorpdfstring{R\+T\+Plot\+Handle}{RTPlotHandle}}]{\setlength{\rightskip}{0pt plus 5cm}Sub\+States.\+Sub\+State.\+R\+T\+Plot\+Handle}\hypertarget{classSubStates_1_1SubState_ab92a0fafcfd778b8965e3f649ff94fc7}{}\label{classSubStates_1_1SubState_ab92a0fafcfd778b8965e3f649ff94fc7}
+
+
+Stores handle for real-\/time plotting. 
+
+
+
+Definition at line 98 of file Sub\+States.\+py.
+
+\index{Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}!state\+Vector\+History@{state\+Vector\+History}}
+\index{state\+Vector\+History@{state\+Vector\+History}!Sub\+States\+::\+Sub\+State@{Sub\+States\+::\+Sub\+State}}
+\subsubsection[{\texorpdfstring{state\+Vector\+History}{stateVectorHistory}}]{\setlength{\rightskip}{0pt plus 5cm}Sub\+States.\+Sub\+State.\+state\+Vector\+History}\hypertarget{classSubStates_1_1SubState_a24bf2de56fc3037d91cba43d28f3bf60}{}\label{classSubStates_1_1SubState_a24bf2de56fc3037d91cba43d28f3bf60}
+
+
+Stores the time-\/history of the sub-\/state state vector. 
+
+
+
+Definition at line 95 of file Sub\+States.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{SubStates_8py}{Sub\+States.\+py}\end{DoxyCompactItemize}

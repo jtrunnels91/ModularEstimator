@@ -1,0 +1,29 @@
+\hypertarget{group__estFunc}{}\section{Est\+Func}
+\label{group__estFunc}\index{Est\+Func@{Est\+Func}}
+
+
+\hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} returns the most recent value of the state vector  
+
+
+\hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} returns the most recent value of the state vector 
+
+The \hyperlink{classSubStates_1_1SubState_a3ebd1a120f63ed477ee76999518a8828}{get\+State\+Vector} method is responsible for returning a dictionary object containing, at minimim, the following items\+:
+
+
+\begin{DoxyItemize}
+\item \textquotesingle{}state\+Vector\textquotesingle{}\+: A length \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} array containing the most recent state vector estimate
+\item \textquotesingle{}covariance\textquotesingle{}\+: A (\hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension} x \hyperlink{classSubStates_1_1SubState_a4aebea19a134cb871a7c0b6c2709546a}{dimension}) array containing the most recent covariance matrix
+\item \textquotesingle{}a\+Priori\textquotesingle{}\+: A boolean indicating if the most recent estimate is the
+\item result of a time update (a\+Priori=True) or a measurement update (a\+Priori=False)
+\end{DoxyItemize}
+
+This function can be used as-\/is
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The dictionary containing the state vector, covariance matrix, and a\+Priori status 
+\end{DoxyReturn}

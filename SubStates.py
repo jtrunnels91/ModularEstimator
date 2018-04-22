@@ -1,8 +1,12 @@
 ## @package SubStates
 # This package contains the SubState class.
 
+
 from abc import ABC, abstractmethod
 import numpy as np
+import matplotlib as mp
+import matplotlib.pyplot as plt
+
 
 import sys
 sys.path.append("/home/joel/Documents/astroSourceTracking/libraries")
@@ -89,7 +93,19 @@ class SubState(ABC):
         
         ## @brief Stores the time-history of the sub-state state vector.
         self.stateVectorHistory = SmartPanda(stateVectorHistory)
+
+        ## @brief Stores handle for real-time plotting        
+        self.RTPlotHandle = None
+
+        self.RTPlotData = None
+
         return
+
+    ##
+    # @name Mandatory SubState Functions
+    # The following functions are functions which are required for the
+    # SubState to function as a sub-state in State.ModularFilter.
+    # @{
     
     ## @fun #getStateVector returns the most recent value of the state vector
     #
@@ -154,7 +170,7 @@ class SubState(ABC):
     #
     # @return Returns the covaraince matrix
     def covariance(self):
-        return self.stateVectorHistory[-1]['covariance']
+        return self.stateVectorHistory.getDict(-1)['covariance']
 
     ## @fun #dimension returns the dimension of the sub-state vector
     #
@@ -223,3 +239,68 @@ class SubState(ABC):
     @abstractmethod
     def getMeasurementMatrices(self, measurement, source=None):
         pass
+    ## @}
+
+
+    """
+    Plotting Functions
+    """
+    ##
+    # @name Plotting Functions
+    # These functions provide generalized plotting capabilities
+    # @{
+
+    def initializeRealTimePlot(
+            self,
+            plotHandle=None,
+            axisHandle=None
+            ):
+
+        if plotHandle is None:
+            self.RTPlotHandle = plt.figure()
+        else:
+            self.RTPlotHandle = plotHandle
+
+        if axisHandle is None:
+            self.RTPaxisHandle = plt.gca()
+        else:
+            self.RTPaxisHandle = axisHandle
+            
+        xAxis = np.linspace(0, self.__dimension__ - 1, self.__dimension__)
+
+        self.RTPlotData, = plt.plot(
+            xAxis,
+            np.zeros(self.__dimension__)
+            )
+
+        plt.grid()
+        plt.show(block=False)
+        return
+        
+    def realTimePlot(
+            self,
+            normalized=True
+    ):
+        if self.RTPlotHandle is None:
+            self.initializeRealTimePlot()
+
+        stateDict = self.getStateVector()
+        yAxis = stateDict['stateVector']
+        
+        if normalized is True:
+            self.RTPaxisHandle.set_ylim([0, 1.1])
+            yAxis = yAxis - np.min(yAxis)
+            yAxis = yAxis/np.max(yAxis)
+
+        if 'xAxis' in stateDict:
+            xAxis = stateDict['xAxis']
+        else:
+            xAxis = np.linspace(0, self.__dimension__ - 1, self.__dimension__)
+
+        self.RTPlotData.set_data(xAxis, yAxis)
+        self.RTPlotHandle.canvas.draw()
+        self.RTPlotHandle.canvas.flush_events()
+
+        return
+
+    # @}
