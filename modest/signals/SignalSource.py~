@@ -1,0 +1,18 @@
+## @file SignalSource.py holds the SignalSource base class
+#
+
+import numpy as np
+from scipy.stats import multivariate_normal
+
+class SignalSource():
+    nextSignalID = 0
+    
+    def __init__(
+            self,
+    ):
+        self.__signalID__ = SignalSource.nextSignalID
+        SignalSource.nextSignalID += 1
+        return
+
+    def signalID(self):
+        return self.__signalID__

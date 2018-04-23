@@ -1,0 +1,8 @@
+from distutils.core import setup
+setup(
+    name='modest',
+    packages=['modest'],
+    version='0.0.0',
+    description='A modular estimation library',
+    author='Joel Runnels',
+    author_emal='runne010@umn.edu',

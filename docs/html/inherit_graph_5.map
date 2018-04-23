@@ -1,4 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node2" href="$classmodest_1_1substates_1_1SubState_1_1SubState.html" title="This is an abstract base class for objects used as sub&#45;states in State.ModularFilter. " alt="" coords="104,5,292,47"/>
-<area shape="rect" id="node3" href="$classmodest_1_1substates_1_1Attitude_1_1Attitude.html" title="Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states..." alt="" coords="340,5,519,47"/>
-</map>
