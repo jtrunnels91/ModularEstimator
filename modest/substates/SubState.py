@@ -1,5 +1,5 @@
-## @package SubStates
-# This package contains the SubState class.
+## @module SubState
+# This file contains the SubState class.
 
 
 from abc import ABC, abstractmethod
