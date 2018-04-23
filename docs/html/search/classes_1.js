@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['correlationfilter',['CorrelationFilter',['../classSignalCorrelationSubstate_1_1CorrelationFilter.html',1,'SignalCorrelationSubstate']]]
+  ['correlationvector',['CorrelationVector',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html',1,'modest::substates::correlationvector']]]
 ];

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['qhat',['qHat',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#a36a58a47280151dd544762d9a1d5c35d',1,'AttitudeSubstate::AttitudeState6DOF']]],
-  ['quaterniontimeupdatematrix',['quaternionTimeUpdateMatrix',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#aada43a81dfe3ae7b1a22dd24220062e8',1,'AttitudeSubstate::AttitudeState6DOF']]]
+  ['qhat',['qHat',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a22a550534d908153baef2e52f7142c5e',1,'modest::substates::attitude::Attitude']]],
+  ['quaterniontimeupdatematrix',['quaternionTimeUpdateMatrix',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#ae21ed62061b674b0108f205df2122083',1,'modest::substates::attitude::Attitude']]]
 ];

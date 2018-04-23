@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['delayvar',['delayVar',['../classSignalCorrelationSubstate_1_1CorrelationFilter.html#a34d52beb18c131f2305689d48f612a5a',1,'SignalCorrelationSubstate::CorrelationFilter']]]
+  ['delayvar',['delayVar',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#ab0c6ffbea793ae20593e85d033341595',1,'modest::substates::correlationvector::CorrelationVector']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['buildtimeupdatematrices',['buildTimeUpdateMatrices',['../classSignalCorrelationSubstate_1_1CorrelationFilter.html#ad05512ccd7d825c60f671f8a66306e28',1,'SignalCorrelationSubstate::CorrelationFilter']]]
+  ['buildtimeupdatematrices',['buildTimeUpdateMatrices',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a3514ce57ec201ece8a5144f515d2d02c',1,'modest::substates::correlationvector::CorrelationVector']]]
 ];

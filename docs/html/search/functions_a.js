@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['processnoisematrix',['processNoiseMatrix',['../classAttitudeSubstate_1_1AttitudeState6DOF.html#abc5b2c8345bcd948d35b438fce184dee',1,'AttitudeSubstate::AttitudeState6DOF']]]
+  ['processnoisematrix',['processNoiseMatrix',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a11f6e9a0803c6843d7c89061ffbb3c2c',1,'modest::substates::attitude::Attitude']]]
 ];

@@ -1,0 +1,6 @@
+<map id="modest.signals.PoissonSource.PoissonSource" name="modest.signals.PoissonSource.PoissonSource">
+<area shape="rect" id="node3" href="$classmodest_1_1signals_1_1PoissonSource_1_1PeriodicPoissonSource.html" title="modest.signals.PoissonSource.\lPeriodicPoissonSource" alt="" coords="503,5,709,47"/>
+<area shape="rect" id="node4" href="$classmodest_1_1signals_1_1PoissonSource_1_1StaticPoissonSource.html" title="modest.signals.PoissonSource.\lStaticPoissonSource" alt="" coords="503,71,709,112"/>
+<area shape="rect" id="node2" href="$classmodest_1_1signals_1_1SignalSource_1_1SignalSource.html" title="modest.signals.SignalSource.\lSignalSource" alt="" coords="5,39,200,80"/>
+<area shape="rect" id="node5" href="$classmodest_1_1signals_1_1XRaySource_1_1UniformNoiseXRaySource.html" title="modest.signals.XRaySource.\lUniformNoiseXRaySource" alt="" coords="757,71,949,112"/>
+</map>

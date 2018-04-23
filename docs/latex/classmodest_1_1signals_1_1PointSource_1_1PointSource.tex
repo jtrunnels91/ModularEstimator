@@ -1,0 +1,147 @@
+\hypertarget{classmodest_1_1signals_1_1PointSource_1_1PointSource}{}\section{modest.\+signals.\+Point\+Source.\+Point\+Source Class Reference}
+\label{classmodest_1_1signals_1_1PointSource_1_1PointSource}\index{modest.\+signals.\+Point\+Source.\+Point\+Source@{modest.\+signals.\+Point\+Source.\+Point\+Source}}
+
+
+Inheritance diagram for modest.\+signals.\+Point\+Source.\+Point\+Source\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=222pt]{classmodest_1_1signals_1_1PointSource_1_1PointSource__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for modest.\+signals.\+Point\+Source.\+Point\+Source\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=222pt]{classmodest_1_1signals_1_1PointSource_1_1PointSource__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classmodest_1_1signals_1_1PointSource_1_1PointSource_a7e28df0f61118ee5c135aa777fd8927f}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self, RA, D\+EC, \hyperlink{classmodest_1_1signals_1_1PointSource_1_1PointSource_ae9aec6bf600ed9b925e2428e7da0a8fb}{attitude\+State\+Name}=\textquotesingle{}attitude\textquotesingle{})
+\item 
+def \hyperlink{classmodest_1_1signals_1_1PointSource_1_1PointSource_a95e43bf6786c7b0a4a1667418fa8c419}{Ra\+Dec} (self)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1PointSource_1_1PointSource_a46995261c063be27716014ab98df02fa}{unit\+Vec} (self, \hyperlink{classmodest_1_1signals_1_1PointSource_1_1PointSource_a95e43bf6786c7b0a4a1667418fa8c419}{Ra\+Dec})
+\item 
+def \hyperlink{classmodest_1_1signals_1_1PointSource_1_1PointSource_ac3603c40a497abd8ad2b1ba19d140413}{compute\+Association\+Probability} (self, measurement, state\+Dict, validation\+Threshold=0)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classmodest_1_1signals_1_1PointSource_1_1PointSource_ae9aec6bf600ed9b925e2428e7da0a8fb}{attitude\+State\+Name}
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classmodest_1_1signals_1_1PointSource_1_1PointSource_aebbf89bfdecbfe1b98e6f835398e475f}{\+\_\+\+\_\+\+R\+A\+\_\+\+\_\+}
+\item 
+\hyperlink{classmodest_1_1signals_1_1PointSource_1_1PointSource_aa00127204cdc233b98addfdf004fc255}{\+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+}
+\item 
+\hyperlink{classmodest_1_1signals_1_1PointSource_1_1PointSource_a5e8336566a9029e0e61f743ba0c76719}{\+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 6 of file Point\+Source.\+py.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+init\+\_\+\+\_\+(self, R\+A, D\+E\+C, attitude\+State\+Name=\textquotesingle{}attitude\textquotesingle{})}{__init__(self, RA, DEC, attitudeStateName='attitude')}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+Point\+Source.\+Point\+Source.\+\_\+\+\_\+init\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{RA, }
+\item[{}]{D\+EC, }
+\item[{}]{attitude\+State\+Name = {\ttfamily \textquotesingle{}attitude\textquotesingle{}}}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1PointSource_1_1PointSource_a7e28df0f61118ee5c135aa777fd8927f}{}\label{classmodest_1_1signals_1_1PointSource_1_1PointSource_a7e28df0f61118ee5c135aa777fd8927f}
+
+
+Definition at line 12 of file Point\+Source.\+py.
+
+
+
+\subsection{Member Function Documentation}
+\index{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}!compute\+Association\+Probability@{compute\+Association\+Probability}}
+\index{compute\+Association\+Probability@{compute\+Association\+Probability}!modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{compute\+Association\+Probability(self, measurement, state\+Dict, validation\+Threshold=0)}{computeAssociationProbability(self, measurement, stateDict, validationThreshold=0)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+Point\+Source.\+Point\+Source.\+compute\+Association\+Probability (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{measurement, }
+\item[{}]{state\+Dict, }
+\item[{}]{validation\+Threshold = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1PointSource_1_1PointSource_ac3603c40a497abd8ad2b1ba19d140413}{}\label{classmodest_1_1signals_1_1PointSource_1_1PointSource_ac3603c40a497abd8ad2b1ba19d140413}
+
+
+Definition at line 39 of file Point\+Source.\+py.
+
+\index{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}!Ra\+Dec@{Ra\+Dec}}
+\index{Ra\+Dec@{Ra\+Dec}!modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{Ra\+Dec(self)}{RaDec(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+Point\+Source.\+Point\+Source.\+Ra\+Dec (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1PointSource_1_1PointSource_a95e43bf6786c7b0a4a1667418fa8c419}{}\label{classmodest_1_1signals_1_1PointSource_1_1PointSource_a95e43bf6786c7b0a4a1667418fa8c419}
+
+
+Definition at line 21 of file Point\+Source.\+py.
+
+\index{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}!unit\+Vec@{unit\+Vec}}
+\index{unit\+Vec@{unit\+Vec}!modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{unit\+Vec(self, Ra\+Dec)}{unitVec(self, RaDec)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+Point\+Source.\+Point\+Source.\+unit\+Vec (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{Ra\+Dec}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1PointSource_1_1PointSource_a46995261c063be27716014ab98df02fa}{}\label{classmodest_1_1signals_1_1PointSource_1_1PointSource_a46995261c063be27716014ab98df02fa}
+
+
+Definition at line 26 of file Point\+Source.\+py.
+
+
+
+\subsection{Member Data Documentation}
+\index{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}!\+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+@{\+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+@{\+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+}!modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+}{__DEC__}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+Point\+Source.\+Point\+Source.\+\_\+\+\_\+\+D\+E\+C\+\_\+\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{classmodest_1_1signals_1_1PointSource_1_1PointSource_aa00127204cdc233b98addfdf004fc255}{}\label{classmodest_1_1signals_1_1PointSource_1_1PointSource_aa00127204cdc233b98addfdf004fc255}
+
+
+Definition at line 15 of file Point\+Source.\+py.
+
+\index{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}!\+\_\+\+\_\+\+R\+A\+\_\+\+\_\+@{\+\_\+\+\_\+\+R\+A\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+\+R\+A\+\_\+\+\_\+@{\+\_\+\+\_\+\+R\+A\+\_\+\+\_\+}!modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+\+R\+A\+\_\+\+\_\+}{__RA__}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+Point\+Source.\+Point\+Source.\+\_\+\+\_\+\+R\+A\+\_\+\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{classmodest_1_1signals_1_1PointSource_1_1PointSource_aebbf89bfdecbfe1b98e6f835398e475f}{}\label{classmodest_1_1signals_1_1PointSource_1_1PointSource_aebbf89bfdecbfe1b98e6f835398e475f}
+
+
+Definition at line 14 of file Point\+Source.\+py.
+
+\index{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}!\+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+@{\+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+@{\+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+}!modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+}{__RaDec__}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+Point\+Source.\+Point\+Source.\+\_\+\+\_\+\+Ra\+Dec\+\_\+\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{classmodest_1_1signals_1_1PointSource_1_1PointSource_a5e8336566a9029e0e61f743ba0c76719}{}\label{classmodest_1_1signals_1_1PointSource_1_1PointSource_a5e8336566a9029e0e61f743ba0c76719}
+
+
+Definition at line 16 of file Point\+Source.\+py.
+
+\index{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}!attitude\+State\+Name@{attitude\+State\+Name}}
+\index{attitude\+State\+Name@{attitude\+State\+Name}!modest\+::signals\+::\+Point\+Source\+::\+Point\+Source@{modest\+::signals\+::\+Point\+Source\+::\+Point\+Source}}
+\subsubsection[{\texorpdfstring{attitude\+State\+Name}{attitudeStateName}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+Point\+Source.\+Point\+Source.\+attitude\+State\+Name}\hypertarget{classmodest_1_1signals_1_1PointSource_1_1PointSource_ae9aec6bf600ed9b925e2428e7da0a8fb}{}\label{classmodest_1_1signals_1_1PointSource_1_1PointSource_ae9aec6bf600ed9b925e2428e7da0a8fb}
+
+
+Definition at line 17 of file Point\+Source.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+modest/signals/\hyperlink{PointSource_8py}{Point\+Source.\+py}\end{DoxyCompactItemize}

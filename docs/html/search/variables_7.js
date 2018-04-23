@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['measurementnoisescalefactor',['measurementNoiseScaleFactor',['../classSignalCorrelationSubstate_1_1CorrelationFilter.html#a21fc425a1d3bcb40b44afbca1f908de1',1,'SignalCorrelationSubstate::CorrelationFilter']]],
-  ['measurementvalidationthreshold',['measurementValidationThreshold',['../classState_1_1ModularFilter.html#adf637093941f85a6ca14a122f232657a',1,'State::ModularFilter']]]
+  ['measurementnoisescalefactor',['measurementNoiseScaleFactor',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#ae1c71753aea17170b58bd9fabc62c037',1,'modest::substates::correlationvector::CorrelationVector']]],
+  ['measurementvalidationthreshold',['measurementValidationThreshold',['../classmodest_1_1ModularFilter_1_1ModularFilter.html#ae3903876f8bd6b45e7630c53e126b29c',1,'modest::ModularFilter::ModularFilter']]]
 ];

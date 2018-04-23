@@ -1,0 +1,5 @@
+<map id="modest.signals.xraysource.UniformNoiseXRaySource" name="modest.signals.xraysource.UniformNoiseXRaySource">
+<area shape="rect" id="node2" href="$classmodest_1_1signals_1_1poissonsource_1_1StaticPoissonSource.html" title="modest.signals.poissonsource.\lStaticPoissonSource" alt="" coords="5,184,208,225"/>
+<area shape="rect" id="node3" href="$classmodest_1_1signals_1_1poissonsource_1_1PoissonSource.html" title="modest.signals.poissonsource.\lPoissonSource" alt="" coords="5,95,208,136"/>
+<area shape="rect" id="node4" href="$classmodest_1_1signals_1_1signalsource_1_1SignalSource.html" title="modest.signals.signalsource.\lSignalSource" alt="" coords="11,5,202,47"/>
+</map>

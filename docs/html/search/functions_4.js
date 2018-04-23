@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dimension',['dimension',['../classSubStates_1_1SubState.html#a4aebea19a134cb871a7c0b6c2709546a',1,'SubStates::SubState']]]
+  ['dimension',['dimension',['../classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6',1,'modest::substates::substate::SubState']]]
 ];

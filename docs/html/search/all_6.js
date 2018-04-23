@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['flux',['flux',['../classSignals_1_1PoissonSource.html#a26e7bf25b1d9195bfded2a3ad6790bce',1,'Signals::PoissonSource']]],
-  ['fluxprofile',['fluxProfile',['../classSignals_1_1PeriodicPoissonSource.html#abba18755c9348e7a36fa9df3ccb5c10a',1,'Signals::PeriodicPoissonSource']]]
+  ['flux',['flux',['../classmodest_1_1signals_1_1poissonsource_1_1PoissonSource.html#a6f2c657ad936b921715d826ac74f7fe5',1,'modest::signals::poissonsource::PoissonSource']]],
+  ['fluxprofile',['fluxProfile',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#a1ff79fd78ebfe4b659093620d0e03b31',1,'modest::signals::poissonsource::PeriodicPoissonSource']]]
 ];

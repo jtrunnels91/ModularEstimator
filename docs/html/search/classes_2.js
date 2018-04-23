@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['modularfilter',['ModularFilter',['../classState_1_1ModularFilter.html',1,'State']]]
+  ['modularfilter',['ModularFilter',['../classmodest_1_1ModularFilter_1_1ModularFilter.html',1,'modest::ModularFilter']]]
 ];
