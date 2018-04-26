@@ -5,7 +5,7 @@ var searchData=
   ['signalid',['signalID',['../classmodest_1_1signals_1_1signalsource_1_1SignalSource.html#a9a64c6a9c2954f6ad61e4ca3518ea8ab',1,'modest::signals::signalsource::SignalSource']]],
   ['signalsource',['SignalSource',['../classmodest_1_1signals_1_1signalsource_1_1SignalSource.html',1,'modest::signals::signalsource']]],
   ['signalsource_2epy',['signalsource.py',['../signalsource_8py.html',1,'']]],
-  ['signalsources',['signalSources',['../classmodest_1_1ModularFilter_1_1ModularFilter.html#ac313b234b8149764c943a1727a4b9056',1,'modest::ModularFilter::ModularFilter']]],
+  ['signalsources',['signalSources',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a545ac50ec6f67f29ad3420cfc5581812',1,'modest::modularfilter::ModularFilter']]],
   ['sincdiff',['sincDiff',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a033e07143d7a0aeefb3136d42a380ee3',1,'modest::substates::correlationvector::CorrelationVector']]],
   ['skewsymmetric',['skewSymmetric',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#ae6f156a198d9c2328ddffde498c1ca19',1,'modest::substates::attitude::Attitude']]],
   ['speedoflight',['speedOfLight',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a5b95e0a827fb233f2f1a40f2cff9d3f0',1,'modest::substates::correlationvector::CorrelationVector']]],
@@ -13,9 +13,9 @@ var searchData=
   ['statevectorhistory',['stateVectorHistory',['../classmodest_1_1substates_1_1substate_1_1SubState.html#a38c12c9d0899bc1161f3502b584517a2',1,'modest::substates::substate::SubState']]],
   ['staticpoissonsource',['StaticPoissonSource',['../classmodest_1_1signals_1_1poissonsource_1_1StaticPoissonSource.html',1,'modest::signals::poissonsource']]],
   ['staticxraypointsource',['StaticXRayPointSource',['../classmodest_1_1signals_1_1xraysource_1_1StaticXRayPointSource.html',1,'modest::signals::xraysource']]],
-  ['storeglobalstatevector',['storeGlobalStateVector',['../classmodest_1_1ModularFilter_1_1ModularFilter.html#a07add84bbb65cc888554817af50516f2',1,'modest::ModularFilter::ModularFilter']]],
+  ['storeglobalstatevector',['storeGlobalStateVector',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a15412a15695827fc57a0609000a1c9c0',1,'modest::modularfilter::ModularFilter']]],
   ['storestatevector',['storeStateVector',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a7ed2c772a331dadab761afd11d980c9e',1,'modest.substates.attitude.Attitude.storeStateVector()'],['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a70ed47697f09424e62e52133fdfb59de',1,'modest.substates.correlationvector.CorrelationVector.storeStateVector()'],['../classmodest_1_1substates_1_1substate_1_1SubState.html#a3644149dc4cc19c0e32d0b7040998c96',1,'modest.substates.substate.SubState.storeStateVector()']]],
   ['substate',['SubState',['../classmodest_1_1substates_1_1substate_1_1SubState.html',1,'modest::substates::substate']]],
   ['substate_2epy',['substate.py',['../substate_8py.html',1,'']]],
-  ['substates',['subStates',['../classmodest_1_1ModularFilter_1_1ModularFilter.html#a1d37c415d645706e55e6ef54726e33d3',1,'modest::ModularFilter::ModularFilter']]]
+  ['substates',['subStates',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a80c66c525d5afd61271f13da47148c5d',1,'modest::modularfilter::ModularFilter']]]
 ];

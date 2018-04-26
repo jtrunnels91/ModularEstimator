@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['addsignalsource',['addSignalSource',['../classmodest_1_1ModularFilter_1_1ModularFilter.html#a75140e1dc2885163912af2d131326eed',1,'modest::ModularFilter::ModularFilter']]],
-  ['addstates',['addStates',['../classmodest_1_1ModularFilter_1_1ModularFilter.html#a06ff9fc8ac0437d7e4be7bb1b02b545a',1,'modest::ModularFilter::ModularFilter']]],
+  ['addsignalsource',['addSignalSource',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a6833080d980ec89769625721fa8e103d',1,'modest::modularfilter::ModularFilter']]],
+  ['addstates',['addStates',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a6363266b6fbd79b2cb8071c853af60a0',1,'modest::modularfilter::ModularFilter']]],
   ['apriori',['aPriori',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a9af2ca612576e52c84e98757e53085a8',1,'modest::substates::correlationvector::CorrelationVector']]],
   ['attitude',['Attitude',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html',1,'modest::substates::attitude']]],
   ['attitude_2epy',['attitude.py',['../attitude_8py.html',1,'']]],

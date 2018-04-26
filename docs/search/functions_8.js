@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['localstateupdatematrices',['localStateUpdateMatrices',['../classmodest_1_1ModularFilter_1_1ModularFilter.html#a344b552e70fd11dfdf69153f291f503e',1,'modest::ModularFilter::ModularFilter']]]
+  ['localstateupdatematrices',['localStateUpdateMatrices',['../classmodest_1_1modularfilter_1_1ModularFilter.html#ab1dc914f4939e1219f4f2d0efbafd9dd',1,'modest::modularfilter::ModularFilter']]]
 ];

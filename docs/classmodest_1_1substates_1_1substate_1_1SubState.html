@@ -92,6 +92,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classmodest_1_1substates_1_1substate_1_1SubState-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">modest.substates.substate.SubState Class Reference</div>  </div>
@@ -105,14 +106,9 @@ Inheritance diagram for modest.substates.substate.SubState:</div>
 <div class="dyncontent">
 <div class="center"><img src="classmodest_1_1substates_1_1substate_1_1SubState__inherit__graph.png" border="0" usemap="#modest_8substates_8substate_8SubState_inherit__map" alt="Inheritance graph"/></div>
 <map name="modest_8substates_8substate_8SubState_inherit__map" id="modest_8substates_8substate_8SubState_inherit__map">
-<area shape="rect" id="node3" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html" title="Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states..." alt="" coords="363,5,540,47"/>
-<area shape="rect" id="node4" href="classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html" title="CorrelationVector estimates the correlation vector and delay between a signal and a time&#45;delayed meas..." alt="" coords="336,71,567,112"/>
+<area shape="rect" id="node2" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html" title="Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states..." alt="" coords="264,5,441,47"/>
+<area shape="rect" id="node3" href="classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html" title="CorrelationVector estimates the correlation vector and delay between a signal and a time&#45;delayed meas..." alt="" coords="237,71,468,112"/>
 </map>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
-<div class="dynheader">
-Collaboration diagram for modest.substates.substate.SubState:</div>
-<div class="dyncontent">
-<div class="center"><img src="classmodest_1_1substates_1_1substate_1_1SubState__coll__graph.png" border="0" usemap="#modest_8substates_8substate_8SubState_coll__map" alt="Collaboration graph"/></div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -165,8 +161,13 @@ Public Attributes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a5b1c0756a69da7f293a415c7d2d77843"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a5b1c0756a69da7f293a415c7d2d77843">__dimension__</a></td></tr>
-<tr class="memdesc:a5b1c0756a69da7f293a415c7d2d77843"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores the length of the state vector as seen by the <a class="el" href="namespacemodest_1_1ModularFilter.html">ModularFilter</a>.  <a href="#a5b1c0756a69da7f293a415c7d2d77843">More...</a><br /></td></tr>
+<tr class="memdesc:a5b1c0756a69da7f293a415c7d2d77843"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores the length of the state vector as seen by the ModularFilter.  <a href="#a5b1c0756a69da7f293a415c7d2d77843">More...</a><br /></td></tr>
 <tr class="separator:a5b1c0756a69da7f293a415c7d2d77843"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a31b0d49b08a8cd07b6d6e4b646d2a307"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a31b0d49b08a8cd07b6d6e4b646d2a307">__metaclass__</a> = ABCMeta</td></tr>
+<tr class="separator:a31b0d49b08a8cd07b6d6e4b646d2a307"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This is an abstract base class for objects used as sub-states in State.ModularFilter. </p>
@@ -225,7 +226,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00065">65</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00066">66</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -255,7 +256,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the covaraince matrix </dd></dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00172">172</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00173">173</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -274,9 +275,9 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> returns the dimension of the sub-state vector </p>
-<p>The <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> method returns the dimension of the sub-state vector estimated by the <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a>. This is the dimension as seen by the <a class="el" href="namespacemodest_1_1ModularFilter.html">ModularFilter</a> estimator.</p>
+<p>The <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> method returns the dimension of the sub-state vector estimated by the <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a>. This is the dimension as seen by the ModularFilter estimator.</p>
 <p>The default implementation is to return the class variable <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a5b1c0756a69da7f293a415c7d2d77843" title="Stores the length of the state vector as seen by the ModularFilter. ">__dimension__</a>, which is saved at initialization. This is designated as a "protected" variable, and should not change during the course of the <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a>'s lifetime. If child class overwrites this implementation, care should be taken to ensure that the value returned by <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> does not change over <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a> object lifetime.</p>
-<p>For <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a> objects with auxilary states, or other quantities related to the state vector but not directly estimated by the <a class="el" href="namespacemodest_1_1ModularFilter.html">ModularFilter</a>, <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> should not count these states as part of the total dimension.</p>
+<p>For <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a> objects with auxilary states, or other quantities related to the state vector but not directly estimated by the ModularFilter, <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> should not count these states as part of the total dimension.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">self</td><td>The object pointer</td></tr>
@@ -285,7 +286,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the dimension of state vector </dd></dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00197">197</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00198">198</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -336,7 +337,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The dictionary containing the state vector, covariance matrix, and aPriori status </dd></dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00240">240</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00241">241</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -371,7 +372,7 @@ Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The dictionary containing the state vector, covariance matrix, and aPriori status </dd></dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00129">129</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00130">130</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -405,7 +406,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00257">257</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00258">258</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -433,7 +434,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00283">283</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00285">285</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -472,7 +473,7 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00154">154</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00155">155</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -530,7 +531,7 @@ Private Attributes</h2></td></tr>
 </ul>
 </dd></dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00236">236</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00237">237</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -553,10 +554,32 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Stores the length of the state vector as seen by the <a class="el" href="namespacemodest_1_1ModularFilter.html">ModularFilter</a>. </p>
+<p>Stores the length of the state vector as seen by the ModularFilter. </p>
 <p>See the <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> function for details on implementation. </p>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00074">74</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00075">75</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a31b0d49b08a8cd07b6d6e4b646d2a307"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">modest.substates.substate.SubState.__metaclass__ = ABCMeta</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00043">43</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -570,7 +593,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00265">265</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00266">266</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -584,7 +607,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00100">100</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00101">101</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -600,7 +623,7 @@ Private Attributes</h2></td></tr>
 
 <p>Stores handle for real-time plotting. </p>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00098">98</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00099">99</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -616,7 +639,7 @@ Private Attributes</h2></td></tr>
 
 <p>Stores the time-history of the sub-state state vector. </p>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00095">95</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00096">96</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>

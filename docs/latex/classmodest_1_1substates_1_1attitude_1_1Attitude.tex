@@ -7,7 +7,8 @@ Estimates the attitude of a vehicle in three dimensions, along with three gyro b
 
 
 
-Inheritance diagram for modest.\+substates.\+attitude.\+Attitude\+:\nopagebreak
+Inheritance diagram for modest.\+substates.\+attitude.\+Attitude\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -16,7 +17,8 @@ Inheritance diagram for modest.\+substates.\+attitude.\+Attitude\+:\nopagebreak
 \end{figure}
 
 
-Collaboration diagram for modest.\+substates.\+attitude.\+Attitude\+:\nopagebreak
+Collaboration diagram for modest.\+substates.\+attitude.\+Attitude\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -174,7 +176,7 @@ Returns the covaraince matrix
 \end{DoxyReturn}
 
 
-Definition at line 172 of file substate.\+py.
+Definition at line 173 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!dimension@{dimension}}
 \index{dimension@{dimension}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -187,11 +189,11 @@ Definition at line 172 of file substate.\+py.
 
 \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} returns the dimension of the sub-\/state vector 
 
-The \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} method returns the dimension of the sub-\/state vector estimated by the \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State}. This is the dimension as seen by the \hyperlink{namespacemodest_1_1ModularFilter}{Modular\+Filter} estimator.
+The \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} method returns the dimension of the sub-\/state vector estimated by the \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State}. This is the dimension as seen by the Modular\+Filter estimator.
 
 The default implementation is to return the class variable \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a5b1c0756a69da7f293a415c7d2d77843}{\+\_\+\+\_\+dimension\+\_\+\+\_\+}, which is saved at initialization. This is designated as a \char`\"{}protected\char`\"{} variable, and should not change during the course of the \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State}\textquotesingle{}s lifetime. If child class overwrites this implementation, care should be taken to ensure that the value returned by \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} does not change over \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State} object lifetime.
 
-For \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State} objects with auxilary states, or other quantities related to the state vector but not directly estimated by the \hyperlink{namespacemodest_1_1ModularFilter}{Modular\+Filter}, \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} should not count these states as part of the total dimension.
+For \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State} objects with auxilary states, or other quantities related to the state vector but not directly estimated by the Modular\+Filter, \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} should not count these states as part of the total dimension.
 
 
 \begin{DoxyParams}{Parameters}
@@ -203,7 +205,7 @@ Returns the dimension of state vector
 \end{DoxyReturn}
 
 
-Definition at line 197 of file substate.\+py.
+Definition at line 198 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!error\+State\+Time\+Update\+Matrix@{error\+State\+Time\+Update\+Matrix}}
 \index{error\+State\+Time\+Update\+Matrix@{error\+State\+Time\+Update\+Matrix}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -350,7 +352,7 @@ The dictionary containing the state vector, covariance matrix, and a\+Priori sta
 \end{DoxyReturn}
 
 
-Definition at line 129 of file substate.\+py.
+Definition at line 130 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!initialize\+Real\+Time\+Plot@{initialize\+Real\+Time\+Plot}}
 \index{initialize\+Real\+Time\+Plot@{initialize\+Real\+Time\+Plot}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -363,7 +365,7 @@ Definition at line 129 of file substate.\+py.
 )\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a1adac64be88eab0a64bb952518c4268f}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a1adac64be88eab0a64bb952518c4268f}
 
 
-Definition at line 257 of file substate.\+py.
+Definition at line 258 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!process\+Noise\+Matrix@{process\+Noise\+Matrix}}
 \index{process\+Noise\+Matrix@{process\+Noise\+Matrix}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -534,7 +536,7 @@ Definition at line 719 of file attitude.\+py.
 )\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a2deb7d1ca3105eb20e50fa7e67298355}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a2deb7d1ca3105eb20e50fa7e67298355}
 
 
-Definition at line 283 of file substate.\+py.
+Definition at line 285 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!sid\+Unit\+Vec@{sid\+Unit\+Vec}}
 \index{sid\+Unit\+Vec@{sid\+Unit\+Vec}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -732,14 +734,14 @@ Definition at line 71 of file attitude.\+py.
 \subsubsection[{\texorpdfstring{R\+T\+Paxis\+Handle}{RTPaxisHandle}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+R\+T\+Paxis\+Handle\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a497ccbb6658589b02568e87c6382222e}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a497ccbb6658589b02568e87c6382222e}
 
 
-Definition at line 265 of file substate.\+py.
+Definition at line 266 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!R\+T\+Plot\+Data@{R\+T\+Plot\+Data}}
 \index{R\+T\+Plot\+Data@{R\+T\+Plot\+Data}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
 \subsubsection[{\texorpdfstring{R\+T\+Plot\+Data}{RTPlotData}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+R\+T\+Plot\+Data\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a9fefae1facc797a1132fb61a55e9ffa1}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a9fefae1facc797a1132fb61a55e9ffa1}
 
 
-Definition at line 100 of file substate.\+py.
+Definition at line 101 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!R\+T\+Plot\+Handle@{R\+T\+Plot\+Handle}}
 \index{R\+T\+Plot\+Handle@{R\+T\+Plot\+Handle}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -750,7 +752,7 @@ Stores handle for real-\/time plotting.
 
 
 
-Definition at line 98 of file substate.\+py.
+Definition at line 99 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!state\+Vector\+History@{state\+Vector\+History}}
 \index{state\+Vector\+History@{state\+Vector\+History}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -761,7 +763,7 @@ Stores the time-\/history of the sub-\/state state vector.
 
 
 
-Definition at line 95 of file substate.\+py.
+Definition at line 96 of file substate.\+py.
 
 
 

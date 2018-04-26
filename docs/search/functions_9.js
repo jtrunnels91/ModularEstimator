@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['measurementupdateekf',['measurementUpdateEKF',['../classmodest_1_1ModularFilter_1_1ModularFilter.html#aab423f4ba75b9f07992de08666409440',1,'modest::ModularFilter::ModularFilter']]],
-  ['measurementupdatejpdaf',['measurementUpdateJPDAF',['../classmodest_1_1ModularFilter_1_1ModularFilter.html#a4b0f2e5f83c580d58264595d0750a3c6',1,'modest::ModularFilter::ModularFilter']]],
-  ['measurementupdateml',['measurementUpdateML',['../classmodest_1_1ModularFilter_1_1ModularFilter.html#a06288fc0e2ec0bd6761e388d401a6590',1,'modest::ModularFilter::ModularFilter']]]
+  ['measurementupdateekf',['measurementUpdateEKF',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a493ccf6845ed800d565f1d26d063592c',1,'modest::modularfilter::ModularFilter']]],
+  ['measurementupdatejpdaf',['measurementUpdateJPDAF',['../classmodest_1_1modularfilter_1_1ModularFilter.html#ac3a26e2a7672ceedf00c48723104d55c',1,'modest::modularfilter::ModularFilter']]],
+  ['measurementupdateml',['measurementUpdateML',['../classmodest_1_1modularfilter_1_1ModularFilter.html#af1a7d5a4e219c494de176f94997ae110',1,'modest::modularfilter::ModularFilter']]]
 ];

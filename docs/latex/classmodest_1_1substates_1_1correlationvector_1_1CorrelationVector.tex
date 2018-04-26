@@ -7,7 +7,8 @@
 
 
 
-Inheritance diagram for modest.\+substates.\+correlationvector.\+Correlation\+Vector\+:\nopagebreak
+Inheritance diagram for modest.\+substates.\+correlationvector.\+Correlation\+Vector\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -16,7 +17,8 @@ Inheritance diagram for modest.\+substates.\+correlationvector.\+Correlation\+Ve
 \end{figure}
 
 
-Collaboration diagram for modest.\+substates.\+correlationvector.\+Correlation\+Vector\+:\nopagebreak
+Collaboration diagram for modest.\+substates.\+correlationvector.\+Correlation\+Vector\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -31,7 +33,7 @@ def \hyperlink{classmodest_1_1substates_1_1correlationvector_1_1CorrelationVecto
 def \hyperlink{classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector_a3514ce57ec201ece8a5144f515d2d02c}{build\+Time\+Update\+Matrices} (self, deltaT, dynamics, h)
 \begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector_a3514ce57ec201ece8a5144f515d2d02c}{build\+Time\+Update\+Matrices} constructs the correlation vector time update matrices \end{DoxyCompactList}\end{DoxyCompactItemize}
 \begin{Indent}{\bf Mandatory Sub\+State Functions}\par
-{\em The following functions are required in order for this class to be used as a substate in \hyperlink{namespacemodest_1_1ModularFilter}{Modular\+Filter}.
+{\em The following functions are required in order for this class to be used as a substate in Modular\+Filter.
 
 The inside of the functions may be changed or updated, but their \char`\"{}black box\char`\"{} behavior must remain the same; i.\+e. they must still perform the same essential functions and return the same things. }\begin{DoxyCompactItemize}
 \item 
@@ -321,7 +323,7 @@ Returns the covaraince matrix
 \end{DoxyReturn}
 
 
-Definition at line 172 of file substate.\+py.
+Definition at line 173 of file substate.\+py.
 
 \index{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}!dimension@{dimension}}
 \index{dimension@{dimension}!modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}}
@@ -334,11 +336,11 @@ Definition at line 172 of file substate.\+py.
 
 \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} returns the dimension of the sub-\/state vector 
 
-The \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} method returns the dimension of the sub-\/state vector estimated by the \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State}. This is the dimension as seen by the \hyperlink{namespacemodest_1_1ModularFilter}{Modular\+Filter} estimator.
+The \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} method returns the dimension of the sub-\/state vector estimated by the \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State}. This is the dimension as seen by the Modular\+Filter estimator.
 
 The default implementation is to return the class variable \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a5b1c0756a69da7f293a415c7d2d77843}{\+\_\+\+\_\+dimension\+\_\+\+\_\+}, which is saved at initialization. This is designated as a \char`\"{}protected\char`\"{} variable, and should not change during the course of the \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State}\textquotesingle{}s lifetime. If child class overwrites this implementation, care should be taken to ensure that the value returned by \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} does not change over \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State} object lifetime.
 
-For \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State} objects with auxilary states, or other quantities related to the state vector but not directly estimated by the \hyperlink{namespacemodest_1_1ModularFilter}{Modular\+Filter}, \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} should not count these states as part of the total dimension.
+For \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State} objects with auxilary states, or other quantities related to the state vector but not directly estimated by the Modular\+Filter, \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} should not count these states as part of the total dimension.
 
 
 \begin{DoxyParams}{Parameters}
@@ -350,7 +352,7 @@ Returns the dimension of state vector
 \end{DoxyReturn}
 
 
-Definition at line 197 of file substate.\+py.
+Definition at line 198 of file substate.\+py.
 
 \index{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}!estimate\+Signal\+Delay\+UT@{estimate\+Signal\+Delay\+UT}}
 \index{estimate\+Signal\+Delay\+UT@{estimate\+Signal\+Delay\+UT}!modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}}
@@ -435,7 +437,7 @@ The dictionary containing the state vector, covariance matrix, and a\+Priori sta
 \end{DoxyReturn}
 
 
-Definition at line 129 of file substate.\+py.
+Definition at line 130 of file substate.\+py.
 
 \index{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}!get\+T\+O\+A\+Measurement\+Matrices@{get\+T\+O\+A\+Measurement\+Matrices}}
 \index{get\+T\+O\+A\+Measurement\+Matrices@{get\+T\+O\+A\+Measurement\+Matrices}!modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}}
@@ -483,7 +485,7 @@ Definition at line 441 of file correlationvector.\+py.
 )\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a1adac64be88eab0a64bb952518c4268f}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a1adac64be88eab0a64bb952518c4268f}
 
 
-Definition at line 257 of file substate.\+py.
+Definition at line 258 of file substate.\+py.
 
 \index{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}!real\+Time\+Plot@{real\+Time\+Plot}}
 \index{real\+Time\+Plot@{real\+Time\+Plot}!modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}}
@@ -495,7 +497,7 @@ Definition at line 257 of file substate.\+py.
 )\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a2deb7d1ca3105eb20e50fa7e67298355}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a2deb7d1ca3105eb20e50fa7e67298355}
 
 
-Definition at line 283 of file substate.\+py.
+Definition at line 285 of file substate.\+py.
 
 \index{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}!sinc\+Diff@{sinc\+Diff}}
 \index{sinc\+Diff@{sinc\+Diff}!modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}}
@@ -750,14 +752,14 @@ Definition at line 189 of file correlationvector.\+py.
 \subsubsection[{\texorpdfstring{R\+T\+Paxis\+Handle}{RTPaxisHandle}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+R\+T\+Paxis\+Handle\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a497ccbb6658589b02568e87c6382222e}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a497ccbb6658589b02568e87c6382222e}
 
 
-Definition at line 265 of file substate.\+py.
+Definition at line 266 of file substate.\+py.
 
 \index{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}!R\+T\+Plot\+Data@{R\+T\+Plot\+Data}}
 \index{R\+T\+Plot\+Data@{R\+T\+Plot\+Data}!modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}}
 \subsubsection[{\texorpdfstring{R\+T\+Plot\+Data}{RTPlotData}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+R\+T\+Plot\+Data\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a9fefae1facc797a1132fb61a55e9ffa1}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a9fefae1facc797a1132fb61a55e9ffa1}
 
 
-Definition at line 100 of file substate.\+py.
+Definition at line 101 of file substate.\+py.
 
 \index{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}!R\+T\+Plot\+Handle@{R\+T\+Plot\+Handle}}
 \index{R\+T\+Plot\+Handle@{R\+T\+Plot\+Handle}!modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}}
@@ -768,7 +770,7 @@ Stores handle for real-\/time plotting.
 
 
 
-Definition at line 98 of file substate.\+py.
+Definition at line 99 of file substate.\+py.
 
 \index{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}!signal\+Delay@{signal\+Delay}}
 \index{signal\+Delay@{signal\+Delay}!modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}}
@@ -790,7 +792,7 @@ Stores the time-\/history of the sub-\/state state vector.
 
 
 
-Definition at line 95 of file substate.\+py.
+Definition at line 96 of file substate.\+py.
 
 \index{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}!t@{t}}
 \index{t@{t}!modest\+::substates\+::correlationvector\+::\+Correlation\+Vector@{modest\+::substates\+::correlationvector\+::\+Correlation\+Vector}}

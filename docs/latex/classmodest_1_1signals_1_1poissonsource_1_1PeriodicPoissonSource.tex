@@ -2,7 +2,8 @@
 \label{classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource}\index{modest.\+signals.\+poissonsource.\+Periodic\+Poisson\+Source@{modest.\+signals.\+poissonsource.\+Periodic\+Poisson\+Source}}
 
 
-Inheritance diagram for modest.\+signals.\+poissonsource.\+Periodic\+Poisson\+Source\+:\nopagebreak
+Inheritance diagram for modest.\+signals.\+poissonsource.\+Periodic\+Poisson\+Source\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -11,7 +12,8 @@ Inheritance diagram for modest.\+signals.\+poissonsource.\+Periodic\+Poisson\+So
 \end{figure}
 
 
-Collaboration diagram for modest.\+signals.\+poissonsource.\+Periodic\+Poisson\+Source\+:\nopagebreak
+Collaboration diagram for modest.\+signals.\+poissonsource.\+Periodic\+Poisson\+Source\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -24,6 +26,8 @@ Collaboration diagram for modest.\+signals.\+poissonsource.\+Periodic\+Poisson\+
 def \hyperlink{classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource_ae95e11ccb3c412deb0ea534670be83a3}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self, \hyperlink{classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource_af88d243e09713ecde60baa40edfedc0b}{peak\+Flux}, \hyperlink{classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource_a1ff79fd78ebfe4b659093620d0e03b31}{flux\+Profile}, \hyperlink{classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource_a0aa4bf45a8d92b38e95817f7541b0a62}{non\+Pulsed\+Flux})
 \item 
 def \hyperlink{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a2f8a73e6f51cbdcd0f1e646d6f4d4574}{compute\+Association\+Probability} (self, current\+Flux, measurement)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a3d32dbed840ea9ac775b226f0a654831}{compute\+Association\+Probability} (self, measurement, state\+Dict, validation\+Threshold=0)
 \item 
 def \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c2954f6ad61e4ca3518ea8ab}{signal\+ID} (self)
 \end{DoxyCompactItemize}
@@ -85,6 +89,20 @@ Definition at line 51 of file poissonsource.\+py.
 
 Definition at line 20 of file poissonsource.\+py.
 
+\index{modest\+::signals\+::poissonsource\+::\+Periodic\+Poisson\+Source@{modest\+::signals\+::poissonsource\+::\+Periodic\+Poisson\+Source}!compute\+Association\+Probability@{compute\+Association\+Probability}}
+\index{compute\+Association\+Probability@{compute\+Association\+Probability}!modest\+::signals\+::poissonsource\+::\+Periodic\+Poisson\+Source@{modest\+::signals\+::poissonsource\+::\+Periodic\+Poisson\+Source}}
+\subsubsection[{\texorpdfstring{compute\+Association\+Probability(self, measurement, state\+Dict, validation\+Threshold=0)}{computeAssociationProbability(self, measurement, stateDict, validationThreshold=0)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+signalsource.\+Signal\+Source.\+compute\+Association\+Probability (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{measurement, }
+\item[{}]{state\+Dict, }
+\item[{}]{validation\+Threshold = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a3d32dbed840ea9ac775b226f0a654831}{}\label{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a3d32dbed840ea9ac775b226f0a654831}
+
+
+Definition at line 26 of file signalsource.\+py.
+
 \index{modest\+::signals\+::poissonsource\+::\+Periodic\+Poisson\+Source@{modest\+::signals\+::poissonsource\+::\+Periodic\+Poisson\+Source}!signal\+ID@{signal\+ID}}
 \index{signal\+ID@{signal\+ID}!modest\+::signals\+::poissonsource\+::\+Periodic\+Poisson\+Source@{modest\+::signals\+::poissonsource\+::\+Periodic\+Poisson\+Source}}
 \subsubsection[{\texorpdfstring{signal\+I\+D(self)}{signalID(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+signalsource.\+Signal\+Source.\+signal\+ID (
@@ -94,7 +112,7 @@ Definition at line 20 of file poissonsource.\+py.
 )\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c2954f6ad61e4ca3518ea8ab}{}\label{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c2954f6ad61e4ca3518ea8ab}
 
 
-Definition at line 14 of file signalsource.\+py.
+Definition at line 17 of file signalsource.\+py.
 
 
 
@@ -125,7 +143,7 @@ Definition at line 12 of file poissonsource.\+py.
 \subsubsection[{\texorpdfstring{next\+Signal\+ID}{nextSignalID}}]{\setlength{\rightskip}{0pt plus 5cm}int modest.\+signals.\+signalsource.\+Signal\+Source.\+next\+Signal\+ID = 0\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a453eafb550b551adbec0903deb63dfce}{}\label{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a453eafb550b551adbec0903deb63dfce}
 
 
-Definition at line 5 of file signalsource.\+py.
+Definition at line 8 of file signalsource.\+py.
 
 \index{modest\+::signals\+::poissonsource\+::\+Periodic\+Poisson\+Source@{modest\+::signals\+::poissonsource\+::\+Periodic\+Poisson\+Source}!non\+Pulsed\+Flux@{non\+Pulsed\+Flux}}
 \index{non\+Pulsed\+Flux@{non\+Pulsed\+Flux}!modest\+::signals\+::poissonsource\+::\+Periodic\+Poisson\+Source@{modest\+::signals\+::poissonsource\+::\+Periodic\+Poisson\+Source}}

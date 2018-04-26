@@ -285,7 +285,7 @@ class Attitude(substate.SubState):
     ):
             
         if (
-                isinstance(source, _PointSource)
+                isinstance(source, PointSource)
         ):
             measurementMatrices = self.RaDecMeasMatrices(
                 source,

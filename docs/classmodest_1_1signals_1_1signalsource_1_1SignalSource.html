@@ -92,6 +92,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classmodest_1_1signals_1_1signalsource_1_1SignalSource-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">modest.signals.signalsource.SignalSource Class Reference</div>  </div>
@@ -117,6 +118,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abc71be8fa60c2431ee68d4b7752684f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a64c6a9c2954f6ad61e4ca3518ea8ab"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1signals_1_1signalsource_1_1SignalSource.html#a9a64c6a9c2954f6ad61e4ca3518ea8ab">signalID</a> (self)</td></tr>
 <tr class="separator:a9a64c6a9c2954f6ad61e4ca3518ea8ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d32dbed840ea9ac775b226f0a654831"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1signals_1_1signalsource_1_1SignalSource.html#a3d32dbed840ea9ac775b226f0a654831">computeAssociationProbability</a> (self, measurement, stateDict, validationThreshold=0)</td></tr>
+<tr class="separator:a3d32dbed840ea9ac775b226f0a654831"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -127,10 +130,15 @@ Static Public Attributes</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a8b8d7f422fe4de0e2f0add245c05b3c1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1signals_1_1signalsource_1_1SignalSource.html#a8b8d7f422fe4de0e2f0add245c05b3c1">__signalID__</a></td></tr>
 <tr class="separator:a8b8d7f422fe4de0e2f0add245c05b3c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a07d7658d1b008499bcdf05c718638160"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1signals_1_1signalsource_1_1SignalSource.html#a07d7658d1b008499bcdf05c718638160">__metaclass__</a> = ABCMeta</td></tr>
+<tr class="separator:a07d7658d1b008499bcdf05c718638160"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p>Definition at line <a class="el" href="signalsource_8py_source.html#l00004">4</a> of file <a class="el" href="signalsource_8py_source.html">signalsource.py</a>.</p>
+<p>Definition at line <a class="el" href="signalsource_8py_source.html#l00006">6</a> of file <a class="el" href="signalsource_8py_source.html">signalsource.py</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="abc71be8fa60c2431ee68d4b7752684f0"></a>
 <div class="memitem">
@@ -146,11 +154,51 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="signalsource_8py_source.html#l00009">9</a> of file <a class="el" href="signalsource_8py_source.html">signalsource.py</a>.</p>
+<p>Definition at line <a class="el" href="signalsource_8py_source.html#l00012">12</a> of file <a class="el" href="signalsource_8py_source.html">signalsource.py</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a3d32dbed840ea9ac775b226f0a654831"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def modest.signals.signalsource.SignalSource.computeAssociationProbability </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>measurement</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>stateDict</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>validationThreshold</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="signalsource_8py_source.html#l00026">26</a> of file <a class="el" href="signalsource_8py_source.html">signalsource.py</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a9a64c6a9c2954f6ad61e4ca3518ea8ab"></a>
 <div class="memitem">
 <div class="memproto">
@@ -165,11 +213,33 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="signalsource_8py_source.html#l00014">14</a> of file <a class="el" href="signalsource_8py_source.html">signalsource.py</a>.</p>
+<p>Definition at line <a class="el" href="signalsource_8py_source.html#l00017">17</a> of file <a class="el" href="signalsource_8py_source.html">signalsource.py</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a class="anchor" id="a07d7658d1b008499bcdf05c718638160"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">modest.signals.signalsource.SignalSource.__metaclass__ = ABCMeta</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="signalsource_8py_source.html#l00007">7</a> of file <a class="el" href="signalsource_8py_source.html">signalsource.py</a>.</p>
+
+</div>
+</div>
 <a class="anchor" id="a8b8d7f422fe4de0e2f0add245c05b3c1"></a>
 <div class="memitem">
 <div class="memproto">
@@ -188,7 +258,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="signalsource_8py_source.html#l00010">10</a> of file <a class="el" href="signalsource_8py_source.html">signalsource.py</a>.</p>
+<p>Definition at line <a class="el" href="signalsource_8py_source.html#l00013">13</a> of file <a class="el" href="signalsource_8py_source.html">signalsource.py</a>.</p>
 
 </div>
 </div>
@@ -210,7 +280,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="signalsource_8py_source.html#l00005">5</a> of file <a class="el" href="signalsource_8py_source.html">signalsource.py</a>.</p>
+<p>Definition at line <a class="el" href="signalsource_8py_source.html#l00008">8</a> of file <a class="el" href="signalsource_8py_source.html">signalsource.py</a>.</p>
 
 </div>
 </div>

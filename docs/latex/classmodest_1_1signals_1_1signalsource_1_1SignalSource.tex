@@ -2,7 +2,8 @@
 \label{classmodest_1_1signals_1_1signalsource_1_1SignalSource}\index{modest.\+signals.\+signalsource.\+Signal\+Source@{modest.\+signals.\+signalsource.\+Signal\+Source}}
 
 
-Inheritance diagram for modest.\+signals.\+signalsource.\+Signal\+Source\+:\nopagebreak
+Inheritance diagram for modest.\+signals.\+signalsource.\+Signal\+Source\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -15,6 +16,8 @@ Inheritance diagram for modest.\+signals.\+signalsource.\+Signal\+Source\+:\nopa
 def \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_abc71be8fa60c2431ee68d4b7752684f0}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self)
 \item 
 def \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c2954f6ad61e4ca3518ea8ab}{signal\+ID} (self)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a3d32dbed840ea9ac775b226f0a654831}{compute\+Association\+Probability} (self, measurement, state\+Dict, validation\+Threshold=0)
 \end{DoxyCompactItemize}
 \subsection*{Static Public Attributes}
 \begin{DoxyCompactItemize}
@@ -26,12 +29,17 @@ int \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a453eafb55
 \item 
 \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a8b8d7f422fe4de0e2f0add245c05b3c1}{\+\_\+\+\_\+signal\+I\+D\+\_\+\+\_\+}
 \end{DoxyCompactItemize}
+\subsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a07d7658d1b008499bcdf05c718638160}{\+\_\+\+\_\+metaclass\+\_\+\+\_\+} = A\+B\+C\+Meta
+\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
 
 
-Definition at line 4 of file signalsource.\+py.
+Definition at line 6 of file signalsource.\+py.
 
 
 
@@ -45,11 +53,25 @@ Definition at line 4 of file signalsource.\+py.
 )}\hypertarget{classmodest_1_1signals_1_1signalsource_1_1SignalSource_abc71be8fa60c2431ee68d4b7752684f0}{}\label{classmodest_1_1signals_1_1signalsource_1_1SignalSource_abc71be8fa60c2431ee68d4b7752684f0}
 
 
-Definition at line 9 of file signalsource.\+py.
+Definition at line 12 of file signalsource.\+py.
 
 
 
 \subsection{Member Function Documentation}
+\index{modest\+::signals\+::signalsource\+::\+Signal\+Source@{modest\+::signals\+::signalsource\+::\+Signal\+Source}!compute\+Association\+Probability@{compute\+Association\+Probability}}
+\index{compute\+Association\+Probability@{compute\+Association\+Probability}!modest\+::signals\+::signalsource\+::\+Signal\+Source@{modest\+::signals\+::signalsource\+::\+Signal\+Source}}
+\subsubsection[{\texorpdfstring{compute\+Association\+Probability(self, measurement, state\+Dict, validation\+Threshold=0)}{computeAssociationProbability(self, measurement, stateDict, validationThreshold=0)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+signalsource.\+Signal\+Source.\+compute\+Association\+Probability (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{measurement, }
+\item[{}]{state\+Dict, }
+\item[{}]{validation\+Threshold = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a3d32dbed840ea9ac775b226f0a654831}{}\label{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a3d32dbed840ea9ac775b226f0a654831}
+
+
+Definition at line 26 of file signalsource.\+py.
+
 \index{modest\+::signals\+::signalsource\+::\+Signal\+Source@{modest\+::signals\+::signalsource\+::\+Signal\+Source}!signal\+ID@{signal\+ID}}
 \index{signal\+ID@{signal\+ID}!modest\+::signals\+::signalsource\+::\+Signal\+Source@{modest\+::signals\+::signalsource\+::\+Signal\+Source}}
 \subsubsection[{\texorpdfstring{signal\+I\+D(self)}{signalID(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+signalsource.\+Signal\+Source.\+signal\+ID (
@@ -59,24 +81,31 @@ Definition at line 9 of file signalsource.\+py.
 )}\hypertarget{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c2954f6ad61e4ca3518ea8ab}{}\label{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c2954f6ad61e4ca3518ea8ab}
 
 
-Definition at line 14 of file signalsource.\+py.
+Definition at line 17 of file signalsource.\+py.
 
 
 
 \subsection{Member Data Documentation}
+\index{modest\+::signals\+::signalsource\+::\+Signal\+Source@{modest\+::signals\+::signalsource\+::\+Signal\+Source}!\+\_\+\+\_\+metaclass\+\_\+\+\_\+@{\+\_\+\+\_\+metaclass\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+metaclass\+\_\+\+\_\+@{\+\_\+\+\_\+metaclass\+\_\+\+\_\+}!modest\+::signals\+::signalsource\+::\+Signal\+Source@{modest\+::signals\+::signalsource\+::\+Signal\+Source}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+metaclass\+\_\+\+\_\+}{__metaclass__}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+signalsource.\+Signal\+Source.\+\_\+\+\_\+metaclass\+\_\+\+\_\+ = A\+B\+C\+Meta\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}\hypertarget{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a07d7658d1b008499bcdf05c718638160}{}\label{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a07d7658d1b008499bcdf05c718638160}
+
+
+Definition at line 7 of file signalsource.\+py.
+
 \index{modest\+::signals\+::signalsource\+::\+Signal\+Source@{modest\+::signals\+::signalsource\+::\+Signal\+Source}!\+\_\+\+\_\+signal\+I\+D\+\_\+\+\_\+@{\+\_\+\+\_\+signal\+I\+D\+\_\+\+\_\+}}
 \index{\+\_\+\+\_\+signal\+I\+D\+\_\+\+\_\+@{\+\_\+\+\_\+signal\+I\+D\+\_\+\+\_\+}!modest\+::signals\+::signalsource\+::\+Signal\+Source@{modest\+::signals\+::signalsource\+::\+Signal\+Source}}
 \subsubsection[{\texorpdfstring{\+\_\+\+\_\+signal\+I\+D\+\_\+\+\_\+}{__signalID__}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+signalsource.\+Signal\+Source.\+\_\+\+\_\+signal\+I\+D\+\_\+\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\hypertarget{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a8b8d7f422fe4de0e2f0add245c05b3c1}{}\label{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a8b8d7f422fe4de0e2f0add245c05b3c1}
 
 
-Definition at line 10 of file signalsource.\+py.
+Definition at line 13 of file signalsource.\+py.
 
 \index{modest\+::signals\+::signalsource\+::\+Signal\+Source@{modest\+::signals\+::signalsource\+::\+Signal\+Source}!next\+Signal\+ID@{next\+Signal\+ID}}
 \index{next\+Signal\+ID@{next\+Signal\+ID}!modest\+::signals\+::signalsource\+::\+Signal\+Source@{modest\+::signals\+::signalsource\+::\+Signal\+Source}}
 \subsubsection[{\texorpdfstring{next\+Signal\+ID}{nextSignalID}}]{\setlength{\rightskip}{0pt plus 5cm}int modest.\+signals.\+signalsource.\+Signal\+Source.\+next\+Signal\+ID = 0\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a453eafb550b551adbec0903deb63dfce}{}\label{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a453eafb550b551adbec0903deb63dfce}
 
 
-Definition at line 5 of file signalsource.\+py.
+Definition at line 8 of file signalsource.\+py.
 
 
 

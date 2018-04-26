@@ -2,16 +2,11 @@
 # This file contains the SubState class.
 
 
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 import numpy as np
-import matplotlib as mp
+# import matplotlib as mp
 import matplotlib.pyplot as plt
-
-
-import sys
-sys.path.append("/home/joel/Documents/astroSourceTracking/libraries")
-from SmartPanda import SmartPanda
-
+from smartpanda import SmartPanda
 
 ## @class SubState
 # @brief This is an abstract base class for objects used as sub-states in
@@ -39,8 +34,9 @@ from SmartPanda import SmartPanda
 # In any case, the documentation for each method of SubState contains a
 # generalized description of what functionality the implementation should
 # provide in a derived class.
-class SubState(ABC):
-    
+class SubState():
+    __metaclass__ = ABCMeta
+
     ## @fun #__init__ initializes a SubState object
     #
     # @details The #__init__ method is responsible for initializing a
@@ -92,7 +88,7 @@ class SubState(ABC):
                 )
         
         ## @brief Stores the time-history of the sub-state state vector.
-        self.stateVectorHistory = SmartPanda(stateVectorHistory)
+        self.stateVectorHistory = SmartPanda(data=stateVectorHistory)
 
         ## @brief Stores handle for real-time plotting        
         self.RTPlotHandle = None
@@ -120,7 +116,8 @@ class SubState(ABC):
     # - 'aPriori': A boolean indicating if the most recent estimate is the
     # - result of a time update (aPriori=True) or a measurement update (aPriori=False)
     #
-    # This function can be used as-is 
+    # This function can be used as-is, or can be overloaded to perform
+    # additional tasks specific to the substate.
     #
     # @param self The object pointer
     #
@@ -273,7 +270,8 @@ class SubState(ABC):
             np.zeros(self.__dimension__)
             )
 
-        plt.grid()
+        # plt.grid()
+        
         plt.show(block=False)
         return
         

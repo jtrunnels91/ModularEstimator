@@ -3,7 +3,7 @@ var searchData=
   ['attitude',['attitude',['../namespacemodest_1_1substates_1_1attitude.html',1,'modest::substates']]],
   ['correlationvector',['correlationvector',['../namespacemodest_1_1substates_1_1correlationvector.html',1,'modest::substates']]],
   ['modest',['modest',['../namespacemodest.html',1,'']]],
-  ['modularfilter',['ModularFilter',['../namespacemodest_1_1ModularFilter.html',1,'modest']]],
+  ['modularfilter',['modularfilter',['../namespacemodest_1_1modularfilter.html',1,'modest']]],
   ['pointsource',['pointsource',['../namespacemodest_1_1signals_1_1pointsource.html',1,'modest::signals']]],
   ['poissonsource',['poissonsource',['../namespacemodest_1_1signals_1_1poissonsource.html',1,'modest::signals']]],
   ['signals',['signals',['../namespacemodest_1_1signals.html',1,'modest']]],
