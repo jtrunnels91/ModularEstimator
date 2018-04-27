@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['measurementupdateekf',['measurementUpdateEKF',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a493ccf6845ed800d565f1d26d063592c',1,'modest::modularfilter::ModularFilter']]],
-  ['measurementupdatejpdaf',['measurementUpdateJPDAF',['../classmodest_1_1modularfilter_1_1ModularFilter.html#ac3a26e2a7672ceedf00c48723104d55c',1,'modest::modularfilter::ModularFilter']]],
-  ['measurementupdateml',['measurementUpdateML',['../classmodest_1_1modularfilter_1_1ModularFilter.html#af1a7d5a4e219c494de176f94997ae110',1,'modest::modularfilter::ModularFilter']]]
+  ['localstateupdatematrices',['localStateUpdateMatrices',['../classmodest_1_1modularfilter_1_1ModularFilter.html#ab1dc914f4939e1219f4f2d0efbafd9dd',1,'modest::modularfilter::ModularFilter']]]
 ];

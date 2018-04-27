@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['localstateupdatematrices',['localStateUpdateMatrices',['../classmodest_1_1modularfilter_1_1ModularFilter.html#ab1dc914f4939e1219f4f2d0efbafd9dd',1,'modest::modularfilter::ModularFilter']]]
+  ['initializerealtimeplot',['initializeRealTimePlot',['../classmodest_1_1substates_1_1substate_1_1SubState.html#a1adac64be88eab0a64bb952518c4268f',1,'modest::substates::substate::SubState']]]
 ];

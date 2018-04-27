@@ -1,5 +1,24 @@
 var searchData=
 [
-  ['qhat',['qHat',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a22a550534d908153baef2e52f7142c5e',1,'modest::substates::attitude::Attitude']]],
-  ['quaterniontimeupdatematrix',['quaternionTimeUpdateMatrix',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#ae21ed62061b674b0108f205df2122083',1,'modest::substates::attitude::Attitude']]]
+  ['peakamplitude',['peakAmplitude',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#a2616e8654edeac61b5616c6bc7333138',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
+  ['peakfitpoints',['peakFitPoints',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#af2be8d7129fd0453208af5268fdddc22',1,'modest::substates::correlationvector::CorrelationVector']]],
+  ['peakphotonflux',['peakPhotonFlux',['../classmodest_1_1signals_1_1xraysource_1_1StaticXRayPointSource.html#a45c2430decc163480da7732af27d1f99',1,'modest::signals::xraysource::StaticXRayPointSource']]],
+  ['periodicpoissonsource',['PeriodicPoissonSource',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html',1,'modest::signals::poissonsource']]],
+  ['phasederivatives',['phaseDerivatives',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#ae30b60a8e1f92e1172041cd1fd267df8',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
+  ['phat',['PHat',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a2f79616ca660e0cc1e628adf94738249',1,'modest::substates::attitude::Attitude']]],
+  ['photonflux',['photonFlux',['../classmodest_1_1signals_1_1xraysource_1_1UniformNoiseXRaySource.html#a9b8049972baf6e0640181b58850a3d20',1,'modest::signals::xraysource::UniformNoiseXRaySource']]],
+  ['photonsperperiod',['photonsPerPeriod',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#aab9b9fda33f78fe5f0e47c62f2b34e51',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
+  ['plot',['plot',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#a61c220fea29637e4af1b180a77b48952',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
+  ['pointsource',['PointSource',['../classmodest_1_1signals_1_1pointsource_1_1PointSource.html',1,'modest::signals::pointsource']]],
+  ['pointsource_2epy',['pointsource.py',['../pointsource_8py.html',1,'']]],
+  ['poissonsource',['PoissonSource',['../classmodest_1_1signals_1_1poissonsource_1_1PoissonSource.html',1,'modest::signals::poissonsource']]],
+  ['poissonsource_2epy',['poissonsource.py',['../poissonsource_8py.html',1,'']]],
+  ['processnoise',['processNoise',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#ab1756128cdec161ea22557d756745195',1,'modest::substates::correlationvector::CorrelationVector']]],
+  ['processnoisematrix',['processNoiseMatrix',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a11f6e9a0803c6843d7c89061ffbb3c2c',1,'modest::substates::attitude::Attitude']]],
+  ['processparfile',['processPARFile',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#a280db13f5c2cd6db115ce2f8aa4694f0',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
+  ['processprofile',['processProfile',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#a89540e48e757dcdc4895dc030e9c3ca5',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
+  ['profile',['profile',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#af057537ab956e1eb3bbeadd90bbe0aa9',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
+  ['profileindex',['profileIndex',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#a61c32fbdb323e66149905e46b70a0e4c',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
+  ['pulsarperiod',['pulsarPeriod',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#a602c543f1a87a280ea021748fb2d8b84',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
+  ['pulsedfraction',['pulsedFraction',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#adf39e84e02a1f4c98f4850853bca4d87',1,'modest::signals::poissonsource::PeriodicPoissonSource']]]
 ];

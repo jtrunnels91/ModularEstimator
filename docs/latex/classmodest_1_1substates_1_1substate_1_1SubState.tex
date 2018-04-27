@@ -7,8 +7,7 @@ This is an abstract base class for objects used as sub-\/states in State.\+Modul
 
 
 
-Inheritance diagram for modest.\+substates.\+substate.\+Sub\+State\+:
-\nopagebreak
+Inheritance diagram for modest.\+substates.\+substate.\+Sub\+State\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -80,7 +79,7 @@ Finally, some methods are specifically tagged as abstract methods and are not im
 
 In any case, the documentation for each method of \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State} contains a generalized description of what functionality the implementation should provide in a derived class. 
 
-Definition at line 42 of file substate.\+py.
+Definition at line 37 of file substate.\+py.
 
 
 
@@ -120,7 +119,7 @@ If no values are passed for the initial state estimate dictionary, they will be 
 \end{DoxyParams}
 
 
-Definition at line 66 of file substate.\+py.
+Definition at line 61 of file substate.\+py.
 
 
 
@@ -152,7 +151,7 @@ Returns the covaraince matrix
 \end{DoxyReturn}
 
 
-Definition at line 173 of file substate.\+py.
+Definition at line 169 of file substate.\+py.
 
 \index{modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}!dimension@{dimension}}
 \index{dimension@{dimension}!modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}}
@@ -181,7 +180,7 @@ Returns the dimension of state vector
 \end{DoxyReturn}
 
 
-Definition at line 198 of file substate.\+py.
+Definition at line 194 of file substate.\+py.
 
 \index{modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}!get\+Measurement\+Matrices@{get\+Measurement\+Matrices}}
 \index{get\+Measurement\+Matrices@{get\+Measurement\+Matrices}!modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}}
@@ -206,7 +205,7 @@ The \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_aa18c8238415131b
 \item result of a time update (a\+Priori=True) or a measurement update (a\+Priori=False)
 \end{DoxyItemize}
 
-This function can be used as-\/is
+This function can be used as-\/is, or can be overloaded to perform additional tasks specific to the substate.
 
 
 \begin{DoxyParams}{Parameters}
@@ -218,7 +217,7 @@ The dictionary containing the state vector, covariance matrix, and a\+Priori sta
 \end{DoxyReturn}
 
 
-Definition at line 241 of file substate.\+py.
+Definition at line 237 of file substate.\+py.
 
 \index{modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}!get\+State\+Vector@{get\+State\+Vector}}
 \index{get\+State\+Vector@{get\+State\+Vector}!modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}}
@@ -241,7 +240,7 @@ The \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_aa18c8238415131b
 \item result of a time update (a\+Priori=True) or a measurement update (a\+Priori=False)
 \end{DoxyItemize}
 
-This function can be used as-\/is
+This function can be used as-\/is, or can be overloaded to perform additional tasks specific to the substate.
 
 
 \begin{DoxyParams}{Parameters}
@@ -253,7 +252,7 @@ The dictionary containing the state vector, covariance matrix, and a\+Priori sta
 \end{DoxyReturn}
 
 
-Definition at line 130 of file substate.\+py.
+Definition at line 126 of file substate.\+py.
 
 \index{modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}!initialize\+Real\+Time\+Plot@{initialize\+Real\+Time\+Plot}}
 \index{initialize\+Real\+Time\+Plot@{initialize\+Real\+Time\+Plot}!modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}}
@@ -266,7 +265,7 @@ Definition at line 130 of file substate.\+py.
 )}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a1adac64be88eab0a64bb952518c4268f}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a1adac64be88eab0a64bb952518c4268f}
 
 
-Definition at line 258 of file substate.\+py.
+Definition at line 254 of file substate.\+py.
 
 \index{modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}!real\+Time\+Plot@{real\+Time\+Plot}}
 \index{real\+Time\+Plot@{real\+Time\+Plot}!modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}}
@@ -278,7 +277,7 @@ Definition at line 258 of file substate.\+py.
 )}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a2deb7d1ca3105eb20e50fa7e67298355}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a2deb7d1ca3105eb20e50fa7e67298355}
 
 
-Definition at line 285 of file substate.\+py.
+Definition at line 281 of file substate.\+py.
 
 \index{modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}!store\+State\+Vector@{store\+State\+Vector}}
 \index{store\+State\+Vector@{store\+State\+Vector}!modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}}
@@ -305,7 +304,7 @@ If an alternative implementation is written for a derived class, it should still
 \end{DoxyParams}
 
 
-Definition at line 155 of file substate.\+py.
+Definition at line 151 of file substate.\+py.
 
 \index{modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}!time\+Update@{time\+Update}}
 \index{time\+Update@{time\+Update}!modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}}
@@ -346,7 +345,7 @@ A dictionary containing, at minimum, the following items\+:
 \end{DoxyReturn}
 
 
-Definition at line 237 of file substate.\+py.
+Definition at line 233 of file substate.\+py.
 
 
 
@@ -360,28 +359,28 @@ Stores the length of the state vector as seen by the Modular\+Filter.
 
 See the \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} function for details on implementation. 
 
-Definition at line 75 of file substate.\+py.
+Definition at line 70 of file substate.\+py.
 
 \index{modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}!\+\_\+\+\_\+metaclass\+\_\+\+\_\+@{\+\_\+\+\_\+metaclass\+\_\+\+\_\+}}
 \index{\+\_\+\+\_\+metaclass\+\_\+\+\_\+@{\+\_\+\+\_\+metaclass\+\_\+\+\_\+}!modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}}
 \subsubsection[{\texorpdfstring{\+\_\+\+\_\+metaclass\+\_\+\+\_\+}{__metaclass__}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+\_\+\+\_\+metaclass\+\_\+\+\_\+ = A\+B\+C\+Meta\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a31b0d49b08a8cd07b6d6e4b646d2a307}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a31b0d49b08a8cd07b6d6e4b646d2a307}
 
 
-Definition at line 43 of file substate.\+py.
+Definition at line 38 of file substate.\+py.
 
 \index{modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}!R\+T\+Paxis\+Handle@{R\+T\+Paxis\+Handle}}
 \index{R\+T\+Paxis\+Handle@{R\+T\+Paxis\+Handle}!modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}}
 \subsubsection[{\texorpdfstring{R\+T\+Paxis\+Handle}{RTPaxisHandle}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+R\+T\+Paxis\+Handle}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a497ccbb6658589b02568e87c6382222e}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a497ccbb6658589b02568e87c6382222e}
 
 
-Definition at line 266 of file substate.\+py.
+Definition at line 262 of file substate.\+py.
 
 \index{modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}!R\+T\+Plot\+Data@{R\+T\+Plot\+Data}}
 \index{R\+T\+Plot\+Data@{R\+T\+Plot\+Data}!modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}}
 \subsubsection[{\texorpdfstring{R\+T\+Plot\+Data}{RTPlotData}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+R\+T\+Plot\+Data}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a9fefae1facc797a1132fb61a55e9ffa1}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a9fefae1facc797a1132fb61a55e9ffa1}
 
 
-Definition at line 101 of file substate.\+py.
+Definition at line 96 of file substate.\+py.
 
 \index{modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}!R\+T\+Plot\+Handle@{R\+T\+Plot\+Handle}}
 \index{R\+T\+Plot\+Handle@{R\+T\+Plot\+Handle}!modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}}
@@ -392,7 +391,7 @@ Stores handle for real-\/time plotting.
 
 
 
-Definition at line 99 of file substate.\+py.
+Definition at line 94 of file substate.\+py.
 
 \index{modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}!state\+Vector\+History@{state\+Vector\+History}}
 \index{state\+Vector\+History@{state\+Vector\+History}!modest\+::substates\+::substate\+::\+Sub\+State@{modest\+::substates\+::substate\+::\+Sub\+State}}
@@ -403,7 +402,7 @@ Stores the time-\/history of the sub-\/state state vector.
 
 
 
-Definition at line 96 of file substate.\+py.
+Definition at line 91 of file substate.\+py.
 
 
 

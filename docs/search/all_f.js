@@ -1,21 +1,11 @@
 var searchData=
 [
-  ['sidunitvec',['sidUnitVec',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#ae6d69671cf2517be4ad69bee7498e665',1,'modest::substates::attitude::Attitude']]],
-  ['signaldelay',['signalDelay',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#aa1565b9972d60149f335e3b923cac371',1,'modest::substates::correlationvector::CorrelationVector']]],
-  ['signalid',['signalID',['../classmodest_1_1signals_1_1signalsource_1_1SignalSource.html#a9a64c6a9c2954f6ad61e4ca3518ea8ab',1,'modest::signals::signalsource::SignalSource']]],
-  ['signalsource',['SignalSource',['../classmodest_1_1signals_1_1signalsource_1_1SignalSource.html',1,'modest::signals::signalsource']]],
-  ['signalsource_2epy',['signalsource.py',['../signalsource_8py.html',1,'']]],
-  ['signalsources',['signalSources',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a545ac50ec6f67f29ad3420cfc5581812',1,'modest::modularfilter::ModularFilter']]],
-  ['sincdiff',['sincDiff',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a033e07143d7a0aeefb3136d42a380ee3',1,'modest::substates::correlationvector::CorrelationVector']]],
-  ['skewsymmetric',['skewSymmetric',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#ae6f156a198d9c2328ddffde498c1ca19',1,'modest::substates::attitude::Attitude']]],
-  ['speedoflight',['speedOfLight',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a5b95e0a827fb233f2f1a40f2cff9d3f0',1,'modest::substates::correlationvector::CorrelationVector']]],
-  ['state',['State',['../namespaceState.html',1,'']]],
-  ['statevectorhistory',['stateVectorHistory',['../classmodest_1_1substates_1_1substate_1_1SubState.html#a38c12c9d0899bc1161f3502b584517a2',1,'modest::substates::substate::SubState']]],
-  ['staticpoissonsource',['StaticPoissonSource',['../classmodest_1_1signals_1_1poissonsource_1_1StaticPoissonSource.html',1,'modest::signals::poissonsource']]],
-  ['staticxraypointsource',['StaticXRayPointSource',['../classmodest_1_1signals_1_1xraysource_1_1StaticXRayPointSource.html',1,'modest::signals::xraysource']]],
-  ['storeglobalstatevector',['storeGlobalStateVector',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a15412a15695827fc57a0609000a1c9c0',1,'modest::modularfilter::ModularFilter']]],
-  ['storestatevector',['storeStateVector',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a7ed2c772a331dadab761afd11d980c9e',1,'modest.substates.attitude.Attitude.storeStateVector()'],['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a70ed47697f09424e62e52133fdfb59de',1,'modest.substates.correlationvector.CorrelationVector.storeStateVector()'],['../classmodest_1_1substates_1_1substate_1_1SubState.html#a3644149dc4cc19c0e32d0b7040998c96',1,'modest.substates.substate.SubState.storeStateVector()']]],
-  ['substate',['SubState',['../classmodest_1_1substates_1_1substate_1_1SubState.html',1,'modest::substates::substate']]],
-  ['substate_2epy',['substate.py',['../substate_8py.html',1,'']]],
-  ['substates',['subStates',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a80c66c525d5afd61271f13da47148c5d',1,'modest::modularfilter::ModularFilter']]]
+  ['ra',['RA',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#a90c55d8278f10578bea87ea3547d08df',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
+  ['radec',['RaDec',['../classmodest_1_1signals_1_1pointsource_1_1PointSource.html#a295eb1a487e18c77029585ac2785db80',1,'modest::signals::pointsource::PointSource']]],
+  ['radecmeasmatrices',['RaDecMeasMatrices',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a1506706112528d3d926a77121bac7b1c',1,'modest::substates::attitude::Attitude']]],
+  ['radecroll',['RaDecRoll',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a6fdadf88372f53c3ac216eaf015947db',1,'modest::substates::attitude::Attitude']]],
+  ['realtimeplot',['realTimePlot',['../classmodest_1_1substates_1_1substate_1_1SubState.html#a2deb7d1ca3105eb20e50fa7e67298355',1,'modest::substates::substate::SubState']]],
+  ['rtpaxishandle',['RTPaxisHandle',['../classmodest_1_1substates_1_1substate_1_1SubState.html#a497ccbb6658589b02568e87c6382222e',1,'modest::substates::substate::SubState']]],
+  ['rtplotdata',['RTPlotData',['../classmodest_1_1substates_1_1substate_1_1SubState.html#a9fefae1facc797a1132fb61a55e9ffa1',1,'modest::substates::substate::SubState']]],
+  ['rtplothandle',['RTPlotHandle',['../classmodest_1_1substates_1_1substate_1_1SubState.html#a37ded775b84cea85b4dce0f1b16286c4',1,'modest::substates::substate::SubState']]]
 ];

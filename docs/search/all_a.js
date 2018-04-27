@@ -1,21 +1,8 @@
 var searchData=
 [
-  ['attitude',['attitude',['../namespacemodest_1_1substates_1_1attitude.html',1,'modest::substates']]],
-  ['correlationvector',['correlationvector',['../namespacemodest_1_1substates_1_1correlationvector.html',1,'modest::substates']]],
-  ['measurementnoisescalefactor',['measurementNoiseScaleFactor',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#ae1c71753aea17170b58bd9fabc62c037',1,'modest::substates::correlationvector::CorrelationVector']]],
-  ['measurementupdateekf',['measurementUpdateEKF',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a493ccf6845ed800d565f1d26d063592c',1,'modest::modularfilter::ModularFilter']]],
-  ['measurementupdatejpdaf',['measurementUpdateJPDAF',['../classmodest_1_1modularfilter_1_1ModularFilter.html#ac3a26e2a7672ceedf00c48723104d55c',1,'modest::modularfilter::ModularFilter']]],
-  ['measurementupdateml',['measurementUpdateML',['../classmodest_1_1modularfilter_1_1ModularFilter.html#af1a7d5a4e219c494de176f94997ae110',1,'modest::modularfilter::ModularFilter']]],
-  ['measurementvalidationthreshold',['measurementValidationThreshold',['../classmodest_1_1modularfilter_1_1ModularFilter.html#af91295c2d8f45afe04386215b5fa39aa',1,'modest::modularfilter::ModularFilter']]],
-  ['modest',['modest',['../namespacemodest.html',1,'']]],
-  ['modularfilter',['ModularFilter',['../classmodest_1_1modularfilter_1_1ModularFilter.html',1,'modest::modularfilter']]],
-  ['modularfilter',['modularfilter',['../namespacemodest_1_1modularfilter.html',1,'modest']]],
-  ['modularfilter_2epy',['modularfilter.py',['../modularfilter_8py.html',1,'']]],
-  ['pointsource',['pointsource',['../namespacemodest_1_1signals_1_1pointsource.html',1,'modest::signals']]],
-  ['poissonsource',['poissonsource',['../namespacemodest_1_1signals_1_1poissonsource.html',1,'modest::signals']]],
-  ['signals',['signals',['../namespacemodest_1_1signals.html',1,'modest']]],
-  ['signalsource',['signalsource',['../namespacemodest_1_1signals_1_1signalsource.html',1,'modest::signals']]],
-  ['substate',['substate',['../namespacemodest_1_1substates_1_1substate.html',1,'modest::substates']]],
-  ['substates',['substates',['../namespacemodest_1_1substates.html',1,'modest']]],
-  ['xraysource',['xraysource',['../namespacemodest_1_1signals_1_1xraysource.html',1,'modest::signals']]]
+  ['lastmeasid',['lastMeasID',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#abc1a273c6fd65c839184ae644b68f010',1,'modest::substates::attitude::Attitude']]],
+  ['lastmeasmat',['lastMeasMat',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#add344f4323848f4ccdd9e59d699310a0',1,'modest::substates::attitude::Attitude']]],
+  ['lastsourceid',['lastSourceID',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a0ec5bf8475ca5c175e4a516d2ac68fdf',1,'modest::substates::attitude::Attitude']]],
+  ['lasttime',['lastTime',['../classmodest_1_1signals_1_1poissonsource_1_1PoissonSource.html#a34395fc83bd8743a0a5ee69f9392a606',1,'modest::signals::poissonsource::PoissonSource']]],
+  ['localstateupdatematrices',['localStateUpdateMatrices',['../classmodest_1_1modularfilter_1_1ModularFilter.html#ab1dc914f4939e1219f4f2d0efbafd9dd',1,'modest::modularfilter::ModularFilter']]]
 ];

@@ -9,6 +9,7 @@ var searchData=
   ['signals',['signals',['../namespacemodest_1_1signals.html',1,'modest']]],
   ['signalsource',['signalsource',['../namespacemodest_1_1signals_1_1signalsource.html',1,'modest::signals']]],
   ['substate',['substate',['../namespacemodest_1_1substates_1_1substate.html',1,'modest::substates']]],
+  ['substatehistory',['substatehistory',['../namespacemodest_1_1substates_1_1substatehistory.html',1,'modest::substates']]],
   ['substates',['substates',['../namespacemodest_1_1substates.html',1,'modest']]],
   ['xraysource',['xraysource',['../namespacemodest_1_1signals_1_1xraysource.html',1,'modest::signals']]]
 ];
