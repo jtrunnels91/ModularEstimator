@@ -23,11 +23,13 @@ class PointSource(signalsource.SignalSource):
 
     def unitVec(
             self,
-            RaDec):
-        cosD = _np.cos(self.__RaDec__['DEC'])
-        sinD = _np.sin(self.__RaDec__['DEC'])
-        cosRA = _np.cos(self.__RaDec__['RA'])
-        sinRA = _np.sin(self.__RaDec__['RA'])
+            RaDec=None):
+        if RaDec is None:
+            RaDec = self.__RaDec__
+        cosD = _np.cos(RaDec['DEC'])
+        sinD = _np.sin(RaDec['DEC'])
+        cosRA = _np.cos(RaDec['RA'])
+        sinRA = _np.sin(RaDec['RA'])
 
         return _np.array([cosD * cosRA, cosD * sinRA, sinD])
     

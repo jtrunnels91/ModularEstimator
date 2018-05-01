@@ -7,5 +7,5 @@ var searchData=
   ['todo_20list',['Todo List',['../todo.html',1,'']]],
   ['totaldimension',['totalDimension',['../classmodest_1_1modularfilter_1_1ModularFilter.html#ae7028964e7e7adf58d75b76aef9783f6',1,'modest::modularfilter::ModularFilter']]],
   ['typecheck',['typecheck',['../classmodest_1_1substates_1_1substatehistory_1_1SubStateHistory.html#a9654b950c535c3da3efb5798ca1b7a93',1,'modest::substates::substatehistory::SubStateHistory']]],
-  ['tzrmjd',['TZRMJD',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#a98bc97a480e5b3f11c337644ad409b4c',1,'modest::signals::poissonsource::PeriodicPoissonSource']]]
+  ['tzrmjd',['TZRMJD',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#aecd53533d34a4f821f4010c197edc2e8',1,'modest::signals::xraysource::PeriodicXRaySource']]]
 ];

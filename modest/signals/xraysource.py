@@ -1,9 +1,21 @@
-import numpy as np
-from scipy.stats import multivariate_normal
-from . import pointsource
-from . import poissonsource 
+## @file xraysource.py
+# This file contains classes which model various astrophysical x-ray
+# sources including #StaticXRayPointSource (e.g. x-ray stars with constant
+# flux), #PeriodicXRaySource, (x-ray sources with periodic flux, i.e. pulsars),
+# and UniformNoiseXRaySource, (model of uniform background noise)
 
-class StaticXRayPointSource(pointsource.PointSource, poissonsource.StaticPoissonSource):
+import numpy as np
+from math import factorial
+import matplotlib.pyplot as plt
+
+from . import pointsource
+from . import poissonsource
+
+
+class StaticXRayPointSource(
+        pointsource.PointSource,
+        poissonsource.StaticPoissonSource
+):
 
     def __init__(
             self,
@@ -67,8 +79,11 @@ class UniformNoiseXRaySource(poissonsource.StaticPoissonSource):
 
     
 ## @class PeriodicPoissonSource is a class which models the signal from a
-# periodic poisson source, e.g. a pulsar.  
-class PeriodicXRaySource(poissonsource.PoissonSource, pointsource.PointSource):
+# periodic poisson source, e.g. a pulsar.
+class PeriodicXRaySource(
+        poissonsource.DynamicPoissonSource,
+        pointsource.PointSource
+):
     def __init__(
             self,
             profile,
@@ -83,7 +98,8 @@ class PeriodicXRaySource(poissonsource.PoissonSource, pointsource.PointSource):
             DEC=None,
             TZRMJD=None,
             name=None,
-            attitudeStateName='attitude'
+            attitudeStateName='attitude',
+            correlationStateName=None
     ):
         
         # Store the user-passed arguments first.  These take priority of
@@ -138,7 +154,6 @@ class PeriodicXRaySource(poissonsource.PoissonSource, pointsource.PointSource):
         # Initialize PointSource with Right ascension and declination values
         pointsource.PointSource.__init__(self, RA, DEC, attitudeStateName)
 
-
         # Check to make sure that we received either a phaseDerivatives dict
         # or a value for pulsar period
         if (
@@ -153,16 +168,31 @@ class PeriodicXRaySource(poissonsource.PoissonSource, pointsource.PointSource):
                 "- PARFile containing frequency information"
             )
 
+        ## @brief #normalizeProfile is a boolean flag used to indicate whether
+        # the profile is normalized from zero to one.  If so, then the signal
+        # should be multiplied by #peakAmplitude.
+        self.normalizeProfile = normalizeProfile
+        
         # Process whatever was passed as the profile
         self.processProfile(profile, normalizeProfile, movePeakToZero)
 
+        if correlationStateName is None:
+            correlationStateName = self.name
+        
+        
         # Update the pulsar period and time array.
+
+        ## @brief #pulsarPeriod is the amouont of time (in seconds) for one
+        # complete pulsar pulse.
         self.pulsarPeriod = 1/self.phaseDerivatives[1]
-        self.singlePeriodTimeArray = np.linspace(
-            0, self.pulsarPeriod, len(self.profile)
-        )
 
         self.computeSinglePeriodIntegral()
+        
+        poissonsource.DynamicPoissonSource.__init__(
+            self,
+            self.peakAmplitude,
+            correlationStateName=correlationStateName
+        )
         
         return
 
@@ -195,10 +225,20 @@ class PeriodicXRaySource(poissonsource.PoissonSource, pointsource.PointSource):
                 profile = np.roll(profile, -np.argmax(profile))
 
         profile = np.append(profile, profile[0])
-                
+
+        ## @brief #profile is a numpy array containing the numerical value of
+        # flux over a single period of the signal.
+        #
+        # @detail The #profile array contains the signal profile of the pulsar
+        # (or periodic source) being modeled.  If the user selected to
+        # normalize the profle, then the profile will be normalized from zero
+        # to one, and then scaled based on the average flux value.  If the
+        # profile is not normalized, then the raw values will be used for
+        # computing the signal.  If the profile is normalized but no average
+        # flux value is received, a warning will be issued.
         self.profile = profile
         self.profileIndex = np.linspace(0, 1, len(self.profile))
-    
+
     def processPARFile(
             self,
             PARFile,
@@ -288,11 +328,16 @@ class PeriodicXRaySource(poissonsource.PoissonSource, pointsource.PointSource):
         # will be used later to compute expected value of flux in the case
         # where time is uncertain.
         self.singlePeriodIntegral = np.zeros(len(self.profile))
+
+        singlePeriodTimeArray = np.linspace(
+            0, self.pulsarPeriod, len(self.profile)
+        )
+        
         for i in range(len(self.profile)):
 
             self.singlePeriodIntegral[i] = np.trapz(
                 self.profile[0:i + 1],
-                self.singlePeriodTimeArray[0:i + 1],
+                singlePeriodTimeArray[0:i + 1],
                 axis=0
             )
 
@@ -316,17 +361,18 @@ class PeriodicXRaySource(poissonsource.PoissonSource, pointsource.PointSource):
             # accordingly and compute a background rate to account for the
             # unpulsed portion
             if self.pulsedFraction is not None:
-                self.peakAmplitude = self.peakAmplitude * self.pulsedFraction
+                self.scaleFactor = self.peakAmplitude * self.pulsedFraction
                 self.backgroundCountRate = (
-                    self.photonsPerPeriod *
-                    self.phaseDerivatives[1] *
+                    self.avgPhotonFlux *
                     (1 - self.pulsedFraction)
                 )
             else:
                 self.backgroundCountRate = 0
+                self.scaleFactor = self.peakAmplitude
 
         else:
-            self.peakAmplitude = 1
+            self.peakAmplitude = np.max(self.profile)
+            self.scaleFactor = 1.0
             self.backgroundCountRate = 0
 
         return
@@ -347,6 +393,13 @@ class PeriodicXRaySource(poissonsource.PoissonSource, pointsource.PointSource):
             )
         return(phase)
 
+    ## @fun #getSignalMJD is a wrapper function that returns the photon flux
+    # at a given Modified Julian Date
+    #
+    # @param self The object pointer
+    # @param MJD The Modified Jullian Date for which flux is to be returned
+    #
+    # @returns The signal at the requested date
     def getSignalMJD(
             self,
             MJD
@@ -387,18 +440,42 @@ class PeriodicXRaySource(poissonsource.PoissonSource, pointsource.PointSource):
     # @param self The object pointer
     # @param observatoryTime The time for which to compute the signal
     # @param tVar (optional) The variance of the time estimate
+    #
+    # @return The signal at the requested time
     def getSignal(
             self,
             observatoryTime,
-            tVar=None
+            tVar=None,
+            state=None            
     ):
+        if state is not None:
+            if 'signalDelay' in state:
+                delay = state['signalDelay']
+                if 'delayVar' in state:
+                    delayVar = state['delayVar']
+                else:
+                    delayVar = 0
+                observatoryTime = observatoryTime + delay
+                tVar = tVar + delayVar
+        # Get the phase corresponding to the current time
         phase = self.getPhase(observatoryTime)
 
+        # If a value was received for the tVar, then we compute the expected
+        # value of flux
         if tVar is not None:
+
+            # Get standard deviation of t
             tSigma = np.sqrt(tVar)
+
+            # Convert the time standard deviation to phase standard deviation
             phaseSigma = tSigma/self.pulsarPeriod
+
+            # Check to see if the phase std is bigger than the std
+            # corresponding to a uniform distribution with support = 1.  If so,
+            # this indicates that we effectively have no meaningful knowledge
+            # of phase, and can just return the average flux.
             if phaseSigma > np.sqrt(1/12):
-                signal = self.avgPhotonFlux
+                signal = self.avgPhotonFlux * self.pulsedFraction
             else:
                 phaseFraction = np.mod(phase, 1.0)
                 upperSigma = phaseFraction + (np.sqrt(12) * phaseSigma / 2)
@@ -425,10 +502,11 @@ class PeriodicXRaySource(poissonsource.PoissonSource, pointsource.PointSource):
                     + lowerSigmaOffset
                 )
                 signal = (
-                    signal *
-                    self.peakAmplitude /
-                    self.days2seconds(np.sqrt(12) * tSigma)
+                    signal /
+                    (np.sqrt(12) * tSigma)
                 )
+                signal = signal * self.scaleFactor
+                
         else:
             signal = self.getPulseFromPhase(phase)
                     
@@ -437,13 +515,12 @@ class PeriodicXRaySource(poissonsource.PoissonSource, pointsource.PointSource):
 
         return(signal)
 
-    
-    
     def getPulseFromPhase(self,
                           phase):
         pFrac = np.mod(phase, 1.0)
         signal = np.interp(pFrac, self.profileIndex, self.profile)
-        return signal * self.peakAmplitude
+        signal = signal * self.scaleFactor
+        return signal
 
     def MJD2seconds(
             self,
@@ -456,14 +533,47 @@ class PeriodicXRaySource(poissonsource.PoissonSource, pointsource.PointSource):
             seconds
     ):
         return self.TZRMJD + (seconds/(24.0 * 60.0 * 60.0))
+    
+    def computeAssociationProbability(
+            self,
+            measurement,
+            stateDict,
+            validationThreshold=0
+    ):
+        anglePR = pointsource.PointSource.computeAssociationProbability(
+            self,
+            measurement,
+            stateDict,
+            validationThreshold
+        )
 
-    def plot(self, nPeriods=1):
+        poisPR = poissonsource.DynamicPoissonSource.computeAssociationProbability(
+            self,
+            measurement,
+            stateDict
+            )
+
+        return (anglePR * poisPR * self.peakAmplitude)
+    
+    def plot(self,
+             nPeriods=1,
+             tVar=None,
+             figureHandle=None
+    ):
+        nPoints = 1000
+        if figureHandle is None:
+            plt.figure()
+            
         tArray = np.linspace(
             0,
             self.pulsarPeriod * nPeriods,
-            100 * nPeriods)
-        plt.figure()
-        plt.plot(tArray, self.getSignal(tArray))
+            nPoints * nPeriods)
+        
+        signalArray = np.zeros(nPoints * nPeriods)
+
+        for index in range(len(signalArray)):
+            signalArray[index] = self.getSignal(tArray[index], tVar)
+        plt.plot(tArray, signalArray)
         plt.show(block=False)
 
     @staticmethod

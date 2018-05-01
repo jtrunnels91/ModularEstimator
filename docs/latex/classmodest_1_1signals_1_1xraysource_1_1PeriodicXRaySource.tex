@@ -1,0 +1,595 @@
+\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource}{}\section{modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source Class Reference}
+\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource}\index{modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source@{modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source}}
+
+
+Inheritance diagram for modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aec2233ce744a483cb13753b1b075082b}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self, \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a50e061bb97d0dd6ab7f344370c6b35a4}{profile}, \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ac227ebef6424695360f2771765b4a4a7}{avg\+Photon\+Flux}=None, \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a5f968d9c80e5315d1657eac2ffca4e73}{pulsed\+Fraction}=None, P\+A\+R\+File=None, move\+Peak\+To\+Zero=True, normalize\+Profile=True, \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ad885c269b3b042b3d094412683ef3476}{phase\+Derivatives}=None, \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aeb6d4a8057d3ee58c81e69fb97b9eef7}{pulsar\+Period}=None, RA=None, D\+EC=None, \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aecd53533d34a4f821f4010c197edc2e8}{T\+Z\+R\+M\+JD}=None, \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aac8308319d4f31067e1087660a15db03}{name}=None, \hyperlink{classmodest_1_1signals_1_1pointsource_1_1PointSource_a0924a2233bb4fd23e50d024e4f1b048e}{attitude\+State\+Name}=\textquotesingle{}attitude\textquotesingle{})
+\item 
+def \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a50045a93644e23cbaa88a4b4458694e2}{process\+Profile} (self, \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a50e061bb97d0dd6ab7f344370c6b35a4}{profile}, normalize\+Profile=True, move\+Peak\+To\+Zero=True)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a98ef4d72f127017fab68dcdeab0dad64}{process\+P\+A\+R\+File} (self, P\+A\+R\+File, replace\+Current\+Values=False)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a20315b15ec1f6141e35a029b5cabf717}{compute\+Single\+Period\+Integral} (self)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a3ea2f37c1387cc682819e667a8ce7f1e}{get\+Phase} (self, observatory\+Time)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a9949b9a2d7a2ed0e4bb731e3e4fb7d2f}{get\+Signal\+M\+JD} (self, M\+JD)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a9949b9a2d7a2ed0e4bb731e3e4fb7d2f}{get\+Signal\+M\+JD} is a wrapper function that returns the photon flux at a given Modified Julian Date \end{DoxyCompactList}\item 
+def \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ad0cc325042befeb69faf9cce05457b5d}{get\+Signal} (self, observatory\+Time, t\+Var=None)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ad0cc325042befeb69faf9cce05457b5d}{get\+Signal} is responsible for returning the photon flux from the pulsar at a given time \end{DoxyCompactList}\item 
+def \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a252850e9966b3281a193c834cb687646}{get\+Pulse\+From\+Phase} (self, phase)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_abdd0337b42d16288c8ad3dede15a99f2}{M\+J\+D2seconds} (self, M\+JD)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a023967f167c21ca3a6020eb36dd7a7d7}{seconds2\+M\+JD} (self, seconds)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aeca7ec50ae038106569f9368523d0ab0}{plot} (self, n\+Periods=1)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1poissonsource_1_1DynamicPoissonSource_aa6030c607a4bded71c622f5f132c9bfe}{get\+Signal} (self, state, t, t\+Var=None)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1poissonsource_1_1DynamicPoissonSource_a086252814ef8c2ddd3f4331dcfbbb827}{compute\+Association\+Probability} (self, measurement, state)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a3d32dbed840ea9ac775b226f0a654831}{compute\+Association\+Probability} (self, measurement, state\+Dict, validation\+Threshold=0)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c2954f6ad61e4ca3518ea8ab}{signal\+ID} (self)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1pointsource_1_1PointSource_a295eb1a487e18c77029585ac2785db80}{Ra\+Dec} (self)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1pointsource_1_1PointSource_aa51308fcb654e7183d332ed824965397}{unit\+Vec} (self, \hyperlink{classmodest_1_1signals_1_1pointsource_1_1PointSource_a295eb1a487e18c77029585ac2785db80}{Ra\+Dec})
+\item 
+def \hyperlink{classmodest_1_1signals_1_1pointsource_1_1PointSource_a8bdf640e312bbf3a56efd0e89d496361}{compute\+Association\+Probability} (self, measurement, state\+Dict, validation\+Threshold=0)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c2954f6ad61e4ca3518ea8ab}{signal\+ID} (self)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ae9e07e0f728014ba3b6af0022d6367fe}{hms2rad} (h, m, s)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a117b7c3ff21b26887d74fce01ffad0a8}{dms2rad} (d, m, s)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ad885c269b3b042b3d094412683ef3476}{phase\+Derivatives}
+\begin{DoxyCompactList}\small\item\em Stores the derivatives of phase with respect to time  \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ad885c269b3b042b3d094412683ef3476}{phase\+Derivatives} is a dict which contains the derivatives of phase with respect to time. \end{DoxyCompactList}\item 
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aecd53533d34a4f821f4010c197edc2e8}{T\+Z\+R\+M\+JD}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aecd53533d34a4f821f4010c197edc2e8}{T\+Z\+R\+M\+JD} stores the Modified Julian Date (M\+JD) corresponding to t=0 seconds. \end{DoxyCompactList}\item 
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aac8308319d4f31067e1087660a15db03}{name}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aac8308319d4f31067e1087660a15db03}{name} is an arbitrary string that is used to identify the signal. \end{DoxyCompactList}\item 
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ac227ebef6424695360f2771765b4a4a7}{avg\+Photon\+Flux}
+\begin{DoxyCompactList}\small\item\em \#average\+Photon\+Flux is the mean value of photons expected to arrive from the signal per second (units of photons/second) \end{DoxyCompactList}\item 
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a5f968d9c80e5315d1657eac2ffca4e73}{pulsed\+Fraction}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a5f968d9c80e5315d1657eac2ffca4e73}{pulsed\+Fraction} is a value from 0 to 1 which indicates what percentage of the \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ac227ebef6424695360f2771765b4a4a7}{avg\+Photon\+Flux} is \char`\"{}pulsed\char`\"{} and what percentage is constant/background \end{DoxyCompactList}\item 
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aeb6d4a8057d3ee58c81e69fb97b9eef7}{pulsar\+Period}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aeb6d4a8057d3ee58c81e69fb97b9eef7}{pulsar\+Period} is the amouont of time (in seconds) for one complete pulsar pulse. \end{DoxyCompactList}\item 
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a50e061bb97d0dd6ab7f344370c6b35a4}{profile}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a50e061bb97d0dd6ab7f344370c6b35a4}{profile} is a numpy array containing the numerical value of flux over a single period of the signal. \end{DoxyCompactList}\item 
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aaf45141c09e1fd35c80c49907fa44497}{profile\+Index}
+\item 
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ab193c1d52a5bd8b0798bf407abcca72d}{single\+Period\+Integral}
+\item 
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a25ab09a55afd1da4f019ad580770e5f4}{photons\+Per\+Period}
+\item 
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ab9ca2f0588f7e2f23c5301e05070fe99}{peak\+Amplitude}
+\item 
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a3a04d3f0609b7454efc4ef9cdcd7b219}{background\+Count\+Rate}
+\item 
+\hyperlink{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a34395fc83bd8743a0a5ee69f9392a606}{last\+Time}
+\item 
+\hyperlink{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a6f2c657ad936b921715d826ac74f7fe5}{flux}
+\item 
+\hyperlink{classmodest_1_1signals_1_1pointsource_1_1PointSource_a0924a2233bb4fd23e50d024e4f1b048e}{attitude\+State\+Name}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a453eafb550b551adbec0903deb63dfce}{next\+Signal\+ID} = 0
+\item 
+int \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a453eafb550b551adbec0903deb63dfce}{next\+Signal\+ID} = 0
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 80 of file xraysource.\+py.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+init\+\_\+\+\_\+(self, profile, avg\+Photon\+Flux=\+None, pulsed\+Fraction=\+None, P\+A\+R\+File=\+None, move\+Peak\+To\+Zero=\+True, normalize\+Profile=\+True, phase\+Derivatives=\+None, pulsar\+Period=\+None, R\+A=\+None, D\+E\+C=\+None, T\+Z\+R\+M\+J\+D=\+None, name=\+None, attitude\+State\+Name=\textquotesingle{}attitude\textquotesingle{})}{__init__(self, profile, avgPhotonFlux=None, pulsedFraction=None, PARFile=None, movePeakToZero=True, normalizeProfile=True, phaseDerivatives=None, pulsarPeriod=None, RA=None, DEC=None, TZRMJD=None, name=None, attitudeStateName='attitude')}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+\_\+\+\_\+init\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{profile, }
+\item[{}]{avg\+Photon\+Flux = {\ttfamily None}, }
+\item[{}]{pulsed\+Fraction = {\ttfamily None}, }
+\item[{}]{P\+A\+R\+File = {\ttfamily None}, }
+\item[{}]{move\+Peak\+To\+Zero = {\ttfamily True}, }
+\item[{}]{normalize\+Profile = {\ttfamily True}, }
+\item[{}]{phase\+Derivatives = {\ttfamily None}, }
+\item[{}]{pulsar\+Period = {\ttfamily None}, }
+\item[{}]{RA = {\ttfamily None}, }
+\item[{}]{D\+EC = {\ttfamily None}, }
+\item[{}]{T\+Z\+R\+M\+JD = {\ttfamily None}, }
+\item[{}]{name = {\ttfamily None}, }
+\item[{}]{attitude\+State\+Name = {\ttfamily \textquotesingle{}attitude\textquotesingle{}}}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aec2233ce744a483cb13753b1b075082b}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aec2233ce744a483cb13753b1b075082b}
+
+
+Definition at line 96 of file xraysource.\+py.
+
+
+
+\subsection{Member Function Documentation}
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!compute\+Association\+Probability@{compute\+Association\+Probability}}
+\index{compute\+Association\+Probability@{compute\+Association\+Probability}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{compute\+Association\+Probability(self, measurement, state\+Dict, validation\+Threshold=0)}{computeAssociationProbability(self, measurement, stateDict, validationThreshold=0)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+signalsource.\+Signal\+Source.\+compute\+Association\+Probability (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{measurement, }
+\item[{}]{state\+Dict, }
+\item[{}]{validation\+Threshold = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a3d32dbed840ea9ac775b226f0a654831}{}\label{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a3d32dbed840ea9ac775b226f0a654831}
+
+
+Definition at line 26 of file signalsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!compute\+Association\+Probability@{compute\+Association\+Probability}}
+\index{compute\+Association\+Probability@{compute\+Association\+Probability}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{compute\+Association\+Probability(self, measurement, state\+Dict, validation\+Threshold=0)}{computeAssociationProbability(self, measurement, stateDict, validationThreshold=0)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+pointsource.\+Point\+Source.\+compute\+Association\+Probability (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{measurement, }
+\item[{}]{state\+Dict, }
+\item[{}]{validation\+Threshold = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1pointsource_1_1PointSource_a8bdf640e312bbf3a56efd0e89d496361}{}\label{classmodest_1_1signals_1_1pointsource_1_1PointSource_a8bdf640e312bbf3a56efd0e89d496361}
+
+
+Definition at line 39 of file pointsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!compute\+Association\+Probability@{compute\+Association\+Probability}}
+\index{compute\+Association\+Probability@{compute\+Association\+Probability}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{compute\+Association\+Probability(self, measurement, state)}{computeAssociationProbability(self, measurement, state)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+poissonsource.\+Dynamic\+Poisson\+Source.\+compute\+Association\+Probability (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{measurement, }
+\item[{}]{state}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1poissonsource_1_1DynamicPoissonSource_a086252814ef8c2ddd3f4331dcfbbb827}{}\label{classmodest_1_1signals_1_1poissonsource_1_1DynamicPoissonSource_a086252814ef8c2ddd3f4331dcfbbb827}
+
+
+Definition at line 73 of file poissonsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!compute\+Single\+Period\+Integral@{compute\+Single\+Period\+Integral}}
+\index{compute\+Single\+Period\+Integral@{compute\+Single\+Period\+Integral}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{compute\+Single\+Period\+Integral(self)}{computeSinglePeriodIntegral(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+compute\+Single\+Period\+Integral (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a20315b15ec1f6141e35a029b5cabf717}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a20315b15ec1f6141e35a029b5cabf717}
+
+
+Definition at line 305 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!dms2rad@{dms2rad}}
+\index{dms2rad@{dms2rad}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{dms2rad(d, m, s)}{dms2rad(d, m, s)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+dms2rad (
+\begin{DoxyParamCaption}
+\item[{}]{d, }
+\item[{}]{m, }
+\item[{}]{s}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a117b7c3ff21b26887d74fce01ffad0a8}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a117b7c3ff21b26887d74fce01ffad0a8}
+
+
+Definition at line 518 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!get\+Phase@{get\+Phase}}
+\index{get\+Phase@{get\+Phase}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{get\+Phase(self, observatory\+Time)}{getPhase(self, observatoryTime)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+get\+Phase (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{observatory\+Time}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a3ea2f37c1387cc682819e667a8ce7f1e}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a3ea2f37c1387cc682819e667a8ce7f1e}
+
+
+Definition at line 360 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!get\+Pulse\+From\+Phase@{get\+Pulse\+From\+Phase}}
+\index{get\+Pulse\+From\+Phase@{get\+Pulse\+From\+Phase}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{get\+Pulse\+From\+Phase(self, phase)}{getPulseFromPhase(self, phase)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+get\+Pulse\+From\+Phase (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{phase}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a252850e9966b3281a193c834cb687646}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a252850e9966b3281a193c834cb687646}
+
+
+Definition at line 485 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!get\+Signal@{get\+Signal}}
+\index{get\+Signal@{get\+Signal}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{get\+Signal(self, state, t, t\+Var=\+None)}{getSignal(self, state, t, tVar=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+poissonsource.\+Dynamic\+Poisson\+Source.\+get\+Signal (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{state, }
+\item[{}]{t, }
+\item[{}]{t\+Var = {\ttfamily None}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1poissonsource_1_1DynamicPoissonSource_aa6030c607a4bded71c622f5f132c9bfe}{}\label{classmodest_1_1signals_1_1poissonsource_1_1DynamicPoissonSource_aa6030c607a4bded71c622f5f132c9bfe}
+
+
+Definition at line 63 of file poissonsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!get\+Signal@{get\+Signal}}
+\index{get\+Signal@{get\+Signal}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{get\+Signal(self, observatory\+Time, t\+Var=\+None)}{getSignal(self, observatoryTime, tVar=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+get\+Signal (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{observatory\+Time, }
+\item[{}]{t\+Var = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ad0cc325042befeb69faf9cce05457b5d}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ad0cc325042befeb69faf9cce05457b5d}
+
+
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ad0cc325042befeb69faf9cce05457b5d}{get\+Signal} is responsible for returning the photon flux from the pulsar at a given time 
+
+The \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ad0cc325042befeb69faf9cce05457b5d}{get\+Signal} method is the method which is responsible for returning the current value of flux from the signal source at a given time. If there is uncertainty in the time, then the expected value of the signal is returned. Uncertainty in time is indicated by the optional t\+Var argument.
+
+In every case, the method calls the \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a3ea2f37c1387cc682819e667a8ce7f1e}{get\+Phase} method to determine the current signal source phase. If no uncertainty in time is passed, then the \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a252850e9966b3281a193c834cb687646}{get\+Pulse\+From\+Phase} method is called to lookup/interpolate the current flux based on the phase and the signal \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a50e061bb97d0dd6ab7f344370c6b35a4}{profile}.
+
+If a value is passed for t\+Var, then the process is more complicated. Rather than simply look up the signal value from the phase, the function returns an approximation of the expected value of the signal, given the mean and variance of time.
+
+Normally, the expected value would be computed by integrating the product of the true distribution of time (probably a normal distribution) with the flux as a function of time. However, due to the non-\/analytical nature of the flux function, the direct computation of this integral is intractable. To overcome this limitation, the time distributuion is approximated as a moment-\/matched uniform distribution. Using this approximation, the approximate integral may be directly computed simply by looking up the start and end values of \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ab193c1d52a5bd8b0798bf407abcca72d}{single\+Period\+Integral}, and dividing by the appropriate scaling factor.
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer \\
+\hline
+{\em observatory\+Time} & The time for which to compute the signal \\
+\hline
+{\em t\+Var} & (optional) The variance of the time estimate\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The signal at the requested time 
+\end{DoxyReturn}
+
+
+Definition at line 426 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!get\+Signal\+M\+JD@{get\+Signal\+M\+JD}}
+\index{get\+Signal\+M\+JD@{get\+Signal\+M\+JD}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{get\+Signal\+M\+J\+D(self, M\+J\+D)}{getSignalMJD(self, MJD)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+get\+Signal\+M\+JD (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{M\+JD}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a9949b9a2d7a2ed0e4bb731e3e4fb7d2f}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a9949b9a2d7a2ed0e4bb731e3e4fb7d2f}
+
+
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a9949b9a2d7a2ed0e4bb731e3e4fb7d2f}{get\+Signal\+M\+JD} is a wrapper function that returns the photon flux at a given Modified Julian Date 
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer \\
+\hline
+{\em M\+JD} & The Modified Jullian Date for which flux is to be returned\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The signal at the requested date 
+\end{DoxyReturn}
+
+
+Definition at line 383 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!hms2rad@{hms2rad}}
+\index{hms2rad@{hms2rad}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{hms2rad(h, m, s)}{hms2rad(h, m, s)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+hms2rad (
+\begin{DoxyParamCaption}
+\item[{}]{h, }
+\item[{}]{m, }
+\item[{}]{s}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ae9e07e0f728014ba3b6af0022d6367fe}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ae9e07e0f728014ba3b6af0022d6367fe}
+
+
+Definition at line 512 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!M\+J\+D2seconds@{M\+J\+D2seconds}}
+\index{M\+J\+D2seconds@{M\+J\+D2seconds}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{M\+J\+D2seconds(self, M\+J\+D)}{MJD2seconds(self, MJD)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+M\+J\+D2seconds (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{M\+JD}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_abdd0337b42d16288c8ad3dede15a99f2}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_abdd0337b42d16288c8ad3dede15a99f2}
+
+
+Definition at line 493 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!plot@{plot}}
+\index{plot@{plot}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{plot(self, n\+Periods=1)}{plot(self, nPeriods=1)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+plot (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{n\+Periods = {\ttfamily 1}}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aeca7ec50ae038106569f9368523d0ab0}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aeca7ec50ae038106569f9368523d0ab0}
+
+
+Definition at line 502 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!process\+P\+A\+R\+File@{process\+P\+A\+R\+File}}
+\index{process\+P\+A\+R\+File@{process\+P\+A\+R\+File}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{process\+P\+A\+R\+File(self, P\+A\+R\+File, replace\+Current\+Values=\+False)}{processPARFile(self, PARFile, replaceCurrentValues=False)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+process\+P\+A\+R\+File (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{P\+A\+R\+File, }
+\item[{}]{replace\+Current\+Values = {\ttfamily False}}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a98ef4d72f127017fab68dcdeab0dad64}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a98ef4d72f127017fab68dcdeab0dad64}
+
+
+Definition at line 225 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!process\+Profile@{process\+Profile}}
+\index{process\+Profile@{process\+Profile}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{process\+Profile(self, profile, normalize\+Profile=\+True, move\+Peak\+To\+Zero=\+True)}{processProfile(self, profile, normalizeProfile=True, movePeakToZero=True)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+process\+Profile (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{profile, }
+\item[{}]{normalize\+Profile = {\ttfamily True}, }
+\item[{}]{move\+Peak\+To\+Zero = {\ttfamily True}}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a50045a93644e23cbaa88a4b4458694e2}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a50045a93644e23cbaa88a4b4458694e2}
+
+
+Definition at line 183 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!Ra\+Dec@{Ra\+Dec}}
+\index{Ra\+Dec@{Ra\+Dec}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{Ra\+Dec(self)}{RaDec(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+pointsource.\+Point\+Source.\+Ra\+Dec (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1pointsource_1_1PointSource_a295eb1a487e18c77029585ac2785db80}{}\label{classmodest_1_1signals_1_1pointsource_1_1PointSource_a295eb1a487e18c77029585ac2785db80}
+
+
+Definition at line 21 of file pointsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!seconds2\+M\+JD@{seconds2\+M\+JD}}
+\index{seconds2\+M\+JD@{seconds2\+M\+JD}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{seconds2\+M\+J\+D(self, seconds)}{seconds2MJD(self, seconds)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+seconds2\+M\+JD (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{seconds}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a023967f167c21ca3a6020eb36dd7a7d7}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a023967f167c21ca3a6020eb36dd7a7d7}
+
+
+Definition at line 499 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!signal\+ID@{signal\+ID}}
+\index{signal\+ID@{signal\+ID}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{signal\+I\+D(self)}{signalID(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+signalsource.\+Signal\+Source.\+signal\+ID (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c2954f6ad61e4ca3518ea8ab}{}\label{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c2954f6ad61e4ca3518ea8ab}
+
+
+Definition at line 17 of file signalsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!signal\+ID@{signal\+ID}}
+\index{signal\+ID@{signal\+ID}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{signal\+I\+D(self)}{signalID(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+signalsource.\+Signal\+Source.\+signal\+ID (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c2954f6ad61e4ca3518ea8ab}{}\label{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c2954f6ad61e4ca3518ea8ab}
+
+
+Definition at line 17 of file signalsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!unit\+Vec@{unit\+Vec}}
+\index{unit\+Vec@{unit\+Vec}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{unit\+Vec(self, Ra\+Dec)}{unitVec(self, RaDec)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+pointsource.\+Point\+Source.\+unit\+Vec (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{Ra\+Dec}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1pointsource_1_1PointSource_aa51308fcb654e7183d332ed824965397}{}\label{classmodest_1_1signals_1_1pointsource_1_1PointSource_aa51308fcb654e7183d332ed824965397}
+
+
+Definition at line 26 of file pointsource.\+py.
+
+
+
+\subsection{Member Data Documentation}
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!attitude\+State\+Name@{attitude\+State\+Name}}
+\index{attitude\+State\+Name@{attitude\+State\+Name}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{attitude\+State\+Name}{attitudeStateName}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+pointsource.\+Point\+Source.\+attitude\+State\+Name\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1pointsource_1_1PointSource_a0924a2233bb4fd23e50d024e4f1b048e}{}\label{classmodest_1_1signals_1_1pointsource_1_1PointSource_a0924a2233bb4fd23e50d024e4f1b048e}
+
+
+Definition at line 17 of file pointsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!avg\+Photon\+Flux@{avg\+Photon\+Flux}}
+\index{avg\+Photon\+Flux@{avg\+Photon\+Flux}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{avg\+Photon\+Flux}{avgPhotonFlux}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+avg\+Photon\+Flux}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ac227ebef6424695360f2771765b4a4a7}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ac227ebef6424695360f2771765b4a4a7}
+
+
+\#average\+Photon\+Flux is the mean value of photons expected to arrive from the signal per second (units of photons/second) 
+
+
+
+Definition at line 129 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!background\+Count\+Rate@{background\+Count\+Rate}}
+\index{background\+Count\+Rate@{background\+Count\+Rate}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{background\+Count\+Rate}{backgroundCountRate}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+background\+Count\+Rate}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a3a04d3f0609b7454efc4ef9cdcd7b219}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a3a04d3f0609b7454efc4ef9cdcd7b219}
+
+
+Definition at line 344 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!flux@{flux}}
+\index{flux@{flux}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{flux}{flux}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+poissonsource.\+Poisson\+Source.\+flux\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a6f2c657ad936b921715d826ac74f7fe5}{}\label{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a6f2c657ad936b921715d826ac74f7fe5}
+
+
+Definition at line 14 of file poissonsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!last\+Time@{last\+Time}}
+\index{last\+Time@{last\+Time}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{last\+Time}{lastTime}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+poissonsource.\+Poisson\+Source.\+last\+Time\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a34395fc83bd8743a0a5ee69f9392a606}{}\label{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a34395fc83bd8743a0a5ee69f9392a606}
+
+
+Definition at line 13 of file poissonsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!name@{name}}
+\index{name@{name}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{name}{name}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+name}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aac8308319d4f31067e1087660a15db03}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aac8308319d4f31067e1087660a15db03}
+
+
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aac8308319d4f31067e1087660a15db03}{name} is an arbitrary string that is used to identify the signal. 
+
+Can be set to whatever the user wants, since it is only used for display purposes. Usually set to the astrophysical signal\textquotesingle{}s name (i.\+e. \char`\"{}\+Crab Pulsar\char`\"{} or \char`\"{}\+P\+S\+R B0531+21\char`\"{}) 
+
+Definition at line 125 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!next\+Signal\+ID@{next\+Signal\+ID}}
+\index{next\+Signal\+ID@{next\+Signal\+ID}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{next\+Signal\+ID}{nextSignalID}}]{\setlength{\rightskip}{0pt plus 5cm}int modest.\+signals.\+signalsource.\+Signal\+Source.\+next\+Signal\+ID = 0\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a453eafb550b551adbec0903deb63dfce}{}\label{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a453eafb550b551adbec0903deb63dfce}
+
+
+Definition at line 8 of file signalsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!next\+Signal\+ID@{next\+Signal\+ID}}
+\index{next\+Signal\+ID@{next\+Signal\+ID}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{next\+Signal\+ID}{nextSignalID}}]{\setlength{\rightskip}{0pt plus 5cm}int modest.\+signals.\+signalsource.\+Signal\+Source.\+next\+Signal\+ID = 0\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a453eafb550b551adbec0903deb63dfce}{}\label{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a453eafb550b551adbec0903deb63dfce}
+
+
+Definition at line 8 of file signalsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!peak\+Amplitude@{peak\+Amplitude}}
+\index{peak\+Amplitude@{peak\+Amplitude}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{peak\+Amplitude}{peakAmplitude}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+peak\+Amplitude}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ab9ca2f0588f7e2f23c5301e05070fe99}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ab9ca2f0588f7e2f23c5301e05070fe99}
+
+
+Definition at line 337 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!phase\+Derivatives@{phase\+Derivatives}}
+\index{phase\+Derivatives@{phase\+Derivatives}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{phase\+Derivatives}{phaseDerivatives}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+phase\+Derivatives}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ad885c269b3b042b3d094412683ef3476}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ad885c269b3b042b3d094412683ef3476}
+
+
+Stores the derivatives of phase with respect to time  \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ad885c269b3b042b3d094412683ef3476}{phase\+Derivatives} is a dict which contains the derivatives of phase with respect to time. 
+
+The 0th derivative of phase is simply a constant phase offset (zero by default). The 1st derivative of phase is frequency. Higher order derivatives reflect the change in frequency with respect to time.
+
+The dict keys should be integers which indicate the order of the derivative. e.\+g. 
+\begin{DoxyCode}
+1 phaseDerivatives = \{0: 0, 1: 29.7417, 2: -3.7184e-19, 3: 1.1949e-20\}
+\end{DoxyCode}
+ (Phase derivatives shown for Crab Nebula pulsar) 
+
+Definition at line 114 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!photons\+Per\+Period@{photons\+Per\+Period}}
+\index{photons\+Per\+Period@{photons\+Per\+Period}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{photons\+Per\+Period}{photonsPerPeriod}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+photons\+Per\+Period}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a25ab09a55afd1da4f019ad580770e5f4}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a25ab09a55afd1da4f019ad580770e5f4}
+
+
+Definition at line 331 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!profile@{profile}}
+\index{profile@{profile}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{profile}{profile}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+profile}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a50e061bb97d0dd6ab7f344370c6b35a4}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a50e061bb97d0dd6ab7f344370c6b35a4}
+
+
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a50e061bb97d0dd6ab7f344370c6b35a4}{profile} is a numpy array containing the numerical value of flux over a single period of the signal. 
+
+The \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a50e061bb97d0dd6ab7f344370c6b35a4}{profile} array contains the signal profile of the pulsar (or periodic source) being modeled. If the user selected to normalize the profle, then the profile will be normalized from zero to one, and then scaled based on the average flux value. If the profile is not normalized, then the raw values will be used for computing the signal. If the profile is normalized but no average flux value is received, a warning will be issued. 
+
+Definition at line 218 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!profile\+Index@{profile\+Index}}
+\index{profile\+Index@{profile\+Index}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{profile\+Index}{profileIndex}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+profile\+Index}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aaf45141c09e1fd35c80c49907fa44497}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aaf45141c09e1fd35c80c49907fa44497}
+
+
+Definition at line 219 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!pulsar\+Period@{pulsar\+Period}}
+\index{pulsar\+Period@{pulsar\+Period}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{pulsar\+Period}{pulsarPeriod}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+pulsar\+Period}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aeb6d4a8057d3ee58c81e69fb97b9eef7}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aeb6d4a8057d3ee58c81e69fb97b9eef7}
+
+
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aeb6d4a8057d3ee58c81e69fb97b9eef7}{pulsar\+Period} is the amouont of time (in seconds) for one complete pulsar pulse. 
+
+
+
+Definition at line 172 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!pulsed\+Fraction@{pulsed\+Fraction}}
+\index{pulsed\+Fraction@{pulsed\+Fraction}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{pulsed\+Fraction}{pulsedFraction}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+pulsed\+Fraction}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a5f968d9c80e5315d1657eac2ffca4e73}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a5f968d9c80e5315d1657eac2ffca4e73}
+
+
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_a5f968d9c80e5315d1657eac2ffca4e73}{pulsed\+Fraction} is a value from 0 to 1 which indicates what percentage of the \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ac227ebef6424695360f2771765b4a4a7}{avg\+Photon\+Flux} is \char`\"{}pulsed\char`\"{} and what percentage is constant/background 
+
+
+
+Definition at line 134 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!single\+Period\+Integral@{single\+Period\+Integral}}
+\index{single\+Period\+Integral@{single\+Period\+Integral}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{single\+Period\+Integral}{singlePeriodIntegral}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+single\+Period\+Integral}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ab193c1d52a5bd8b0798bf407abcca72d}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_ab193c1d52a5bd8b0798bf407abcca72d}
+
+
+Definition at line 309 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}!T\+Z\+R\+M\+JD@{T\+Z\+R\+M\+JD}}
+\index{T\+Z\+R\+M\+JD@{T\+Z\+R\+M\+JD}!modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source@{modest\+::signals\+::xraysource\+::\+Periodic\+X\+Ray\+Source}}
+\subsubsection[{\texorpdfstring{T\+Z\+R\+M\+JD}{TZRMJD}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+xraysource.\+Periodic\+X\+Ray\+Source.\+T\+Z\+R\+M\+JD}\hypertarget{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aecd53533d34a4f821f4010c197edc2e8}{}\label{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aecd53533d34a4f821f4010c197edc2e8}
+
+
+\hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource_aecd53533d34a4f821f4010c197edc2e8}{T\+Z\+R\+M\+JD} stores the Modified Julian Date (M\+JD) corresponding to t=0 seconds. 
+
+
+
+Definition at line 119 of file xraysource.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+modest/signals/\hyperlink{xraysource_8py}{xraysource.\+py}\end{DoxyCompactItemize}

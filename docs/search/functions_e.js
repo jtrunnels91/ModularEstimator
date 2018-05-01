@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['seconds2mjd',['seconds2MJD',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#a838d12bdd873eeb217bb6a20c6f3bdcd',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
+  ['seconds2mjd',['seconds2MJD',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a023967f167c21ca3a6020eb36dd7a7d7',1,'modest::signals::xraysource::PeriodicXRaySource']]],
   ['sidunitvec',['sidUnitVec',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#ae6d69671cf2517be4ad69bee7498e665',1,'modest::substates::attitude::Attitude']]],
   ['signalid',['signalID',['../classmodest_1_1signals_1_1signalsource_1_1SignalSource.html#a9a64c6a9c2954f6ad61e4ca3518ea8ab',1,'modest::signals::signalsource::SignalSource']]],
   ['sincdiff',['sincDiff',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a033e07143d7a0aeefb3136d42a380ee3',1,'modest::substates::correlationvector::CorrelationVector']]],

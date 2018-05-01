@@ -3,9 +3,9 @@
 # @brief Initialization file for the signals subpackage.
 
 from . signalsource import SignalSource
-from . poissonsource import PoissonSource, StaticPoissonSource, PeriodicPoissonSource
+from . poissonsource import PoissonSource, StaticPoissonSource, DynamicPoissonSource
 from . pointsource import PointSource
-from . xraysource import StaticXRayPointSource, UniformNoiseXRaySource
+from . xraysource import StaticXRayPointSource, UniformNoiseXRaySource, PeriodicXRaySource
 
 __all__ = [
     "SignalSource",
@@ -14,5 +14,6 @@ __all__ = [
     "PeriodicPoissonSource",
     "PointSource",
     "StaticXRayPointSource",
-	"UniformNoiseXRaySource"
+    "UniformNoiseXRaySource",
+    "UniformNoiseXRaySource"    
 ]

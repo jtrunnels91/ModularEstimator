@@ -71,7 +71,6 @@ class CorrelationVector(substate.SubState):
     # The trueSignal input is checked to see whether it has the following
     # methods:
     # - flux()
-    # - peakAmplitude()
     # - signalID()
     # - unitVec()
     #
@@ -151,7 +150,7 @@ class CorrelationVector(substate.SubState):
         if correlationVector is None:
             correlationVector = (
                 np.ones(self.__filterOrder__) *
-                np.square(self.__trueSignal__.peakAmplitude() * self.__dT__)
+                np.square(self.__trueSignal__.peakAmplitude * self.__dT__)
             )
         ## @brief #correlationVector is the current estimate of the
         # correlation vector between the incoming signal measurements and the
@@ -161,7 +160,7 @@ class CorrelationVector(substate.SubState):
         if correlationVectorCovariance is None:
             correlationVectorCovariance = (
                 np.eye(self.__filterOrder__) *
-                np.square(self.__trueSignal__.peakAmplitude() * self.__dT__)
+                np.square(self.__trueSignal__.peakAmplitude * self.__dT__)
             )
         ## @brief #correlationVectorCovariance is the covariance matrix of the
         # correlation vector estimate, #correlationVector
@@ -462,7 +461,7 @@ class CorrelationVector(substate.SubState):
 
         R = (
             np.eye(self.__filterOrder__) *
-            self.__trueSignal__.peakAmplitude() *
+            self.__trueSignal__.peakAmplitude *
             self.__dT__ *
             np.dot(corrVec, corrVec) *
             self.measurementNoiseScaleFactor

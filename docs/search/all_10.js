@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['seconds2mjd',['seconds2MJD',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#a838d12bdd873eeb217bb6a20c6f3bdcd',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
+  ['seconds2mjd',['seconds2MJD',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a023967f167c21ca3a6020eb36dd7a7d7',1,'modest::signals::xraysource::PeriodicXRaySource']]],
   ['sidunitvec',['sidUnitVec',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#ae6d69671cf2517be4ad69bee7498e665',1,'modest::substates::attitude::Attitude']]],
   ['signaldelay',['signalDelay',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#aa1565b9972d60149f335e3b923cac371',1,'modest::substates::correlationvector::CorrelationVector']]],
   ['signalid',['signalID',['../classmodest_1_1signals_1_1signalsource_1_1SignalSource.html#a9a64c6a9c2954f6ad61e4ca3518ea8ab',1,'modest::signals::signalsource::SignalSource']]],
@@ -8,8 +8,7 @@ var searchData=
   ['signalsource_2epy',['signalsource.py',['../signalsource_8py.html',1,'']]],
   ['signalsources',['signalSources',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a545ac50ec6f67f29ad3420cfc5581812',1,'modest::modularfilter::ModularFilter']]],
   ['sincdiff',['sincDiff',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a033e07143d7a0aeefb3136d42a380ee3',1,'modest::substates::correlationvector::CorrelationVector']]],
-  ['singleperiodintegral',['singlePeriodIntegral',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#a7ac3284a45a9d165fe8d6b6fe8fd4b0e',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
-  ['singleperiodtimearray',['singlePeriodTimeArray',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#a0a4a43615a7ba6ad5952ec1f68833b2c',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
+  ['singleperiodintegral',['singlePeriodIntegral',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#ab193c1d52a5bd8b0798bf407abcca72d',1,'modest::signals::xraysource::PeriodicXRaySource']]],
   ['skewsymmetric',['skewSymmetric',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#ae6f156a198d9c2328ddffde498c1ca19',1,'modest::substates::attitude::Attitude']]],
   ['speedoflight',['speedOfLight',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a5b95e0a827fb233f2f1a40f2cff9d3f0',1,'modest::substates::correlationvector::CorrelationVector']]],
   ['state',['State',['../namespaceState.html',1,'']]],

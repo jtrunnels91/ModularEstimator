@@ -7,5 +7,5 @@ var searchData=
   ['attitude',['Attitude',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html',1,'modest::substates::attitude']]],
   ['attitude_2epy',['attitude.py',['../attitude_8py.html',1,'']]],
   ['attitudestatename',['attitudeStateName',['../classmodest_1_1signals_1_1pointsource_1_1PointSource.html#a0924a2233bb4fd23e50d024e4f1b048e',1,'modest::signals::pointsource::PointSource']]],
-  ['avgphotonflux',['avgPhotonFlux',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#a79f9634be78f18e34daa792eb4742944',1,'modest::signals::poissonsource::PeriodicPoissonSource']]]
+  ['avgphotonflux',['avgPhotonFlux',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#ac227ebef6424695360f2771765b4a4a7',1,'modest::signals::xraysource::PeriodicXRaySource']]]
 ];

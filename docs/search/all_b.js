@@ -7,7 +7,7 @@ var searchData=
   ['measurementupdatejpdaf',['measurementUpdateJPDAF',['../classmodest_1_1modularfilter_1_1ModularFilter.html#ac3a26e2a7672ceedf00c48723104d55c',1,'modest::modularfilter::ModularFilter']]],
   ['measurementupdateml',['measurementUpdateML',['../classmodest_1_1modularfilter_1_1ModularFilter.html#af1a7d5a4e219c494de176f94997ae110',1,'modest::modularfilter::ModularFilter']]],
   ['measurementvalidationthreshold',['measurementValidationThreshold',['../classmodest_1_1modularfilter_1_1ModularFilter.html#af91295c2d8f45afe04386215b5fa39aa',1,'modest::modularfilter::ModularFilter']]],
-  ['mjd2seconds',['MJD2seconds',['../classmodest_1_1signals_1_1poissonsource_1_1PeriodicPoissonSource.html#abb4ac1c9f5fbc156cb2d82d73feaf126',1,'modest::signals::poissonsource::PeriodicPoissonSource']]],
+  ['mjd2seconds',['MJD2seconds',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#abdd0337b42d16288c8ad3dede15a99f2',1,'modest::signals::xraysource::PeriodicXRaySource']]],
   ['modest',['modest',['../namespacemodest.html',1,'']]],
   ['modularfilter',['ModularFilter',['../classmodest_1_1modularfilter_1_1ModularFilter.html',1,'modest::modularfilter']]],
   ['modularfilter',['modularfilter',['../namespacemodest_1_1modularfilter.html',1,'modest']]],
