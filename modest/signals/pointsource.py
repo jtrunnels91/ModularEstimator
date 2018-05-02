@@ -43,7 +43,7 @@ class PointSource(signalsource.SignalSource):
         if (
                 ('RA' in measurement) and
                 ('DEC' in measurement) and
-                ('attitude' in stateDict)
+                (self.attitudeStateName in stateDict)
         ):
             attitudeState = stateDict[self.attitudeStateName]['stateObject']
 

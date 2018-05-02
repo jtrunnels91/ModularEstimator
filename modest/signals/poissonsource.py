@@ -70,13 +70,18 @@ class DynamicPoissonSource(PoissonSource):
     def computeAssociationProbability(
             self,
             measurement,
-            state
+            stateDict
             ):
-        
+
+        state = None
+
+        if self.correlationStateName in stateDict:
+            state = stateDict[self.correlationStateName]['stateObject']
+            state = state.getStateVector()
         currentFlux = self.getSignal(
             measurement['t']['value'],
             tVar=measurement['t']['var'],
-            state=self.correlationStateName
+            state=state
         )
         print(currentFlux)
 

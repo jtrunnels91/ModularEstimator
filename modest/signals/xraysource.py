@@ -332,6 +332,8 @@ class PeriodicXRaySource(
         singlePeriodTimeArray = np.linspace(
             0, self.pulsarPeriod, len(self.profile)
         )
+
+        self.profileLen = len(self.profile)
         
         for i in range(len(self.profile)):
 
@@ -446,7 +448,7 @@ class PeriodicXRaySource(
             self,
             observatoryTime,
             tVar=None,
-            state=None            
+            state=None
     ):
         if state is not None:
             if 'signalDelay' in state:
@@ -476,6 +478,9 @@ class PeriodicXRaySource(
             # of phase, and can just return the average flux.
             if phaseSigma > np.sqrt(1/12):
                 signal = self.avgPhotonFlux * self.pulsedFraction
+            elif phaseSigma < 1/(100 * self.profileLen):
+                signal = self.getPulseFromPhase(phase)
+
             else:
                 phaseFraction = np.mod(phase, 1.0)
                 upperSigma = phaseFraction + (np.sqrt(12) * phaseSigma / 2)
