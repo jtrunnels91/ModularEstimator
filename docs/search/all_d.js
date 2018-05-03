@@ -9,7 +9,7 @@ var searchData=
   ['phat',['PHat',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a2f79616ca660e0cc1e628adf94738249',1,'modest::substates::attitude::Attitude']]],
   ['photonflux',['photonFlux',['../classmodest_1_1signals_1_1xraysource_1_1UniformNoiseXRaySource.html#a9b8049972baf6e0640181b58850a3d20',1,'modest::signals::xraysource::UniformNoiseXRaySource']]],
   ['photonsperperiod',['photonsPerPeriod',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a25ab09a55afd1da4f019ad580770e5f4',1,'modest::signals::xraysource::PeriodicXRaySource']]],
-  ['plot',['plot',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#aeca7ec50ae038106569f9368523d0ab0',1,'modest::signals::xraysource::PeriodicXRaySource']]],
+  ['plot',['plot',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a640937825e6219bc7cc27168ed0e7fb0',1,'modest::signals::xraysource::PeriodicXRaySource']]],
   ['pointsource',['PointSource',['../classmodest_1_1signals_1_1pointsource_1_1PointSource.html',1,'modest::signals::pointsource']]],
   ['pointsource_2epy',['pointsource.py',['../pointsource_8py.html',1,'']]],
   ['poissonsource',['PoissonSource',['../classmodest_1_1signals_1_1poissonsource_1_1PoissonSource.html',1,'modest::signals::poissonsource']]],
@@ -20,6 +20,7 @@ var searchData=
   ['processprofile',['processProfile',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a50045a93644e23cbaa88a4b4458694e2',1,'modest::signals::xraysource::PeriodicXRaySource']]],
   ['profile',['profile',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a50e061bb97d0dd6ab7f344370c6b35a4',1,'modest::signals::xraysource::PeriodicXRaySource']]],
   ['profileindex',['profileIndex',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#aaf45141c09e1fd35c80c49907fa44497',1,'modest::signals::xraysource::PeriodicXRaySource']]],
+  ['profilelen',['profileLen',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a9d4e5488915741b792df74c256782777',1,'modest::signals::xraysource::PeriodicXRaySource']]],
   ['pulsarperiod',['pulsarPeriod',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#aeb6d4a8057d3ee58c81e69fb97b9eef7',1,'modest::signals::xraysource::PeriodicXRaySource']]],
   ['pulsedfraction',['pulsedFraction',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a5f968d9c80e5315d1657eac2ffca4e73',1,'modest::signals::xraysource::PeriodicXRaySource']]]
 ];

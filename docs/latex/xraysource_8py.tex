@@ -2,7 +2,7 @@
 \label{xraysource_8py}\index{modest/signals/xraysource.\+py@{modest/signals/xraysource.\+py}}
 
 
-This file contains classes which model various astrophysical x-\/ray sources including \#\+Static\+X\+Ray\+Point\+Source (e.\+g.  
+This file contains classes which model various astrophysical x-\/ray sources.  
 
 
 \subsection*{Classes}
@@ -22,6 +22,8 @@ class \hyperlink{classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource}{mod
 
 
 \subsection{Detailed Description}
-This file contains classes which model various astrophysical x-\/ray sources including \#\+Static\+X\+Ray\+Point\+Source (e.\+g. 
+This file contains classes which model various astrophysical x-\/ray sources. 
 
-x-\/ray stars with constant flux), \#\+Periodic\+X\+Ray\+Source, (x-\/ray sources with periodic flux, i.\+e. pulsars), and Uniform\+Noise\+X\+Ray\+Source, (model of uniform background noise) 
+The signals modeled by these classes represent a variety of astrophysical x-\/ray sources including uniform background, static point sources (e.\+g. x-\/ray stars), and periodic point sources (e.\+g. pulsars).
+
+These classes generally inherit from two different types of signals\+: .Point\+Source and .Poisson\+Source 

@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['scalefactor',['scaleFactor',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a1f4469f0818f93136c6c228bd6fb5a09',1,'modest::signals::xraysource::PeriodicXRaySource']]],
   ['seconds2mjd',['seconds2MJD',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a023967f167c21ca3a6020eb36dd7a7d7',1,'modest::signals::xraysource::PeriodicXRaySource']]],
   ['sidunitvec',['sidUnitVec',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#ae6d69671cf2517be4ad69bee7498e665',1,'modest::substates::attitude::Attitude']]],
   ['signaldelay',['signalDelay',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#aa1565b9972d60149f335e3b923cac371',1,'modest::substates::correlationvector::CorrelationVector']]],

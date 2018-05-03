@@ -10,6 +10,7 @@ var searchData=
   ['processnoise',['processNoise',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#ab1756128cdec161ea22557d756745195',1,'modest::substates::correlationvector::CorrelationVector']]],
   ['profile',['profile',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a50e061bb97d0dd6ab7f344370c6b35a4',1,'modest::signals::xraysource::PeriodicXRaySource']]],
   ['profileindex',['profileIndex',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#aaf45141c09e1fd35c80c49907fa44497',1,'modest::signals::xraysource::PeriodicXRaySource']]],
+  ['profilelen',['profileLen',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a9d4e5488915741b792df74c256782777',1,'modest::signals::xraysource::PeriodicXRaySource']]],
   ['pulsarperiod',['pulsarPeriod',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#aeb6d4a8057d3ee58c81e69fb97b9eef7',1,'modest::signals::xraysource::PeriodicXRaySource']]],
   ['pulsedfraction',['pulsedFraction',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a5f968d9c80e5315d1657eac2ffca4e73',1,'modest::signals::xraysource::PeriodicXRaySource']]]
 ];

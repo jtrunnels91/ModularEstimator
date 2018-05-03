@@ -1,8 +1,10 @@
 ## @file xraysource.py
-# This file contains classes which model various astrophysical x-ray
-# sources including #StaticXRayPointSource (e.g. x-ray stars with constant
-# flux), #PeriodicXRaySource, (x-ray sources with periodic flux, i.e. pulsars),
-# and UniformNoiseXRaySource, (model of uniform background noise)
+# @brief This file contains classes which model various astrophysical x-ray
+# sources.
+#
+# @details The signals modeled by these classes represent a variety of astrophysical x-ray sources including uniform background, static point sources (e.g. x-ray stars), and periodic point sources (e.g. pulsars).
+#
+# These classes generally inherit from two different types of signals: pointsource.PointSource and poissonsource.PoissonSource
 
 import numpy as np
 from math import factorial
@@ -581,6 +583,52 @@ class PeriodicXRaySource(
         plt.plot(tArray, signalArray)
         plt.show(block=False)
 
+    def generatePhotonArrivals(
+            self,
+            tMax,
+            t0=0,
+            position=None,
+            attitude=None,
+            FOV=None
+            ):
+
+        nCandidates = np.int((tMax - t0) * self.peakAmplitude * 1.1)
+
+        # Generate a batch of candidate arrival times (more efficient than generating on the fly)
+        candidateTimeArray = np.random.exponential(1.0/self.peakAmplitude, nCandidates)
+        selectionVariableArray = np.random.uniform(0, 1, nCandidates)
+
+        photonArrivalTimes = []
+        tLastCandidate = t0
+        candidateIndex = 0
+        while tLastCandidate < tMax:
+            # Draw the next arrival time and selection variable from our
+            # pre-generated arrays
+            if candidateIndex < len(candidateTimeArray):
+                nextCandidate = candidateTimeArray[candidateIndex]
+                selectionVariable = selectionVariableArray[candidateIndex]
+            # If we run out, generate more on the fly
+            else:
+                nextCandidate = np.random.exponential(1.0/self.peakAmplitude)
+                selectionVariable = np.random.uniform(0, 1)
+                print('Generating on the fly!')
+            tNextCandidate = (
+                tLastCandidate +
+                nextCandidate
+                )
+            currentFluxNormalized = (
+                self.getSignal(tNextCandidate)/self.peakAmplitude
+                )
+            
+
+            if selectionVariable <= currentFluxNormalized:
+                photonArrivalTimes.append(tNextCandidate)
+            
+            tLastCandidate = tNextCandidate
+            candidateIndex = candidateIndex + 1
+
+        return np.array(photonArrivalTimes)
+    
     @staticmethod
     def hms2rad(h, m, s):
         hours = h + m / 60.0 + s / 3600.0

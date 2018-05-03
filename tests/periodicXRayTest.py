@@ -7,7 +7,7 @@ myPARFile = './pulsarData/ephem_J0534+2200_nancay_jodrell.par'
 
 myFlux = 9.93e-9 # erg/cm^2/s
 
-detectorArea = 100 # cm^2
+detectorArea = 100  # cm^2
 electronVoltPerPhoton = 6e3  # Electron-Volt x 10^3
 electronVoltPerErg = 6.242e11
 ergsPerElectronVolt = 1 / electronVoltPerErg
@@ -57,3 +57,23 @@ stateDict = {
 
 myPr = myPulsar.computeAssociationProbability(myMeas, stateDict)
 print(myPr)
+
+periodSim = 10000
+simTime = myPulsar.pulsarPeriod * periodSim
+
+myPhotonArrivals = myPulsar.generatePhotonArrivals(simTime)
+
+nHistBins = 200
+hist, binEdges = np.histogram(np.mod(myPhotonArrivals, myPulsar.pulsarPeriod), bins=nHistBins)
+
+hist = (hist) * (nHistBins/simTime)
+binCenters = (binEdges[:-1] + binEdges[1:])/2
+
+myFig = plt.figure()
+plt.step(binCenters, hist)
+plt.show(block=False)
+
+myPulsar.plot(figureHandle=myFig)
+plt.show(block=False)
+
+

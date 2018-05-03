@@ -2,11 +2,8 @@
 # This package contains the #CorrelationVector class
 
 import numpy as np
-from scipy.linalg import block_diag
-from numpy import sin, cos, arcsin, arccos, arctan2, square, sqrt, abs, power
-from numpy.linalg import norm
-from pyquaternion import Quaternion
-
+#from numpy import sin, cos, arcsin, arccos, arctan2, square, sqrt, abs, power
+import matplotlib.pyplot as plt
 from . import substate
 
 ## @class CorrelationVector
@@ -229,16 +226,20 @@ class CorrelationVector(substate.SubState):
 
         # Compute new estimate of delay based on new state vector, store in
         # svDict and local attributes
-        delayDict = self.estimateSignalDelayUT(
-            self.correlationVector,
-            self.correlationVectorCovariance
-        )
+        if svDict['aPriori'] is False:
+            delayDict = self.estimateSignalDelayUT(
+                self.correlationVector,
+                self.correlationVectorCovariance
+            )
+    
+            self.signalDelay = delayDict['meanDelay']
+            self.delayVar = delayDict['varDelay']
 
-        self.signalDelay = delayDict['meanDelay']
-        self.delayVar = delayDict['varDelay']
-
-        svDict['signalDelay'] = delayDict['meanDelay']
-        svDict['delayVar'] = delayDict['varDelay']
+            svDict['signalDelay'] = delayDict['meanDelay']
+            svDict['delayVar'] = delayDict['varDelay']
+        else:
+            svDict['signalDelay'] = self.signalDelay
+            svDict['delayVar'] = self.delayVar
         
         super().storeStateVector(svDict)
         return
@@ -283,7 +284,10 @@ class CorrelationVector(substate.SubState):
                 ('t' in measurement)
         ):
 
-            measurementMatrices = self.getTOAMeasurementMatrices(measurement)
+            measurementMatrices = self.getTOAMeasurementMatrices(
+                measurement,
+                self.correlationVector
+            )
 
             HDict = {'correlationVector': measurementMatrices['H']}
             RDict = {'correlationVector': measurementMatrices['R']}
@@ -438,7 +442,7 @@ class CorrelationVector(substate.SubState):
             measurement,
             corrVec
     ):
-        photonTOA = measurement['t']
+        photonTOA = measurement['t']['value']
             
         H = np.eye(self.__filterOrder__)
 
@@ -448,14 +452,17 @@ class CorrelationVector(substate.SubState):
             self.__filterOrder__
         )
 
-        timeVector = timeVector + photonTOA - self.signalDelay
+        timeVector = timeVector + photonTOA  # - self.signalDelay
 
         signalTimeHistory = np.zeros(self.__filterOrder__)
 
         for timeIndex in range(len(timeVector)):
             signalTimeHistory[timeIndex] = (
-                self.__trueSignal__.flux(timeVector[timeIndex]) * self.__dT__
+                self.__trueSignal__.getSignal(timeVector[timeIndex]) * self.__dT__
             )
+        # plt.plot(signalTimeHistory)
+        # plt.show(block=False)
+        # 1/0
 
         dY = signalTimeHistory - corrVec
 
@@ -512,32 +519,44 @@ class CorrelationVector(substate.SubState):
 
         # Next, we "roll" the correlation vector so that the values being
         # fitted quadratically are the first 2 * peakFitPoints + 1 values
-        rollFactor = self.peakFitPoints - peakLocation
+#        rollFactor = self.peakFitPoints - peakLocation
+#
+#        if rollFactor != 0:
+#            slicedC = np.roll(
+#                c,
+#                rollFactor
+#            )
+#            slicedP = (
+#                np.roll(
+#                    np.roll(P,
+#                            rollFactor,
+#                            axis=0),
+#                    rollFactor,
+#                    axis=1
+#                )
+#            )
+#        else:
+#            slicedC = c
+#            slicedP = P
 
-        if rollFactor != 0:
-            slicedC = np.roll(
-                c,
-                rollFactor
-            )
-            slicedP = (
-                np.roll(
-                    np.roll(P,
-                            rollFactor,
-                            axis=0),
-                    rollFactor,
-                    axis=1
-                )
-            )
-        else:
-            slicedC = c
-            slicedP = P
 
         # Extract the portion of the correlation vector used for fitting
         # quadratic
-        mySlice = slice(0, self.peakFitPoints * 2 + 1)
+#        mySlice = slice(0, self.peakFitPoints * 2 + 1)
+#
+#        slicedC = slicedC[mySlice]
+#        slicedP = slicedP[mySlice, mySlice]
 
-        slicedC = slicedC[mySlice]
-        slicedP = slicedP[mySlice, mySlice]
+        lowerBound = peakLocation - self.peakFitPoints
+        upperBound = lowerBound + (self.peakFitPoints * 2) + 1
+        if (lowerBound < 0) or (upperBound > self.__dimension__):
+            mySlice = range(lowerBound, upperBound)
+            slicedC = c.take(mySlice, mode='wrap')
+            slicedP = P.take(mySlice, axis=0, mode='wrap').take(mySlice, axis=1, mode='wrap')
+        else:
+            mySlice = slice(lowerBound, upperBound)
+            slicedC = c[mySlice]
+            slicedP = P[mySlice, mySlice]
 
         # np.polyfit assumes that the weights will be the inverse standard
         # deviation
@@ -546,12 +565,14 @@ class CorrelationVector(substate.SubState):
 
         # xVec is the vector of "x" values corresponding the "y" values to
         # which the quadratic is being fit.
-        xVec = np.linspace(0, self.peakFitPoints * 2, (self.peakFitPoints * 2) + 1)
-        xVec = xVec - rollFactor
+        xVec = self.__xVec__
+#        xVec = xVec - rollFactor
+        xVec = xVec + lowerBound
 
         # Get the quadratic function that fits the peak and surrounding values,
         # and use it to estimate the location of the max
-        quadraticVec = np.polyfit(xVec, slicedC, 2, w=weightVector)
+        # quadraticVec = np.polyfit(xVec, slicedC, 2, w=weightVector)
+        quadraticVec = self.quadraticFit(xVec, slicedC)
         delay = (-quadraticVec[1] / (2 * quadraticVec[0]))
 
         return delay
@@ -581,6 +602,11 @@ class CorrelationVector(substate.SubState):
             h,
             P
     ):
+        self.__xVec__ = np.linspace(
+                0, 
+                self.peakFitPoints * 2, 
+                (self.peakFitPoints * 2) + 1
+                )
         # Compute sigma points
         hDimension = len(h)
         sqrtP = np.linalg.cholesky(hDimension * P)
@@ -595,7 +621,7 @@ class CorrelationVector(substate.SubState):
         # Compute the peak corresponding to each sigma point vector
         for i in range(len(sigmaPoints)):
             sigmaPointResults[i] = (
-                self.computeSignalOffset(sigmaPoints[i], P)
+                self.computeSignalDelay(sigmaPoints[i], P)
             )
 
         meanDelay = np.mean(sigmaPointResults)
@@ -623,3 +649,19 @@ class CorrelationVector(substate.SubState):
             )
 
         return myDiff
+
+
+    @staticmethod
+    def quadraticFit(x, y):
+        X_T = np.array([np.power(x, 2), x, np.ones(len(x))])
+        X = X_T.transpose()
+        if len(x) < 3:
+            raise ValueError(
+                "Cannot fit a quadratic to less than three data points."
+                )
+        elif len(x) == 3:
+            coef = np.linalg.inv(X).dot(y)
+        else:
+            coef = np.linalg.inv(X_T.dot(X)).dot(X_T).dot(y)
+            
+        return coef
