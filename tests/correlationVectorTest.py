@@ -2,12 +2,20 @@ from context import modest as md
 import matplotlib.pyplot as plt
 import numpy as np
 
-nTaps = 20
+plt.close('all')
 
-myProfile='./pulsarData/J0534+2200_profile.txt'
+orbitPeriod = 50/(2*np.pi)
+orbitAmplitude = 1e3
+
+
+
+vVar = np.square(500)
+nTaps = 9
+
+myProfile = './pulsarData/J0534+2200_profile.txt'
 myPARFile = './pulsarData/ephem_J0534+2200_nancay_jodrell.par'
 
-detectorArea = 100  # cm^2
+detectorArea = 200  # cm^2
 electronVoltPerPhoton = 6e3  # Electron-Volt x 10^3
 electronVoltPerErg = 6.242e11
 ergsPerElectronVolt = 1 / electronVoltPerErg
@@ -25,18 +33,43 @@ myPulsar = md.signals.PeriodicXRaySource(
     pulsedFraction=myPulseFraction
 )
 
-photonArrivalTimes = myPulsar.generatePhotonArrivals(50)
-photonArrivalTimes = photonArrivalTimes + myPulsar.pulsarPeriod/2
+myUnitVec = myPulsar.unitVec()
+constantOffset = -myUnitVec * myPulsar.speedOfLight() * 0.0033622786515540015 * 0
 
-print(len(photonArrivalTimes))
+def position(t):
+    return(
+        np.array([
+            (orbitAmplitude * np.sin(t/orbitPeriod) * myUnitVec[0]) + constantOffset[0],
+            (orbitAmplitude * np.sin(t/orbitPeriod) * myUnitVec[1]) + constantOffset[1],
+            (orbitAmplitude * np.sin(t/orbitPeriod) * myUnitVec[2]) + constantOffset[2]
+            ]
+        )
+    )
+
+
+def velocity(t):
+    return(
+        (orbitAmplitude/orbitPeriod) *
+        np.array([
+            np.cos(t/orbitPeriod) * myUnitVec[0],
+            np.cos(t/orbitPeriod) * myUnitVec[1],
+            np.cos(t/orbitPeriod) * myUnitVec[2]
+            ]
+        )
+    )
+
+photonArrivalTimes = myPulsar.generatePhotonArrivals(500, position=position)
+photonArrivalTimes = photonArrivalTimes
 
 myCorrelation = md.substates.CorrelationVector(
     myPulsar,
     nTaps,
     myPulsar.pulsarPeriod/nTaps,
-    signalDelay=0,
-    delayVar=0,
-    measurementNoiseScaleFactor=1
+    signalTDOA=0,
+    TDOAVar=0,
+    measurementNoiseScaleFactor=1,
+    processNoise=1e-9,
+    centerPeak=True
     )
 
 myFilter = md.ModularFilter()
@@ -49,13 +82,63 @@ myMeas = {
 myFilter.measurementUpdateEKF(myMeas, myPulsar.name)
 
 lastUpdateTime = 0
+lastT = 0
+
+timeUpdateOnlyTDOA = []
+lastTUOTDOA = 0
+timeUpdateOnlyT = []
+
+
 for photon in photonArrivalTimes:
+    vMeas = velocity(photon) + np.random.normal(0,scale=np.sqrt(vVar),size=3)
+    TUOTDOA = vMeas.dot(myUnitVec) * (photon - lastT)/myPulsar.speedOfLight() + lastTUOTDOA
+    timeUpdateOnlyTDOA.append(TUOTDOA)
+    lastTUOTDOA = TUOTDOA
+    timeUpdateOnlyT.append(photon)
+    
+    dynamics = {
+            'velocity': {'value': vMeas, 'var': np.eye(3)*vVar}
+            }
+    
+    myFilter.timeUpdateEKF(photon-lastT, dynamics=dynamics)
+#    if myCorrelation.peakLock is True:
+#        myCorrelation.realTimePlot()
+    #myFilter.timeUpdateEKF(photon-lastT)
+    
     myMeas = {
         't': {'value': photon}
         }
     myFilter.measurementUpdateEKF(myMeas, myPulsar.name)
 
-    if (photon-lastUpdateTime) > 10:
+    if (photon-lastUpdateTime) > 5:
         myCorrelation.realTimePlot()
         lastUpdateTime = int(photon)
         print('time: %f' % photon)
+    lastT = photon
+
+trueDelay = (
+    position(myCorrelation.stateVectorHistory['t']).transpose().dot(myPulsar.unitVec()) /
+    myPulsar.speedOfLight()
+    )
+plt.figure()
+plt.plot(
+    myCorrelation.stateVectorHistory['t'],
+    trueDelay
+)
+plt.plot(
+    myCorrelation.stateVectorHistory['t'],
+    myCorrelation.stateVectorHistory['signalTDOA']
+)
+plt.plot(
+    timeUpdateOnlyT,
+    timeUpdateOnlyTDOA
+)
+plt.plot(
+    myCorrelation.stateVectorHistory['t'],
+    np.sqrt(myCorrelation.stateVectorHistory['TDOAVar'])
+)
+plt.plot(
+    myCorrelation.stateVectorHistory['t'],
+    -np.sqrt(myCorrelation.stateVectorHistory['TDOAVar'])
+)
+plt.show(block=False)

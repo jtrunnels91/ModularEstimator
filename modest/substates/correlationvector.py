@@ -111,8 +111,8 @@ class CorrelationVector(substate.SubState):
             t=0,
             correlationVector=None,
             correlationVectorCovariance=None,
-            signalDelay=0,
-            delayVar=0,
+            signalTDOA=0,
+            TDOAVar=0,
             aPriori=True,
             centerPeak=True,
             peakFitPoints=1,
@@ -120,6 +120,11 @@ class CorrelationVector(substate.SubState):
             measurementNoiseScaleFactor=1
             ):
 
+        #self.peakCenteringDT = trueSignal.pulsarPeriod/10
+        self.peakCenteringDT = 0
+        
+        self.peakOffsetFromCenter = 0
+        
         ## @brief #__unitVecToSignal__ is a unit vector which points to the signal
         # source
         self.__unitVecToSignal__ = trueSignal.unitVec()
@@ -165,15 +170,20 @@ class CorrelationVector(substate.SubState):
 
         ## @brief #signalDelay is the current estimate of the delay between
         # the incoming signal measurements and the #__trueSignal__
-        self.signalDelay = signalDelay
+        self.signalTDOA = signalTDOA
         
         ## @brief #delayVar is the variance of the signal delay estimate
         # #signalDelay
-        self.delayVar = delayVar
+        self.TDOAVar = TDOAVar
 
         ## @brief #centerPeak indicates whether the correlation vector is
-        # shifted to maintain the peak at the 0th tap
+        # shifted to maintain the peak at the middle tap
         self.centerPeak = centerPeak
+
+        ## @brief #peakLock indicates whether the current estimate of
+        # correlation vector and peak location is accurate enough to "know"
+        # that we've locked on to the correct peak.
+        self.peakLock = False
 
         ## @brief #peakFitPoints is a variable which controls the number of
         # points used for quadratically estimating the location of the
@@ -187,6 +197,9 @@ class CorrelationVector(substate.SubState):
         ## @brief #measurementNoiseScaleFactor is a factor used to scale the
         # measurement noise matrix.  The default value is 1 (no scaling).
         self.measurementNoiseScaleFactor = measurementNoiseScaleFactor
+
+        self.__halfLength__ = int(np.ceil(self.__filterOrder__ / 2))
+        self.__halfLengthSeconds__ = self.__halfLength__ * self.__dT__
         
         super().__init__(
             stateDimension=filterOrder,
@@ -195,8 +208,8 @@ class CorrelationVector(substate.SubState):
                 'stateVector': correlationVector,
                 'covariance': correlationVectorCovariance,
                 'aPriori': aPriori,
-                'signalDelay': signalDelay,
-                'delayVar': delayVar
+                'signalTDOA': signalTDOA,
+                'TDOAVar': TDOAVar
             }
         )
 
@@ -217,30 +230,57 @@ class CorrelationVector(substate.SubState):
             self,
             svDict
             ):
-
         # Unpack updated state vector values
         self.t = svDict['t']
-        self.correlationVector = svDict['stateVector']
-        self.correlationVectorCovariance = svDict['covariance']
         self.aPriori = svDict['aPriori']
 
         # Compute new estimate of delay based on new state vector, store in
         # svDict and local attributes
+        #if False is False:
         if svDict['aPriori'] is False:
-            delayDict = self.estimateSignalDelayUT(
+            self.correlationVector = svDict['stateVector']
+            self.correlationVectorCovariance = svDict['covariance']
+
+            tdoaDict = self.estimateSignalTDOA_UT(
                 self.correlationVector,
                 self.correlationVectorCovariance
             )
-    
-            self.signalDelay = delayDict['meanDelay']
-            self.delayVar = delayDict['varDelay']
 
-            svDict['signalDelay'] = delayDict['meanDelay']
-            svDict['delayVar'] = delayDict['varDelay']
+            newTDOA = (
+                (
+                    tdoaDict['meanTDOA'] 
+                ) *
+                self.__dT__
+            ) - self.__halfLengthSeconds__ - self.peakCenteringDT
+            newTDOAVar = tdoaDict['varTDOA'] * np.square(self.__dT__)
+            self.signalTDOA = newTDOA
+            self.TDOAVar = newTDOAVar
+
+            svDict['signalTDOA'] = newTDOA
+            svDict['TDOAVar'] = newTDOAVar
+                  
+            if self.peakLock is True and self.centerPeak is True:
+                self.peakOffsetFromCenter = tdoaDict['meanTDOA'] - self.__halfLength__
+                
+            else:
+                self.peakOffsetFromCenter = 0
+
         else:
-            svDict['signalDelay'] = self.signalDelay
-            svDict['delayVar'] = self.delayVar
-        
+#            if self.peakLock is True and self.centerPeak is True:
+#                svDict['stateVector'] = self.correlationVector
+#            else:
+                
+            self.correlationVector = svDict['stateVector']
+            
+            self.correlationVectorCovariance = svDict['covariance']
+            svDict['signalTDOA'] = self.signalTDOA
+            svDict['TDOAVar'] = self.TDOAVar
+
+        if np.sqrt(self.TDOAVar) < self.__dT__:
+            self.peakLock = True
+        else:
+            self.peakLock = False
+            
         super().storeStateVector(svDict)
         return
 
@@ -270,7 +310,10 @@ class CorrelationVector(substate.SubState):
         L = timeUpdateMatrices['L']
         Q = timeUpdateMatrices['Q']
 
-        Qmat = np.outer(L) * Q + (np.eye(self.__filterOrder__) * self.processNoise)
+        Qmat = (
+            np.outer(L, L) * Q +
+            (np.eye(self.__filterOrder__) * self.processNoise)
+        )
         
         return {'F': timeUpdateMatrices['F'], 'Q': Qmat}
 
@@ -354,17 +397,28 @@ class CorrelationVector(substate.SubState):
             dynamics,
             h
     ):
-        if 'velocity' in dynamics:
+        if dynamics is not None and 'velocity' in dynamics:
 
             velocity = dynamics['velocity']['value']
             vVar = dynamics['velocity']['var']
 
             indexDiff = deltaT/self.__dT__
             
-            fractionalDelay = (
+            peakShift = (
                 (velocity.dot(self.__unitVecToSignal__) * indexDiff) /
                 self.speedOfLight()
             )
+
+            velocityTDOA = peakShift * self.__dT__
+            
+            if (self.peakLock is True) and (self.centerPeak is True):
+                FMatrixDT = -self.peakOffsetFromCenter * self.__dT__
+                FMatrixShift = -self.peakOffsetFromCenter
+                self.peakCenteringDT = self.peakCenteringDT - velocityTDOA + FMatrixDT
+                self.signalTDOA = self.signalTDOA + velocityTDOA - FMatrixDT
+            else:
+                FMatrixShift = peakShift
+            # self.signalDelay = self.signalDelay + timeDelay
 
             Q = (
                 self.__unitVecToSignal__.dot(
@@ -378,39 +432,40 @@ class CorrelationVector(substate.SubState):
             L = np.zeros([self.__filterOrder__, self.__filterOrder__])
 
             # Build arrays of indicies from which to form the sinc function
-            halfLength = np.ceil(self.__filterOrder__ / 2)
 
             if np.mod(self.__filterOrder__, 2) == 0:
                 baseVec = (
                     np.linspace(
-                        1 - halfLength,
-                        halfLength,
+                        1 - self.__halfLength__,
+                        self.__halfLength__,
                         self.__filterOrder__
-                    ) + fractionalDelay
+                    )
                 )
 
             else:
                 baseVec = (
                     np.linspace(
-                        1 - halfLength,
-                        halfLength - 1,
+                        1 - self.__halfLength__,
+                        self.__halfLength__ - 1,
                         self.__filterOrder__
-                    ) + fractionalDelay
+                    )
                 )
 
             # Compute the sinc function of the base vector
-            sincBase = np.sinc(baseVec)
+            sincBase = np.sinc(baseVec + FMatrixShift)
             diffBase = np.zeros_like(sincBase)
 
             for i in range(len(baseVec)):
-                diffBase[i] = self.sincDiff(baseVec[i])
+                diffBase[i] = self.sincDiff(baseVec[i] + peakShift)
             
-            sincBase = np.roll(sincBase, 1 - int(halfLength))
-            diffBase = np.roll(diffBase, 1 - int(halfLength))
+            sincBase = np.roll(sincBase, 1 - int(self.__halfLength__))
+            diffBase = np.roll(diffBase, 1 - int(self.__halfLength__))
 
             for i in range(len(F)):
                 F[i] = np.roll(sincBase, i)
                 L[i] = np.roll(diffBase, i)
+#            if (self.peakLock is True) and (self.centerPeak is True):
+#                F = np.eye(self.__filterOrder__)
 
             L = L.dot(h)
 
@@ -443,22 +498,31 @@ class CorrelationVector(substate.SubState):
             corrVec
     ):
         photonTOA = measurement['t']['value']
-            
+        
+        adjustedTOA = photonTOA - self.__halfLengthSeconds__ - self.peakCenteringDT
+        
         H = np.eye(self.__filterOrder__)
 
         timeVector = np.linspace(
             0,
-            (1-self.__filterOrder__) * self.__dT__,
+            (self.__filterOrder__ - 1),
             self.__filterOrder__
         )
+        timeVector = timeVector * self.__dT__
 
-        timeVector = timeVector + photonTOA  # - self.signalDelay
+        timeVector = (
+            timeVector + adjustedTOA
+            )
+
+        # if self.peakLock is True:
+        #     timeVector = timeVector - self.signalDelay
 
         signalTimeHistory = np.zeros(self.__filterOrder__)
 
         for timeIndex in range(len(timeVector)):
             signalTimeHistory[timeIndex] = (
-                self.__trueSignal__.getSignal(timeVector[timeIndex]) * self.__dT__
+                self.__trueSignal__.getSignal(timeVector[timeIndex]) *
+                self.__dT__
             )
         # plt.plot(signalTimeHistory)
         # plt.show(block=False)
@@ -482,7 +546,7 @@ class CorrelationVector(substate.SubState):
         
         return measMatDict
 
-    ## @fun #computeSignalDelay computes the delay between the #__trueSignal__ and
+    ## @fun #computeSignalTDOA computes the delay between the #__trueSignal__ and
     # measurements based on a correlation vector
     #
     # @details The #computeSignalDelay function is a rudimentary function
@@ -508,7 +572,7 @@ class CorrelationVector(substate.SubState):
     # @param P the correlation vector covariance matrix
     #
     # @return The estimate of the delay
-    def computeSignalDelay(
+    def computeSignalTDOA(
             self,
             c,
             P
@@ -573,11 +637,11 @@ class CorrelationVector(substate.SubState):
         # and use it to estimate the location of the max
         # quadraticVec = np.polyfit(xVec, slicedC, 2, w=weightVector)
         quadraticVec = self.quadraticFit(xVec, slicedC)
-        delay = (-quadraticVec[1] / (2 * quadraticVec[0]))
+        TDOA = (-quadraticVec[1] / (2 * quadraticVec[0]))
 
-        return delay
+        return TDOA
 
-    ## @fun #estimateSignalDelayUT uses a unscented tranform to estimate the
+    ## @fun #estimateSignalTDOA_UT uses a unscented tranform to estimate the
     # delay corresponding to a correlation vector
     #
     # @details The #estimateSignalDelayUT method is responsible for computing
@@ -597,7 +661,7 @@ class CorrelationVector(substate.SubState):
     #
     # @returns A dict containing the estimate of the peak location
     # ("meanDelay") and the estimate variance ("varDelay")
-    def estimateSignalDelayUT(
+    def estimateSignalTDOA_UT(
             self,
             h,
             P
@@ -621,14 +685,14 @@ class CorrelationVector(substate.SubState):
         # Compute the peak corresponding to each sigma point vector
         for i in range(len(sigmaPoints)):
             sigmaPointResults[i] = (
-                self.computeSignalDelay(sigmaPoints[i], P)
+                self.computeSignalTDOA(sigmaPoints[i], P)
             )
 
-        meanDelay = np.mean(sigmaPointResults)
-        meanDelay = sigmaPointResults[0]
-        varDelay = np.var(sigmaPointResults)
+        meanTDOA = np.mean(sigmaPointResults)
+        #meanTDOA = sigmaPointResults[0]
+        varTDOA = np.var(sigmaPointResults)
 
-        return {'meanDelay': meanDelay, 'varDelay': varDelay}
+        return {'meanTDOA': meanTDOA, 'varTDOA': varTDOA}
 
     
     def speedOfLight(

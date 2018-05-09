@@ -58,10 +58,17 @@ stateDict = {
 myPr = myPulsar.computeAssociationProbability(myMeas, stateDict)
 print(myPr)
 
+unitVec = myPulsar.unitVec()
+speedOfLight = myPulsar.speedOfLight()
+
+def position(t):
+    return unitVec * speedOfLight * myPulsar.pulsarPeriod * (1/4)
+    
+
 periodSim = 10000
 simTime = myPulsar.pulsarPeriod * periodSim
 
-myPhotonArrivals = myPulsar.generatePhotonArrivals(simTime)
+myPhotonArrivals = myPulsar.generatePhotonArrivals(simTime, position=position)
 
 nHistBins = 200
 hist, binEdges = np.histogram(np.mod(myPhotonArrivals, myPulsar.pulsarPeriod), bins=nHistBins)

@@ -600,6 +600,13 @@ class PeriodicXRaySource(
 
         photonArrivalTimes = []
         tLastCandidate = t0
+
+        # If we have a position, then we want to get the signal at T0 at that
+        # position, not the SSB.  So, shift T0 accordingly.
+        if position is not None:
+            rangeDeltaT = self.unitVec().dot(position(t0)) / self.speedOfLight()
+            tLastCandidate = tLastCandidate + rangeDeltaT
+        
         candidateIndex = 0
         while tLastCandidate < tMax:
             # Draw the next arrival time and selection variable from our
@@ -620,9 +627,15 @@ class PeriodicXRaySource(
                 self.getSignal(tNextCandidate)/self.peakAmplitude
                 )
             
-
             if selectionVariable <= currentFluxNormalized:
-                photonArrivalTimes.append(tNextCandidate)
+                if position is not None:
+                    rangeDeltaT = (
+                        self.unitVec().dot(position(tNextCandidate)) /
+                        self.speedOfLight()
+                        )
+                    photonArrivalTimes.append(tNextCandidate - rangeDeltaT)
+                else:
+                    photonArrivalTimes.append(tNextCandidate)
             
             tLastCandidate = tNextCandidate
             candidateIndex = candidateIndex + 1
@@ -640,3 +653,7 @@ class PeriodicXRaySource(
         degrees = d + m / 60.0 + s / 3600.0
         return 2.0 * np.pi * degrees / 360.0
         
+    def speedOfLight(
+            self
+    ):
+        return (299792)
