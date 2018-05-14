@@ -4,12 +4,12 @@ import numpy as np
 
 plt.close('all')
 
-orbitPeriod = 50/(2*np.pi)
-orbitAmplitude = 1e3
+orbitPeriod = 100/(2*np.pi)
+orbitAmplitude = 1e4
 
 
 
-vVar = np.square(500)
+vVar = np.square(100)
 nTaps = 9
 
 myProfile = './pulsarData/J0534+2200_profile.txt'
@@ -58,7 +58,7 @@ def velocity(t):
         )
     )
 
-photonArrivalTimes = myPulsar.generatePhotonArrivals(500, position=position)
+photonArrivalTimes = myPulsar.generatePhotonArrivals(300, position=position)
 photonArrivalTimes = photonArrivalTimes
 
 myCorrelation = md.substates.CorrelationVector(

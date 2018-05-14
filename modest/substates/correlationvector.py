@@ -200,6 +200,9 @@ class CorrelationVector(substate.SubState):
 
         self.__halfLength__ = int(np.ceil(self.__filterOrder__ / 2))
         self.__halfLengthSeconds__ = self.__halfLength__ * self.__dT__
+
+        xAxis = np.linspace(0, self.__filterOrder__-1, self.__filterOrder__)
+        xAxis = xAxis * self.__dT__
         
         super().__init__(
             stateDimension=filterOrder,
@@ -209,7 +212,8 @@ class CorrelationVector(substate.SubState):
                 'covariance': correlationVectorCovariance,
                 'aPriori': aPriori,
                 'signalTDOA': signalTDOA,
-                'TDOAVar': TDOAVar
+                'TDOAVar': TDOAVar,
+                'xAxis': xAxis
             }
         )
 
@@ -251,10 +255,15 @@ class CorrelationVector(substate.SubState):
                     tdoaDict['meanTDOA'] 
                 ) *
                 self.__dT__
-            ) - self.__halfLengthSeconds__ - self.peakCenteringDT
+            ) - self.peakCenteringDT
             newTDOAVar = tdoaDict['varTDOA'] * np.square(self.__dT__)
             self.signalTDOA = newTDOA
             self.TDOAVar = newTDOAVar
+
+            xAxis = np.linspace(0, self.__filterOrder__-1, self.__filterOrder__)
+            xAxis = (xAxis * self.__dT__) - self.peakCenteringDT
+
+            svDict['xAxis'] = xAxis
 
             svDict['signalTDOA'] = newTDOA
             svDict['TDOAVar'] = newTDOAVar
@@ -499,7 +508,7 @@ class CorrelationVector(substate.SubState):
     ):
         photonTOA = measurement['t']['value']
         
-        adjustedTOA = photonTOA - self.__halfLengthSeconds__ - self.peakCenteringDT
+        adjustedTOA = photonTOA - self.peakCenteringDT
         
         H = np.eye(self.__filterOrder__)
 

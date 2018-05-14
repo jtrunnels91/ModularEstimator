@@ -284,7 +284,7 @@ class SubState():
 
         stateDict = self.getStateVector()
         yAxis = stateDict['stateVector']
-        
+
         if normalized is True:
             self.RTPaxisHandle.set_ylim([0, 1.1])
             yAxis = yAxis - np.min(yAxis)
@@ -292,6 +292,7 @@ class SubState():
 
         if 'xAxis' in stateDict:
             xAxis = stateDict['xAxis']
+            self.RTPaxisHandle.set_xlim([np.min(xAxis), np.max(xAxis)])
         else:
             xAxis = np.linspace(0, self.__dimension__ - 1, self.__dimension__)
 
