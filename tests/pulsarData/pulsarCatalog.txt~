@@ -1,0 +1,6 @@
+Name,Period (s),Flux (erg/cm^2/s),Pulsed fraction,Pulse width,Template,PARFile,citation
+J0534+2200, 0.0335, 9.93e-9, 70, 1.7e-3,hs84.txt,ephem_J0534+2200_nancay_jodrell.par
+J0437-4715,0.00575, 1.71e-12, 27,,radio_profile_J0437-4715.asc,ephem_J0437m4715_parkes_20090209.par,abdo2009first
+B1937+21, 0.00156, 4.10e-13, 86, 2.1e-5,1939+2134_ApJ_744_33_2012_WSRTprofile.dat.txt,1939+2134_ApJ_744_33_2012.par,Guillemot2012
+B1957+20, 0.00160, 5.38e-13, 60, 8.0e-5,1959+2048_ApJ_744_33_2012_WSRTprofile.dat.txt,1959+2048_ApJ_744_33_2012.par,Guillemot2012
+B1821-24, 0.00305, 1.25e-12, 98, 5.5e-5,B1821-24_ApJ_778_106_2013_radioprofile_nancay2000MHz.dat.txt,B1821-24_ApJ_778_106_2013.par,Johnson2013

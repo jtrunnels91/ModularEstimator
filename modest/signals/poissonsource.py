@@ -83,12 +83,12 @@ class DynamicPoissonSource(PoissonSource):
             tVar=measurement['t']['var'],
             state=state
         )
-        print(currentFlux)
+        #print(currentFlux)
 
         poissonProb = super().computeAssociationProbability(
             currentFlux,
             measurement
         )
 
-        print(poissonProb)
+        #print(poissonProb)
         return(poissonProb)

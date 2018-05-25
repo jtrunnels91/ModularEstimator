@@ -1,9 +1,10 @@
 from context import modest as md
 import matplotlib.pyplot as plt
 import numpy as np
+from operator import itemgetter
 
-myProfile='./pulsarData/J0534+2200_profile.txt'
-myPARFile = './pulsarData/ephem_J0534+2200_nancay_jodrell.par'
+myProfile='./pulsarData/profiles/J0534+2200_profile.txt'
+myPARFile = './pulsarData/PAR_files/ephem_J0534+2200_nancay_jodrell.par'
 
 myFlux = 9.93e-9 # erg/cm^2/s
 
@@ -37,8 +38,8 @@ myCorr = md.substates.CorrelationVector(
     myPulsar,
     10,
     myPulsar.pulsarPeriod/10,
-    signalDelay=0,
-    delayVar=1e-100
+    signalTDOA=0,
+    TDOAVar=1e-100
 )
 attitudeSubstate = md.substates.Attitude(
     attitudeErrorCovariance=np.eye(3)*1e-1,
@@ -71,7 +72,7 @@ simTime = myPulsar.pulsarPeriod * periodSim
 myPhotonArrivals = myPulsar.generatePhotonArrivals(simTime, position=position)
 
 nHistBins = 200
-hist, binEdges = np.histogram(np.mod(myPhotonArrivals, myPulsar.pulsarPeriod), bins=nHistBins)
+hist, binEdges = np.histogram(np.mod([x['t']['value'] for x in myPhotonArrivals], myPulsar.pulsarPeriod), bins=nHistBins)
 
 hist = (hist) * (nHistBins/simTime)
 binCenters = (binEdges[:-1] + binEdges[1:])/2
@@ -83,4 +84,20 @@ plt.show(block=False)
 myPulsar.plot(figureHandle=myFig)
 plt.show(block=False)
 
+
+# Integral test
+tSteps=20
+nPeriods=3
+tArray = np.linspace(0, myPulsar.pulsarPeriod * nPeriods, tSteps)
+dT = myPulsar.pulsarPeriod * nPeriods / tSteps
+myIntegral = [0]
+for tIndex in range(len(tArray)):
+    if tIndex > 0:
+        myIntegral.append(myPulsar.signalIntegral(tArray[tIndex -1], tArray[tIndex]))
+
+plt.figure()
+plt.plot(tArray, myIntegral)
+
+plt.plot(tArray, myPulsar.getSignal(tArray) * dT)
+plt.show(block=False)
 

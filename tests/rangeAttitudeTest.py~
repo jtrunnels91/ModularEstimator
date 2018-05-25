@@ -1,0 +1,171 @@
+from context import modest as md
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from operator import itemgetter
+
+plt.close('all')
+pulsarList = ['J0534+2200','J0437-4715','B1937+21', 'B1957+20', 'B1821-24']
+pulsarList = ['J0030+0451']
+pulsarDir = './pulsarData/'
+pulsarCatalogFileName = 'pulsarCatalog.txt'
+pulsarCatalog = pd.read_csv(pulsarDir + pulsarCatalogFileName)
+
+tFinal = 500
+
+orbitPeriod = 100/(2*np.pi)
+orbitAmplitude = 0
+vVar = np.square(0.1)
+nTaps = 9
+
+detectorArea = 10000  # cm^2
+electronVoltPerPhoton = 6e3  # Electron-Volt x 10^3
+electronVoltPerErg = 6.242e11
+ergsPerElectronVolt = 1 / electronVoltPerErg
+
+
+def attitude(t,returnQ=True):
+    eulerAngles = [t/100, 0, 0]
+    if returnQ:
+        return md.utils.euler2quaternion(eulerAngles)
+    else:
+        return(eulerAngles)
+
+def omega(t):
+    return([1/100, 0, 0])
+
+def position(t):
+    return(
+        np.array([
+            orbitAmplitude * np.cos(t/orbitPeriod),
+            orbitAmplitude * np.sin(t/orbitPeriod),
+            0 * t
+        ])
+    )
+
+def velocity(t):
+    return(
+        (orbitAmplitude/orbitPeriod) *
+        np.array([
+            -np.sin(t/orbitPeriod),
+            np.cos(t/orbitPeriod),
+            0 * t
+            ]
+        )
+    )
+
+pulsarObjectDict = {}
+corrSubstateDict = {}
+photonMeasurements = []
+
+myFilter = md.ModularFilter()
+
+
+# Generate photon arrivals for each pulsar in the list
+for pulsarName in pulsarList:
+    if (
+            not np.any(pulsarCatalog[pulsarCatalog['Name'] == pulsarName])
+    ):
+        print('Cannot find pulsar %s in catalog. Skipping.' %pulsarName)
+    else:
+        catalogRow = pulsarCatalog[pulsarCatalog['Name'] == pulsarName]
+        photonFlux = (
+            catalogRow['Flux (erg/cm^2/s)'].item() *
+            electronVoltPerErg / electronVoltPerPhoton
+            ) * detectorArea
+        pulsarObjectDict[pulsarName] = md.signals.PeriodicXRaySource(
+            pulsarDir + catalogRow['Template'].item(),
+            PARFile=pulsarDir + catalogRow['PARFile'].item(),
+            avgPhotonFlux=photonFlux,
+            pulsedFraction=catalogRow['Pulsed fraction'].item()/100,
+            name=pulsarName
+        )
+        photonMeasurements += pulsarObjectDict[pulsarName].generatePhotonArrivals(
+                tFinal,
+                position=position,
+                attitude=attitude
+            )
+
+        corrSubstateDict[pulsarName] = md.substates.CorrelationVector(
+            pulsarObjectDict[pulsarName],
+            nTaps,
+            pulsarObjectDict[pulsarName].pulsarPeriod/nTaps,
+            signalTDOA=0,
+            TDOAVar=100,
+            measurementNoiseScaleFactor=4,
+            processNoise=1e-15,
+            centerPeak=True,
+            peakLockThreshold=0.1,
+            )
+        
+        myFilter.addSignalSource(pulsarObjectDict[pulsarName].name, pulsarObjectDict[pulsarName])
+        myFilter.addStates(pulsarObjectDict[pulsarName].name, corrSubstateDict[pulsarName])
+
+photonMeasurements = sorted(photonMeasurements, key=lambda k: k['t']['value'])
+
+myAttitude = md.substates.Attitude()
+myFilter.addStates('attitude', myAttitude)
+
+# myMeas = {
+#     't': {'value': 0}
+# }
+# myFilter.measurementUpdateEKF(myMeas, myPulsar.name)
+
+lastUpdateTime = 0
+lastT = 0
+
+timeUpdateOnlyTDOA = []
+timeUpdateOnlyT = []
+
+for photonMeas in photonMeasurements:
+    arrivalT = photonMeas['t']['value']
+    vMeas = velocity(arrivalT) + np.random.normal(0,scale=np.sqrt(vVar),size=3)
+    
+    dynamics = {
+        'velocity': {'value': vMeas, 'var': np.eye(3)*vVar},
+        'omega': {'value': omega(arrivalT), 'var': np.eye(3) * 1e-100},
+    }
+    
+    myFilter.timeUpdateEKF(arrivalT-lastT, dynamics=dynamics)
+#    if myCorrelation.peakLock is True:
+#        myCorrelation.realTimePlot()
+    #myFilter.timeUpdateEKF(photon-lastT)
+    # print(photonMeas)
+    photonMeas['RA']['var'] = 1e-10
+    photonMeas['DEC']['var'] = 1e-10
+    myFilter.measurementUpdateEKF(photonMeas, photonMeas['name'])
+
+    if (arrivalT-lastUpdateTime) > 5:
+        lastUpdateTime = int(arrivalT)
+        print('time: %f' % arrivalT)
+        myFilter.realTimePlot()
+        # for key in corrSubstateDict:
+        #     corrSubstateDict[key].realTimePlot()
+    lastT = arrivalT
+
+# trueDelay = (
+#     position(myCorrelation.stateVectorHistory['t']).transpose().dot(myPulsar.unitVec()) /
+#     myPulsar.speedOfLight()
+#     )
+# plt.figure()
+# plt.plot(
+#     myCorrelation.stateVectorHistory['t'],
+#     trueDelay
+# )
+# plt.plot(
+#     myCorrelation.stateVectorHistory['t'],
+#     myCorrelation.stateVectorHistory['signalTDOA']
+# )
+# plt.plot(
+#     timeUpdateOnlyT,
+#     timeUpdateOnlyTDOA
+# )
+# plt.plot(
+#     myCorrelation.stateVectorHistory['t'],
+#     np.sqrt(myCorrelation.stateVectorHistory['TDOAVar'])
+# )
+# plt.plot(
+#     myCorrelation.stateVectorHistory['t'],
+#     -np.sqrt(myCorrelation.stateVectorHistory['TDOAVar'])
+# )
+# plt.show(block=False)

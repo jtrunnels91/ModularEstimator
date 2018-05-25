@@ -88,3 +88,14 @@ class PointSource(signalsource.SignalSource):
             probability=0
 
         return(probability)
+    
+    @staticmethod
+    def unitVector2RaDec(unitVector):
+        D = _np.arcsin(unitVector[2])
+        cosD = _np.cos(D)
+        cosRA = unitVector[0]/cosD
+        sinRA = unitVector[1]/cosD
+
+        RA = _np.arctan2(sinRA, cosRA)
+
+        return(RA, D)

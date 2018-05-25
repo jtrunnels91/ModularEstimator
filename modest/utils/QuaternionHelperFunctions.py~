@@ -1,0 +1,48 @@
+import numpy as np
+from pyquaternion import Quaternion
+from numpy import sin, cos, arcsin, arccos, arctan2, square, sqrt, abs, power
+
+
+def euler2quaternion(eulerAngles):
+    roll = eulerAngles[0]
+    pitch = eulerAngles[1]
+    yaw = eulerAngles[2]
+    
+    cy = cos(yaw * 0.5)
+    sy = sin(yaw * 0.5)
+    cr = cos(roll * 0.5)
+    sr = sin(roll * 0.5)
+    cp = cos(pitch * 0.5)
+    sp = sin(pitch * 0.5)
+
+    w = cy * cr * cp + sy * sr * sp
+    x = cy * sr * cp - sy * cr * sp
+    y = cy * cr * sp + sy * sr * cp
+    z = sy * cr * cp - cy * sr * sp
+    return Quaternion([w,x,y,z])
+
+
+def quaternion2euler(q):
+    if isinstance(q,Quaternion):
+        q = q.q
+
+    phi = arctan2(2*(q[0]*q[1] + q[2]*q[3]), 1 - 2*(square(q[1]) + square(q[2])))
+    theta = arcsin(2 * ((q[0] * q[2]) - (q[3] * q[1])))
+    psi = arctan2(2 * (q[0] * q[3] + q[1]*q[2]), 1 - 2*(square(q[2]) + square(q[3])))
+
+    return [phi, theta, psi]
+
+
+def eulerAngleDiff(angle1, angle2):
+    if hasattr(angle1, "__len__"):
+        angleDiff = angle1 * 0
+        for angleIt in range(len(angle1)):
+            angleDiff[angleIt] = eulerAngleDiff(angle1[angleIt], angle2[angleIt])
+    else:
+        angleDiff = angle1 - angle2
+        if angleDiff > np.pi:
+            angleDiff = angleDiff - (2*np.pi)
+        elif angleDiff < - np.pi:
+            angleDiff = (2*np.pi) + angleDiff
+        
+    return angleDiff

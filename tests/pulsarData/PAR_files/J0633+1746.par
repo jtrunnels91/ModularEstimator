@@ -1,0 +1,23 @@
+PSRJ           J0633+1746
+RAJ            6:33:54.289                 
+DECJ           +17:46:14.38                
+F0             4.2175670649262114748     0  0.00000000002022813343   
+F1             -1.9525033316064710553e-13 0  4.730099340500401645e-18 
+F2             0                           
+PEPOCH         54800                       
+POSEPOCH       54800                       
+DMEPOCH        54800                       
+DM             0                           
+START          54642.596221167965268       
+FINISH         54974.922167573386105       
+   
+TZRMJD         54819.836659199721936       
+TZRFRQ         0                        
+TZRSITE        coe   
+EPHVER         5                           
+CLK            TT(TAI)
+MODE 1
+UNITS          TDB
+EPHEM          DE405
+NITS           1
+NTOA           16

@@ -45,7 +45,6 @@ class StaticXRayPointSource(
             stateDict,
             validationThreshold
         )
-
         poisPR = poissonsource.StaticPoissonSource.computeAssociationProbability(
             self,
             measurement
@@ -101,7 +100,8 @@ class PeriodicXRaySource(
             TZRMJD=None,
             name=None,
             attitudeStateName='attitude',
-            correlationStateName=None
+            correlationStateName=None,
+            useProfileColumn=None
     ):
         
         # Store the user-passed arguments first.  These take priority of
@@ -176,7 +176,7 @@ class PeriodicXRaySource(
         self.normalizeProfile = normalizeProfile
         
         # Process whatever was passed as the profile
-        self.processProfile(profile, normalizeProfile, movePeakToZero)
+        self.processProfile(profile, normalizeProfile, movePeakToZero, useProfileColumn)
 
         if correlationStateName is None:
             correlationStateName = self.name
@@ -202,13 +202,17 @@ class PeriodicXRaySource(
             self,
             profile,
             normalizeProfile=True,
-            movePeakToZero=True
+            movePeakToZero=True,
+            useProfileColumn=None
     ):
         # If a string is received, assume this points to a file and try to
         # open it and import the data.
         if type(profile) is str:
             profileArray = np.loadtxt(profile)
-            profileArray = profileArray[:, len(profileArray[0]) - 1]
+            if useProfileColumn is None:
+                profileArray = profileArray[:, len(profileArray[0]) - 1]
+            else:
+                profileArray = profileArray[:, int(useProfileColumn)]
             profile = profileArray
 
         if normalizeProfile is True:
@@ -522,6 +526,55 @@ class PeriodicXRaySource(
 
         return(signal)
 
+    def signalIntegral(
+            self,
+            tStart,
+            tStop,
+            state=None
+            ): 
+        if state is not None:
+            if 'signalDelay' in state:
+                delay = state['signalDelay']
+                
+                tStart = tStart + delay
+                tStop = tStop + delay
+        # Get the phase corresponding to the current time
+        phaseStart = self.getPhase(tStart)
+        phaseStop = self.getPhase(tStop)
+
+        completeCycles = np.floor(phaseStop-phaseStart)
+
+        phaseStartFraction = np.mod(phaseStart, 1.0)
+        phaseStopFraction = np.mod(phaseStop, 1.0)
+
+        integralTStart = np.interp(
+            phaseStartFraction,
+            self.profileIndex,
+            self.singlePeriodIntegral
+        )
+        integralTStop = np.interp(
+            phaseStopFraction,
+            self.profileIndex,
+            self.singlePeriodIntegral
+        )
+        phaseFractionIntegral = integralTStop - integralTStart
+        if phaseFractionIntegral < 0:
+            phaseFractionIntegral = (
+                phaseFractionIntegral + self.singlePeriodIntegral[-1]
+                )
+        signalIntegral = (
+            phaseFractionIntegral + self.singlePeriodIntegral[-1] * completeCycles
+            )
+        signalIntegral = signalIntegral * self.scaleFactor
+
+        if self.backgroundCountRate is not None:
+            signalIntegral = (
+                signalIntegral +
+                self.backgroundCountRate * (tStop - tStart)
+                )
+       
+        return signalIntegral
+    
     def getPulseFromPhase(self,
                           phase):
         pFrac = np.mod(phase, 1.0)
@@ -565,9 +618,9 @@ class PeriodicXRaySource(
     def plot(self,
              nPeriods=1,
              tVar=None,
-             figureHandle=None
+             figureHandle=None,
+             nPoints=1000
     ):
-        nPoints = 1000
         if figureHandle is None:
             plt.figure()
             
@@ -598,6 +651,7 @@ class PeriodicXRaySource(
         candidateTimeArray = np.random.exponential(1.0/self.peakAmplitude, nCandidates)
         selectionVariableArray = np.random.uniform(0, 1, nCandidates)
 
+        photonMeasurements = []
         photonArrivalTimes = []
         tLastCandidate = t0
 
@@ -626,21 +680,47 @@ class PeriodicXRaySource(
             currentFluxNormalized = (
                 self.getSignal(tNextCandidate)/self.peakAmplitude
                 )
-            
+            # This if statement uses a uniform variable to determine whether
+            # the next generated photon arrival time is a real photon arrival
+            # time.
             if selectionVariable <= currentFluxNormalized:
                 if position is not None:
                     rangeDeltaT = (
                         self.unitVec().dot(position(tNextCandidate)) /
                         self.speedOfLight()
                         )
+                    newPhotonArrivalTime = tNextCandidate - rangeDeltaT
                     photonArrivalTimes.append(tNextCandidate - rangeDeltaT)
                 else:
+                    newPhotonArrivalTime = tNextCandidate
                     photonArrivalTimes.append(tNextCandidate)
-            
+
+                if attitude is not None:
+                    qCurrent = attitude(tNextCandidate)
+                    attitudeMatrix = qCurrent.rotation_matrix.transpose()
+                    
+                    unitVecMeas = attitudeMatrix.dot(self.unitVec())
+                    RaMeas, DecMeas = self.unitVector2RaDec(unitVecMeas)
+
+                    measurementDict = {
+                        't': {'value': newPhotonArrivalTime},
+                        'unitVec': {'value': unitVecMeas},
+                        'RA': {'value': RaMeas},
+                        'DEC': {'value': DecMeas},
+                        'name': self.name
+                        }
+                else:
+                    measurementDict = {
+                        't': {'value': newPhotonArrivalTime},
+                        'name': self.name
+                        }
+
+                photonMeasurements.append(measurementDict)
+                
             tLastCandidate = tNextCandidate
             candidateIndex = candidateIndex + 1
 
-        return np.array(photonArrivalTimes)
+        return photonMeasurements
     
     @staticmethod
     def hms2rad(h, m, s):
@@ -652,7 +732,7 @@ class PeriodicXRaySource(
     def dms2rad(d, m, s):
         degrees = d + m / 60.0 + s / 3600.0
         return 2.0 * np.pi * degrees / 360.0
-        
+    
     def speedOfLight(
             self
     ):

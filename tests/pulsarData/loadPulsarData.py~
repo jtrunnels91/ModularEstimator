@@ -1,0 +1,6 @@
+import pandas as pd
+
+pulsarDir = './'
+pulsarCatalogFileName = 'pulsarCatalog.xls'
+
+pulsarCatalog = pd.read_excel(pulsarDir + pulsarCatalogFileName)

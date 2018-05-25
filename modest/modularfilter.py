@@ -17,6 +17,7 @@ import numpy as np
 from scipy.linalg import block_diag
 from numpy import sin, cos, arcsin, arccos, arctan2, square, sqrt, abs, power
 from numpy.linalg import norm, inv
+import matplotlib.pyplot as plt
 # from pyquaternion import Quaternion
 
 import sys
@@ -49,6 +50,7 @@ class ModularFilter():
             measurementValidationThreshold=1e-3,
             time=0
     ):
+        self.plotHandle=None
 
         self.totalDimension = 0
         self.covarianceMatrix = np.zeros([0, 0])
@@ -58,6 +60,9 @@ class ModularFilter():
         self.tCurrent = time
 
         self.measurementValidationThreshold = measurementValidationThreshold
+
+        self.measurementList = []
+        self.lastMeasurementID = None
         
         return
 
@@ -224,6 +229,21 @@ class ModularFilter():
             measurement,
             sourceName
             ):
+
+        if 'ID' not in measurement:
+            if self.lastMeasurementID is None:
+                self.lastMeasurementID = -1
+            measurement['ID'] = self.lastMeasurementID + 1
+
+        if measurement['ID'] in self.measurementList:
+            raise Warning(
+                'Measurement ID %s has already been used to update state.'
+                % measurement['ID']
+            )
+        else:
+            self.measurementList.append(measurement['ID'])
+        self.lastMeasurementID = measurement['ID']
+        
         xMinus = self.getGlobalStateVector()
         PMinus = self.covarianceMatrix
 
@@ -281,7 +301,6 @@ class ModularFilter():
         self.storeGlobalStateVector(xPlus, PPlus, aPriori=False)
         return (xPlus, PPlus)
         
-
         return
         
     def measurementUpdateJPDAF(
@@ -292,6 +311,7 @@ class ModularFilter():
             self.computeAssociationProbabilities(measurement)
             )
 
+        #print(signalAssociationProbability)
         xMinus = self.getGlobalStateVector()
         PMinus = self.covarianceMatrix
 
@@ -555,3 +575,35 @@ class ModularFilter():
             'R': totalRMatrix,
             'dY': totaldYMatrix
             })
+
+
+    def initializeRealTimePlot(
+            self,
+            plotHandle=None
+    ):
+        if plotHandle is None:
+            self.plotHandle = plt.figure()
+        else:
+            self.plotHandle = plotHandle
+
+        panelIterator = 0
+        for substate in self.subStates:
+            newAxis = plt.subplot2grid(
+                (len(self.subStates), 1), (panelIterator, 0)
+            )
+            newAxis.set_title(substate)
+            self.subStates[substate]['stateObject'].initializeRealTimePlot(
+                plotHandle=self.plotHandle,
+                axisHandle=newAxis
+            )
+            panelIterator = panelIterator+1
+        plt.tight_layout()
+
+    def realTimePlot(
+            self,
+            normalized=True
+    ):
+        if self.plotHandle is None:
+            self.initializeRealTimePlot()
+        for substate in self.subStates:
+            self.subStates[substate]['stateObject'].realTimePlot(normalized)

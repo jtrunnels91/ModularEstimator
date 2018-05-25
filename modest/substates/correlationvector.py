@@ -117,9 +117,11 @@ class CorrelationVector(substate.SubState):
             centerPeak=True,
             peakFitPoints=1,
             processNoise=1e-12,
-            measurementNoiseScaleFactor=1
+            measurementNoiseScaleFactor=1,
+            peakLockThreshold=1
             ):
 
+        self.peakLockThreshold = peakLockThreshold
         #self.peakCenteringDT = trueSignal.pulsarPeriod/10
         self.peakCenteringDT = 0
         
@@ -152,7 +154,7 @@ class CorrelationVector(substate.SubState):
         if correlationVector is None:
             correlationVector = (
                 np.ones(self.__filterOrder__) *
-                np.square(self.__trueSignal__.peakAmplitude * self.__dT__)
+                self.__trueSignal__.peakAmplitude * self.__dT__
             )
         ## @brief #correlationVector is the current estimate of the
         # correlation vector between the incoming signal measurements and the
@@ -285,9 +287,19 @@ class CorrelationVector(substate.SubState):
             svDict['signalTDOA'] = self.signalTDOA
             svDict['TDOAVar'] = self.TDOAVar
 
-        if np.sqrt(self.TDOAVar) < self.__dT__:
+        if np.sqrt(self.TDOAVar) < (self.peakLockThreshold * self.__dT__):
+            if not self.peakLock:
+                print(
+                    'Substate %s reached peak lock at time %s'
+                    %(self.__trueSignal__.name, self.t)
+                )
             self.peakLock = True
         else:
+            if self.peakLock:
+                print(
+                    'Substate %s lost peak lock at time %s'
+                    %(self.__trueSignal__.name, self.t)
+                )
             self.peakLock = False
             
         super().storeStateVector(svDict)
@@ -530,7 +542,7 @@ class CorrelationVector(substate.SubState):
 
         for timeIndex in range(len(timeVector)):
             signalTimeHistory[timeIndex] = (
-                self.__trueSignal__.getSignal(timeVector[timeIndex]) *
+                self.__trueSignal__.getSignal(timeVector[timeIndex], tVar=np.square(self.__dT__)/12) *
                 self.__dT__
             )
         # plt.plot(signalTimeHistory)
