@@ -29,7 +29,7 @@ initialAttitudeSigma= 0.05 * np.pi/180.0 #rad
 
 nTaps = 19
 
-detectorArea = 1000  # cm^2
+detectorArea = 100  # cm^2
 detectorFOV = 1
 pulsarObjectDict = loadPulsarData(detectorArea=detectorArea)
 
