@@ -17,7 +17,7 @@ pulsarList = ['J0437-4715']
 #pulsarList=['B1821-24']
 pulsarDir = './pulsarData/'
 pulsarCatalogFileName = 'pulsarCatalog.txt'
-tFinal = 3600
+tFinal = 1000
 constantOffset = 0
 
 orbitPeriod = 100/(2*np.pi)
@@ -27,9 +27,9 @@ omegaVar = np.square(1e-6) # rad^2/s^2
 AOAVar = np.square(1e-4) # rad^2
 initialAttitudeSigma= 0.05 * np.pi/180.0 #rad
 
-nTaps = 9
+nTaps = 19
 
-detectorArea = 500  # cm^2
+detectorArea = 1000  # cm^2
 detectorFOV = 1
 pulsarObjectDict = loadPulsarData(detectorArea=detectorArea)
 
@@ -162,7 +162,7 @@ for pulsarName in pulsarList:
         signalTDOA=0,
         TDOAVar=np.square(pulsarObjectDict[pulsarName].pulsarPeriod),
         measurementNoiseScaleFactor=1.0,
-        processNoise=1e-15,
+        processNoise=1e-9,
         centerPeak=True,
         peakLockThreshold=0.01,
         )
