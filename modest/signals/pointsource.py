@@ -1,6 +1,7 @@
 import numpy as _np
 from scipy.stats import multivariate_normal as _mvn
 from . import signalsource
+from .. utils import spacegeometry as sg
 
 
 class PointSource(signalsource.SignalSource):
@@ -64,7 +65,7 @@ class PointSource(signalsource.SignalSource):
                 uniformProbability = 1/(4 * _np.pi)
                 maxProb = 1/_np.sqrt(_np.linalg.det(2 * _np.pi * residualVariance))
                 if maxProb < uniformProbability:
-                    print("using uniform probability")
+#                    print("using uniform probability")
                     probability = uniformProbability
                 else:
                     probability = _mvn.pdf(dY, cov=residualVariance)
@@ -88,14 +89,23 @@ class PointSource(signalsource.SignalSource):
             probability=0
 
         return(probability)
-    
-    @staticmethod
-    def unitVector2RaDec(unitVector):
-        D = _np.arcsin(unitVector[2])
-        cosD = _np.cos(D)
-        cosRA = unitVector[0]/cosD
-        sinRA = unitVector[1]/cosD
 
-        RA = _np.arctan2(sinRA, cosRA)
-
-        return(RA, D)
+    def generateArrivalVector(
+            self,
+            attitudeQ
+    ):
+        if hasattr(attitudeQ, '__len__'):
+            measurement = []
+            for attIndex in range(len(attitudeQ)):
+                measurement.append(self.generateArrivalVector(attitudeQ[attIndex]))
+        else:
+            attitudeMatrix = attitudeQ.rotation_matrix.transpose()
+            unitVecMeas = attitudeMatrix.dot(self.unitVec())
+            RaMeas, DecMeas = sg.unitVector2RaDec(unitVecMeas)
+            measurement = {
+                'unitVec': {'value': unitVecMeas},
+                'RA': {'value': RaMeas},
+                'DEC': {'value': DecMeas}
+                }
+        return measurement
+        

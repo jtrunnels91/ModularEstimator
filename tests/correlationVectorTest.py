@@ -5,17 +5,17 @@ import numpy as np
 plt.close('all')
 
 orbitPeriod = 100/(2*np.pi)
-orbitAmplitude = 1e4
+orbitAmplitude = 0
 
 tFinal = 300
 
-vVar = np.square(1000)
+vVar = np.square(1e-6)
 nTaps = 9
 
-myProfile = './pulsarData/J0534+2200_profile.txt'
-myPARFile = './pulsarData/ephem_J0534+2200_nancay_jodrell.par'
+myProfile = './pulsarData/profiles/J0534+2200_profile.txt'
+myPARFile = './pulsarData/PAR_files/ephem_J0534+2200_nancay_jodrell.par'
 
-detectorArea = 200  # cm^2
+detectorArea = 100  # cm^2
 electronVoltPerPhoton = 6e3  # Electron-Volt x 10^3
 electronVoltPerErg = 6.242e11
 ergsPerElectronVolt = 1 / electronVoltPerErg
@@ -68,7 +68,7 @@ myCorrelation = md.substates.CorrelationVector(
     signalTDOA=0,
     TDOAVar=0,
     measurementNoiseScaleFactor=1,
-    processNoise=1e-9,
+    processNoise=1e-100,
     centerPeak=True
     )
 

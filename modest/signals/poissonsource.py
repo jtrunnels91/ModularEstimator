@@ -42,6 +42,40 @@ class StaticPoissonSource(PoissonSource):
         )
         return(poissonProb)
 
+    def generateEvents(
+            self,
+            tMax,
+            t0=0
+            ):
+        nCandidates = np.int((tMax - t0) * self.flux * 1.1)
+
+        print(nCandidates)
+        # Generate a batch of candidate arrival times (more efficient than generating on the fly)
+        arrivalTimeArray = np.random.exponential(1.0/self.flux, nCandidates)
+
+        poissonEvents = []
+
+        tLastEvent = t0
+        eventIndex = 0
+        
+        while tLastEvent < tMax:
+            # Draw the next arrival time and selection variable from our
+            # pre-generated arrays
+            if eventIndex < len(arrivalTimeArray):
+                nextEvent = arrivalTimeArray[eventIndex]
+            # If we run out, generate more on the fly
+            else:
+                nextEvent = np.random.exponential(1.0/self.flux)
+                # print('Generating on the fly!')
+            tNextEvent = (
+                tLastEvent +
+                nextEvent
+                )
+            if tNextEvent < tMax:
+                poissonEvents.append(tNextEvent)
+            tLastEvent = tNextEvent
+            eventIndex = eventIndex+1
+        return poissonEvents
 
 class DynamicPoissonSource(PoissonSource):
     __metaclass__ = ABCMeta

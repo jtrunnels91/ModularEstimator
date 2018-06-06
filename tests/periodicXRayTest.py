@@ -90,10 +90,9 @@ tSteps=20
 nPeriods=3
 tArray = np.linspace(0, myPulsar.pulsarPeriod * nPeriods, tSteps)
 dT = myPulsar.pulsarPeriod * nPeriods / tSteps
-myIntegral = [0]
+myIntegral = []
 for tIndex in range(len(tArray)):
-    if tIndex > 0:
-        myIntegral.append(myPulsar.signalIntegral(tArray[tIndex -1], tArray[tIndex]))
+    myIntegral.append(myPulsar.signalIntegral(tArray[tIndex] - dT/2.0, tArray[tIndex] + dT/2.0))
 
 plt.figure()
 plt.plot(tArray, myIntegral)

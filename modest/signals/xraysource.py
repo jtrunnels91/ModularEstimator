@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 from . import pointsource
 from . import poissonsource
-
+from .. utils import spacegeometry as sg
 
 class StaticXRayPointSource(
         pointsource.PointSource,
@@ -77,6 +77,57 @@ class UniformNoiseXRaySource(poissonsource.StaticPoissonSource):
         totalPR = anglePR * poisPR * self.photonFlux
 
         return totalPR
+    
+    def generatePhotonArrivals(
+            self,
+            tMax,
+            t0=0,
+            position=None,
+            attitude=None,
+            FOV=None
+            ):
+        nCandidates = np.int((tMax - t0) * self.photonFlux * 1.1)
+
+        # Generate a batch of candidate arrival times (more efficient than generating on the fly)
+        photonTimeArray = np.random.exponential(1.0/self.photonFlux, nCandidates)
+        arrivalVectorArray = np.random.normal(np.zeros([nCandidates, 3]))
+
+        photonMeasurements = []
+        tLastPhoton = t0
+        photonIndex = 0
+        while tLastPhoton < tMax:
+            # Draw the next arrival time and selection variable from our
+            # pre-generated arrays
+            if photonIndex < len(photonTimeArray):
+                nextPhoton = photonTimeArray[photonIndex]
+                arrivalVector = arrivalVectorArray[photonIndex]
+            # If we run out, generate more on the fly
+            else:
+                nextPhoton = np.random.exponential(1.0/self.photonFlux)
+                arrivalVector - np.random.normal(np.zeros(3))
+                print('Generating on the fly!')
+            tNextPhoton = (
+                tLastPhoton +
+                nextPhoton
+                )
+
+            # Generate a uniformly distributed random arrival vector
+            arrivalVector = arrivalVectorArray[photonIndex]
+            arrivalVector = arrivalVector/np.linalg.norm(arrivalVector)
+            Ra, Dec = sg.unitVector2RaDec(arrivalVector)
+            measurementDict = {
+                't': {'value': tNextPhoton},
+                'unitVec': {'value': arrivalVector},
+                'RA': {'value': Ra},
+                'DEC': {'value': Dec},
+                'name': 'background'
+            }
+
+            photonMeasurements.append(measurementDict)
+            tLastPhoton = tNextPhoton
+            photonIndex = photonIndex+1
+        
+        return photonMeasurements
 
     
 ## @class PeriodicPoissonSource is a class which models the signal from a
@@ -700,7 +751,7 @@ class PeriodicXRaySource(
                     attitudeMatrix = qCurrent.rotation_matrix.transpose()
                     
                     unitVecMeas = attitudeMatrix.dot(self.unitVec())
-                    RaMeas, DecMeas = self.unitVector2RaDec(unitVecMeas)
+                    RaMeas, DecMeas = sg.unitVector2RaDec(unitVecMeas)
 
                     measurementDict = {
                         't': {'value': newPhotonArrivalTime},

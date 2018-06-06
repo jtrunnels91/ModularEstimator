@@ -271,7 +271,8 @@ class CorrelationVector(substate.SubState):
             svDict['TDOAVar'] = newTDOAVar
                   
             if self.peakLock is True and self.centerPeak is True:
-                self.peakOffsetFromCenter = tdoaDict['meanTDOA'] - self.__halfLength__
+                self.peakOffsetFromCenter = tdoaDict['meanTDOA'] - self.__halfLength__ + 1
+                # self.peakOffsetFromCenter = np.mod(tdoaDict['meanTDOA'], self.__dT__)
                 
             else:
                 self.peakOffsetFromCenter = 0
@@ -333,7 +334,11 @@ class CorrelationVector(substate.SubState):
 
         Qmat = (
             np.outer(L, L) * Q +
-            (np.eye(self.__filterOrder__) * self.processNoise)
+            (
+                    np.eye(self.__filterOrder__) * 
+                          self.processNoise * dT * 
+                          np.square(self.__trueSignal__.avgPhotonFlux * self.__dT__)
+            )
         )
         
         return {'F': timeUpdateMatrices['F'], 'Q': Qmat}
@@ -446,7 +451,7 @@ class CorrelationVector(substate.SubState):
                     vVar
                 ).dot(self.__unitVecToSignal__) *
                 np.square(indexDiff / self.speedOfLight())
-                )
+            )
             
             # Initialize empty matricies
             F = np.zeros([self.__filterOrder__, self.__filterOrder__])
@@ -539,11 +544,18 @@ class CorrelationVector(substate.SubState):
         #     timeVector = timeVector - self.signalDelay
 
         signalTimeHistory = np.zeros(self.__filterOrder__)
-
+        halfDT = self.__dT__/2.0
+#        for timeIndex in range(len(timeVector)):
+#            signalTimeHistory[timeIndex] = (
+#                    self.__trueSignal__.getSignal(timeVector[timeIndex]) *
+#                                                 self.__dT__
+#             )
         for timeIndex in range(len(timeVector)):
             signalTimeHistory[timeIndex] = (
-                self.__trueSignal__.getSignal(timeVector[timeIndex], tVar=np.square(self.__dT__)/12) *
-                self.__dT__
+                self.__trueSignal__.signalIntegral(
+                    timeVector[timeIndex]-halfDT,
+                    timeVector[timeIndex] + halfDT
+                )
             )
         # plt.plot(signalTimeHistory)
         # plt.show(block=False)
@@ -710,7 +722,8 @@ class CorrelationVector(substate.SubState):
             )
 
         meanTDOA = np.mean(sigmaPointResults)
-        #meanTDOA = sigmaPointResults[0]
+        # meanTDOA = sigmaPointResults[0]
+        # meanTDOA = self.computeSignalTDOA(h, P)
         varTDOA = np.var(sigmaPointResults)
 
         return {'meanTDOA': meanTDOA, 'varTDOA': varTDOA}

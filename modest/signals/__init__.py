@@ -5,15 +5,17 @@
 from . signalsource import SignalSource
 from . poissonsource import PoissonSource, StaticPoissonSource, DynamicPoissonSource
 from . pointsource import PointSource
-from . xraysource import StaticXRayPointSource, UniformNoiseXRaySource, PeriodicXRaySource
+from . staticxraypointsource import StaticXRayPointSource
+from . uniformnoisexraysource import UniformNoiseXRaySource
+from . periodicxraysource import PeriodicXRaySource
 
 __all__ = [
     "SignalSource",
     "PointSource",
     "StaticPoissonSource",
-    "PeriodicPoissonSource",
+    "DynamicPoissonSource",
     "PointSource",
     "StaticXRayPointSource",
     "UniformNoiseXRaySource",
-    "UniformNoiseXRaySource"    
+    "PeriodicXRaySource"
 ]
