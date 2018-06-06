@@ -329,7 +329,7 @@ env = Environment(
 traj = env.trajectory
 
 # Monte Carlo simulation parameters
-traj.f_add_parameter('runtime', 1800, comment='Length of simulation in seconds')
+traj.f_add_parameter('runtime', 3600, comment='Length of simulation in seconds')
 traj.f_add_parameter('pulsarName', 'J0437-4715', comment='Name of the pulsar to run simulation for')
 traj.f_add_parameter('filterTaps', 19, comment='Dimension of correlation vector')
 traj.f_add_parameter('processNoise', 1e-12, comment='Process noise constant added to correlation vector')
@@ -359,7 +359,7 @@ traj.f_explore(
     cartesian_product(
         {
             'detectorArea': np.logspace(2, 3, 4),
-            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=10)
+            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=100)
         }
     )
 )
