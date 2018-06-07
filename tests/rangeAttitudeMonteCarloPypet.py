@@ -331,7 +331,7 @@ env = Environment(
 traj = env.trajectory
 
 # Monte Carlo simulation parameters
-traj.f_add_parameter('runtime', 1000, comment='Length of simulation in seconds')
+traj.f_add_parameter('runtime', 1800, comment='Length of simulation in seconds')
 traj.f_add_parameter('pulsarName', 'J0437-4715', comment='Name of the pulsar to run simulation for')
 traj.f_add_parameter('filterTaps', 20, comment='Dimension of correlation vector')
 traj.f_add_parameter('processNoise', 1e-8, comment='Process noise constant added to correlation vector')
