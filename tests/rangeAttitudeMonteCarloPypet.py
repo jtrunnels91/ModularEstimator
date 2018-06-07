@@ -385,4 +385,4 @@ traj.f_explore(
 
 env.run(run4DOFSimulation)
 #md.plots.montecarloplots.plotNTapsVsError(traj)
-md.plots.montecarloplots.plotKeyVsError(traj,'initialAttitudeSigma')
+md.plots.montecarloplots.plotKeyVsError(traj,'initialAttitudeSigma',logx=True,logy=True)
