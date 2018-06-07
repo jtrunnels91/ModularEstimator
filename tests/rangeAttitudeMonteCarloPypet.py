@@ -331,9 +331,9 @@ env = Environment(
 traj = env.trajectory
 
 # Monte Carlo simulation parameters
-traj.f_add_parameter('runtime', 600, comment='Length of simulation in seconds')
+traj.f_add_parameter('runtime', 1000, comment='Length of simulation in seconds')
 traj.f_add_parameter('pulsarName', 'J0437-4715', comment='Name of the pulsar to run simulation for')
-traj.f_add_parameter('filterTaps', 25, comment='Dimension of correlation vector')
+traj.f_add_parameter('filterTaps', 20, comment='Dimension of correlation vector')
 traj.f_add_parameter('processNoise', 1e-8, comment='Process noise constant added to correlation vector')
 traj.f_add_parameter('peakLockThreshold', 0.05, comment='How low the TDOA variance estimate must be in order to reach peak lock.  Unitless; it is defined in terms of the filter dT')
 
@@ -343,7 +343,7 @@ traj.f_add_parameter('peakLockThreshold', 0.05, comment='How low the TDOA varian
 
 # Detector Information
 traj.f_add_parameter('detectorArea', np.float64(100.0), comment='Detector area in cm^2')
-traj.f_add_parameter('detectorFOV', 0.5, comment='Detector FOV in degrees (angle of half cone)')
+traj.f_add_parameter('detectorFOV', 1, comment='Detector FOV in degrees (angle of half cone)')
 traj.f_add_parameter('AOAVar', np.square(1e-6), comment='Angle of arrival measurement error variance in rad^2')
 
 # Trajectory Information
