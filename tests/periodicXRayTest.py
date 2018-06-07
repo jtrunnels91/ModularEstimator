@@ -86,7 +86,7 @@ plt.show(block=False)
 
 
 # Integral test
-tSteps=20
+tSteps=50
 nPeriods=3
 tArray = np.linspace(0, myPulsar.pulsarPeriod * nPeriods, tSteps)
 dT = myPulsar.pulsarPeriod * nPeriods / tSteps
