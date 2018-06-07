@@ -358,7 +358,7 @@ traj.f_add_parameter('AOAVar', np.square(1e-4), comment='Angle of arrival measur
 traj.f_add_parameter('constantPhaseOffset', np.float64(0), comment='Constant phase delay added to photon arrivals')
 traj.f_add_parameter('orbitPeriod', 100.0/(2*np.pi), comment='Period of orbit in seconds')
 traj.f_add_parameter('orbitAmplitude', 0.0, comment='Amplitude of orbit in km')
-traj.f_add_parameter('vVar', np.square(10.0), comment='Variance of velocity measurement in km^2/s^2')
+traj.f_add_parameter('vVar', np.square(1.0), comment='Variance of velocity measurement in km^2/s^2')
 
 # Attitude information
 traj.f_add_parameter('angularVelocity', [0.0, 0.0, 0.0], comment='Angular velocity of detector in rad/s')
