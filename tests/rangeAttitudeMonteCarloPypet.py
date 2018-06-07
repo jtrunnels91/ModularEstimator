@@ -118,6 +118,11 @@ def run4DOFSimulation(traj):
         attitude=attitude
     )
 
+    if traj.scaleProcessNoise is True:
+        processNoise = traj.processNoise * traj.detectorArea
+    else:
+        processNoise = traj.processNoise
+        
     correlationSubstate = md.substates.CorrelationVector(
         myPulsarObject,
         traj.filterTaps,
@@ -125,7 +130,7 @@ def run4DOFSimulation(traj):
         signalTDOA=0,
         TDOAVar=np.square(myPulsarObject.pulsarPeriod),
         measurementNoiseScaleFactor=1.0,
-        processNoise=traj.processNoise,
+        processNoise=processNoise,
         centerPeak=True,
         peakLockThreshold=traj.peakLockThreshold,
     )
@@ -331,11 +336,11 @@ env = Environment(
 traj = env.trajectory
 
 # Monte Carlo simulation parameters
-traj.f_add_parameter('runtime', 3600, comment='Length of simulation in seconds')
+traj.f_add_parameter('runtime', 1000, comment='Length of simulation in seconds')
 
 #traj.f_add_parameter('pulsarName', 'J0437-4715', comment='Name of the pulsar to run simulation for')
 traj.f_add_parameter('pulsarName', 'B1957+20', comment='Name of the pulsar to run simulation for')
-traj.f_add_parameter('filterTaps', 12, comment='Dimension of correlation vector')
+traj.f_add_parameter('filterTaps', 9, comment='Dimension of correlation vector')
 traj.f_add_parameter('processNoise', 1e-18, comment='Process noise constant added to correlation vector')
 traj.f_add_parameter('peakLockThreshold', 0.01, comment='How low the TDOA variance estimate must be in order to reach peak lock.  Unitless; it is defined in terms of the filter dT')
 
@@ -346,13 +351,13 @@ traj.f_add_parameter('peakLockThreshold', 0.01, comment='How low the TDOA varian
 # Detector Information
 traj.f_add_parameter('detectorArea', np.float64(100.0), comment='Detector area in cm^2')
 traj.f_add_parameter('detectorFOV', 1, comment='Detector FOV in degrees (angle of half cone)')
-traj.f_add_parameter('AOAVar', np.square(1e-6), comment='Angle of arrival measurement error variance in rad^2')
+traj.f_add_parameter('AOAVar', np.square(1e-4), comment='Angle of arrival measurement error variance in rad^2')
 
 # Trajectory Information
 traj.f_add_parameter('constantPhaseOffset', np.float64(0), comment='Constant phase delay added to photon arrivals')
 traj.f_add_parameter('orbitPeriod', 100.0/(2*np.pi), comment='Period of orbit in seconds')
 traj.f_add_parameter('orbitAmplitude', 0.0, comment='Amplitude of orbit in km')
-traj.f_add_parameter('vVar', np.square(1e-1), comment='Variance of velocity measurement in km^2/s^2')
+traj.f_add_parameter('vVar', np.square(1.0), comment='Variance of velocity measurement in km^2/s^2')
 
 # Attitude information
 traj.f_add_parameter('angularVelocity', [0.0, 0.0, 0.0], comment='Angular velocity of detector in rad/s')
@@ -362,8 +367,8 @@ traj.f_add_parameter('initialAttitudeSigma', 0.015 * np.pi/180.0, comment='Varia
 traj.f_explore(
     cartesian_product(
         {
-            'detectorArea': np.logspace(2, 3, 4),
-            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=25)
+            'detectorArea': np.logspace(2, 3, 3),
+            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=10)
         }
     )
 )

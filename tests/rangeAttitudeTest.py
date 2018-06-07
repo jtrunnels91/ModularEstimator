@@ -22,12 +22,12 @@ constantOffset = 0
 
 orbitPeriod = 100/(2*np.pi)
 orbitAmplitude = 0
-vVar = np.square(1e-4) # km^2/s^2
+vVar = np.square(1) # km^2/s^2
 omegaVar = np.square(1e-6) # rad^2/s^2
 AOAVar = np.square(1e-4) # rad^2
 initialAttitudeSigma= 0.05 * np.pi/180.0 #rad
 
-nTaps = 19
+nTaps = 9
 
 detectorArea = 100  # cm^2
 detectorFOV = 1
@@ -162,7 +162,7 @@ for pulsarName in pulsarList:
         signalTDOA=0,
         TDOAVar=np.square(pulsarObjectDict[pulsarName].pulsarPeriod),
         measurementNoiseScaleFactor=1.0,
-        processNoise=1e-9,
+        processNoise=1e-12,
         centerPeak=True,
         peakLockThreshold=0.01,
         )
