@@ -311,6 +311,8 @@ class ModularFilter():
             self.computeAssociationProbabilities(measurement)
             )
 
+        measurement['associationProbabilities']=signalAssociationProbability
+
         #print(signalAssociationProbability)
         xMinus = self.getGlobalStateVector()
         PMinus = self.covarianceMatrix
@@ -366,7 +368,7 @@ class ModularFilter():
         
         self.storeGlobalStateVector(xPlus, PPlus, aPriori=False)
         # print(signalAssociationProbability)
-        return (xPlus, PPlus)
+        return (xPlus, PPlus, measurement)
 
     def getGlobalStateVector(
             self

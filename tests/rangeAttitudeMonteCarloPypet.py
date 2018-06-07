@@ -368,7 +368,7 @@ traj.f_add_parameter('initialAttitudeSigma', np.float64(0.1 * np.pi/180.0), comm
 traj.f_explore(
     cartesian_product(
         {
-            'initialAttitudeSigma': np.logspace(-5, -1, 5),
+            'vVar': np.logspace(-3, 2, 6),
             'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=10)
         }
     )
@@ -385,4 +385,4 @@ traj.f_explore(
 
 env.run(run4DOFSimulation)
 #md.plots.montecarloplots.plotNTapsVsError(traj)
-md.plots.montecarloplots.plotKeyVsError(traj,'initialAttitudeSigma',logx=True,logy=True)
+md.plots.montecarloplots.plotKeyVsError(traj,'vVar',logx=True,logy=True)
