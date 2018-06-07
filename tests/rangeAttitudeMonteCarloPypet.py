@@ -333,7 +333,7 @@ traj = env.trajectory
 # Monte Carlo simulation parameters
 traj.f_add_parameter('runtime', 3600, comment='Length of simulation in seconds')
 traj.f_add_parameter('pulsarName', 'J0437-4715', comment='Name of the pulsar to run simulation for')
-traj.f_add_parameter('filterTaps', 20, comment='Dimension of correlation vector')
+traj.f_add_parameter('filterTaps', 8, comment='Dimension of correlation vector')
 traj.f_add_parameter('processNoise', 1e-8, comment='Process noise constant added to correlation vector')
 traj.f_add_parameter('peakLockThreshold', 0.01, comment='How low the TDOA variance estimate must be in order to reach peak lock.  Unitless; it is defined in terms of the filter dT')
 
@@ -357,24 +357,24 @@ traj.f_add_parameter('angularVelocity', [0.0, 0.0, 0.0], comment='Angular veloci
 traj.f_add_parameter('omegaVar', np.square(1e-6), comment='Variance of angular velocity measurement in rad^2/s^2')
 traj.f_add_parameter('initialAttitudeSigma', 0.015 * np.pi/180.0, comment='Variance of initial euler angle uncertainty in radians')
 
-# traj.f_explore(
-#     cartesian_product(
-#         {
-#             'detectorArea': np.logspace(2, 3, 2),
-#             'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=10)
-#         }
-#     )
-# )
 traj.f_explore(
     cartesian_product(
         {
-            'filterTaps': [7,9,11],
-            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=20)
+            'detectorArea': np.logspace(2, 3, 2),
+            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=25)
         }
     )
 )
+# traj.f_explore(
+#     cartesian_product(
+#         {
+#             'filterTaps': [7,9,11],
+#             'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=20)
+#         }
+#     )
+# )
 
 
 env.run(run4DOFSimulation)
-md.plots.montecarloplots.plotNTapsVsError(traj)
-# md.plots.montecarloplots.plotAreaVsError(traj)
+#md.plots.montecarloplots.plotNTapsVsError(traj)
+md.plots.montecarloplots.plotAreaVsError(traj)
