@@ -17,7 +17,7 @@ pulsarList = ['J0437-4715']
 #pulsarList=['B1821-24']
 pulsarDir = './pulsarData/'
 pulsarCatalogFileName = 'pulsarCatalog.txt'
-tFinal = 1000
+tFinal = 100
 constantOffset = 0
 
 orbitPeriod = 100/(2*np.pi)
@@ -269,10 +269,6 @@ plt.show(block=False)
 plt.figure()
 attitudeMatrix = attitude(0).rotation_matrix.transpose()
 
-plt.scatter(
-        [p['RA']['value'] for p in photonMeasurements],
-        [p['DEC']['value'] for p in photonMeasurements],
-        marker='.', s=10, alpha=.2)
 
 for signal in myFilter.signalSources:
     if hasattr(myFilter.signalSources[signal], '__RaDec__'):
@@ -283,6 +279,10 @@ for signal in myFilter.signalSources:
             RaDec[1],
             marker='^'
         )
+plt.scatter(
+        [p['RA']['value'] for p in photonMeasurements],
+        [p['DEC']['value'] for p in photonMeasurements],
+        marker='.', s=10, alpha=.2)
 
 plt.show(block=False)
 
