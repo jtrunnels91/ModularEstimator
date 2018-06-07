@@ -368,13 +368,13 @@ traj.f_add_parameter('initialAttitudeSigma', 0.015 * np.pi/180.0, comment='Varia
 traj.f_explore(
     cartesian_product(
         {
-            'filterTaps': [7,9,11,13,15,17,19,21,23,25,27,29],
-            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=10)
+            'filterTaps': [7,9,11],
+            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=20)
         }
     )
 )
 
 
 env.run(run4DOFSimulation)
-
+md.plots.montecarloplots.plotNTapsVsError(traj)
 # md.plots.montecarloplots.plotAreaVsError(traj)
