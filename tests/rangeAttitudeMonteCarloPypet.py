@@ -369,7 +369,7 @@ traj.f_explore(
     cartesian_product(
         {
             'initialAttitudeSigma': np.logspace(-5, -1, 5),
-            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=5)
+            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=10)
         }
     )
 )
