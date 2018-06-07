@@ -363,7 +363,7 @@ traj.f_add_parameter('vVar', np.square(1.0), comment='Variance of velocity measu
 # Attitude information
 traj.f_add_parameter('angularVelocity', [0.0, 0.0, 0.0], comment='Angular velocity of detector in rad/s')
 traj.f_add_parameter('omegaVar', np.square(1e-6), comment='Variance of angular velocity measurement in rad^2/s^2')
-traj.f_add_parameter('initialAttitudeSigma', 0.1 * np.pi/180.0, comment='Variance of initial euler angle uncertainty in radians')
+traj.f_add_parameter('initialAttitudeSigma', np.float(0.1 * np.pi/180.0), comment='Variance of initial euler angle uncertainty in radians')
 
 traj.f_explore(
     cartesian_product(
