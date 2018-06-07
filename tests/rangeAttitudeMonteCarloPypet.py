@@ -6,6 +6,8 @@ from pulsarData.loadPulsarData import loadPulsarData
 from pypet import Environment, cartesian_product, Trajectory
 
 
+
+
 def run4DOFSimulation(traj):
 
     # pulsarDir = './pulsarData/'
@@ -364,3 +366,5 @@ traj.f_explore(
     )
 )
 env.run(run4DOFSimulation)
+
+md.plots.montecarloplots.plotAreaVsError(traj)
