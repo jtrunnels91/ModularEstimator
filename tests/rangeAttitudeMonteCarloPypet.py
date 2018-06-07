@@ -329,7 +329,7 @@ env = Environment(
 traj = env.trajectory
 
 # Monte Carlo simulation parameters
-traj.f_add_parameter('runtime', 3600, comment='Length of simulation in seconds')
+traj.f_add_parameter('runtime', 500, comment='Length of simulation in seconds')
 traj.f_add_parameter('pulsarName', 'J0437-4715', comment='Name of the pulsar to run simulation for')
 traj.f_add_parameter('filterTaps', 19, comment='Dimension of correlation vector')
 traj.f_add_parameter('processNoise', 1e-6, comment='Process noise constant added to correlation vector')
@@ -341,7 +341,7 @@ traj.f_add_parameter('peakLockThreshold', 0.01, comment='How low the TDOA varian
 
 # Detector Information
 traj.f_add_parameter('detectorArea', np.float64(100.0), comment='Detector area in cm^2')
-traj.f_add_parameter('detectorFOV', 1.0, comment='Detector FOV in degrees (angle of half cone)')
+traj.f_add_parameter('detectorFOV', 0.5, comment='Detector FOV in degrees (angle of half cone)')
 traj.f_add_parameter('AOAVar', np.square(1e-6), comment='Angle of arrival measurement error variance in rad^2')
 
 # Trajectory Information
@@ -359,7 +359,7 @@ traj.f_explore(
     cartesian_product(
         {
             'detectorArea': np.logspace(2, 3, 4),
-            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=100)
+            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=5)
         }
     )
 )

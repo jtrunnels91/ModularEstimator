@@ -8,6 +8,7 @@ plt.close('all')
 trajName = 'MonteCarloTest_2018_06_06_14h31m45s'
 trajName = 'MonteCarloTest_2018_06_06_16h06m04s'
 trajName = 'MonteCarloTest_2018_06_06_16h41m10s'
+trajName = 'MonteCarloTest_2018_06_06_17h24m16s'
 
 def meanSqrt(val):
     return np.mean(np.sqrt(val))
