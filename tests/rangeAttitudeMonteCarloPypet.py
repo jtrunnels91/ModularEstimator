@@ -336,7 +336,7 @@ env = Environment(
 traj = env.trajectory
 
 # Monte Carlo simulation parameters
-traj.f_add_parameter('runtime', 300, comment='Length of simulation in seconds')
+traj.f_add_parameter('runtime', 600, comment='Length of simulation in seconds')
 
 traj.f_add_parameter('pulsarName', 'J0437-4715', comment='Name of the pulsar to run simulation for')
 #traj.f_add_parameter('pulsarName', 'B1957+20', comment='Name of the pulsar to run simulation for')
@@ -358,7 +358,7 @@ traj.f_add_parameter('AOAVar', np.square(1e-4), comment='Angle of arrival measur
 traj.f_add_parameter('constantPhaseOffset', np.float64(0), comment='Constant phase delay added to photon arrivals')
 traj.f_add_parameter('orbitPeriod', 100.0/(2*np.pi), comment='Period of orbit in seconds')
 traj.f_add_parameter('orbitAmplitude', 0.0, comment='Amplitude of orbit in km')
-traj.f_add_parameter('vVar', np.square(1.0), comment='Variance of velocity measurement in km^2/s^2')
+traj.f_add_parameter('vVar', np.square(10.0), comment='Variance of velocity measurement in km^2/s^2')
 
 # Attitude information
 traj.f_add_parameter('angularVelocity', [0.0, 0.0, 0.0], comment='Angular velocity of detector in rad/s')
@@ -368,7 +368,7 @@ traj.f_add_parameter('initialAttitudeSigma', 0.015 * np.pi/180.0, comment='Varia
 traj.f_explore(
     cartesian_product(
         {
-            'detectorArea': np.logspace(2, 4, 3),
+            'detectorArea': np.logspace(2, 3, 2),
             'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=10)
         }
     )
