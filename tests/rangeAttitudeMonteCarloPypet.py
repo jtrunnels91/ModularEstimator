@@ -368,7 +368,7 @@ traj.f_add_parameter('initialAttitudeSigma', 0.015 * np.pi/180.0, comment='Varia
 traj.f_explore(
     cartesian_product(
         {
-            'detectorArea': np.logspace(2, 3, 3),
+            'detectorArea': np.logspace(2, 4, 3),
             'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=10)
         }
     )
