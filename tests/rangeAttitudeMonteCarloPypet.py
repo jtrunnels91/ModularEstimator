@@ -336,7 +336,7 @@ env = Environment(
 traj = env.trajectory
 
 # Monte Carlo simulation parameters
-traj.f_add_parameter('runtime', 1000, comment='Length of simulation in seconds')
+traj.f_add_parameter('runtime', 100, comment='Length of simulation in seconds')
 
 traj.f_add_parameter('pulsarName', 'J0437-4715', comment='Name of the pulsar to run simulation for')
 #traj.f_add_parameter('pulsarName', 'B1957+20', comment='Name of the pulsar to run simulation for')
