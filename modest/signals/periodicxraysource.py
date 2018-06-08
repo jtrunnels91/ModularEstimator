@@ -385,17 +385,17 @@ class PeriodicXRaySource(
             self,
             observatoryTime,
             tVar=None,
-            state=None
+            #state=None
     ):
-        if state is not None:
-            if 'signalDelay' in state:
-                delay = state['signalDelay']
-                if 'delayVar' in state:
-                    delayVar = state['delayVar']
-                else:
-                    delayVar = 0
-                observatoryTime = observatoryTime + delay
-                tVar = tVar + delayVar
+        # if state is not None:
+        #     if 'signalDelay' in state:
+        #         delay = state['signalDelay']
+        #         if 'delayVar' in state:
+        #             delayVar = state['delayVar']
+        #         else:
+        #             delayVar = 0
+        #         observatoryTime = observatoryTime + delay
+        #         tVar = tVar + delayVar
         # Get the phase corresponding to the current time
         phase = self.getPhase(observatoryTime)
 

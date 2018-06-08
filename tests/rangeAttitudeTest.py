@@ -17,7 +17,7 @@ pulsarList = ['J0437-4715']
 #pulsarList=['B1821-24']
 pulsarDir = './pulsarData/'
 pulsarCatalogFileName = 'pulsarCatalog.txt'
-tFinal = 100
+tFinal = 600
 constantOffset = 0
 
 orbitPeriod = 100/(2*np.pi)
@@ -162,7 +162,7 @@ for pulsarName in pulsarList:
         signalTDOA=0,
         TDOAVar=np.square(pulsarObjectDict[pulsarName].pulsarPeriod),
         measurementNoiseScaleFactor=1.0,
-        processNoise=1e-12,
+        processNoise=1e-50,
         centerPeak=True,
         peakLockThreshold=0.01,
         )

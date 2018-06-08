@@ -112,10 +112,16 @@ class DynamicPoissonSource(PoissonSource):
         if self.correlationStateName in stateDict:
             state = stateDict[self.correlationStateName]['stateObject']
             state = state.getStateVector()
+        #print('Current TDOA std: %.2e' %np.sqrt(state['TDOAVar']))
+        if 'TDOAVar' in state:
+            measuredTVar = measurement['t']['var'] + state['TDOAVar']
+        else:
+            measuredTVar = measurement['t']['var']
+            
         currentFlux = self.getSignal(
             measurement['t']['value'],
-            tVar=measurement['t']['var'],
-            state=state
+            tVar=measuredTVar,
+            #state=state
         )
         #print(currentFlux)
 
