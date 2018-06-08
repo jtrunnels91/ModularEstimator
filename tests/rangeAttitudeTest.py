@@ -17,7 +17,7 @@ pulsarList = ['J0437-4715']
 #pulsarList=['B1821-24']
 pulsarDir = './pulsarData/'
 pulsarCatalogFileName = 'pulsarCatalog.txt'
-tFinal = 600
+tFinal = 1000
 constantOffset = 0
 
 orbitPeriod = 100/(2*np.pi)
@@ -124,7 +124,8 @@ for signalIndex in range(len(pointSources)):
 
         if (
                 (np.abs(pulsarRaDec['RA'] - myRa) > 1e-9) and
-                (np.abs(pulsarRaDec['DEC'] - myDec) > 1e-9)
+                (np.abs(pulsarRaDec['DEC'] - myDec) > 1e-9) and
+                'null' not in myRow['name']
         ):
             
             pointSourceObjectDict[myRow['name']] = (

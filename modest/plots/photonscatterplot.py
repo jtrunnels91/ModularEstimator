@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 def photonScatterPlot(
         photonMeasurements,
@@ -26,24 +27,24 @@ def photonScatterPlot(
             )
     else:
         for p in photonMeasurements:
-            print(p['associationProbabilities'][probabilityAlpha])
+            
+            prAlpha = np.float(alpha*p['associationProbabilities'][probabilityAlpha])
             if color is None:
                 point = axis.scatter(
                     p['RA']['value'], p['DEC']['value'],
-                    marker = '.',
-                    size=size,
-                    alpha=alpha * p['associationProbabilities'][probabilityAlpha]
+                    marker='.',
+                    s=size,
+                    alpha=prAlpha
                     )
-                color = point[-1].get_color()
+                color = point.properties()['facecolor']
             else:
                 point = axis.scatter(
                     p['RA']['value'], p['DEC']['value'],
                     marker='.',
-                    size=size,
-                    alpha= (alpha * p['associationProbabilities'][probabilityAlpha]),
+                    s=size,
+                    alpha=prAlpha,
                     color=color
                     )
-                
-                
 
+    plt.show(block=False)
     
