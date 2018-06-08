@@ -27,7 +27,7 @@ omegaVar = np.square(1e-6) # rad^2/s^2
 AOAVar = np.square(1e-4) # rad^2
 initialAttitudeSigma= 0.05 * np.pi/180.0 #rad
 
-nTaps = 9
+nTaps = 15
 
 detectorArea = 100  # cm^2
 detectorFOV = 1
@@ -163,9 +163,9 @@ for pulsarName in pulsarList:
         signalTDOA=0,
         TDOAVar=np.square(pulsarObjectDict[pulsarName].pulsarPeriod),
         measurementNoiseScaleFactor=1.0,
-        processNoise=1e-15,
+        processNoise=1e-12,
         centerPeak=True,
-        peakLockThreshold=0.01,
+        peakLockThreshold=0.05,
         )
 
     myFilter.addSignalSource(pulsarObjectDict[pulsarName].name, pulsarObjectDict[pulsarName])
@@ -227,7 +227,7 @@ for photonMeas in photonMeasurements:
               
     #myFilter.measurementUpdateEKF(photonMeas, photonMeas['name'])
     myFilter.measurementUpdateJPDAF(photonMeas)
-    if (arrivalT-lastUpdateTime) > 5:
+    if (arrivalT-lastUpdateTime) > 100:
         lastUpdateTime = int(arrivalT)
         print('time: %f' % arrivalT)
         myFilter.realTimePlot()

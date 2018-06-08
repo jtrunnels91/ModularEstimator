@@ -347,9 +347,9 @@ traj.f_add_parameter('pulsarName', 'J0437-4715', comment='Name of the pulsar to 
 #traj.f_add_parameter('pulsarName', 'J0030+0451', comment='Name of the pulsar to run simulation for')
 
 
-traj.f_add_parameter('filterTaps', 9, comment='Dimension of correlation vector')
+traj.f_add_parameter('filterTaps', 15, comment='Dimension of correlation vector')
 traj.f_add_parameter('processNoise', 1e-15, comment='Process noise constant added to correlation vector')
-traj.f_add_parameter('scaleProcessNoise', False, comment='Boolean sets whether the process noise is scaled by the detector area.')
+traj.f_add_parameter('scaleProcessNoise', True, comment='Boolean sets whether the process noise is scaled by the detector area.')
 traj.f_add_parameter('peakLockThreshold', 0.01, comment='How low the TDOA variance estimate must be in order to reach peak lock.  Unitless; it is defined in terms of the filter dT')
 
 
@@ -372,8 +372,8 @@ traj.f_add_parameter('initialAttitudeSigma', np.float64(0.1 * np.pi/180.0), comm
 traj.f_explore(
     cartesian_product(
         {
-            'detectorArea': np.logspace(2, 3, 4),
-            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=20)
+            'detectorArea': np.logspace(2, 3, 3),
+            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=30)
         }
     )
 )
