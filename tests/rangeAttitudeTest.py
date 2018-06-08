@@ -163,7 +163,7 @@ for pulsarName in pulsarList:
         signalTDOA=0,
         TDOAVar=np.square(pulsarObjectDict[pulsarName].pulsarPeriod),
         measurementNoiseScaleFactor=1.0,
-        processNoise=1e-50,
+        processNoise=1e-15,
         centerPeak=True,
         peakLockThreshold=0.01,
         )
