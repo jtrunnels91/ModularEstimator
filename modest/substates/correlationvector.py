@@ -670,7 +670,10 @@ class CorrelationVector(substate.SubState):
         # and use it to estimate the location of the max
         # quadraticVec = np.polyfit(xVec, slicedC, 2, w=weightVector)
         quadraticVec = self.quadraticFit(xVec, slicedC)
-        TDOA = (-quadraticVec[1] / (2 * quadraticVec[0]))
+        if np.abs(quadraticVec[0]) > 0:
+            TDOA = (-quadraticVec[1] / (2 * quadraticVec[0]))
+        else:
+            TDOA = xVec[peakLocation]
 
         return TDOA
 
