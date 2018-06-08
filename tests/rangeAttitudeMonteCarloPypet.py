@@ -336,7 +336,7 @@ env = Environment(
 traj = env.trajectory
 
 # Monte Carlo simulation parameters
-traj.f_add_parameter('runtime', 600, comment='Length of simulation in seconds')
+traj.f_add_parameter('runtime', 1200, comment='Length of simulation in seconds')
 
 traj.f_add_parameter('pulsarName', 'J0437-4715', comment='Name of the pulsar to run simulation for')
 #traj.f_add_parameter('pulsarName', 'B1957+20', comment='Name of the pulsar to run simulation for')
@@ -385,4 +385,4 @@ traj.f_explore(
 
 env.run(run4DOFSimulation)
 #md.plots.montecarloplots.plotNTapsVsError(traj)
-md.plots.montecarloplots.plotKeyVsError(traj,'vVar',logx=True,logy=True)
+md.plots.montecarloplots.plotKeyVsError(traj,'detectorArea',logx=True,logy=True)
