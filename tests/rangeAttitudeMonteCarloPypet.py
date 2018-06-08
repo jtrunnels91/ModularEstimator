@@ -261,6 +261,11 @@ def run4DOFSimulation(traj):
         myAttitude.stateVectorHistory[-1]['eulerSTD'],
         comment='standard deviation of euler angle estimate error'
         )
+    traj.f_add_result(
+        'peakLock.$',
+        correlationSubstate.peakLock,
+        comment='indicates whether peak lock had been reached at end of run'
+        )
 
     
 
@@ -348,8 +353,8 @@ traj.f_add_parameter('pulsarName', 'J0437-4715', comment='Name of the pulsar to 
 
 
 traj.f_add_parameter('filterTaps', 9, comment='Dimension of correlation vector')
-traj.f_add_parameter('processNoise', 1e-12, comment='Process noise constant added to correlation vector')
-traj.f_add_parameter('scaleProcessNoise', False, comment='Boolean sets whether the process noise is scaled by the detector area.')
+traj.f_add_parameter('processNoise', 1e-15, comment='Process noise constant added to correlation vector')
+traj.f_add_parameter('scaleProcessNoise', True, comment='Boolean sets whether the process noise is scaled by the detector area.')
 traj.f_add_parameter('peakLockThreshold', 0.02, comment='How low the TDOA variance estimate must be in order to reach peak lock.  Unitless; it is defined in terms of the filter dT')
 
 
@@ -372,8 +377,8 @@ traj.f_add_parameter('initialAttitudeSigma', np.float64(0.1 * np.pi/180.0), comm
 traj.f_explore(
     cartesian_product(
         {
-            'detectorArea': np.logspace(2, 3, 3),
-            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=30)
+            'detectorArea': np.logspace(2, 3, 4),
+            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=50)
         }
     )
 )
@@ -389,4 +394,5 @@ traj.f_explore(
 
 env.run(run4DOFSimulation)
 #md.plots.montecarloplots.plotNTapsVsError(traj)
-md.plots.montecarloplots.plotKeyVsError(traj,'detectorArea',logx=True,logy=True)
+md.plots.montecarloplots.plotAreaVsError(traj)
+# md.plots.montecarloplots.plotKeyVsError(traj,'detectorArea',logx=True,logy=True)
