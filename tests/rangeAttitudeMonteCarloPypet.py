@@ -336,7 +336,7 @@ env = Environment(
 traj = env.trajectory
 
 # Monte Carlo simulation parameters
-traj.f_add_parameter('runtime', 600, comment='Length of simulation in seconds')
+traj.f_add_parameter('runtime', 1000, comment='Length of simulation in seconds')
 
 
 #traj.f_add_parameter('pulsarName', 'J0534+2200', comment='Name of the pulsar to run simulation for')
@@ -373,7 +373,7 @@ traj.f_explore(
     cartesian_product(
         {
             'detectorArea': np.logspace(2, 3, 2),
-            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=30)
+            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=10)
         }
     )
 )
