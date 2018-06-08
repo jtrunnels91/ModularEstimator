@@ -709,8 +709,23 @@ class CorrelationVector(substate.SubState):
                 )
         # Compute sigma points
         hDimension = len(h)
-        sqrtP = np.linalg.cholesky(hDimension * P)
-        
+
+        # Compute the square root of P.  This while loop is a hack to avoid a non semi-positive definite P; if there is an error, then add process noise until matrix is semi-positive definite
+        sqrtComputeSuccess = False
+        while not sqrtComputeSuccess:
+            try:
+                sqrtP = np.linalg.cholesky(hDimension * P)
+                sqrtComputeSuccess = True
+            except:
+                P = (
+                    P + (
+                        np.eye(self.__filterOrder__) *
+                        self.processNoise *
+                        np.square(self.__trueSignal__.avgPhotonFlux * self.__dT__)
+                        )
+                    )
+                print('Adding process noise hack')
+                
         sigmaPoints = h + np.append(sqrtP, -sqrtP, axis=0)
 
         sigmaPoints = np.append(np.array([h]), sigmaPoints, axis=0)

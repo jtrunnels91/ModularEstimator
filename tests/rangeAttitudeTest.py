@@ -17,7 +17,7 @@ pulsarList = ['J0437-4715']
 #pulsarList=['B1821-24']
 pulsarDir = './pulsarData/'
 pulsarCatalogFileName = 'pulsarCatalog.txt'
-tFinal = 1000
+tFinal = 1800
 constantOffset = 0
 
 orbitPeriod = 100/(2*np.pi)
@@ -27,7 +27,7 @@ omegaVar = np.square(1e-6) # rad^2/s^2
 AOAVar = np.square(1e-4) # rad^2
 initialAttitudeSigma= 0.05 * np.pi/180.0 #rad
 
-nTaps = 15
+nTaps = 9
 
 detectorArea = 100  # cm^2
 detectorFOV = 1
@@ -165,7 +165,7 @@ for pulsarName in pulsarList:
         measurementNoiseScaleFactor=1.0,
         processNoise=1e-12,
         centerPeak=True,
-        peakLockThreshold=0.05,
+        peakLockThreshold=0.02,
         )
 
     myFilter.addSignalSource(pulsarObjectDict[pulsarName].name, pulsarObjectDict[pulsarName])
