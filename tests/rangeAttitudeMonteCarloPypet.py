@@ -222,8 +222,8 @@ def run4DOFSimulation(traj):
                           'True TDOA %f \n' +
                           'Est TDOA %f \n' +
                           'Phase Error %f \n' +
-                          'VDrift %f' %
-                          (
+                          'VDrift %f'
+                          %(
                               traj.detectorArea,
                               arrivalT,
                               constantOffset,
