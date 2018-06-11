@@ -173,9 +173,15 @@ def run4DOFSimulation(traj):
 
             constantOffset = traj.constantPhaseOffset * myPulsarObject.pulsarPeriod
 
+            vDrift = 0
+            pulsarUnitVector = myPulsarObject.unitVec()
+
             for photonMeas in photonMeasurements:
                 arrivalT = photonMeas['t']['value']
                 vMeas = velocity(arrivalT) + np.random.normal(0,scale=np.sqrt(traj.vVar),size=3)
+
+                vDrift += vMeas.dot(pulsarUnitVector) * (arrivalT - lastT)
+                
                 omegaMeas = omega(arrivalT) + np.random.normal(0,scale=np.sqrt(traj.omegaVar),size=3)
 
                 dynamics = {
@@ -205,13 +211,19 @@ def run4DOFSimulation(traj):
                         constantOffset,
                         myPulsarObject.pulsarPeriod
                     )
-                    print('Area: %i \tTime: %f \tTrue TDOA %f\tEst TDOA %f, Phase Error: %f' %
+                    print('Area: %i \n' +
+                          'Time: %f \n' +
+                          'True TDOA %f \n' +
+                          'Est TDOA %f \n'
+                          'Phase Error %f \n' +
+                          'VDrift %f' %
                           (
                               traj.detectorArea,
                               arrivalT,
                               constantOffset,
                               estimatedDelay,
-                              delayError/myPulsarObject.pulsarPeriod
+                              delayError/myPulsarObject.pulsarPeriod,
+                              vDrift
                           )
                     )
                     #myFilter.realTimePlot()
@@ -273,7 +285,11 @@ def run4DOFSimulation(traj):
         comment='indicates whether peak lock had been reached at end of run'
         )
 
-    
+    traj.f_add_result(
+        'vDrift.$',
+        vDrift,
+        comment='Velocity integration drift over the course of the run'
+        )
 
     # plt.close('all')
 
@@ -385,7 +401,7 @@ traj.f_explore(
     cartesian_product(
         {
             'detectorArea': np.logspace(2, 3, 4),
-            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=30)
+            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=5)
         }
     )
 )

@@ -78,7 +78,7 @@ def plotNTapsVsError(trajectory):
 
     plotTrajectory(trajectory, sortByKey, plotResultsKeys, logx=False)
 
-def plotAreaVsError(trajectory):
+def plotAreaVsError(trajectory, rejectNonPeakLock=False):
 
     def meanSqrt(val):
         return np.mean(np.sqrt(val))
@@ -149,7 +149,6 @@ def plotTrajectory(
             if trajPlot[sortByKey] in resultsDict:
                 newVal = trajPlot.results[varName][run][0]
                 if not isnan(newVal):
-
                     resultsDict[trajPlot[sortByKey]].append(
                         newVal
                     )
