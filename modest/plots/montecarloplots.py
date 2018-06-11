@@ -1,7 +1,7 @@
 from pypet import Trajectory, pypetconstants
 import numpy as np
 import matplotlib.pyplot as plt
-
+from math import isnan
 plt.close('all')
 def plotKeyVsError(
         trajectory,
@@ -147,9 +147,12 @@ def plotTrajectory(
             # print(traj.results[resultsKey][run])
 
             if trajPlot[sortByKey] in resultsDict:
-                resultsDict[trajPlot[sortByKey]].append(
-                    trajPlot.results[varName][run][0]
-                )
+                newVal = trajPlot.results[varName][run][0]
+                if not isnan(newVal):
+
+                    resultsDict[trajPlot[sortByKey]].append(
+                        newVal
+                    )
             else:
                 resultsDict[trajPlot[sortByKey]] = [trajPlot.results[varName][run][0]]
 
@@ -162,6 +165,7 @@ def plotTrajectory(
                     processedResultsOrd.append(
                         plotResultsKeys[resultsKey]['function'](resultsDict[sortKeyVal])
                     )
+                    
             elif plotResultsKeys[resultsKey]['plot'] is 'scatter':
                 if plotResultsKeys[resultsKey]['function'] is not None:
                     scatterPointsOrd = plotResultsKeys[resultsKey]['function'](
@@ -169,9 +173,11 @@ def plotTrajectory(
                     )
                 else:
                     scatterPointsOrd = resultsDict[sortKeyVal]
-                scatterPointsAbs = np.ones(len(scatterPointsOrd)) * sortKeyVal
-                processedResultsAbs.append(scatterPointsAbs)
-                processedResultsOrd.append(scatterPointsOrd)
+                scatterPointsAbs = (np.ones(len(scatterPointsOrd)) * sortKeyVal).tolist()
+                processedResultsAbs += scatterPointsAbs
+                if not isinstance(scatterPointsOrd, list):
+                    scatterPointsOrd = scatterPointsOrd.tolist()
+                processedResultsOrd += scatterPointsOrd
 
         if plotResultsKeys[resultsKey]['plot'] is 'line':
             plt.plot(
@@ -179,6 +185,7 @@ def plotTrajectory(
                 processedResultsOrd,
                 label=plotResultsKeys[resultsKey]['name']
             )
+
         elif plotResultsKeys[resultsKey]['plot'] is 'scatter':
             print('scatterplot!')
             plt.scatter(

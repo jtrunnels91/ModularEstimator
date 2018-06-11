@@ -17,8 +17,7 @@ pulsarList = ['J0437-4715']
 #pulsarList=['B1821-24']
 pulsarDir = './pulsarData/'
 pulsarCatalogFileName = 'pulsarCatalog.txt'
-tFinal = 1800
-constantOffset = 0
+tFinal = 1000
 
 orbitPeriod = 100/(2*np.pi)
 orbitAmplitude = 0
@@ -27,11 +26,13 @@ omegaVar = np.square(1e-6) # rad^2/s^2
 AOAVar = np.square(1e-4) # rad^2
 initialAttitudeSigma= 0.05 * np.pi/180.0 #rad
 
-nTaps = 9
+nTaps = 7
 
 detectorArea = 100  # cm^2
 detectorFOV = 1
 pulsarObjectDict = loadPulsarData(detectorArea=detectorArea)
+pulsarPeriod = pulsarObjectDict[pulsarList[0]].pulsarPeriod
+constantOffset = np.random.uniform(0, pulsarPeriod)
 
 
 angularVelocity = [0, 0, 0]
@@ -162,10 +163,10 @@ for pulsarName in pulsarList:
         pulsarObjectDict[pulsarName].pulsarPeriod/(nTaps+1),
         signalTDOA=0,
         TDOAVar=np.square(pulsarObjectDict[pulsarName].pulsarPeriod),
-        measurementNoiseScaleFactor=1.0,
-        processNoise=1e-12,
+        measurementNoiseScaleFactor=3,
+        processNoise=1e-50,
         centerPeak=True,
-        peakLockThreshold=0.02,
+        peakLockThreshold=0.1,
         )
 
     myFilter.addSignalSource(pulsarObjectDict[pulsarName].name, pulsarObjectDict[pulsarName])
@@ -229,7 +230,13 @@ for photonMeas in photonMeasurements:
     myFilter.measurementUpdateJPDAF(photonMeas)
     if (arrivalT-lastUpdateTime) > 100:
         lastUpdateTime = int(arrivalT)
-        print('time: %f' % arrivalT)
+        print('time: %f\test TDOA: %f\ttrue TDOA %f' %
+              (
+                  arrivalT,
+                  constantOffset,
+                  corrSubstateDict[pulsarList[0]].stateVectorHistory[-1]['signalTDOA']
+              )
+        )
         myFilter.realTimePlot()
         # for key in corrSubstateDict:
         #     corrSubstateDict[key].realTimePlot()
@@ -250,7 +257,11 @@ for key in corrSubstateDict:
     C = myFilter.signalSources[key].speedOfLight()
     subpanel.plot(
         myCorrelation.stateVectorHistory['t'],
-        myCorrelation.stateVectorHistory['signalTDOA'] * C
+        md.utils.spacegeometry.phaseError(
+            myCorrelation.stateVectorHistory['signalTDOA'],
+            constantOffset,
+            pulsarPeriod
+            ) * C
     )
     subpanel.plot(
         myCorrelation.stateVectorHistory['t'],

@@ -8,13 +8,22 @@ earthObj = planets['earth']
 
 
 def phaseError(estDelay, trueDelay, period):
-    error = estDelay-trueDelay
-    if error > period/2:
-        while error > period/2:
-            error = error - period
-    elif error < -period/2:
-        while error < - period/2:
-            error = error + period
+    if hasattr(estDelay, '__len__'):
+        error = np.zeros(len(estDelay))
+        if hasattr(trueDelay, '__len__'):
+            for i in range(len(error)):
+                error[i] = phaseError(estDelay[i], trueDelay[i], period)
+        else:
+            for i in range(len(error)):
+                error[i] = phaseError(estDelay[i], trueDelay, period)
+    else:
+        error = estDelay-trueDelay
+        if error > period/2:
+            while error > period/2:
+                error = error - period
+        elif error < -period/2:
+            while error < - period/2:
+                error = error + period
 
     return error
 

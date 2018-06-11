@@ -49,7 +49,7 @@ class StaticPoissonSource(PoissonSource):
             ):
         nCandidates = np.int((tMax - t0) * self.flux * 1.1)
 
-        print(nCandidates)
+        # print(nCandidates)
         # Generate a batch of candidate arrival times (more efficient than generating on the fly)
         arrivalTimeArray = np.random.exponential(1.0/self.flux, nCandidates)
 
@@ -117,10 +117,11 @@ class DynamicPoissonSource(PoissonSource):
             measuredTVar = measurement['t']['var'] + state['TDOAVar']
         else:
             measuredTVar = measurement['t']['var']
-            
+        # Hack to try and limit the erroneous locking behavior
+        tVarScaleFactor = 2
         currentFlux = self.getSignal(
             measurement['t']['value'],
-            tVar=measuredTVar,
+            tVar=measuredTVar * tVarScaleFactor,
             #state=state
         )
         #print(currentFlux)

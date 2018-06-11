@@ -436,12 +436,20 @@ class CorrelationVector(substate.SubState):
             )
 
             velocityTDOA = peakShift * self.__dT__
+            Q = (
+                self.__unitVecToSignal__.dot(
+                    vVar
+                ).dot(self.__unitVecToSignal__) *
+                np.square(indexDiff / self.speedOfLight())
+            )
+            
             
             if (self.peakLock is True) and (self.centerPeak is True):
                 FMatrixDT = -self.peakOffsetFromCenter * self.__dT__
                 FMatrixShift = -self.peakOffsetFromCenter
                 self.peakCenteringDT = self.peakCenteringDT - velocityTDOA + FMatrixDT
                 self.signalTDOA = self.signalTDOA + velocityTDOA - FMatrixDT
+                self.TDOAVar = self.TDOAVar + (Q * np.square(self.__dT__))
             else:
                 FMatrixShift = peakShift
             # self.signalDelay = self.signalDelay + timeDelay
@@ -710,24 +718,12 @@ class CorrelationVector(substate.SubState):
         # Compute sigma points
         hDimension = len(h)
 
-        # Compute the square root of P.  This while loop is a hack to avoid a non semi-positive definite P; if there is an error, then add process noise until matrix is semi-positive definite
-        sqrtComputeSuccess = False
-        while not sqrtComputeSuccess:
-            try:
-                sqrtP = np.linalg.cholesky(hDimension * P)
-                sqrtComputeSuccess = True
-            except:
-                P = (
-                    P + (
-                        np.eye(self.__filterOrder__) *
-                        self.processNoise *
-                        np.square(self.__trueSignal__.avgPhotonFlux * self.__dT__)
-                        )
-                    )
-                print('Adding process noise hack')
+        # Compute the square root of P.
+        sqrtP = np.linalg.cholesky(hDimension * P)
                 
         sigmaPoints = h + np.append(sqrtP, -sqrtP, axis=0)
 
+        # Append one more row of sigma points containing the unmodified estimate
         sigmaPoints = np.append(np.array([h]), sigmaPoints, axis=0)
 
         # Initiate vector to store the resulting peaks from each sigma point
