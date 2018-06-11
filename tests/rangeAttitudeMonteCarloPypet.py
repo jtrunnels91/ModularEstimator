@@ -217,18 +217,14 @@ def run4DOFSimulation(traj):
                         constantOffset,
                         myPulsarObject.pulsarPeriod
                     )
-                    print('Area: %i \n' +
-                          'Time: %f \n' +
-                          'True TDOA %f \n' +
-                          'Est TDOA %f \n' +
-                          'Phase Error %f \n' +
-                          'VDrift %f'
-                          %(
+                    print(
+                        'Area: %i \nTime: %f \nTrue TDOA %f \n Est TDOA %f \n Phase Error %f \n VDrift %f'%(
                               traj.detectorArea,
                               arrivalT,
                               constantOffset,
                               estimatedDelay,
                               delayError/myPulsarObject.pulsarPeriod,
+                            vDrift
                           )
                     )
                     #myFilter.realTimePlot()
