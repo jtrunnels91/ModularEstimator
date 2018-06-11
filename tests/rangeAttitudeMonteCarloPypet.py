@@ -241,7 +241,6 @@ def run4DOFSimulation(traj):
             print(inst.args)     # arguments stored in .args
             print(inst)
             print('Aborting run because of error... restarting.')
-            1/0
         
     traj.f_add_result(
         'correlationSubstate.$',
@@ -297,7 +296,7 @@ def run4DOFSimulation(traj):
     traj.f_add_result(
         'vDrift.$',
         vDrift,
-        comment='Velocity integration drift over the course of the run'
+        comment='Velocity integration drift over the course of the run, in km'
         )
 
     # plt.close('all')
