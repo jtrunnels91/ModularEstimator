@@ -74,9 +74,10 @@ def run4DOFSimulation(traj):
     pulsarUnitVector = myPulsarObject.unitVec()
     vMeas = velocity(arrivalT) + np.random.normal(0, scale=np.sqrt(traj.vVar), size=3)
     vDrift += vMeas.dot(pulsarUnitVector) * (arrivalT - lastT)
-
+    
     arrivalT = 0
     lastT = 0
+    
     while not successfulRun:
         try:
             pointSourceObjectDict = {}
@@ -236,8 +237,15 @@ def run4DOFSimulation(traj):
                     #     corrSubstateDict[key].realTimePlot()
                 lastT = arrivalT
             successfulRun = True
-        except:
+        except Exception as inst:
+            print(type(inst))    # the exception instance
+            print(inst.args)     # arguments stored in .args
+            print(inst)          # __str__ allows args to be printed directly,  but may be overridden in exception subclasses
+            x, y = inst.args     # unpack args
+            print('x =', x)
+            print('y =', y)            
             print('Aborting run because of error... restarting.')
+            1/0
         
     traj.f_add_result(
         'correlationSubstate.$',
