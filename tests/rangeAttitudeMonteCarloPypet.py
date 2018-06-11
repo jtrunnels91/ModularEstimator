@@ -220,7 +220,7 @@ def run4DOFSimulation(traj):
                     print('Area: %i \n' +
                           'Time: %f \n' +
                           'True TDOA %f \n' +
-                          'Est TDOA %f \n'
+                          'Est TDOA %f \n' +
                           'Phase Error %f \n' +
                           'VDrift %f' %
                           (
