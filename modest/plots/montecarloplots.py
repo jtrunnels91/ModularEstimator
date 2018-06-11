@@ -78,7 +78,11 @@ def plotNTapsVsError(trajectory):
 
     plotTrajectory(trajectory, sortByKey, plotResultsKeys, logx=False)
 
-def plotAreaVsError(trajectory, rejectNonPeakLock=False):
+def plotAreaVsError(
+        trajectory,
+        rejectNonPeakLock=False,
+        resultsDir='../../tests/MCResults/'
+):
 
     def meanSqrt(val):
         return np.mean(np.sqrt(val))
@@ -87,6 +91,10 @@ def plotAreaVsError(trajectory, rejectNonPeakLock=False):
     # the monte carlo simulation plot
     sortByKey = 'detectorArea'
 
+    if rejectNonPeakLock is True:
+        rejectName = 'peakLock'
+    else:
+        rejectName = None
     # This dictionary defines what results are to be plotted, and what operation
     # should be done to those results before plotting.
     plotResultsKeys = {
@@ -95,25 +103,25 @@ def plotAreaVsError(trajectory, rejectNonPeakLock=False):
             'function': np.abs,
             'name': 'result error scatter',
             'plot': 'scatter',
-            'reject': None
+            'reject': rejectName
         },
         'finalDelayError': {
             'varName': 'finalDelayError',
             'function': np.std,
             'name': 'result error \$\sigma\$',
             'plot': 'line',
-            'reject': None
+            'reject': rejectName
         },
         'finalDelayVar': {
             'varName': 'finalDelayVar',
             'function': meanSqrt,
             'name': 'estimated error \$\sigma\$',
             'plot': 'line',
-            'reject': None
+            'reject': rejectName
         }
     }
 
-    plotTrajectory(trajectory, sortByKey, plotResultsKeys)
+    plotTrajectory(trajectory, sortByKey, plotResultsKeys, resultsDir=resultsDir)
     
 def plotTrajectory(
         trajPlot,
@@ -141,6 +149,7 @@ def plotTrajectory(
         resultsDict = {}
 
         varName = plotResultsKeys[resultsKey]['varName']
+        rejectName = plotResultsKeys[resultsKey]['reject']
         for run in trajPlot.f_iter_runs(yields='idx'):
             trajPlot.v_idx = run
             # print(traj[sortByKey])
@@ -149,9 +158,13 @@ def plotTrajectory(
             if trajPlot[sortByKey] in resultsDict:
                 newVal = trajPlot.results[varName][run][0]
                 if not isnan(newVal):
-                    resultsDict[trajPlot[sortByKey]].append(
-                        newVal
-                    )
+                    if (
+                            rejectName is not None and (trajPlot.results[rejectName][run])
+                    ) or rejectName is None:
+                        resultsDict[trajPlot[sortByKey]].append(
+                            newVal
+                        )
+                        
             else:
                 resultsDict[trajPlot[sortByKey]] = [trajPlot.results[varName][run][0]]
 
