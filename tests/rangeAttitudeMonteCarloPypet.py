@@ -178,7 +178,7 @@ def run4DOFSimulation(traj):
 
             for photonMeas in photonMeasurements:
                 arrivalT = photonMeas['t']['value']
-                vMeas = velocity(arrivalT) + np.random.normal(0,scale=np.sqrt(traj.vVar),size=3)
+                vMeas = velocity(arrivalT) + np.random.normal(0, scale=np.sqrt(traj.vVar), size=3)
 
                 vDrift += vMeas.dot(pulsarUnitVector) * (arrivalT - lastT)
                 
