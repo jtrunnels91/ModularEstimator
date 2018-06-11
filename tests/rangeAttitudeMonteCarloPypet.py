@@ -229,7 +229,6 @@ def run4DOFSimulation(traj):
                               constantOffset,
                               estimatedDelay,
                               delayError/myPulsarObject.pulsarPeriod,
-                              vDrift
                           )
                     )
                     #myFilter.realTimePlot()
