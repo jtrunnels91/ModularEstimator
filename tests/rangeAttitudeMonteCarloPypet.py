@@ -67,8 +67,16 @@ def run4DOFSimulation(traj):
             )
         )
 
+    arrivalT = 1
+    lastT = 0
     successfulRun = False
+    vDrift = 0            
+    pulsarUnitVector = myPulsarObject.unitVec()
+    vMeas = velocity(arrivalT) + np.random.normal(0, scale=np.sqrt(traj.vVar), size=3)
+    vDrift += vMeas.dot(pulsarUnitVector) * (arrivalT - lastT)
 
+    arrivalT = 0
+    lastT = 0
     while not successfulRun:
         try:
             pointSourceObjectDict = {}
@@ -172,9 +180,6 @@ def run4DOFSimulation(traj):
             timeUpdateOnlyT = []
 
             constantOffset = traj.constantPhaseOffset * myPulsarObject.pulsarPeriod
-
-            vDrift = 0
-            pulsarUnitVector = myPulsarObject.unitVec()
 
             for photonMeas in photonMeasurements:
                 arrivalT = photonMeas['t']['value']
