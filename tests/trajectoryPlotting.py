@@ -4,6 +4,8 @@ from pulsarData.loadPulsarData import loadPulsarData
 
 from pypet import Environment, cartesian_product, Trajectory
 
+from pint import UnitRegistry
+ureg = UnitRegistry()
 
 def generateRandomNumbers(traj):
     traj.f_add_result(
@@ -21,7 +23,7 @@ env = Environment(
 
 traj=env.trajectory
 
-traj.f_add_parameter('loc', 0, comment='Mean of normal distribution')
+traj.f_add_parameter('loc', np.float64(1))
 traj.f_add_parameter('std', np.float64(1), comment='Standard deviation of random number distribution')
 traj.f_add_parameter('size', np.float64(1), comment='Number of random numbers per data point to generate')
 

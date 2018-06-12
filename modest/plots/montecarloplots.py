@@ -149,7 +149,10 @@ def plotTrajectory(
         resultsDict = {}
 
         varName = plotResultsKeys[resultsKey]['varName']
-        rejectName = plotResultsKeys[resultsKey]['reject']
+        if 'reject' in plotResultsKeys[resultsKey]:
+            rejectName = plotResultsKeys[resultsKey]['reject']
+        else:
+            rejectName = None
         for run in trajPlot.f_iter_runs(yields='idx'):
             trajPlot.v_idx = run
             # print(traj[sortByKey])
