@@ -7,7 +7,7 @@ setup(
     name='modest',
     packages=['modest'],
 	install_requires=['numpy','matplotlib'],
-    version='0.0.2',
+    version='0.0.3',
     description='A modular estimation library',
     author='Joel Runnels',
     author_email='runne010@umn.edu'
