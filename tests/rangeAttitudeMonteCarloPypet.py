@@ -409,7 +409,7 @@ traj.f_explore(
     cartesian_product(
         {
             'detectorArea': np.logspace(2, 3, 4),
-            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=30)
+            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=100)
         }
     )
 )
