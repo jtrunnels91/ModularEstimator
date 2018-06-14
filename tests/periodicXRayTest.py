@@ -1,7 +1,11 @@
+import time
 from context import modest as md
 import matplotlib.pyplot as plt
 import numpy as np
 from operator import itemgetter
+
+
+t0 = time.time()
 
 myProfile='./pulsarData/profiles/J0534+2200_profile.txt'
 myPARFile = './pulsarData/PAR_files/ephem_J0534+2200_nancay_jodrell.par'
@@ -66,7 +70,7 @@ def position(t):
     return unitVec * speedOfLight * myPulsar.pulsarPeriod * (1/4)
     
 
-periodSim = 10000
+periodSim = 1000
 simTime = myPulsar.pulsarPeriod * periodSim
 
 myPhotonArrivals = myPulsar.generatePhotonArrivals(simTime, position=position)
@@ -100,3 +104,7 @@ plt.plot(tArray, myIntegral)
 plt.plot(tArray, myPulsar.getSignal(tArray) * dT)
 plt.show(block=False)
 
+t1 = time.time()
+
+total = t1-t0
+print('total run-time: %f' %total)
