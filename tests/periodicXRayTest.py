@@ -70,7 +70,7 @@ def position(t):
     return unitVec * speedOfLight * myPulsar.pulsarPeriod * (1/4)
     
 
-periodSim = 1000
+periodSim = 10000
 simTime = myPulsar.pulsarPeriod * periodSim
 
 myPhotonArrivals = myPulsar.generatePhotonArrivals(simTime, position=position)
