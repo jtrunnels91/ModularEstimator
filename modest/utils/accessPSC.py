@@ -44,7 +44,7 @@ def xamin_coneSearch(
     print(outputDF)
     for row in range(len(outputDF)):
         try:
-            outputDF.loc[row]['flux'] = float(outputDF.loc[row]['flux'])
+            outputDF.set_value(row, 'flux', outputDF.loc[row]['flux'])
         except:
             if removeNullFlux is True:
                 outputDF.drop(row, inplace=True)
