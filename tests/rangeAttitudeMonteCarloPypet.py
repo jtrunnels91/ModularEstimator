@@ -141,7 +141,7 @@ def run4DOFSimulation(traj):
             traj.filterTaps,
             myPulsarObject.pulsarPeriod/(traj.filterTaps+1),
             signalTDOA=0,
-            TDOAVar=np.square(myPulsarObject.pulsarPeriod),
+            TDOAVar=np.float(np.square(myPulsarObject.pulsarPeriod)),
             measurementNoiseScaleFactor=traj.measurementNoiseScaleFactor,
             processNoise=processNoise,
             centerPeak=True,
