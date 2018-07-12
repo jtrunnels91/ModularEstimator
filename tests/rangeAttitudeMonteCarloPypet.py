@@ -79,168 +79,168 @@ def run4DOFSimulation(traj):
     lastT = 0
     
     while not successfulRun:
-        try:
-            pointSourceObjectDict = {}
+        # try:
+        pointSourceObjectDict = {}
 
-            photonMeasurements = []
+        photonMeasurements = []
 
-            myFilter = md.ModularFilter()
+        myFilter = md.ModularFilter()
 
-            for signalIndex in range(len(pointSources)):
-                myRow = pointSources.iloc[signalIndex]
-                myRa = md.utils.spacegeometry.hms2rad(hms=myRow['ra'])
-                myDec = md.utils.spacegeometry.dms2rad(dms=myRow['dec'])
-                try:
-                    myFlux = float(myRow['flux'])
-                    print('Initializing static point source %s.' %myRow['name'])
-                except:
-                    print('Point source %s had invalid flux.  Skipping.' %myRow['name'])
+        for signalIndex in range(len(pointSources)):
+            myRow = pointSources.iloc[signalIndex]
+            myRa = md.utils.spacegeometry.hms2rad(hms=myRow['ra'])
+            myDec = md.utils.spacegeometry.dms2rad(dms=myRow['dec'])
+            try:
+                myFlux = float(myRow['flux'])
+                print('Initializing static point source %s.' %myRow['name'])
+            except:
+                print('Point source %s had invalid flux.  Skipping.' %myRow['name'])
 
-                if myFlux > 0.0 and myFlux < 1e-10:
+            if myFlux > 0.0 and myFlux < 1e-10:
 
-                    if (
-                            (np.abs(pulsarRaDec['RA'] - myRa) > 1e-9) and
-                            (np.abs(pulsarRaDec['DEC'] - myDec) > 1e-9)
-                    ):
+                if (
+                        (np.abs(pulsarRaDec['RA'] - myRa) > 1e-9) and
+                        (np.abs(pulsarRaDec['DEC'] - myDec) > 1e-9)
+                ):
 
-                        pointSourceObjectDict[myRow['name']] = (
-                            md.signals.StaticXRayPointSource(
-                                myRa,
-                                myDec,
-                                photonEnergyFlux=myFlux,
-                                detectorArea=traj.detectorArea,
-                                name=myRow['name']
-                                )
+                    pointSourceObjectDict[myRow['name']] = (
+                        md.signals.StaticXRayPointSource(
+                            myRa,
+                            myDec,
+                            photonEnergyFlux=myFlux,
+                            detectorArea=traj.detectorArea,
+                            name=myRow['name']
                             )
-                        photonMeasurements+=pointSourceObjectDict[myRow['name']].generatePhotonArrivals(
-                            traj.runtime,
-                            attitude=attitude
-                            )
-                        try:
-                            if myFlux > 1e-14:
-                                myFilter.addSignalSource(myRow['name'],pointSourceObjectDict[myRow['name']])
-                        except:
-                            print('The signal source %s has already been added.  Skipping.' %myRow['name'])
+                        )
+                    photonMeasurements+=pointSourceObjectDict[myRow['name']].generatePhotonArrivals(
+                        traj.runtime,
+                        attitude=attitude
+                        )
+                    try:
+                        if myFlux > 1e-14:
+                            myFilter.addSignalSource(myRow['name'],pointSourceObjectDict[myRow['name']])
+                    except:
+                        print('The signal source %s has already been added.  Skipping.' %myRow['name'])
 
 
-            # Generate photon arrivals for each pulsar in the list
-            photonMeasurements += myPulsarObject.generatePhotonArrivals(
-                traj.runtime,
-                position=position,
-                attitude=attitude
+        # Generate photon arrivals for each pulsar in the list
+        photonMeasurements += myPulsarObject.generatePhotonArrivals(
+            traj.runtime,
+            position=position,
+            attitude=attitude
+        )
+
+        if traj.scaleProcessNoise is True:
+            processNoise = traj.processNoise * traj.detectorArea
+        else:
+            processNoise = traj.processNoise
+
+        correlationSubstate = md.substates.CorrelationVector(
+            myPulsarObject,
+            traj.filterTaps,
+            myPulsarObject.pulsarPeriod/(traj.filterTaps+1),
+            signalTDOA=0,
+            TDOAVar=np.square(myPulsarObject.pulsarPeriod),
+            measurementNoiseScaleFactor=traj.measurementNoiseScaleFactor,
+            processNoise=processNoise,
+            centerPeak=True,
+            peakLockThreshold=traj.peakLockThreshold,
+        )
+
+        myFilter.addSignalSource(myPulsarObject.name, myPulsarObject)
+        myFilter.addStates(myPulsarObject.name, correlationSubstate)
+
+        backgroundNoise = md.signals.UniformNoiseXRaySource(
+            detectorArea=traj.detectorArea,
+            detectorFOV=traj.detectorFOV
+        )
+
+        photonMeasurements += backgroundNoise.generatePhotonArrivals(traj.runtime)
+
+        photonMeasurements = sorted(photonMeasurements, key=lambda k: k['t']['value'])
+
+        initialAttitude = md.utils.euler2quaternion(
+            attitude(0, returnQ=False) + np.random.normal(0, scale=traj.initialAttitudeSigma, size=3)
             )
+        myAttitude = md.substates.Attitude(
+            attitudeQuaternion=initialAttitude,
+            attitudeErrorCovariance=np.eye(3)*np.square(traj.initialAttitudeSigma),
+            gyroBiasCovariance=np.eye(3)*1e-100)
+        myFilter.addStates('attitude', myAttitude)
+        myFilter.addSignalSource('background', backgroundNoise)
 
-            if traj.scaleProcessNoise is True:
-                processNoise = traj.processNoise * traj.detectorArea
-            else:
-                processNoise = traj.processNoise
+        # myMeas = {
+        #     't': {'value': 0}
+        # }
+        # myFilter.measurementUpdateEKF(myMeas, myPulsar.name)
 
-            correlationSubstate = md.substates.CorrelationVector(
-                myPulsarObject,
-                traj.filterTaps,
-                myPulsarObject.pulsarPeriod/(traj.filterTaps+1),
-                signalTDOA=0,
-                TDOAVar=np.square(myPulsarObject.pulsarPeriod),
-                measurementNoiseScaleFactor=traj.measurementNoiseScaleFactor,
-                processNoise=processNoise,
-                centerPeak=True,
-                peakLockThreshold=traj.peakLockThreshold,
-            )
+        lastUpdateTime = 0
+        lastT = 0
 
-            myFilter.addSignalSource(myPulsarObject.name, myPulsarObject)
-            myFilter.addStates(myPulsarObject.name, correlationSubstate)
+        timeUpdateOnlyTDOA = []
+        timeUpdateOnlyT = []
 
-            backgroundNoise = md.signals.UniformNoiseXRaySource(
-                detectorArea=traj.detectorArea,
-                detectorFOV=traj.detectorFOV
-            )
+        constantOffset = traj.constantPhaseOffset * myPulsarObject.pulsarPeriod
 
-            photonMeasurements += backgroundNoise.generatePhotonArrivals(traj.runtime)
+        for photonMeas in photonMeasurements:
+            arrivalT = photonMeas['t']['value']
+            vMeas = velocity(arrivalT) + np.random.normal(0, scale=np.sqrt(traj.vVar), size=3)
 
-            photonMeasurements = sorted(photonMeasurements, key=lambda k: k['t']['value'])
+            vDrift += vMeas.dot(pulsarUnitVector) * (arrivalT - lastT)
 
-            initialAttitude = md.utils.euler2quaternion(
-                attitude(0, returnQ=False) + np.random.normal(0, scale=traj.initialAttitudeSigma, size=3)
+            omegaMeas = omega(arrivalT) + np.random.normal(0,scale=np.sqrt(traj.omegaVar),size=3)
+
+            dynamics = {
+                'velocity': {'value': vMeas, 'var': np.eye(3)*traj.vVar},
+                'omega': {'value': omega(arrivalT), 'var': np.eye(3) * traj.omegaVar},
+            }
+
+            myFilter.timeUpdateEKF(arrivalT-lastT, dynamics=dynamics)
+        #    if myCorrelation.peakLock is True:
+        #        myCorrelation.realTimePlot()
+            #myFilter.timeUpdateEKF(photon-lastT)
+            # print(photonMeas)
+            photonMeas['RA']['value'] = np.random.normal(photonMeas['RA']['value'], np.sqrt(traj.AOAVar))
+            photonMeas['DEC']['value'] = np.random.normal(photonMeas['DEC']['value'], np.sqrt(traj.AOAVar))
+            photonMeas['RA']['var'] = traj.AOAVar
+            photonMeas['DEC']['var'] = traj.AOAVar
+            photonMeas['t']['var'] = 1e-20
+            photonMeas['t']['value'] -= constantOffset
+
+            #myFilter.measurementUpdateEKF(photonMeas, photonMeas['name'])
+            myFilter.measurementUpdateJPDAF(photonMeas)
+            if (arrivalT-lastUpdateTime) > 100:
+                lastUpdateTime = int(arrivalT)
+                estimatedDelay = correlationSubstate.stateVectorHistory[-1]['signalTDOA']
+                delayError = md.utils.spacegeometry.phaseError(
+                    estimatedDelay,
+                    constantOffset,
+                    myPulsarObject.pulsarPeriod
                 )
-            myAttitude = md.substates.Attitude(
-                attitudeQuaternion=initialAttitude,
-                attitudeErrorCovariance=np.eye(3)*np.square(traj.initialAttitudeSigma),
-                gyroBiasCovariance=np.eye(3)*1e-100)
-            myFilter.addStates('attitude', myAttitude)
-            myFilter.addSignalSource('background', backgroundNoise)
-
-            # myMeas = {
-            #     't': {'value': 0}
-            # }
-            # myFilter.measurementUpdateEKF(myMeas, myPulsar.name)
-
-            lastUpdateTime = 0
-            lastT = 0
-
-            timeUpdateOnlyTDOA = []
-            timeUpdateOnlyT = []
-
-            constantOffset = traj.constantPhaseOffset * myPulsarObject.pulsarPeriod
-
-            for photonMeas in photonMeasurements:
-                arrivalT = photonMeas['t']['value']
-                vMeas = velocity(arrivalT) + np.random.normal(0, scale=np.sqrt(traj.vVar), size=3)
-
-                vDrift += vMeas.dot(pulsarUnitVector) * (arrivalT - lastT)
-                
-                omegaMeas = omega(arrivalT) + np.random.normal(0,scale=np.sqrt(traj.omegaVar),size=3)
-
-                dynamics = {
-                    'velocity': {'value': vMeas, 'var': np.eye(3)*traj.vVar},
-                    'omega': {'value': omega(arrivalT), 'var': np.eye(3) * traj.omegaVar},
-                }
-
-                myFilter.timeUpdateEKF(arrivalT-lastT, dynamics=dynamics)
-            #    if myCorrelation.peakLock is True:
-            #        myCorrelation.realTimePlot()
-                #myFilter.timeUpdateEKF(photon-lastT)
-                # print(photonMeas)
-                photonMeas['RA']['value'] = np.random.normal(photonMeas['RA']['value'], np.sqrt(traj.AOAVar))
-                photonMeas['DEC']['value'] = np.random.normal(photonMeas['DEC']['value'], np.sqrt(traj.AOAVar))
-                photonMeas['RA']['var'] = traj.AOAVar
-                photonMeas['DEC']['var'] = traj.AOAVar
-                photonMeas['t']['var'] = 1e-20
-                photonMeas['t']['value'] -= constantOffset
-
-                #myFilter.measurementUpdateEKF(photonMeas, photonMeas['name'])
-                myFilter.measurementUpdateJPDAF(photonMeas)
-                if (arrivalT-lastUpdateTime) > 100:
-                    lastUpdateTime = int(arrivalT)
-                    estimatedDelay = correlationSubstate.stateVectorHistory[-1]['signalTDOA']
-                    delayError = md.utils.spacegeometry.phaseError(
-                        estimatedDelay,
+                print(
+                    (
+                        'Area: %i \tTime: %f\tTrue TDOA %f\t' +
+                        'Est TDOA %f\tPhase Error %f\tVDrift %f'
+                    )
+                    %(
+                        traj.detectorArea,
+                        arrivalT,
                         constantOffset,
-                        myPulsarObject.pulsarPeriod
+                        estimatedDelay,
+                        delayError/myPulsarObject.pulsarPeriod,
+                        vDrift
                     )
-                    print(
-                        (
-                            'Area: %i \tTime: %f\tTrue TDOA %f\t' +
-                            'Est TDOA %f\tPhase Error %f\tVDrift %f'
-                        )
-                        %(
-                            traj.detectorArea,
-                            arrivalT,
-                            constantOffset,
-                            estimatedDelay,
-                            delayError/myPulsarObject.pulsarPeriod,
-                            vDrift
-                        )
-                    )
-                    #myFilter.realTimePlot()
-                    # for key in corrSubstateDict:
-                    #     corrSubstateDict[key].realTimePlot()
-                lastT = arrivalT
-            successfulRun = True
-        except Exception as inst:
-            print(type(inst))    # the exception instance
-            print(inst.args)     # arguments stored in .args
-            print(inst)
-            print('Aborting run because of error... restarting.')
+                )
+                #myFilter.realTimePlot()
+                # for key in corrSubstateDict:
+                #     corrSubstateDict[key].realTimePlot()
+            lastT = arrivalT
+        successfulRun = True
+        # except Exception as inst:
+        #     print(type(inst))    # the exception instance
+        #     print(inst.args)     # arguments stored in .args
+        #     print(inst)
+        #     print('Aborting run because of error... restarting.')
         
     traj.f_add_result(
         'correlationSubstate.$',
