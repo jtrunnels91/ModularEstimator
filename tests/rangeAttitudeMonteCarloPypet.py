@@ -134,7 +134,8 @@ def run4DOFSimulation(traj):
             processNoise = traj.processNoise * traj.detectorArea
         else:
             processNoise = traj.processNoise
-
+        print('Pulsar object period:')
+        print(myPulsarObject.pulsarPeriod)
         correlationSubstate = md.substates.CorrelationVector(
             myPulsarObject,
             traj.filterTaps,
