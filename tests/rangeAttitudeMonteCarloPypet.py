@@ -368,7 +368,6 @@ env = Environment(
     overwrite_file=True
     )
 
-1/0
 traj = env.trajectory
 
 # Monte Carlo simulation parameters
