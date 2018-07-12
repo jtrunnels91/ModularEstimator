@@ -88,7 +88,6 @@ class SubState():
                 )
         
         ## @brief Stores the time-history of the sub-state state vector.
-        print(stateVectorHistory)
         self.stateVectorHistory = SmartPanda(data=stateVectorHistory)
 
         ## @brief Stores handle for real-time plotting        
