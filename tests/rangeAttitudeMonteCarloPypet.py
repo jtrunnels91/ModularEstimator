@@ -163,6 +163,7 @@ def run4DOFSimulation(traj):
         initialAttitude = md.utils.euler2quaternion(
             attitude(0, returnQ=False) + np.random.normal(0, scale=traj.initialAttitudeSigma, size=3)
             )
+        print('initializing attitude')
         myAttitude = md.substates.Attitude(
             attitudeQuaternion=initialAttitude,
             attitudeErrorCovariance=np.eye(3)*np.square(traj.initialAttitudeSigma),
