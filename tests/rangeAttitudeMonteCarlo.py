@@ -1,4 +1,4 @@
-from context import modest as md
+import modest as md
 #import matplotlib.pyplot as plt
 import numpy as np
 from pulsarData.loadPulsarData import loadPulsarData

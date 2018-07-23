@@ -237,7 +237,7 @@ for photonMeas in photonMeasurements:
                   corrSubstateDict[pulsarList[0]].stateVectorHistory[-1]['signalTDOA']
               )
         )
-        myFilter.realTimePlot()
+        # myFilter.realTimePlot()
         # for key in corrSubstateDict:
         #     corrSubstateDict[key].realTimePlot()
     lastT = arrivalT
@@ -245,70 +245,70 @@ for photonMeas in photonMeasurements:
 plt.figure()
 nPanels = len(corrSubstateDict)
 panelCounter = 0
-for key in corrSubstateDict:
+# for key in corrSubstateDict:
 
-    subpanel=plt.subplot2grid((nPanels,1),(panelCounter,0))
-    panelCounter = panelCounter+1
-    myCorrelation = corrSubstateDict[key]
-    # subpanel.plot(
-    #     myCorrelation.stateVectorHistory['t'],
-    #     trueDelay
-    # )
-    C = myFilter.signalSources[key].speedOfLight()
-    subpanel.plot(
-        myCorrelation.stateVectorHistory['t'],
-        md.utils.spacegeometry.phaseError(
-            myCorrelation.stateVectorHistory['signalTDOA'],
-            constantOffset,
-            pulsarPeriod
-            ) * C
-    )
-    subpanel.plot(
-        myCorrelation.stateVectorHistory['t'],
-        np.sqrt(myCorrelation.stateVectorHistory['TDOAVar']) * C
-    )
-    subpanel.plot(
-        myCorrelation.stateVectorHistory['t'],
-        -np.sqrt(myCorrelation.stateVectorHistory['TDOAVar']) * C
-    )
-    if np.any(np.abs(subpanel.get_ylim()) > 2 * pulsarObjectDict[key].pulsarPeriod):
-        subpanel.set_ylim(-2*pulsarObjectDict[key].pulsarPeriod * C, 2*pulsarObjectDict[key].pulsarPeriod * C)
-    subpanel.grid()
-    subpanel.set_title(key)
-plt.show(block=False)
-
-
-plt.figure()
-attitudeMatrix = attitude(0).rotation_matrix.transpose()
+#     subpanel=plt.subplot2grid((nPanels,1),(panelCounter,0))
+#     panelCounter = panelCounter+1
+#     myCorrelation = corrSubstateDict[key]
+#     # subpanel.plot(
+#     #     myCorrelation.stateVectorHistory['t'],
+#     #     trueDelay
+#     # )
+#     C = myFilter.signalSources[key].speedOfLight()
+#     subpanel.plot(
+#         myCorrelation.stateVectorHistory['t'],
+#         md.utils.spacegeometry.phaseError(
+#             myCorrelation.stateVectorHistory['signalTDOA'],
+#             constantOffset,
+#             pulsarPeriod
+#             ) * C
+#     )
+#     subpanel.plot(
+#         myCorrelation.stateVectorHistory['t'],
+#         np.sqrt(myCorrelation.stateVectorHistory['TDOAVar']) * C
+#     )
+#     subpanel.plot(
+#         myCorrelation.stateVectorHistory['t'],
+#         -np.sqrt(myCorrelation.stateVectorHistory['TDOAVar']) * C
+#     )
+#     if np.any(np.abs(subpanel.get_ylim()) > 2 * pulsarObjectDict[key].pulsarPeriod):
+#         subpanel.set_ylim(-2*pulsarObjectDict[key].pulsarPeriod * C, 2*pulsarObjectDict[key].pulsarPeriod * C)
+#     subpanel.grid()
+#     subpanel.set_title(key)
+# plt.show(block=False)
 
 
-for signal in myFilter.signalSources:
-    if hasattr(myFilter.signalSources[signal], '__RaDec__'):
-        unitVec = attitudeMatrix.dot(myFilter.signalSources[signal].unitVec())
-        RaDec = md.utils.spacegeometry.unitVector2RaDec(unitVec)
-        plt.scatter(
-            RaDec[0],
-            RaDec[1],
-            marker='^'
-        )
-plt.scatter(
-        [p['RA']['value'] for p in photonMeasurements],
-        [p['DEC']['value'] for p in photonMeasurements],
-        marker='.', s=10, alpha=.2)
+# plt.figure()
+# attitudeMatrix = attitude(0).rotation_matrix.transpose()
 
-plt.show(block=False)
 
-plt.figure()
-eulerAnglesTrue=np.array(attitude(myAttitude.stateVectorHistory['t'],returnQ=False))
-eulerAnglesEst=np.array(myAttitude.stateVectorHistory['eulerAngles'])
+# for signal in myFilter.signalSources:
+#     if hasattr(myFilter.signalSources[signal], '__RaDec__'):
+#         unitVec = attitudeMatrix.dot(myFilter.signalSources[signal].unitVec())
+#         RaDec = md.utils.spacegeometry.unitVector2RaDec(unitVec)
+#         plt.scatter(
+#             RaDec[0],
+#             RaDec[1],
+#             marker='^'
+#         )
+# plt.scatter(
+#         [p['RA']['value'] for p in photonMeasurements],
+#         [p['DEC']['value'] for p in photonMeasurements],
+#         marker='.', s=10, alpha=.2)
 
-for eulerAngleIndex in range(3):
-    subpanel=plt.subplot2grid((3,1),(eulerAngleIndex,0))
-    subpanel.plot(myAttitude.stateVectorHistory['t'],
-                  md.utils.QuaternionHelperFunctions.eulerAngleDiff(
-                      eulerAnglesEst[:,eulerAngleIndex],
-                      eulerAnglesTrue[:, eulerAngleIndex]
-                      )
-                  )
-    subpanel.grid()
-plt.show(block=False)
+# plt.show(block=False)
+
+# plt.figure()
+# eulerAnglesTrue=np.array(attitude(myAttitude.stateVectorHistory['t'],returnQ=False))
+# eulerAnglesEst=np.array(myAttitude.stateVectorHistory['eulerAngles'])
+
+# for eulerAngleIndex in range(3):
+#     subpanel=plt.subplot2grid((3,1),(eulerAngleIndex,0))
+#     subpanel.plot(myAttitude.stateVectorHistory['t'],
+#                   md.utils.QuaternionHelperFunctions.eulerAngleDiff(
+#                       eulerAnglesEst[:,eulerAngleIndex],
+#                       eulerAnglesTrue[:, eulerAngleIndex]
+#                       )
+#                   )
+#     subpanel.grid()
+# plt.show(block=False)
