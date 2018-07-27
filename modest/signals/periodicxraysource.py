@@ -538,12 +538,13 @@ class PeriodicXRaySource(
             validationThreshold
         )
 
-        poisPR = poissonsource.DynamicPoissonSource.computeAssociationProbability(
-            self,
-            measurement,
-            stateDict
-            )
+        # poisPR = poissonsource.DynamicPoissonSource.computeAssociationProbability(
+        #     self,
+        #     measurement,
+        #     stateDict
+        #     )
 
+        poisPR = 1.0
         return (anglePR * poisPR * self.peakAmplitude)
     
     def plot(self,
