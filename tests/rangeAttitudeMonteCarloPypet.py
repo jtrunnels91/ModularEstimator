@@ -393,7 +393,7 @@ traj.f_add_parameter('peakLockThreshold', 0.1, comment='How low the TDOA varianc
 # Detector Information
 traj.f_add_parameter('detectorArea', np.float64(100.0), comment='Detector area in cm^2')
 traj.f_add_parameter('detectorFOV', 1, comment='Detector FOV in degrees (angle of half cone)')
-traj.f_add_parameter('AOAVar', np.square(1e-4), comment='Angle of arrival measurement error variance in rad^2')
+traj.f_add_parameter('AOAVar', np.square(2e-4), comment='Angle of arrival measurement error variance in rad^2')
 
 # Trajectory Information
 traj.f_add_parameter('constantPhaseOffset', np.float64(0), comment='Constant phase delay added to photon arrivals')
