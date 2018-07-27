@@ -3,10 +3,56 @@ import numpy as np
 import matplotlib.pyplot as plt
 from math import isnan
 plt.close('all')
+
+def plotAreaVsAngleError(
+        trajectory,
+        resultsDir='/home/joel/Documents/pythonDev/modules/ModularFilter/tests/MCResults/',
+        logx=True,
+        logy=True
+        ):
+    def meanSqrt(val):
+        return np.mean(np.sqrt(val))
+    def meanSTD(val):
+        return np.std(np.mean(val))
+    def meanAbs(val):
+        return np.mean(np.abs(val))
+
+    # This dictionary defines what results are to be plotted, and what operation
+    # should be done to those results before plotting.
+    plotResultsKeys = {
+        # 'eulerErrorScatter': {
+        #     'varName': 'finalEulerError',
+        #     'function': np.abs,
+        #     'name': 'angle error scatter',
+        #     'plot': 'scatter'
+        # },
+        'eulerErrorSTDMeas': {
+            'varName': 'finalEulerError',
+            'function': np.std,
+            'name': 'measured angle error \$\sigma\$',
+            'plot': 'line'
+        },
+        'eulerErrorSTDEst': {
+            'varName': 'eulerSTD',
+            'function': meanSqrt,
+            'name': 'estimated angle error \$\sigma\$',
+            'plot': 'line'
+        }
+    }
+
+    return plotTrajectory(trajectory,
+                   'detectorArea',
+                   plotResultsKeys,
+                   logx=logx,
+                   logy=logy,
+                   resultsDir=resultsDir
+    )
+
+    
 def plotKeyVsError(
         trajectory,
         key,
-        resultsDir='../../tests/MCResults/',
+        resultsDir='/home/joel/Documents/pythonDev/modules/ModularFilter/tests/MCResults/',
         logx=True,
         logy=True
 
@@ -37,7 +83,7 @@ def plotKeyVsError(
         }
     }
 
-    plotTrajectory(trajectory,
+    return plotTrajectory(trajectory,
                    key,
                    plotResultsKeys,
                    logx=logx,
@@ -76,12 +122,12 @@ def plotNTapsVsError(trajectory):
         }
     }
 
-    plotTrajectory(trajectory, sortByKey, plotResultsKeys, logx=False)
+    return plotTrajectory(trajectory, sortByKey, plotResultsKeys, logx=False)
 
 def plotAreaVsError(
         trajectory,
         rejectNonPeakLock=False,
-        resultsDir='../../tests/MCResults/'
+        resultsDir='/home/joel/Documents/pythonDev/modules/ModularFilter/tests/MCResults/'
 ):
 
     def meanSqrt(val):
@@ -121,13 +167,13 @@ def plotAreaVsError(
         }
     }
 
-    plotTrajectory(trajectory, sortByKey, plotResultsKeys, resultsDir=resultsDir)
+    return plotTrajectory(trajectory, sortByKey, plotResultsKeys, resultsDir=resultsDir)
     
 def plotTrajectory(
         trajPlot,
         sortByKey,
         plotResultsKeys,
-        resultsDir='../../tests/MCResults/',
+        resultsDir='/home/joel/Documents/pythonDev/modules/ModularFilter/tests/MCResults/',
         logx=True,
         logy=True
         ):
@@ -141,7 +187,7 @@ def plotTrajectory(
     else:
         trajPlot.f_load(load_results=pypetconstants.LOAD_DATA)
 
-    plt.figure()
+    myFigure = plt.figure()
     ax = plt.gca()
 
     for resultsKey in plotResultsKeys:
@@ -160,7 +206,11 @@ def plotTrajectory(
 
             if trajPlot[sortByKey] in resultsDict:
                 newVal = trajPlot.results[varName][run][0]
-                if not isnan(newVal):
+                try:
+                    valueValid = not isnan(newVal)
+                except:
+                    valueValid = not np.any([isnan(subValue) for subValue in newVal])
+                if valueValid:
                     if (
                             rejectName is not None and (trajPlot.results[rejectName][run])
                     ) or rejectName is None:
@@ -217,3 +267,4 @@ def plotTrajectory(
     plt.grid()
     plt.legend()
     plt.show(block=False)
+    return myFigure

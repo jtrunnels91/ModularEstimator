@@ -7,7 +7,6 @@ from pypet import Environment, cartesian_product, Trajectory
 
 
 
-
 def run4DOFSimulation(traj):
 
     # pulsarDir = './pulsarData/'
