@@ -16,7 +16,7 @@ class PointSource(signalsource.SignalSource):
         self.__DEC__ = DEC
         self.__RaDec__ = {'RA': RA, 'DEC': DEC}
         self.attitudeStateName = attitudeStateName
-
+        self.lastPDF = None
         return
 
     def RaDec(self):
@@ -68,6 +68,13 @@ class PointSource(signalsource.SignalSource):
 #                    print("using uniform probability")
                     probability = uniformProbability
                 else:
+                    # if self.lastPDF:
+                    #     if self.lastPDF['stateVectorID'] == stateDict['stateVectorID']:
+                    #         probability = self.lastPDF['dist'].pdf(dY)
+                    #     else:
+                    #         self.lastPDF = {
+                    #             'stateVectorID': stateDict['stateVectorID'],
+                    #             'dist': _mvn(cov=residualVariance
                     probability = _mvn.pdf(dY, cov=residualVariance)
 
             except:

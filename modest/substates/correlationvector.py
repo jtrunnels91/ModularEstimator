@@ -204,7 +204,13 @@ class CorrelationVector(substate.SubState):
         self.__halfLengthSeconds__ = self.__halfLength__ * self.__dT__
 
         xAxis = np.linspace(0, self.__filterOrder__-1, self.__filterOrder__)
-        xAxis = xAxis * self.__dT__
+        self.xAxis = xAxis * self.__dT__
+        
+        self.__xVec__ = np.linspace(
+                0, 
+                self.peakFitPoints * 2, 
+                (self.peakFitPoints * 2) + 1
+                )
         
         super().__init__(
             stateDimension=filterOrder,
@@ -215,7 +221,8 @@ class CorrelationVector(substate.SubState):
                 'aPriori': aPriori,
                 'signalTDOA': signalTDOA,
                 'TDOAVar': TDOAVar,
-                'xAxis': xAxis
+                'xAxis': self.xAxis,
+                'stateVectorID': -1
             }
         )
 
@@ -262,10 +269,10 @@ class CorrelationVector(substate.SubState):
             self.signalTDOA = newTDOA
             self.TDOAVar = newTDOAVar
 
-            xAxis = np.linspace(0, self.__filterOrder__-1, self.__filterOrder__)
-            xAxis = (xAxis * self.__dT__) - self.peakCenteringDT
+            # xAxis = np.linspace(0, self.__filterOrder__-1, self.__filterOrder__)
+            # xAxis = (xAxis * self.__dT__) - self.peakCenteringDT
 
-            svDict['xAxis'] = xAxis
+            svDict['xAxis'] = self.xAxis - self.peakCenteringDT
 
             svDict['signalTDOA'] = newTDOA
             svDict['TDOAVar'] = newTDOAVar
@@ -665,8 +672,8 @@ class CorrelationVector(substate.SubState):
 
         # np.polyfit assumes that the weights will be the inverse standard
         # deviation
-        weightVector = np.diag(slicedP)
-        weightVector = 1 / np.sqrt(weightVector)
+        # weightVector = np.diag(slicedP)
+        # weightVector = 1 / np.sqrt(weightVector)
 
         # xVec is the vector of "x" values corresponding the "y" values to
         # which the quadratic is being fit.
@@ -676,7 +683,6 @@ class CorrelationVector(substate.SubState):
 
         # Get the quadratic function that fits the peak and surrounding values,
         # and use it to estimate the location of the max
-        # quadraticVec = np.polyfit(xVec, slicedC, 2, w=weightVector)
         quadraticVec = self.quadraticFit(xVec, slicedC)
         try:
             TDOA = (-quadraticVec[1] / (2 * quadraticVec[0]))
@@ -710,11 +716,6 @@ class CorrelationVector(substate.SubState):
             h,
             P
     ):
-        self.__xVec__ = np.linspace(
-                0, 
-                self.peakFitPoints * 2, 
-                (self.peakFitPoints * 2) + 1
-                )
         # Compute sigma points
         hDimension = len(h)
 
@@ -772,8 +773,13 @@ class CorrelationVector(substate.SubState):
                 "Cannot fit a quadratic to less than three data points."
                 )
         elif len(x) == 3:
+            # Note: Suprisingly, it is faster to directly invert the X matrix
+            # than it is to do a linear solve.  Strange.
+            
+            #coef = np.linalg.solve(X, y)
             coef = np.linalg.inv(X).dot(y)
         else:
+            #coef = np.linalg.solve(X_T.dot(X).dot(X_T), y)
             coef = np.linalg.inv(X_T.dot(X)).dot(X_T).dot(y)
             
         return coef

@@ -28,7 +28,7 @@ initialAttitudeSigma= 0.05 * np.pi/180.0 #rad
 
 nTaps = 7
 
-detectorArea = 100  # cm^2
+detectorArea = 500  # cm^2
 detectorFOV = 1
 pulsarObjectDict = loadPulsarData(detectorArea=detectorArea)
 pulsarPeriod = pulsarObjectDict[pulsarList[0]].pulsarPeriod
@@ -164,9 +164,9 @@ for pulsarName in pulsarList:
         signalTDOA=0,
         TDOAVar=np.square(pulsarObjectDict[pulsarName].pulsarPeriod),
         measurementNoiseScaleFactor=3,
-        processNoise=1e-50,
+        processNoise=1e-20,
         centerPeak=True,
-        peakLockThreshold=0.1,
+        peakLockThreshold=0.01,
         )
 
     myFilter.addSignalSource(pulsarObjectDict[pulsarName].name, pulsarObjectDict[pulsarName])
@@ -242,14 +242,16 @@ for photonMeas in photonMeasurements:
         #     corrSubstateDict[key].realTimePlot()
     lastT = arrivalT
 
-plt.figure()
-nPanels = len(corrSubstateDict)
-panelCounter = 0
+# plt.figure()
+# nPanels = len(corrSubstateDict)
+# panelCounter = 0
+
 # for key in corrSubstateDict:
 
 #     subpanel=plt.subplot2grid((nPanels,1),(panelCounter,0))
 #     panelCounter = panelCounter+1
 #     myCorrelation = corrSubstateDict[key]
+#     subpanel.set_title('Phase error %s' %key)
 #     # subpanel.plot(
 #     #     myCorrelation.stateVectorHistory['t'],
 #     #     trueDelay
@@ -278,9 +280,9 @@ panelCounter = 0
 # plt.show(block=False)
 
 
-# plt.figure()
+# scatterPlot = plt.figure()
 # attitudeMatrix = attitude(0).rotation_matrix.transpose()
-
+# # plt.title('Photon scatter plot')
 
 # for signal in myFilter.signalSources:
 #     if hasattr(myFilter.signalSources[signal], '__RaDec__'):
@@ -298,7 +300,8 @@ panelCounter = 0
 
 # plt.show(block=False)
 
-# plt.figure()
+# eulerErrorPlot = plt.figure()
+# # plt.title('euler angle error')
 # eulerAnglesTrue=np.array(attitude(myAttitude.stateVectorHistory['t'],returnQ=False))
 # eulerAnglesEst=np.array(myAttitude.stateVectorHistory['eulerAngles'])
 

@@ -73,7 +73,8 @@ class SubState():
             stateVectorHistory = {
                 't': 0,
                 'stateVector': np.zeros(stateDimension),
-                'covariance': np.eye(stateDimension)
+                'covariance': np.eye(stateDimension),
+                'stateVectorID': 0
                 }
                 
         # Check to verify that the dictionary contains the correct keys
@@ -86,6 +87,12 @@ class SubState():
                 "State vector history must contain state vector key, labeled" +
                 "\"stateVector\""
                 )
+
+        if 'stateVectorID' not in stateVectorHistory:
+            raise ValueError(
+                "State vector history must contain state vector id key, labeled \"stateVectorID\""
+                )
+            
         
         ## @brief Stores the time-history of the sub-state state vector.
         self.stateVectorHistory = SmartPanda(data=stateVectorHistory)

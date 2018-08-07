@@ -103,7 +103,8 @@ class Attitude(substate.SubState):
                 'aPriori': True,
                 'q': self.qHat.q,
                 'eulerAngles': self.eulerAngles(),
-                'eulerSTD': np.sqrt(self.PHat.diagonal()[0:3])
+                'eulerSTD': np.sqrt(self.PHat.diagonal()[0:3]),
+                'stateVectorID': -1
             }
         )
 
@@ -181,7 +182,8 @@ class Attitude(substate.SubState):
                 'aPriori': aPriori,
                 'q': self.qHat.q,
                 'eulerAngles': self.eulerAngles(),
-                'eulerSTD': np.sqrt(self.PHat.diagonal()[0:3])
+                'eulerSTD': np.sqrt(self.PHat.diagonal()[0:3]),
+                'stateVectorID': svDict['stateVectorID']
             }
         )
 

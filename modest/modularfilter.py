@@ -63,6 +63,8 @@ class ModularFilter():
 
         self.measurementList = []
         self.lastMeasurementID = None
+
+        self.lastStateVectorID = 0
         
         return
 
@@ -387,17 +389,19 @@ class ModularFilter():
             covariance,
             aPriori=False
             ):
+        newSVID = self.lastStateVectorID + 1
         for stateName in self.subStates:
             mySlice = self.subStates[stateName]['index']
             svDict = {
                 'stateVector': globalStateVector[mySlice],
                 'covariance': covariance[mySlice, mySlice],
                 't': self.tCurrent,
-                'aPriori': aPriori
+                'aPriori': aPriori,
+                'stateVectorID': newSVID
                 }
 
             self.subStates[stateName]['stateObject'].storeStateVector(svDict)
-            
+        self.lastStateVectorID = newSVID
         return
 
     """
