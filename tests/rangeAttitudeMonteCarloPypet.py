@@ -387,7 +387,7 @@ traj.f_add_parameter('filterTaps', 9, comment='Dimension of correlation vector')
 traj.f_add_parameter('processNoise', 1e-15, comment='Process noise constant added to correlation vector')
 traj.f_add_parameter('measurementNoiseScaleFactor', 3.0, comment='Tuning parameter for measurement noise')
 traj.f_add_parameter('scaleProcessNoise', True, comment='Boolean sets whether the process noise is scaled by the detector area.')
-traj.f_add_parameter('peakLockThreshold', 0.05, comment='How low the TDOA variance estimate must be in order to reach peak lock.  Unitless; it is defined in terms of the filter dT')
+traj.f_add_parameter('peakLockThreshold', 0.01, comment='How low the TDOA variance estimate must be in order to reach peak lock.  Unitless; it is defined in terms of the filter dT')
 
 
 # Detector Information
@@ -410,7 +410,7 @@ traj.f_explore(
     cartesian_product(
         {
             'detectorArea': np.logspace(2, 3, 3),
-            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=15)
+            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=50)
         }
     )
 )
