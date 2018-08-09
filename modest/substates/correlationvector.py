@@ -294,8 +294,8 @@ class CorrelationVector(substate.SubState):
             self.correlationVectorCovariance = svDict['covariance']
             svDict['signalTDOA'] = self.signalTDOA
             svDict['TDOAVar'] = self.TDOAVar
-
-        if np.sqrt(self.TDOAVar) < (self.peakLockThreshold * self.__dT__):
+        tdoaSTD = np.sqrt(self.TDOAVar)
+        if tdoaSTD < (self.peakLockThreshold * self.__dT__):
             if not self.peakLock:
                 print(
                     'Substate %s reached peak lock at time %s'
@@ -303,12 +303,12 @@ class CorrelationVector(substate.SubState):
                 )
             self.peakLock = True
         else:
-            if self.peakLock:
+            if self.peakLock and tdoaSTD > (self.peakLockThreshold * self.__dT__ * 1.1):
                 print(
                     'Substate %s lost peak lock at time %s'
                     %(self.__trueSignal__.name, self.t)
                 )
-            self.peakLock = False
+                self.peakLock = False
             
         super().storeStateVector(svDict)
         return
