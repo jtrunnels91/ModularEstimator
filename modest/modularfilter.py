@@ -565,7 +565,8 @@ class ModularFilter():
                     )
 
         S = totalHMatrix.dot(PMinus).dot(totalHMatrix.transpose()) + totalRMatrix
-        K = PMinus.dot(totalHMatrix.transpose()).dot(np.linalg.inv(S))
+        K = PMinus.dot(totalHMatrix.transpose()).dot(ModularFilter.covarianceInverse(S))
+        # K = PMinus.dot(totalHMatrix.transpose()).dot(np.linalg.inv(S))
 
         IminusKH = np.eye(self.totalDimension) - K.dot(totalHMatrix)
 
@@ -581,7 +582,10 @@ class ModularFilter():
             'R': totalRMatrix,
             'dY': totaldYMatrix
             })
-
+    @staticmethod
+    def covarianceInverse(P):
+        cholPInv = np.linalg.inv(np.linalg.cholesky(P))
+        return (cholPInv.transpose()).dot(cholPInv)
 
     def initializeRealTimePlot(
             self,
