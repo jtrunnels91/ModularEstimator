@@ -37,6 +37,7 @@ def xamin_coneSearch(
     # process = subprocess.Popen(['java', '-jar', 'users.jar'], stdout=subprocess.PIPE)
     process = subprocess.Popen(myCommand, stdout=subprocess.PIPE)
     output = process.stdout
+    print(output)
     outputDF = pd.read_csv(output, sep='|', comment='#').dropna(how='any')
     outputDF.columns = outputDF.columns.str.strip()
     outputDF = outputDF.rename(columns={str.lower(fluxKey):'flux'})
