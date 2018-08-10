@@ -20,8 +20,8 @@ def run4DOFSimulation(traj):
         pulsarRaDec['RA'] * 180.0/np.pi,
         pulsarRaDec['DEC'] * 180.0/np.pi,
         FOV=traj.detectorFOV,
-        catalog='xmmslewcln',
-        fluxKey='flux_b8'
+        # catalog='xmmslewcln',
+        # fluxKey='flux_b8'
         #minSignificance=20
     )
 
