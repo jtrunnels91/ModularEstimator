@@ -406,22 +406,22 @@ traj.f_add_parameter('angularVelocity', [0.0, 0.0, 0.0], comment='Angular veloci
 traj.f_add_parameter('omegaVar', np.square(1e-6), comment='Variance of angular velocity measurement in rad^2/s^2')
 traj.f_add_parameter('initialAttitudeSigma', np.float64(0.1 * np.pi/180.0), comment='Variance of initial euler angle uncertainty in radians')
 
-# traj.f_explore(
-#     cartesian_product(
-#         {
-#             'detectorArea': np.logspace(2, 3, 3),
-#             'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=50)
-#         }
-#     )
-# )
 traj.f_explore(
     cartesian_product(
         {
-            'initialAttitudeSigma': np.logspace(-3,-2,2) * np.pi/180.0,
-            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=3)
+            'detectorArea': np.logspace(2, 3, 3),
+            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=3)
         }
     )
 )
+# traj.f_explore(
+#     cartesian_product(
+#         {
+#             'initialAttitudeSigma': np.logspace(-3,-2,2) * np.pi/180.0,
+#             'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=3)
+#         }
+#     )
+# )
 
 
 env.run(run4DOFSimulation)
