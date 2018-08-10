@@ -5,6 +5,7 @@ from pulsarData.loadPulsarData import loadPulsarData
 
 from pypet import Environment, cartesian_product, Trajectory
 
+pointSources = None
 
 
 def run4DOFSimulation(traj):
@@ -16,14 +17,15 @@ def run4DOFSimulation(traj):
     myPulsarObject = pulsarObjectDict[traj.pulsarName]
     pulsarRaDec = myPulsarObject.__RaDec__
 
-    pointSources = md.utils.accessPSC.xamin_coneSearch(
-        pulsarRaDec['RA'] * 180.0/np.pi,
-        pulsarRaDec['DEC'] * 180.0/np.pi,
-        FOV=traj.detectorFOV,
-        catalog='xmmslewcln',
-        fluxKey='flux_b8',
-        # minSignificance=20
-    )
+    if pointSources is None:
+        pointSources = md.utils.accessPSC.xamin_coneSearch(
+            pulsarRaDec['RA'] * 180.0/np.pi,
+            pulsarRaDec['DEC'] * 180.0/np.pi,
+            FOV=traj.detectorFOV,
+            catalog='xmmslewcln',
+            fluxKey='flux_b8',
+            # minSignificance=20
+        )
 
     def attitude(t, returnQ=True):
         if hasattr(t, '__len__'):
