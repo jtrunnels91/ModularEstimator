@@ -5,6 +5,7 @@ from pulsarData.loadPulsarData import loadPulsarData
 
 from pypet import Environment, cartesian_product, Trajectory
 
+global pointSources
 pointSources = None
 
 
