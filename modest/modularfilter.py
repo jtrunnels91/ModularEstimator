@@ -201,7 +201,13 @@ class ModularFilter():
                     validationThreshold=self.measurementValidationThreshold
                 )
             )
-            
+
+            if currentProbability < 0:
+                raise ValueError(
+                    'Got negative probability for measurement %s, signal source %s',
+                    %(measurement, signalKey)
+                    )
+                                 
             probabilityDict[signalKey] = currentProbability
             probabilitySum = probabilitySum + currentProbability
 

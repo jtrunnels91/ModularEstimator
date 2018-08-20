@@ -209,8 +209,8 @@ def run4DOFSimulation(traj):
             photonMeas['t']['var'] = 1e-20
             photonMeas['t']['value'] -= constantOffset
 
-            myFilter.measurementUpdateEKF(photonMeas, photonMeas['name'])
-            # myFilter.measurementUpdateJPDAF(photonMeas)
+            # myFilter.measurementUpdateEKF(photonMeas, photonMeas['name'])
+            myFilter.measurementUpdateJPDAF(photonMeas)
             if (arrivalT-lastUpdateTime) > 100:
                 lastUpdateTime = int(arrivalT)
                 estimatedDelay = correlationSubstate.stateVectorHistory[-1]['signalTDOA']
@@ -365,15 +365,15 @@ env = Environment(
     trajectory='MonteCarloTest',
     add_time=True,
     git_repository='../.git',
-    git_message='Monte carlo run to determine behavior with EKF rather than JPDAF',
-    file_title='Monte carlo run to determine behavior with EKF rather than JPDAF',
+    git_message='Testing to see if JPDAF is producing negative probabilities',
+    file_title='Testing to see if JPDAF is producing negative probabilities',
     overwrite_file=True
     )
 
 traj = env.trajectory
 
 # Monte Carlo simulation parameters
-traj.f_add_parameter('runtime', 3600, comment='Length of simulation in seconds')
+traj.f_add_parameter('runtime', 1000, comment='Length of simulation in seconds')
 
 
 #traj.f_add_parameter('pulsarName', 'J0534+2200', comment='Name of the pulsar to run simulation for')
@@ -394,7 +394,7 @@ traj.f_add_parameter('peakLockThreshold', 0.01, comment='How low the TDOA varian
 # Detector Information
 traj.f_add_parameter('detectorArea', np.float64(100.0), comment='Detector area in cm^2')
 traj.f_add_parameter('detectorFOV', 1, comment='Detector FOV in degrees (angle of half cone)')
-traj.f_add_parameter('AOAVar', np.square(1e-6), comment='Angle of arrival measurement error variance in rad^2')
+traj.f_add_parameter('AOAVar', np.square(1e-9), comment='Angle of arrival measurement error variance in rad^2')
 
 # Trajectory Information
 traj.f_add_parameter('constantPhaseOffset', np.float64(0), comment='Constant phase delay added to photon arrivals')
@@ -407,22 +407,22 @@ traj.f_add_parameter('angularVelocity', [0.0, 0.0, 0.0], comment='Angular veloci
 traj.f_add_parameter('omegaVar', np.square(1e-6), comment='Variance of angular velocity measurement in rad^2/s^2')
 traj.f_add_parameter('initialAttitudeSigma', np.float64(0.1 * np.pi/180.0), comment='Variance of initial euler angle uncertainty in radians')
 
-traj.f_explore(
-    cartesian_product(
-        {
-            'detectorArea': np.logspace(2, 3, 3),
-            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=10)
-        }
-    )
-)
 # traj.f_explore(
 #     cartesian_product(
 #         {
-#             'initialAttitudeSigma': np.logspace(-3,-2,2) * np.pi/180.0,
-#             'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=3)
+#             'detectorArea': np.logspace(2, 3, 3),
+#             'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=10)
 #         }
 #     )
 # )
+traj.f_explore(
+    cartesian_product(
+        {
+            'initialAttitudeSigma': np.logspace(-8,-4,2) * np.pi/180.0,
+            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=3)
+        }
+    )
+)
 
 
 env.run(run4DOFSimulation)
