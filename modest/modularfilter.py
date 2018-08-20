@@ -204,7 +204,7 @@ class ModularFilter():
 
             if currentProbability < 0:
                 raise ValueError(
-                    'Got negative probability for measurement %s, signal source %s',
+                    'Got negative probability for measurement %s, signal source %s'
                     %(measurement, signalKey)
                     )
                                  
