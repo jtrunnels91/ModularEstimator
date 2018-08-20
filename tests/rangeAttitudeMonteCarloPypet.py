@@ -386,7 +386,7 @@ traj.f_add_parameter('pulsarName', 'J0437-4715', comment='Name of the pulsar to 
 
 traj.f_add_parameter('filterTaps', 9, comment='Dimension of correlation vector')
 traj.f_add_parameter('processNoise', 1e-15, comment='Process noise constant added to correlation vector')
-traj.f_add_parameter('measurementNoiseScaleFactor', 3.0, comment='Tuning parameter for measurement noise')
+traj.f_add_parameter('measurementNoiseScaleFactor', 1.0, comment='Tuning parameter for measurement noise')
 traj.f_add_parameter('scaleProcessNoise', True, comment='Boolean sets whether the process noise is scaled by the detector area.')
 traj.f_add_parameter('peakLockThreshold', 0.01, comment='How low the TDOA variance estimate must be in order to reach peak lock.  Unitless; it is defined in terms of the filter dT')
 
@@ -394,18 +394,18 @@ traj.f_add_parameter('peakLockThreshold', 0.01, comment='How low the TDOA varian
 # Detector Information
 traj.f_add_parameter('detectorArea', np.float64(1000.0), comment='Detector area in cm^2')
 traj.f_add_parameter('detectorFOV', 1, comment='Detector FOV in degrees (angle of half cone)')
-traj.f_add_parameter('AOAVar', np.square(1e-9), comment='Angle of arrival measurement error variance in rad^2')
+traj.f_add_parameter('AOAVar', np.square(1e-12), comment='Angle of arrival measurement error variance in rad^2')
 
 # Trajectory Information
 traj.f_add_parameter('constantPhaseOffset', np.float64(0), comment='Constant phase delay added to photon arrivals')
 traj.f_add_parameter('orbitPeriod', 100.0/(2*np.pi), comment='Period of orbit in seconds')
 traj.f_add_parameter('orbitAmplitude', 0.0, comment='Amplitude of orbit in km')
-traj.f_add_parameter('vVar', np.square(0.01), comment='Variance of velocity measurement in km^2/s^2')
+traj.f_add_parameter('vVar', np.square(0.001), comment='Variance of velocity measurement in km^2/s^2')
 
 # Attitude information
 traj.f_add_parameter('angularVelocity', [0.0, 0.0, 0.0], comment='Angular velocity of detector in rad/s')
-traj.f_add_parameter('omegaVar', np.square(1e-6), comment='Variance of angular velocity measurement in rad^2/s^2')
-traj.f_add_parameter('initialAttitudeSigma', np.float64(1e-3 * np.pi/180.0), comment='Variance of initial euler angle uncertainty in radians')
+traj.f_add_parameter('omegaVar', np.square(1e-12), comment='Variance of angular velocity measurement in rad^2/s^2')
+traj.f_add_parameter('initialAttitudeSigma', np.float64(1e-9 * np.pi/180.0), comment='Variance of initial euler angle uncertainty in radians')
 
 traj.f_explore(
     cartesian_product(
