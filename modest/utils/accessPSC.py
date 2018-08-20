@@ -3,6 +3,24 @@ import pandas as pd
 from tempfile import NamedTemporaryFile
 import os
 import subprocess
+from astropy.io import fits
+
+
+def localCatalog_coneSearch(
+        RA,
+        DEC,
+        FOV,
+        catalogName = 'xmmsl2_clean.fits',
+        removeNullFlux=True,
+        fluxKey='flux'
+        ):
+    dirpath = '/home/joel/Documents/pythonDev/modules/ModularFilter/modest/utils/'
+    
+    hdulist = fits.open(dirpath + catalogName)
+
+    dataHeader = hdulist[1].header
+    columns = ['UNIQUE_SRCNAME', 'RA', "DEC"]
+    return hdulist
 
 def xamin_coneSearch(
         RA,

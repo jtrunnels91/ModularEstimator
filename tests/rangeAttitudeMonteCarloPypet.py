@@ -5,8 +5,7 @@ from pulsarData.loadPulsarData import loadPulsarData
 
 from pypet import Environment, cartesian_product, Trajectory
 
-global pointSources
-pointSources = None
+
 
 
 def run4DOFSimulation(traj):
@@ -18,15 +17,14 @@ def run4DOFSimulation(traj):
     myPulsarObject = pulsarObjectDict[traj.pulsarName]
     pulsarRaDec = myPulsarObject.__RaDec__
 
-    if pointSources is None:
-        pointSources = md.utils.accessPSC.xamin_coneSearch(
-            pulsarRaDec['RA'] * 180.0/np.pi,
-            pulsarRaDec['DEC'] * 180.0/np.pi,
-            FOV=traj.detectorFOV,
-            catalog='xmmslewcln',
-            fluxKey='flux_b8',
-            # minSignificance=20
-        )
+    pointSources = md.utils.accessPSC.xamin_coneSearch(
+        pulsarRaDec['RA'] * 180.0/np.pi,
+        pulsarRaDec['DEC'] * 180.0/np.pi,
+        FOV=traj.detectorFOV,
+        catalog='xmmslewcln',
+        fluxKey='flux_b8',
+        # minSignificance=20
+    )
 
     def attitude(t, returnQ=True):
         if hasattr(t, '__len__'):
@@ -211,8 +209,8 @@ def run4DOFSimulation(traj):
             photonMeas['t']['var'] = 1e-20
             photonMeas['t']['value'] -= constantOffset
 
-            #myFilter.measurementUpdateEKF(photonMeas, photonMeas['name'])
-            myFilter.measurementUpdateJPDAF(photonMeas)
+            myFilter.measurementUpdateEKF(photonMeas, photonMeas['name'])
+            # myFilter.measurementUpdateJPDAF(photonMeas)
             if (arrivalT-lastUpdateTime) > 100:
                 lastUpdateTime = int(arrivalT)
                 estimatedDelay = correlationSubstate.stateVectorHistory[-1]['signalTDOA']
@@ -367,8 +365,8 @@ env = Environment(
     trajectory='MonteCarloTest',
     add_time=True,
     git_repository='../.git',
-    git_message='Pypet Monte Carlo Runs',
-    file_title='More tests of pypet',
+    git_message='Monte carlo run to determine behavior with EKF rather than JPDAF',
+    file_title='Monte carlo run to determine behavior with EKF rather than JPDAF',
     overwrite_file=True
     )
 
