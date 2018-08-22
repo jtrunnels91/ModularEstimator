@@ -544,7 +544,7 @@ class ModularFilter():
             varianceDict[stateName] = localRDict
 
             for key, subComponentR in localRDict.items():
-                if subComponentR:
+                if subComponentR is not None:
                     try:
                         np.linalg.cholesky(subComponentR)
                     except:
