@@ -657,6 +657,10 @@ class ModularFilter():
         try:
             np.linalg.cholesky(PPlus)
         except:
+            print('I - KH:')
+            print(IminusKH)
+            print('K:')
+            print(K)
             raise ValueError('PPlus is not positive semidefinite, even though PMinus and R were.  Big problem.')
         return({
             'xPlus': xPlus,
