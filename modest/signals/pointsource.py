@@ -90,19 +90,21 @@ class PointSource(signalsource.SignalSource):
                     # probability = _mvn.pdf(dY, cov=residualVariance, allow_singular=True)
 
             except:
-                print('P:')
-                print(P)
-                print('H:')
-                print(H)
-                print('R:')
-                print(R)
-                print('S:')                
-                print(residualVariance)
-                print('dY:')
-                print(dY)
-                raise ValueError(
-                    'Error computing probability.'
-                    )
+                probability = 0
+                print('Error computing probability; setting to zero')
+                # print('P:')
+                # print(P)
+                # print('H:')
+                # print(H)
+                # print('R:')
+                # print(R)
+                # print('S:')                
+                # print(residualVariance)
+                # print('dY:')
+                # print(dY)
+                # raise ValueError(
+                #     'Error computing probability.'
+                #     )
             # print('')
         else:
             probability=0
