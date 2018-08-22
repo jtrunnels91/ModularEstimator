@@ -547,6 +547,9 @@ class ModularFilter():
                 try:
                     np.linalg.cholesky(subComponentR)
                 except:
+                    print('KEY:')
+                    print(key)
+                    print(stateName)
                     raise ValueError(
                         'Received a non positive-semidefinite R matrix ' +
                         'subcomponent. Substate %s, signal source %s'
