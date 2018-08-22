@@ -544,20 +544,21 @@ class ModularFilter():
             varianceDict[stateName] = localRDict
 
             for key, subComponentR in localRDict.items():
-                try:
-                    np.linalg.cholesky(subComponentR)
-                except:
-                    print('KEY:')
-                    print(key)
-                    print(stateName)
-                    print('R MATRIX:')
-                    print(subComponentR)
-                    raise ValueError(
-                        'Received a non positive-semidefinite R matrix ' +
-                        'subcomponent. Substate %s, signal source %s. ' +
-                        'R matrix:\n%s'
-                        %(stateName, key)
-                    )
+                if subComponentR:
+                    try:
+                        np.linalg.cholesky(subComponentR)
+                    except:
+                        print('KEY:')
+                        print(key)
+                        print(stateName)
+                        print('R MATRIX:')
+                        print(subComponentR)
+                        raise ValueError(
+                            'Received a non positive-semidefinite R matrix ' +
+                            'subcomponent. Substate %s, signal source %s. ' +
+                            'R matrix:\n%s'
+                            %(stateName, key)
+                        )
 
         totalHMatrix = np.zeros([totaldYLength, self.totalDimension])
         totalRMatrix = np.zeros([totaldYLength, totaldYLength])
