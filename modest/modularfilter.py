@@ -649,7 +649,15 @@ class ModularFilter():
             np.linalg.cholesky(PMinus) 
         except:
             raise ValueError('PMinus is not positive semidefinite going into measurement update.')
-           
+
+        try:
+            np.linalg.cholesky(IminusKH.dot(PMinus).dot(IminusKH.transpose()))
+        except:
+            raise ValueError('(I-KH)P(I-KH)^T not PSD')
+        try:
+            np.linalg.cholesky(K.dot(totalRMatrix).dot(K.transpose()))
+        except:
+            raise ValueError('(K)R(K)^T not PSD')
         PPlus = (
             IminusKH.dot(PMinus).dot(IminusKH.transpose()) +
             K.dot(totalRMatrix).dot(K.transpose())
