@@ -237,7 +237,7 @@ class Attitude(substate.SubState):
         ):
             biasVar = dynamics['bias']['var']
         else:
-            biasVar = 0
+            biasVar = 1e-100
 
         # Estimated angular velocity is equal to the measured velocity minus
         # the estimated gyro bias
@@ -732,7 +732,7 @@ class Attitude(substate.SubState):
     # be moved to a seperate library probably.
     #
     # @param self Object pointer
-    # @param RaDec A dictionary containing the two angles
+    # @param RaDec A dictionary containing the two angles, in radians
     #
     # @returns A unit vector generated from the angles given
     def sidUnitVec(
