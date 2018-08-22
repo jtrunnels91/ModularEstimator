@@ -315,7 +315,6 @@ class ModularFilter():
             self,
             measurement
     ):
-        print('Called JPDAF')
         signalAssociationProbability = (
             self.computeAssociationProbabilities(measurement)
             )
@@ -351,6 +350,14 @@ class ModularFilter():
                 PPlus = (
                     PPlus + (currentPR * updateDict['PPlus'])
                 )
+                if currentPR < 0:
+                    raise ValueError('Probability less than zero!')
+                try:
+                    np.linalg.cholesky(updateDict['PPlus'])
+                except:
+                    print('PPlus subcomponent = %s' %updateDict['PPlus'])
+                    raise ValueError('Subcomponent of updated covariance is not positive semi-definite.  Signal %s.' %signalName)
+                
 
                 # If the signal association was valid, store it in a dict so
                 # that we can go back and compute the spread of means term
@@ -360,7 +367,7 @@ class ModularFilter():
             np.linalg.cholesky(PPlus)
         except:
             print('PPlus = %s' %PPlus)
-            raise ValueError('JPDAF measurement matrix not positive semi-definite (pre spread-of-means term')
+            raise ValueError('JPDAF measurement matrix not positive semi-definite (pre spread-of-means term)')
         
         # Initialize Spread Of Means matrix
         spreadOfMeans = np.zeros([self.totalDimension, self.totalDimension])
@@ -383,6 +390,7 @@ class ModularFilter():
             np.linalg.cholesky(PPlus)
         except:
             print('PPlus = %s' %PPlus)
+            print('Measurement ID %s' %(self.lastMeasurementID + 1))
             raise ValueError('JPDAF measurement matrix not positive semi-definite (post spread-of-means term')
             
         self.covarianceMatrix = PPlus
