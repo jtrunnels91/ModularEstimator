@@ -63,6 +63,14 @@ class PointSource(signalsource.SignalSource):
             residualVariance = H.dot(P).dot(H.transpose()) + R
             try:
                 uniformProbability = 1/(4 * _np.pi)
+                maxProb = (
+                    1 /
+                    _np.sqrt(
+                        _np.power((2*_np.pi), len(dY)) *
+                        _np.linalg.det(residualVariance)
+                    )
+                )
+
                 maxProb = 1/_np.sqrt(_np.linalg.det(2 * _np.pi * residualVariance))
                 if maxProb < uniformProbability:
 #                    print("using uniform probability")
@@ -75,7 +83,11 @@ class PointSource(signalsource.SignalSource):
                     #         self.lastPDF = {
                     #             'stateVectorID': stateDict['stateVectorID'],
                     #             'dist': _mvn(cov=residualVariance
-                    probability = _mvn.pdf(dY, cov=residualVariance, allow_singular=True)
+                    probability = (
+                        maxProb * 
+                        _np.exp(-dY.dot(_np.linalg.inv(residualVariance)).dot(dY)/2)
+                    )
+                    # probability = _mvn.pdf(dY, cov=residualVariance, allow_singular=True)
 
             except:
                 print('P:')
