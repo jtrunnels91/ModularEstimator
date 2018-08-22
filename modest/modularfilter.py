@@ -315,6 +315,7 @@ class ModularFilter():
             self,
             measurement
     ):
+        print('Called JPDAF')
         signalAssociationProbability = (
             self.computeAssociationProbabilities(measurement)
             )
@@ -355,6 +356,12 @@ class ModularFilter():
                 # that we can go back and compute the spread of means term
                 validAssociationsDict[signalName] = updateDict
 
+        try:
+            np.linalg.cholesky(PPlus)
+        except:
+            print('PPlus = %s' %PPlus)
+            raise ValueError('JPDAF measurement matrix not positive semi-definite (pre spread-of-means term')
+        
         # Initialize Spread Of Means matrix
         spreadOfMeans = np.zeros([self.totalDimension, self.totalDimension])
         # Compute the "spread of means" term
@@ -371,7 +378,13 @@ class ModularFilter():
             )
             
         PPlus = PPlus + spreadOfMeans
-        
+
+        try:
+            np.linalg.cholesky(PPlus)
+        except:
+            print('PPlus = %s' %PPlus)
+            raise ValueError('JPDAF measurement matrix not positive semi-definite (post spread-of-means term')
+            
         self.covarianceMatrix = PPlus
         
         self.storeGlobalStateVector(xPlus, PPlus, aPriori=False)
