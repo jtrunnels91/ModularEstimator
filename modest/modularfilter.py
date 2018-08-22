@@ -163,6 +163,7 @@ class ModularFilter():
             except:
                 raise ValueError(
                     'Process noise matrix Q for substate %s not positive semi-definite'
+                    %stateName
                 )
             F[mySlice, mySlice] = timeUpdateMatrices['F']
             Q[mySlice, mySlice] = timeUpdateMatrices['Q']
