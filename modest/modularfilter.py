@@ -161,9 +161,19 @@ class ModularFilter():
             F[mySlice, mySlice] = timeUpdateMatrices['F']
             Q[mySlice, mySlice] = timeUpdateMatrices['Q']
 
+        try:
+            np.linalg.cholesky(Q)
+        except:
+            raise ValueError('Q matrix in EKF time update not positive semidefinite')
+        
         xMinus = F.dot(self.getGlobalStateVector())
         
         PMinus = F.dot(self.covarianceMatrix).dot(F.transpose()) + Q
+        
+        try:
+            np.linalg.cholesky(PMinus)
+        except:
+            raise ValueError('PMinus matrix in EKF time update not positive semidefinite')
 
         self.tCurrent = self.tCurrent + dT
         
