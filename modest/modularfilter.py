@@ -467,6 +467,15 @@ class ModularFilter():
             xMinus,
             PMinus
             ):
+        try:
+            np.linalg.cholesky(PMinus)
+        except:
+            raise ValueError(
+                'PMinus is not positive semidefinite going into ' +
+                'measurement update. Signal source %s'
+                %signalSourceName
+            )
+        
         measurementDimensions = {}
         measurementMatrixDict = {}
         residualDict = {}
@@ -533,6 +542,16 @@ class ModularFilter():
             measurementMatrixDict[stateName] = localHDict
             residualDict[stateName] = localdYDict
             varianceDict[stateName] = localRDict
+
+            for key, subComponentR in localRDict:
+                try:
+                    np.linalg.cholesky(subComponentR)
+                except:
+                    raise ValueError(
+                        'Received a non positive-semidefinite R matrix ' +
+                        'subcomponent. Substate %s, signal source %s'
+                        %(stateName, key)
+                    )
 
         totalHMatrix = np.zeros([totaldYLength, self.totalDimension])
         totalRMatrix = np.zeros([totaldYLength, totaldYLength])
@@ -609,12 +628,17 @@ class ModularFilter():
                     )
 
         S = totalHMatrix.dot(PMinus).dot(totalHMatrix.transpose()) + totalRMatrix
-        K = PMinus.dot(totalHMatrix.transpose()).dot(ModularFilter.covarianceInverse(S))
-        # K = PMinus.dot(totalHMatrix.transpose()).dot(np.linalg.inv(S))
+        #K = PMinus.dot(totalHMatrix.transpose()).dot(ModularFilter.covarianceInverse(S))
+        K = PMinus.dot(totalHMatrix.transpose()).dot(np.linalg.inv(S))
 
         IminusKH = np.eye(self.totalDimension) - K.dot(totalHMatrix)
 
         xPlus = xMinus + K.dot(totaldYMatrix)
+        try:
+            np.linalg.cholesky(totalRMatrix) 
+        except:
+            raise ValueError('TotalR is not positive semidefinite going into measurement update.')
+           
         PPlus = (
             IminusKH.dot(PMinus).dot(IminusKH.transpose()) +
             K.dot(totalRMatrix).dot(K.transpose())
