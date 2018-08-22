@@ -209,8 +209,14 @@ def run4DOFSimulation(traj):
             photonMeas['t']['var'] = 1e-20
             photonMeas['t']['value'] -= constantOffset
 
-            # myFilter.measurementUpdateEKF(photonMeas, photonMeas['name'])
-            myFilter.measurementUpdateJPDAF(photonMeas)
+            if traj.measurementUpdateMethod == 'EKF':
+                myFilter.measurementUpdateEKF(photonMeas, photonMeas['name'])
+            elif traj.measurementUpdateMethod == 'JPDAF':
+                myFilter.measurementUpdateJPDAF(photonMeas)
+            elif traj.measurementUpdateMethod == 'MLE':
+                myFilter.measurementUpdateMLE(photonMeas)
+            else:
+                raise ValueError('Unrecougnized update method %s' %traj.measurementUpdateMethod)
             if (arrivalT-lastUpdateTime) > 100:
                 lastUpdateTime = int(arrivalT)
                 estimatedDelay = correlationSubstate.stateVectorHistory[-1]['signalTDOA']
@@ -365,8 +371,8 @@ env = Environment(
     trajectory='MonteCarloTest',
     add_time=True,
     git_repository='../.git',
-    git_message='Monte carlo of range error vs initial attitude uncertainty',
-    file_title='Monte carlo of range error vs initial attitude uncertainty',
+    git_message='Monte carlo of range error vs initial attitude uncertainty, testing again with EKF',
+    file_title='Monte carlo of range error vs initial attitude uncertainty, testing again with EKF',
     overwrite_file=True
     )
 
@@ -389,6 +395,8 @@ traj.f_add_parameter('processNoise', 1e-15, comment='Process noise constant adde
 traj.f_add_parameter('measurementNoiseScaleFactor', 1.0, comment='Tuning parameter for measurement noise')
 traj.f_add_parameter('scaleProcessNoise', True, comment='Boolean sets whether the process noise is scaled by the detector area.')
 traj.f_add_parameter('peakLockThreshold', 0.01, comment='How low the TDOA variance estimate must be in order to reach peak lock.  Unitless; it is defined in terms of the filter dT')
+
+traj.f_add_parameter('measurementUpdateMethod', 'JPDAF', comment='Measurement update method; choose either JPDAF, MLE, or EKF')
 
 
 # Detector Information
@@ -419,8 +427,8 @@ traj.f_add_parameter('initialAttitudeSigma', np.float64(1e-9 * np.pi/180.0), com
 traj.f_explore(
     cartesian_product(
         {
-            'initialAttitudeSigma': np.logspace(-2,0,2) * np.pi/180.0,
-            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=10)
+            'initialAttitudeSigma': np.logspace(-2,-2,1) * np.pi/180.0,
+            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=20)
         }
     )
 )
