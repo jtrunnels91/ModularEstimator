@@ -427,7 +427,7 @@ traj.f_add_parameter('initialAttitudeSigma', np.float64(1e-9 * np.pi/180.0), com
 traj.f_explore(
     cartesian_product(
         {
-            'initialAttitudeSigma': np.logspace(-2,-2,1) * np.pi/180.0,
+            'initialAttitudeSigma': np.logspace(-4,-4,1) * np.pi/180.0,
             'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=20)
         }
     )
