@@ -5,7 +5,7 @@ from skyfield.api import load
 planets = load('de421.bsp')
 timeObj = load.timescale()
 earthObj = planets['earth']
-
+import yoctopy as yp
 
 def phaseError(estDelay, trueDelay, period):
     if hasattr(estDelay, '__len__'):
@@ -92,7 +92,10 @@ def sidUnitVec(RA, DEC):
     cosRA = np.cos(RA)
     sinRA = np.sin(RA)
 
-    return np.matrix([cosD * cosRA, cosD * sinRA, sinD])
+    if isinstance(sinD, yp.uscalar):
+        return yp.uarray([cosD * cosRA, cosD * sinRA, sinD])
+    else:
+        return np.array([cosD * cosRA, cosD * sinRA, sinD])
 
 
 def getUTC(startTime, ellapsedSeconds, verbose=False):

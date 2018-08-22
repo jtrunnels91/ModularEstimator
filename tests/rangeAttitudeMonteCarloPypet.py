@@ -365,8 +365,8 @@ env = Environment(
     trajectory='MonteCarloTest',
     add_time=True,
     git_repository='../.git',
-    git_message='Testing to see if JPDAF is producing negative probabilities',
-    file_title='Testing to see if JPDAF is producing negative probabilities',
+    git_message='Monte carlo of range error vs initial attitude uncertainty',
+    file_title='Monte carlo of range error vs initial attitude uncertainty',
     overwrite_file=True
     )
 
@@ -407,22 +407,22 @@ traj.f_add_parameter('angularVelocity', [0.0, 0.0, 0.0], comment='Angular veloci
 traj.f_add_parameter('omegaVar', np.square(1e-12), comment='Variance of angular velocity measurement in rad^2/s^2')
 traj.f_add_parameter('initialAttitudeSigma', np.float64(1e-9 * np.pi/180.0), comment='Variance of initial euler angle uncertainty in radians')
 
-traj.f_explore(
-    cartesian_product(
-        {
-            'detectorArea': np.logspace(3, 3, 1),
-            'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=10)
-        }
-    )
-)
 # traj.f_explore(
 #     cartesian_product(
 #         {
-#             'initialAttitudeSigma': np.logspace(-8,-4,2) * np.pi/180.0,
-#             'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=3)
+#             'detectorArea': np.logspace(3, 3, 1),
+#             'constantPhaseOffset': np.random.uniform(low=-1.0, high=1.0, size=10)
 #         }
 #     )
 # )
+traj.f_explore(
+    cartesian_product(
+        {
+            'initialAttitudeSigma': np.logspace(-4,0,3) * np.pi/180.0,
+            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=10)
+        }
+    )
+)
 
 
 env.run(run4DOFSimulation)
