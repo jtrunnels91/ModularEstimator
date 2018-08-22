@@ -158,6 +158,12 @@ class ModularFilter():
             
             mySlice = self.subStates[stateName]['index']
 
+            try:
+                np.linalg.cholesky(timeUpdateMatrices['Q'])
+            except:
+                raise ValueError(
+                    'Process noise matrix Q for substate %s not positive semi-definite'
+                )
             F[mySlice, mySlice] = timeUpdateMatrices['F']
             Q[mySlice, mySlice] = timeUpdateMatrices['Q']
 
