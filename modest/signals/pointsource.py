@@ -75,7 +75,7 @@ class PointSource(signalsource.SignalSource):
                     #         self.lastPDF = {
                     #             'stateVectorID': stateDict['stateVectorID'],
                     #             'dist': _mvn(cov=residualVariance
-                    probability = _mvn.pdf(dY, cov=residualVariance)
+                    probability = _mvn.pdf(dY, cov=residualVariance, allow_singular=True)
 
             except:
                 print('P:')
