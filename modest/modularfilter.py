@@ -645,6 +645,10 @@ class ModularFilter():
             np.linalg.cholesky(totalRMatrix) 
         except:
             raise ValueError('TotalR is not positive semidefinite going into measurement update.')
+        try:
+            np.linalg.cholesky(PMinus) 
+        except:
+            raise ValueError('TotalR is not positive semidefinite going into measurement update.')
            
         PPlus = (
             IminusKH.dot(PMinus).dot(IminusKH.transpose()) +
