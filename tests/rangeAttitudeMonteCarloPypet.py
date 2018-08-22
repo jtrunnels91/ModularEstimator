@@ -196,8 +196,8 @@ def run4DOFSimulation(traj):
                 'velocity': {'value': vMeas, 'var': np.eye(3)*traj.vVar},
                 'omega': {'value': omega(arrivalT), 'var': np.eye(3) * traj.omegaVar},
             }
-
-            myFilter.timeUpdateEKF(arrivalT-lastT, dynamics=dynamics)
+            if arrivalT > lastT:
+                myFilter.timeUpdateEKF(arrivalT-lastT, dynamics=dynamics)
         #    if myCorrelation.peakLock is True:
         #        myCorrelation.realTimePlot()
             #myFilter.timeUpdateEKF(photon-lastT)
