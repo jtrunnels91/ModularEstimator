@@ -543,7 +543,7 @@ class ModularFilter():
             residualDict[stateName] = localdYDict
             varianceDict[stateName] = localRDict
 
-            for key, subComponentR in localRDict:
+            for key, subComponentR in localRDict.items():
                 try:
                     np.linalg.cholesky(subComponentR)
                 except:
