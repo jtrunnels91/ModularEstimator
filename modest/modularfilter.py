@@ -550,11 +550,13 @@ class ModularFilter():
                     print('KEY:')
                     print(key)
                     print(stateName)
+                    print('R MATRIX:')
+                    print(subComponentR)
                     raise ValueError(
                         'Received a non positive-semidefinite R matrix ' +
                         'subcomponent. Substate %s, signal source %s. ' +
                         'R matrix:\n%s'
-                        %(stateName, key, subComponentR)
+                        %(stateName, key)
                     )
 
         totalHMatrix = np.zeros([totaldYLength, self.totalDimension])
