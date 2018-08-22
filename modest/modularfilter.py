@@ -635,41 +635,43 @@ class ModularFilter():
                     )
 
         S = totalHMatrix.dot(PMinus).dot(totalHMatrix.transpose()) + totalRMatrix
-        #K = PMinus.dot(totalHMatrix.transpose()).dot(ModularFilter.covarianceInverse(S))
+
+        # Could inversion of S be introducting instability?
         K = PMinus.dot(totalHMatrix.transpose()).dot(np.linalg.inv(S))
 
         IminusKH = np.eye(self.totalDimension) - K.dot(totalHMatrix)
 
         xPlus = xMinus + K.dot(totaldYMatrix)
-        try:
-            np.linalg.cholesky(totalRMatrix) 
-        except:
-            raise ValueError('TotalR is not positive semidefinite going into measurement update.')
-        try:
-            np.linalg.cholesky(PMinus) 
-        except:
-            raise ValueError('PMinus is not positive semidefinite going into measurement update.')
+        # try:
+        #     np.linalg.cholesky(totalRMatrix) 
+        # except:
+        #     raise ValueError('TotalR is not positive semidefinite going into measurement update.')
+        # try:
+        #     np.linalg.cholesky(PMinus) 
+        # except:
+        #     raise ValueError('PMinus is not positive semidefinite going into measurement update.')
 
-        try:
-            np.linalg.cholesky(IminusKH.dot(PMinus).dot(IminusKH.transpose()))
-        except:
-            raise ValueError('(I-KH)P(I-KH)^T not PSD')
-        try:
-            np.linalg.cholesky(K.dot(totalRMatrix).dot(K.transpose()))
-        except:
-            raise ValueError('(K)R(K)^T not PSD')
+        # try:
+        #     np.linalg.cholesky(IminusKH.dot(PMinus).dot(IminusKH.transpose()))
+        # except:
+        #     raise ValueError('(I-KH)P(I-KH)^T not PSD')
+        # try:
+        #     np.linalg.cholesky(K.dot(totalRMatrix).dot(K.transpose()))
+        # except:
+        #     raise ValueError('(K)R(K)^T not PSD')
         PPlus = (
             IminusKH.dot(PMinus).dot(IminusKH.transpose()) +
             K.dot(totalRMatrix).dot(K.transpose())
             )
-        try:
-            np.linalg.cholesky(PPlus)
-        except:
-            print('I - KH:')
-            print(IminusKH)
-            print('K:')
-            print(K)
-            raise ValueError('PPlus is not positive semidefinite, even though PMinus and R were.  Big problem.')
+        PPlus = (PPlus + PPlus.transpose())/2
+        # try:
+        #     np.linalg.cholesky(PPlus)
+        # except:
+        #     print('I - KH:')
+        #     print(IminusKH)
+        #     print('K:')
+        #     print(K)
+        #     raise ValueError('PPlus is not positive semidefinite, even though PMinus and R were.  Big problem.')
         return({
             'xPlus': xPlus,
             'PPlus': PPlus,
