@@ -359,6 +359,13 @@ class ModularFilter():
                     xMinus,
                     PMinus
                     )
+                if currentPR < 0:
+                    raise ValueError('Probability less than zero!')
+                try:
+                    np.linalg.cholesky(updateDict['PPlus'])
+                except:
+                    print('PPlus subcomponent = %s' %updateDict['PPlus'])
+                    raise ValueError('Subcomponent of updated covariance is not positive semi-definite.  Signal %s.' %signalName)
 
                 xPlus = (
                     xPlus + (currentPR * updateDict['xPlus'])
@@ -367,13 +374,6 @@ class ModularFilter():
                 PPlus = (
                     PPlus + (currentPR * updateDict['PPlus'])
                 )
-                if currentPR < 0:
-                    raise ValueError('Probability less than zero!')
-                try:
-                    np.linalg.cholesky(updateDict['PPlus'])
-                except:
-                    print('PPlus subcomponent = %s' %updateDict['PPlus'])
-                    raise ValueError('Subcomponent of updated covariance is not positive semi-definite.  Signal %s.' %signalName)
                 
 
                 # If the signal association was valid, store it in a dict so
@@ -648,12 +648,16 @@ class ModularFilter():
         try:
             np.linalg.cholesky(PMinus) 
         except:
-            raise ValueError('TotalR is not positive semidefinite going into measurement update.')
+            raise ValueError('PMinus is not positive semidefinite going into measurement update.')
            
         PPlus = (
             IminusKH.dot(PMinus).dot(IminusKH.transpose()) +
             K.dot(totalRMatrix).dot(K.transpose())
             )
+        try:
+            np.linalg.cholesky(PPlus)
+        except:
+            raise ValueError('PPlus is not positive semidefinite, even though PMinus and R were.  Big problem.')
         return({
             'xPlus': xPlus,
             'PPlus': PPlus,
