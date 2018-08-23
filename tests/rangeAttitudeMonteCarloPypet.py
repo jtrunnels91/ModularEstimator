@@ -370,16 +370,16 @@ env = Environment(
     filename='./MCResults/',
     trajectory='MonteCarloTest',
     add_time=True,
-    git_repository='../.git',
-    git_message='Monte carlo of range error vs initial attitude uncertainty, testing again with EKF',
-    file_title='Monte carlo of range error vs initial attitude uncertainty, testing again with EKF',
+    # git_repository='../.git',
+    # git_message='Monte carlo of range error vs initial attitude uncertainty, testing again with EKF',
+    file_title='Monte carlo of range error vs initial attitude uncertainty, JPDAF',
     overwrite_file=True
     )
 
 traj = env.trajectory
 
 # Monte Carlo simulation parameters
-traj.f_add_parameter('runtime', 150, comment='Length of simulation in seconds')
+traj.f_add_parameter('runtime', 1000, comment='Length of simulation in seconds')
 
 
 #traj.f_add_parameter('pulsarName', 'J0534+2200', comment='Name of the pulsar to run simulation for')
@@ -427,8 +427,8 @@ traj.f_add_parameter('initialAttitudeSigma', np.float64(1e-9 * np.pi/180.0), com
 traj.f_explore(
     cartesian_product(
         {
-            'initialAttitudeSigma': np.logspace(-4,-2,2) * np.pi/180.0,
-            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=20)
+            'initialAttitudeSigma': np.logspace(-4,0,5) * np.pi/180.0,
+            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=50)
         }
     )
 )

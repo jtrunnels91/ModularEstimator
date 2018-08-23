@@ -228,7 +228,7 @@ class Attitude(substate.SubState):
             omegaVar = omegaDict['var']
         else:
             myOmega = np.zeros([3])
-            omegaVar = 0
+            omegaVar = 1e-100
 
         # Check dynamics dict for bias variance
         if (
