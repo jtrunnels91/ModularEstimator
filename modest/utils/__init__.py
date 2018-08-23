@@ -4,10 +4,14 @@
 
 from . QuaternionHelperFunctions import euler2quaternion, quaternion2euler, eulerAngleDiff
 from . accessPSC import chandraPSC_coneSearch, xamin_coneSearch
+from . buildtraj import buildEnvironment, addParameterGroup
 
 __all__ = [
     "euler2quaternion",
     "quaternion2euler",
     "eulerAngleDiff",
-    "accessPSC"
+    "accessPSC",
+    "buildTraj",
+    "buildEnvironment",
+    "addParameterGroup"
 ]

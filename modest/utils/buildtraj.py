@@ -1,5 +1,6 @@
 import yaml
-from pypet import Environment
+from pypet import Environment, cartesian_product
+import numpy as np
 
 ## @fun buildEnvironment creates a pypet envorinment based on a YAML input file
 def buildEnvironment(yamlFile):
@@ -14,8 +15,33 @@ def buildEnvironment(yamlFile):
     parameterDict = dataMap['parameters']
     for key in parameterDict:
         addParameterGroup(env.trajectory, key, parameterDict[key])
+
+    exploreParameters = dataMap['exploreParameters']
+    exploreDict = {}
+
+    # In this loop, we initialize the cartesian product to be explored in Pypet, based on the exploreParameters section of the yaml file.
+    for key, param in exploreParameters.items():
+        # First, we figure out the range type (i.e. linear or log)
+        modifiedKey = key + '.value'
+        if 'rangeType' in param:
+            rangeType = param['rangeType']
+        else:
+            rangeType = 'linear'
+
+        if rangeType == 'linear':
+            product = np.linspace(param['start'], param['stop'], param['number']).tolist()
+        elif rangeType == 'log':
+            product = np.logspace(param['start'], param['stop'], param['number']).tolist()
+
+        exploreDict[modifiedKey] = product
+    env.traj.f_explore(
+        cartesian_product(
+            exploreDict
+        )
+    )
     
-    return dataMap, env
+    
+    return env, dataMap
 
 
 ## @fun addParameterGroup adds parameters to a pypet trajectory
