@@ -5,6 +5,7 @@
 from . QuaternionHelperFunctions import euler2quaternion, quaternion2euler, eulerAngleDiff
 from . accessPSC import chandraPSC_coneSearch, xamin_coneSearch
 from . buildtraj import buildEnvironment, addParameterGroup
+from . loadPulsarData import loadPulsarData
 
 __all__ = [
     "euler2quaternion",
@@ -13,5 +14,6 @@ __all__ = [
     "accessPSC",
     "buildTraj",
     "buildEnvironment",
-    "addParameterGroup"
+    "addParameterGroup",
+	"loadPulsarData"
 ]

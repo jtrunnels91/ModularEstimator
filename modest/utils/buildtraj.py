@@ -32,8 +32,11 @@ def buildEnvironment(yamlFile):
             product = np.linspace(param['start'], param['stop'], param['number']).tolist()
         elif rangeType == 'log':
             product = np.logspace(param['start'], param['stop'], param['number']).tolist()
-
-        exploreDict[modifiedKey] = product
+        print(product)
+        exploreDict[modifiedKey] = [
+            type(env.trajectory.parameters[modifiedKey])(element)
+            for element in product
+        ]
     env.traj.f_explore(
         cartesian_product(
             exploreDict
