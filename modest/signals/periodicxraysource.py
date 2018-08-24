@@ -574,7 +574,9 @@ class PeriodicXRaySource(
             t0=0,
             position=None,
             attitude=None,
-            FOV=None
+            FOV=None,
+            AOA_StdDev=None,
+            TOA_StdDev=None
             ):
 
         nCandidates = np.int((tMax - t0) * self.peakAmplitude * 1.1)
@@ -626,14 +628,27 @@ class PeriodicXRaySource(
                 else:
                     newPhotonArrivalTime = tNextCandidate
                     photonArrivalTimes.append(tNextCandidate)
-                measurementDict = {
-                    't': {'value': newPhotonArrivalTime},
-                    'name': self.name
+
+                if TOA_StdDev:
+                    newPhotonArrivalTime = (
+                        newPhotonArrivalTime + np.random.normal(scale=TOA_StdDev)
+                    )
+                    measurementDict = {
+                        't': {
+                            'value': newPhotonArrivalTime,
+                            'var': np.square(TOA_StdDev)
+                        },
+                        'name': self.name
+                    }
+                else:
+                    measurementDict = {
+                        't': {'value': newPhotonArrivalTime},
+                        'name': self.name
                     }
 
                 if attitude is not None:
                     measurementDict.update(
-                        self.generateArrivalVector(attitude(newPhotonArrivalTime))
+                        self.generateArrivalVector(attitude(newPhotonArrivalTime), AOA_StdDev)
                     )
                     # measurementDict = {
                     #     't': {'value': newPhotonArrivalTime},

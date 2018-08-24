@@ -85,10 +85,10 @@ class ModularFilter():
         # Check to see whether the name is unique
         if name in self.subStates:
             raise ValueError(
-                'The name "%s" has already been used for a state.  If you ' +
+                ('The name %s has already been used for a state.  If you ' +
                 'want to remove that state, you can use the removeStates ' +
                 'function.  If you want to replace it, you can use the ' +
-                'replaceStates function.' %name
+                'replaceStates function.') % name
                 )
 
         newSlice = slice(self.totalDimension, self.totalDimension + stateObject.dimension())
@@ -127,7 +127,7 @@ class ModularFilter():
         # Check to see whether the name is unique
         if name in self.signalSources:
             raise ValueError(
-                'The name \"%s\" has already been used for a signal source.  ' +
+                'The name %s has already been used for a signal source.  ' +
                 'If you want to remove that signal source, you can use the ' +
                 'removeSignalSource function.  If you want to replace it, ' +
                 'you can use the replaceSignalSource function.'

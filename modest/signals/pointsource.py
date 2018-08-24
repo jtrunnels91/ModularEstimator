@@ -113,7 +113,8 @@ class PointSource(signalsource.SignalSource):
 
     def generateArrivalVector(
             self,
-            attitudeQ
+            attitudeQ,
+            AOA_StdDev=None
     ):
         if hasattr(attitudeQ, '__len__'):
             measurement = []
@@ -123,10 +124,33 @@ class PointSource(signalsource.SignalSource):
             attitudeMatrix = attitudeQ.rotation_matrix.transpose()
             unitVecMeas = attitudeMatrix.dot(self.unitVec())
             RaMeas, DecMeas = sg.unitVector2RaDec(unitVecMeas)
-            measurement = {
-                'unitVec': {'value': unitVecMeas},
-                'RA': {'value': RaMeas},
-                'DEC': {'value': DecMeas}
+
+            # If we were given a value for angle of arrival standard deviation,
+            # then corrupt the measurements with noise.  Otherwise, simply
+            # return the true values.
+            if AOA_StdDev:
+                RaMeas = RaMeas + _np.random.normal(scale=AOA_StdDev)
+                DecMeas = DecMeas + _np.random.normal(scale=AOA_StdDev)
+                measurement = {
+                    'unitVec': {'value': sg.sidUnitVec(RaMeas, DecMeas)},
+                    'RA': {
+                        'value': RaMeas,
+                        'var': _np.square(AOA_StdDev)
+                    },
+                    'DEC': {
+                        'value': DecMeas,
+                        'var': _np.square(AOA_StdDev)
+                    }
+                }
+            else:
+                measurement = {
+                    'unitVec': {'value': unitVecMeas},
+                    'RA': {
+                        'value': RaMeas
+                    },
+                    'DEC': {
+                        'value': DecMeas
+                    }
                 }
         return measurement
         
