@@ -127,10 +127,11 @@ class ModularFilter():
         # Check to see whether the name is unique
         if name in self.signalSources:
             raise ValueError(
-                'The name "%s" has already been used for a signal source.  ' +
+                'The name \"%s\" has already been used for a signal source.  ' +
                 'If you want to remove that signal source, you can use the ' +
                 'removeSignalSource function.  If you want to replace it, ' +
                 'you can use the replaceSignalSource function.'
+                %name
                 )
 
         self.signalSources[name] = signalSourceObject
