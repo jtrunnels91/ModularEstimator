@@ -2,6 +2,7 @@ import numpy as np
 # Import module which will give us information about the motion of Earth
 # around the SSB
 from skyfield.api import load
+import warnings
 planets = load('de421.bsp')
 timeObj = load.timescale()
 earthObj = planets['earth']
@@ -17,14 +18,22 @@ def phaseError(estDelay, trueDelay, period):
             for i in range(len(error)):
                 error[i] = phaseError(estDelay[i], trueDelay, period)
     else:
+        nIter = 0
         error = estDelay-trueDelay
         if error > period/2:
-            while error > period/2:
+            while (error > period/2) and nIter < 100:
+                nIter += 1
                 error = error - period
-        elif error < -period/2:
-            while error < - period/2:
+        elif (error < -period/2):
+            while (error < - period/2) and nIter < 100:
+                nIter += 1
                 error = error + period
 
+        if (
+                (error < -period/2) or
+                (error > period/2)
+        ):
+            warnings.warn("Unable to wrap phase")
     return error
 
     

@@ -143,6 +143,16 @@ class ModularFilter():
             dT,
             dynamics=None
             ):
+        try:
+            np.linalg.cholesky(self.covarianceMatrix)
+        except:
+            problemTerm = self.covarianceMatrix
+            print('Problem term: P^+')
+            print('Eigen values:')
+            print(np.linalg.eigvals(problemTerm))
+            print('Condition number:')
+            print(np.linalg.cond(problemTerm))
+            raise ValueError('P+ not PSD')
 
         F = np.zeros([self.totalDimension, self.totalDimension])
         Q = np.zeros([self.totalDimension, self.totalDimension])
@@ -159,29 +169,29 @@ class ModularFilter():
             
             mySlice = self.subStates[stateName]['index']
 
-            try:
-                np.linalg.cholesky(timeUpdateMatrices['Q'])
-            except:
-                raise ValueError(
-                    'Process noise matrix Q for substate %s not positive semi-definite'
-                    %stateName
-                )
+            # try:
+            #     np.linalg.cholesky(timeUpdateMatrices['Q'])
+            # except:
+            #     raise ValueError(
+            #         'Process noise matrix Q for substate %s not positive semi-definite'
+            #         %stateName
+            #     )
             F[mySlice, mySlice] = timeUpdateMatrices['F']
             Q[mySlice, mySlice] = timeUpdateMatrices['Q']
 
-        try:
-            np.linalg.cholesky(Q)
-        except:
-            raise ValueError('Q matrix in EKF time update not positive semidefinite')
+        # try:
+        #     np.linalg.cholesky(Q)
+        # except:
+        #     raise ValueError('Q matrix in EKF time update not positive semidefinite')
         
         xMinus = F.dot(self.getGlobalStateVector())
         
         PMinus = F.dot(self.covarianceMatrix).dot(F.transpose()) + Q
         
-        try:
-            np.linalg.cholesky(PMinus)
-        except:
-            raise ValueError('PMinus matrix in EKF time update not positive semidefinite')
+        # try:
+        #     np.linalg.cholesky(PMinus)
+        # except:
+        #     raise ValueError('PMinus matrix in EKF time update not positive semidefinite')
 
         self.tCurrent = self.tCurrent + dT
         
@@ -333,6 +343,17 @@ class ModularFilter():
             self,
             measurement
     ):
+        try:
+            np.linalg.cholesky(self.covarianceMatrix)
+        except:
+            problemTerm = self.covarianceMatrix
+            print('Problem term: P^-')
+            print('Eigen values:')
+            print(np.linalg.eigvals(problemTerm))
+            print('Condition number:')
+            print(np.linalg.cond(problemTerm))
+            raise ValueError('P- not PSD')
+        
         signalAssociationProbability = (
             self.computeAssociationProbabilities(measurement)
             )
@@ -362,11 +383,11 @@ class ModularFilter():
                     )
                 if currentPR < 0:
                     raise ValueError('Probability less than zero!')
-                try:
-                    np.linalg.cholesky(updateDict['PPlus'])
-                except:
-                    print('PPlus subcomponent = %s' %updateDict['PPlus'])
-                    raise ValueError('Subcomponent of updated covariance is not positive semi-definite.  Signal %s.' %signalName)
+                # try:
+                #     np.linalg.cholesky(updateDict['PPlus'])
+                # except:
+                #     print('PPlus subcomponent = %s' %updateDict['PPlus'])
+                #     raise ValueError('Subcomponent of updated covariance is not positive semi-definite.  Signal %s.' %signalName)
 
                 xPlus = (
                     xPlus + (currentPR * updateDict['xPlus'])
@@ -381,11 +402,11 @@ class ModularFilter():
                 # that we can go back and compute the spread of means term
                 validAssociationsDict[signalName] = updateDict
 
-        try:
-            np.linalg.cholesky(PPlus)
-        except:
-            print('PPlus = %s' %PPlus)
-            raise ValueError('JPDAF measurement matrix not positive semi-definite (pre spread-of-means term)')
+        # try:
+        #     np.linalg.cholesky(PPlus)
+        # except:
+        #     print('PPlus = %s' %PPlus)
+        #     raise ValueError('JPDAF measurement matrix not positive semi-definite (pre spread-of-means term)')
         
         # Initialize Spread Of Means matrix
         spreadOfMeans = np.zeros([self.totalDimension, self.totalDimension])
@@ -404,12 +425,12 @@ class ModularFilter():
             
         PPlus = PPlus + spreadOfMeans
 
-        try:
-            np.linalg.cholesky(PPlus)
-        except:
-            print('PPlus = %s' %PPlus)
-            print('Measurement ID %s' %(self.lastMeasurementID + 1))
-            raise ValueError('JPDAF measurement matrix not positive semi-definite (post spread-of-means term')
+        # try:
+        #     np.linalg.cholesky(PPlus)
+        # except:
+        #     print('PPlus = %s' %PPlus)
+        #     print('Measurement ID %s' %(self.lastMeasurementID + 1))
+        #     raise ValueError('JPDAF measurement matrix not positive semi-definite (post spread-of-means term')
             
         self.covarianceMatrix = PPlus
         
@@ -468,14 +489,14 @@ class ModularFilter():
             xMinus,
             PMinus
             ):
-        try:
-            np.linalg.cholesky(PMinus)
-        except:
-            raise ValueError(
-                'PMinus is not positive semidefinite going into ' +
-                'measurement update. Signal source %s'
-                %signalSourceName
-            )
+        # try:
+        #     np.linalg.cholesky(PMinus)
+        # except:
+        #     raise ValueError(
+        #         'PMinus is not positive semidefinite going into ' +
+        #         'measurement update. Signal source %s'
+        #         %signalSourceName
+        #     )
         
         measurementDimensions = {}
         measurementMatrixDict = {}
@@ -544,22 +565,22 @@ class ModularFilter():
             residualDict[stateName] = localdYDict
             varianceDict[stateName] = localRDict
 
-            for key, subComponentR in localRDict.items():
-                if subComponentR is not None:
-                    try:
-                        np.linalg.cholesky(subComponentR)
-                    except:
-                        print('KEY:')
-                        print(key)
-                        print(stateName)
-                        print('R MATRIX:')
-                        print(subComponentR)
-                        raise ValueError(
-                            'Received a non positive-semidefinite R matrix ' +
-                            'subcomponent. Substate %s, signal source %s. ' +
-                            'R matrix:\n%s'
-                            %(stateName, key)
-                        )
+            # for key, subComponentR in localRDict.items():
+            #     if subComponentR is not None:
+                    # try:
+                    #     np.linalg.cholesky(subComponentR)
+                    # except:
+                    #     print('KEY:')
+                    #     print(key)
+                    #     print(stateName)
+                    #     print('R MATRIX:')
+                    #     print(subComponentR)
+                    #     raise ValueError(
+                    #         'Received a non positive-semidefinite R matrix ' +
+                    #         'subcomponent. Substate %s, signal source %s. ' +
+                    #         'R matrix:\n%s'
+                    #         %(stateName, key)
+                    #     )
 
         totalHMatrix = np.zeros([totaldYLength, self.totalDimension])
         totalRMatrix = np.zeros([totaldYLength, totaldYLength])
@@ -655,16 +676,30 @@ class ModularFilter():
         # try:
         #     np.linalg.cholesky(IminusKH.dot(PMinus).dot(IminusKH.transpose()))
         # except:
+        #     problemTerm = IminusKH.dot(PMinus).dot(IminusKH.transpose())
+        #     print('Problem term: (I-KH)P(I-KH)^T')
+        #     print('Eigen values:')
+        #     print(np.linalg.eigvals(problemTerm))
+        #     print('Condition number:')
+        #     print(np.linalg.cond(problemTerm))
         #     raise ValueError('(I-KH)P(I-KH)^T not PSD')
+        
         # try:
         #     np.linalg.cholesky(K.dot(totalRMatrix).dot(K.transpose()))
         # except:
+        #     problemTerm = K.dot(totalRMatrix).dot(K.transpose())
+        #     print('Problem term: KRK^T')
+        #     print('Eigen values:')
+        #     print(np.linalg.eigvals(problemTerm))
+        #     print('Condition number:')
+        #     print(np.linalg.cond(problemTerm))
+        #     raise ValueError('(I-KH)P(I-KH)^T not PSD')
         #     raise ValueError('(K)R(K)^T not PSD')
         PPlus = (
             IminusKH.dot(PMinus).dot(IminusKH.transpose()) +
             K.dot(totalRMatrix).dot(K.transpose())
             )
-        PPlus = (PPlus + PPlus.transpose())/2
+        # PPlus = (PPlus + PPlus.transpose())/2
         # try:
         #     np.linalg.cholesky(PPlus)
         # except:
