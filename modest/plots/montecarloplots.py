@@ -264,10 +264,12 @@ def plotTrajectory(
     if logy:
         ax.set_yscale('log')
 
-    if '.value' in sortByKey:
-        sortByKey = sortByKey.replace('.value', '')
-        myXLabel = sortByKey + ' (' + traj[sortByKey].units + ')'
-    plt.xlabel(
+    sortByKey = sortByKey.replace('.value', '')
+    try:
+        myXLabel = sortByKey + ' (' + trajPlot[sortByKey].unit + ')'
+    except:
+        myXLabel = sortByKey
+    plt.xlabel(myXLabel)
     plt.grid()
     plt.legend()
     plt.show(block=False)
