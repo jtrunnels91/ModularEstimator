@@ -474,7 +474,7 @@ class ModularFilter():
     localStateUpdateMatrices
     This function is responsible for assembling a sub-component of the global
     measurement matrix, assuming that the signal in question originated from a
-    single signal source.
+    given signal source.
 
     Inputs:
     - measurement: A dictionary containing all measured quantities being used
@@ -655,59 +655,14 @@ class ModularFilter():
                             measurementDimensions[key]['index']
                         ] + localdYDict[key]
                     )
-
-        S = totalHMatrix.dot(PMinus).dot(totalHMatrix.transpose()) + totalRMatrix
-
-        # Could inversion of S be introducting instability?
-        K = PMinus.dot(totalHMatrix.transpose()).dot(np.linalg.inv(S))
-
-        IminusKH = np.eye(self.totalDimension) - K.dot(totalHMatrix)
-
-        xPlus = xMinus + K.dot(totaldYMatrix)
-        # try:
-        #     np.linalg.cholesky(totalRMatrix) 
-        # except:
-        #     raise ValueError('TotalR is not positive semidefinite going into measurement update.')
-        # try:
-        #     np.linalg.cholesky(PMinus) 
-        # except:
-        #     raise ValueError('PMinus is not positive semidefinite going into measurement update.')
-
-        # try:
-        #     np.linalg.cholesky(IminusKH.dot(PMinus).dot(IminusKH.transpose()))
-        # except:
-        #     problemTerm = IminusKH.dot(PMinus).dot(IminusKH.transpose())
-        #     print('Problem term: (I-KH)P(I-KH)^T')
-        #     print('Eigen values:')
-        #     print(np.linalg.eigvals(problemTerm))
-        #     print('Condition number:')
-        #     print(np.linalg.cond(problemTerm))
-        #     raise ValueError('(I-KH)P(I-KH)^T not PSD')
-        
-        # try:
-        #     np.linalg.cholesky(K.dot(totalRMatrix).dot(K.transpose()))
-        # except:
-        #     problemTerm = K.dot(totalRMatrix).dot(K.transpose())
-        #     print('Problem term: KRK^T')
-        #     print('Eigen values:')
-        #     print(np.linalg.eigvals(problemTerm))
-        #     print('Condition number:')
-        #     print(np.linalg.cond(problemTerm))
-        #     raise ValueError('(I-KH)P(I-KH)^T not PSD')
-        #     raise ValueError('(K)R(K)^T not PSD')
-        PPlus = (
-            IminusKH.dot(PMinus).dot(IminusKH.transpose()) +
-            K.dot(totalRMatrix).dot(K.transpose())
+        xPlus, PPlus = self.computeUpdatedStateandCovariance(
+            xMinus,
+            PMinus,
+            totaldYMatrix,
+            totalHMatrix,
+            totalRMatrix
             )
-        # PPlus = (PPlus + PPlus.transpose())/2
-        # try:
-        #     np.linalg.cholesky(PPlus)
-        # except:
-        #     print('I - KH:')
-        #     print(IminusKH)
-        #     print('K:')
-        #     print(K)
-        #     raise ValueError('PPlus is not positive semidefinite, even though PMinus and R were.  Big problem.')
+
         return({
             'xPlus': xPlus,
             'PPlus': PPlus,
@@ -715,6 +670,31 @@ class ModularFilter():
             'R': totalRMatrix,
             'dY': totaldYMatrix
             })
+
+    def computeUpdatedStateandCovariance(
+            self,
+            xMinus,
+            PMinus,
+            dY,
+            H,
+            R,
+            method='standardKalman'
+    ):
+        if method == 'standardKalman':
+            S = H.dot(PMinus).dot(H.transpose()) + R
+
+            # Could inversion of S be introducting instability?
+            K = PMinus.dot(H.transpose()).dot(np.linalg.inv(S))
+
+            IminusKH = np.eye(self.totalDimension) - K.dot(H)
+
+            xPlus = xMinus + K.dot(dY)
+            PPlus = (
+                IminusKH.dot(PMinus).dot(IminusKH.transpose()) +
+                K.dot(R).dot(K.transpose())
+            )
+        return (xPlus, PPlus)
+    
     @staticmethod
     def covarianceInverse(P):
         cholPInv = np.linalg.inv(np.linalg.cholesky(P))
