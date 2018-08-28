@@ -48,8 +48,14 @@ class ModularFilter():
     def __init__(
             self,
             measurementValidationThreshold=1e-3,
-            time=0
+            time=0,
+            covarianceStorage='covariance'
     ):
+        ## covarianceStorage determines how the filter stores and updates
+        # covariance, or more generally, uncertainty.
+        # The standard approach is to use the covariance matrix, as in the
+        # standard Kalman filter formulation.
+        self.covarianceStorage=covarianceStorage
         self.plotHandle=None
 
         self.totalDimension = 0
@@ -185,9 +191,25 @@ class ModularFilter():
         #     raise ValueError('Q matrix in EKF time update not positive semidefinite')
         
         xMinus = F.dot(self.getGlobalStateVector())
-        
-        PMinus = F.dot(self.covarianceMatrix).dot(F.transpose()) + Q
-        
+
+        if self.covarianceStorage == 'covariance':
+            # Standard Kalman Filter equation
+            PMinus = F.dot(self.covarianceMatrix).dot(F.transpose()) + Q
+            
+        elif self.covarianceStorage == 'cholesky':
+            # Square root filter time update equation based on Gram-Schmidt
+            # orthogonalization.  See Optimal State Estimation (Simon),
+            # Page 162-163 for derivation.
+            M = np.vstack([
+                self.covarianceMatrix.transpose().dot(F),
+                np.linalg.cholesky(Q).transpose()
+                ]
+            )
+            T = np.linalg.qr(M)
+            PMinus = T[1][0:self.totalDimension]
+            if PMinus[0,0] < 0:
+                PMinus = -PMinus
+            
         # try:
         #     np.linalg.cholesky(PMinus)
         # except:
@@ -393,10 +415,16 @@ class ModularFilter():
                     xPlus + (currentPR * updateDict['xPlus'])
                     )
 
-                PPlus = (
-                    PPlus + (currentPR * updateDict['PPlus'])
-                )
-                
+                if self.covarianceStorage == 'covariance':
+                    PPlus = (
+                        PPlus + (currentPR * updateDict['PPlus'])
+                    )
+                elif self.covarianceStorage == 'cholesky':
+                    PPlus = (
+                        PPlus + (np.sqrt(currentPR) * updateDict['PPlus'])
+                    )
+                else:
+                    raise ValueError('Unrecougnized covariance storage method')
 
                 # If the signal association was valid, store it in a dict so
                 # that we can go back and compute the spread of means term
@@ -677,10 +705,10 @@ class ModularFilter():
             PMinus,
             dY,
             H,
-            R,
-            method='standardKalman'
+            R
     ):
-        if method == 'standardKalman':
+        if self.covarianceStorage == 'covariance':
+            # Standard Kalman Filter
             S = H.dot(PMinus).dot(H.transpose()) + R
 
             # Could inversion of S be introducting instability?
@@ -693,6 +721,19 @@ class ModularFilter():
                 IminusKH.dot(PMinus).dot(IminusKH.transpose()) +
                 K.dot(R).dot(K.transpose())
             )
+        elif self.covarianceStorage == 'cholesky':
+            W = PMinus
+            Z = W.transpose().dot(H)
+            U = np.linalg.cholesky(R + Z.transpose().dot(Z))
+            V = np.linalg.cholesky(R)
+            UInv = np.linalg.inv(U)
+            WPlus = W.transpose().dot(
+                np.eye(self.totalDimension) -
+                Z.dot(UInv.transpose()).dot(np.linalg.inv(U + V)).dot(Z.transpose())
+            )
+            PPlus = WPlus
+            xPlus = xMinus + W.dot(Z).dot(UInv.transpose()).dot(UInv).dot(dY)
+            
         return (xPlus, PPlus)
     
     @staticmethod

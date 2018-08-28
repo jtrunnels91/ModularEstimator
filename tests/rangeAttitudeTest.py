@@ -17,18 +17,18 @@ pulsarList = ['J0437-4715']
 #pulsarList=['B1821-24']
 pulsarDir = './pulsarData/'
 pulsarCatalogFileName = 'pulsarCatalog.txt'
-tFinal = 3600
+tFinal = 1000
 
 orbitPeriod = 100/(2*np.pi)
 orbitAmplitude = 0
-vVar = np.square(1) # km^2/s^2
-omegaVar = np.square(1e-6) # rad^2/s^2
-AOAVar = np.square(1e-6) # rad^2
-initialAttitudeSigma= 0.1 * np.pi/180.0 #rad
+vVar = np.square(0.01) # km^2/s^2
+omegaVar = np.square(1e-10) # rad^2/s^2
+AOAVar = np.square(1e-10) # rad^2
+initialAttitudeSigma= 1e-9 * np.pi/180.0 #rad
 
 nTaps = 9
 
-detectorArea = 100  # cm^2
+detectorArea = 1000  # cm^2
 detectorFOV = 1
 pulsarObjectDict = loadPulsarData(detectorArea=detectorArea)
 pulsarPeriod = pulsarObjectDict[pulsarList[0]].pulsarPeriod
@@ -100,7 +100,7 @@ def velocity(t):
 corrSubstateDict = {}
 photonMeasurements = []
 
-myFilter = md.ModularFilter()
+myFilter = md.ModularFilter(covarianceStorage='cholesky')
 
 # myPointSource = md.signals.StaticXRayPointSource(
 #     pulsarRaDec['RA'] + 0.001,
