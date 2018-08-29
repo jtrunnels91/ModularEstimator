@@ -387,7 +387,8 @@ class ModularFilter():
         PMinus = self.covarianceMatrix
 
         xPlus = np.zeros(self.totalDimension)
-        PPlus = np.zeros([self.totalDimension, self.totalDimension])
+        PPlus = None
+            
 
         validAssociationsDict = {}
         for signalName in signalAssociationProbability:
@@ -405,36 +406,41 @@ class ModularFilter():
                     )
                 if currentPR < 0:
                     raise ValueError('Probability less than zero!')
-                # try:
-                #     np.linalg.cholesky(updateDict['PPlus'])
-                # except:
-                #     print('PPlus subcomponent = %s' %updateDict['PPlus'])
-                #     raise ValueError('Subcomponent of updated covariance is not positive semi-definite.  Signal %s.' %signalName)
 
                 xPlus = (
                     xPlus + (currentPR * updateDict['xPlus'])
                     )
 
                 if self.covarianceStorage == 'covariance':
-                    PPlus = (
-                        PPlus + (currentPR * updateDict['PPlus'])
-                    )
+                    if PPlus:
+                        PPlus = (
+                            PPlus + (currentPR * updateDict['PPlus'])
+                        )
+                    else:
+                        PPlus = currentPR * updateDict['PPlus']
+                        
                 elif self.covarianceStorage == 'cholesky':
-                    PPlus = (
-                        PPlus + (np.sqrt(currentPR) * updateDict['PPlus'])
-                    )
+                    # If we're doing square root filtering, then we can't
+                    # simply add the square roots of covariance together.
+                    # Rather we have to stack them, then do the QR factorization.
+                    if PPlus:
+                        PPlus = np.vstack(
+                            [PPlus, (np.sqrt(currentPR) * updateDict['PPlus'])]
+                        )
+                    else:
+                        PPlus = (np.sqrt(currentPR) * updateDict['PPlus'])
                 else:
+                    
                     raise ValueError('Unrecougnized covariance storage method')
 
                 # If the signal association was valid, store it in a dict so
                 # that we can go back and compute the spread of means term
                 validAssociationsDict[signalName] = updateDict
 
-        # try:
-        #     np.linalg.cholesky(PPlus)
-        # except:
-        #     print('PPlus = %s' %PPlus)
-        #     raise ValueError('JPDAF measurement matrix not positive semi-definite (pre spread-of-means term)')
+        # Here, we compute the spread of means.  Note that we compute it the
+        # same way regardless of which covariance storage we're using.  If
+        # square root filtering, we'll just take the cholesky decomposition
+        # after the computation is finished.
         
         # Initialize Spread Of Means matrix
         spreadOfMeans = np.zeros([self.totalDimension, self.totalDimension])
@@ -450,15 +456,15 @@ class ModularFilter():
                 spreadOfMeans +
                 currentPR * np.outer(xDiff, xDiff)
             )
-            
-        PPlus = PPlus + spreadOfMeans
-
-        # try:
-        #     np.linalg.cholesky(PPlus)
-        # except:
-        #     print('PPlus = %s' %PPlus)
-        #     print('Measurement ID %s' %(self.lastMeasurementID + 1))
-        #     raise ValueError('JPDAF measurement matrix not positive semi-definite (post spread-of-means term')
+        if self.covarianceStorage == 'covariance':
+            PPlus = PPlus + spreadOfMeans
+        elif self.covarianceStorage == 'cholesky':
+            spreadOfMeans = np.linalg.cholesky(spreadOfMeans)
+            PPlus = np.vstack([PPlus, spreadOfMeans])
+            QR = np.linalg.qr(PPlus)
+            PPlus = QR[1]
+            if PPlus[0,0] < 0:
+                PPlus = - PPlus
             
         self.covarianceMatrix = PPlus
         
