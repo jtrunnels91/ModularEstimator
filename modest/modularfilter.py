@@ -20,6 +20,7 @@ from numpy.linalg import norm, inv
 import matplotlib.pyplot as plt
 # from pyquaternion import Quaternion
 
+from . utils import covarianceContainer
 import sys
 import os
 sys.path.append("/home/joel/Documents/astroSourceTracking/libraries")
@@ -59,7 +60,7 @@ class ModularFilter():
         self.plotHandle=None
 
         self.totalDimension = 0
-        self.covarianceMatrix = np.zeros([0, 0])
+        self.covarianceMatrix = covarianceContainer(np.zeros([0, 0]), covarianceStorage)
 
         self.subStates = {}
         self.signalSources = {}
@@ -103,9 +104,16 @@ class ModularFilter():
             self.totalDimension + stateObject.dimension()
             )
 
-        self.covarianceMatrix = block_diag(
-            self.covarianceMatrix,
-            stateObject.covariance()
+        otherCovariance = stateObject.covariance()
+        if otherCovariance.form != self.covarianceMatrix.form:
+            otherCovariance = otherCovariance.convertCovariance(self.covarianceMatrix.form)
+
+        self.covarianceMatrix = covarianceContainer(
+            block_diag(
+                self.covarianceMatrix.value,
+                otherCovariance.value
+            ),
+            self.form
         )
 
         self.subStates[name] = {
@@ -149,17 +157,7 @@ class ModularFilter():
             dT,
             dynamics=None
             ):
-        try:
-            np.linalg.cholesky(self.covarianceMatrix)
-        except:
-            problemTerm = self.covarianceMatrix
-            print('Problem term: P^+')
-            print('Eigen values:')
-            print(np.linalg.eigvals(problemTerm))
-            print('Condition number:')
-            print(np.linalg.cond(problemTerm))
-            raise ValueError('P+ not PSD')
-
+        
         F = np.zeros([self.totalDimension, self.totalDimension])
         Q = np.zeros([self.totalDimension, self.totalDimension])
 
@@ -192,16 +190,16 @@ class ModularFilter():
         
         xMinus = F.dot(self.getGlobalStateVector())
 
-        if self.covarianceStorage == 'covariance':
+        if self.covarianceMatrix.form == 'covariance':
             # Standard Kalman Filter equation
-            PMinus = F.dot(self.covarianceMatrix).dot(F.transpose()) + Q
+            PMinus = F.dot(self.covarianceMatrix.value).dot(F.transpose()) + Q
             
-        elif self.covarianceStorage == 'cholesky':
+        elif self.covarianceMatrix.form == 'cholesky':
             # Square root filter time update equation based on Gram-Schmidt
             # orthogonalization.  See Optimal State Estimation (Simon),
             # Page 162-163 for derivation.
             M = np.vstack([
-                self.covarianceMatrix.transpose().dot(F),
+                self.covarianceMatrix.value.transpose().dot(F),
                 np.linalg.cholesky(Q).transpose()
                 ]
             )
@@ -217,7 +215,7 @@ class ModularFilter():
 
         self.tCurrent = self.tCurrent + dT
         
-        self.covarianceMatrix = PMinus
+        self.covarianceMatrix = covarianceContainer(PMinus, self.covarianceMatrix.form)
         
         self.storeGlobalStateVector(xMinus, PMinus, aPriori=True)
         
@@ -364,18 +362,7 @@ class ModularFilter():
     def measurementUpdateJPDAF(
             self,
             measurement
-    ):
-        try:
-            np.linalg.cholesky(self.covarianceMatrix)
-        except:
-            problemTerm = self.covarianceMatrix
-            print('Problem term: P^-')
-            print('Eigen values:')
-            print(np.linalg.eigvals(problemTerm))
-            print('Condition number:')
-            print(np.linalg.cond(problemTerm))
-            raise ValueError('P- not PSD')
-        
+    ):        
         signalAssociationProbability = (
             self.computeAssociationProbabilities(measurement)
             )
@@ -411,26 +398,25 @@ class ModularFilter():
                     xPlus + (currentPR * updateDict['xPlus'])
                     )
 
-                if self.covarianceStorage == 'covariance':
+                if self.covarianceMatrix.form == 'covariance':
                     if PPlus:
                         PPlus = (
-                            PPlus + (currentPR * updateDict['PPlus'])
+                            PPlus + (currentPR * updateDict['PPlus'].value)
                         )
                     else:
-                        PPlus = currentPR * updateDict['PPlus']
+                        PPlus = currentPR * updateDict['PPlus'].value
                         
-                elif self.covarianceStorage == 'cholesky':
+                elif self.covarianceMatrix.form == 'cholesky':
                     # If we're doing square root filtering, then we can't
                     # simply add the square roots of covariance together.
                     # Rather we have to stack them, then do the QR factorization.
                     if PPlus:
                         PPlus = np.vstack(
-                            [PPlus, (np.sqrt(currentPR) * updateDict['PPlus'])]
+                            [PPlus, (np.sqrt(currentPR) * updateDict['PPlus'].value)]
                         )
                     else:
-                        PPlus = (np.sqrt(currentPR) * updateDict['PPlus'])
+                        PPlus = (np.sqrt(currentPR) * updateDict['PPlus'].value)
                 else:
-                    
                     raise ValueError('Unrecougnized covariance storage method')
 
                 # If the signal association was valid, store it in a dict so
@@ -475,6 +461,9 @@ class ModularFilter():
             PPlus = QR[1]
             if PPlus[0,0] < 0:
                 PPlus = - PPlus
+            PPlus = covarianceContainer(PPlus, 'cholesky')
+        elif self.covarianceMatrix.form == 'covariance':
+            PPlus = covarianceContainer(PPlus, 'covariance')
 
         self.covarianceMatrix = PPlus
         
@@ -724,9 +713,9 @@ class ModularFilter():
             R
     ):
         print(H)
-        if self.covarianceStorage == 'covariance':
+        if PMinus.form == 'covariance':
             # Standard Kalman Filter
-            S = H.dot(PMinus).dot(H.transpose()) + R
+            S = H.dot(PMinus.value).dot(H.transpose()) + R
 
             # Could inversion of S be introducting instability?
             K = PMinus.dot(H.transpose()).dot(np.linalg.inv(S))
@@ -735,11 +724,12 @@ class ModularFilter():
 
             xPlus = xMinus + K.dot(dY)
             PPlus = (
-                IminusKH.dot(PMinus).dot(IminusKH.transpose()) +
+                IminusKH.dot(PMinus.value).dot(IminusKH.transpose()) +
                 K.dot(R).dot(K.transpose())
             )
-        elif self.covarianceStorage == 'cholesky':
-            W = PMinus
+            PPlus = covarianceContainer(PPlus, 'covariance')
+        elif PMinus.form == 'cholesky':
+            W = PMinus.value
             Z = W.transpose().dot(H.transpose())
             U = np.linalg.cholesky(R + Z.transpose().dot(Z))
             V = np.linalg.cholesky(R)
@@ -748,7 +738,7 @@ class ModularFilter():
                 np.eye(self.totalDimension) -
                 Z.dot(UInv.transpose()).dot(np.linalg.inv(U + V)).dot(Z.transpose())
             )
-            PPlus = WPlus
+            PPlus = covarianceContainer(WPlus, PMinus.form)
             xPlus = xMinus + W.dot(Z).dot(UInv.transpose()).dot(UInv).dot(dY)
             
         return (xPlus, PPlus)
