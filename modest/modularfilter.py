@@ -441,31 +441,41 @@ class ModularFilter():
         # same way regardless of which covariance storage we're using.  If
         # square root filtering, we'll just take the cholesky decomposition
         # after the computation is finished.
-        
-        # Initialize Spread Of Means matrix
-        spreadOfMeans = np.zeros([self.totalDimension, self.totalDimension])
-        # Compute the "spread of means" term
-        for signalName in validAssociationsDict:
-            currentPR = signalAssociationProbability[signalName]
+        #
+        # Also note that we only need to compute the spread of means term if
+        # there was more than one valid association.  Otherwise we essentially
+        # just have the standard KF
+        if len(validAssociationsDict) > 1:
+            # Initialize Spread Of Means matrix
+            spreadOfMeans = np.zeros([self.totalDimension, self.totalDimension])
+            # Compute the "spread of means" term
+            for signalName in validAssociationsDict:
+                currentPR = signalAssociationProbability[signalName]
 
-            # Compute the difference between the jointly-updated state vector,
-            # and the locally updated state vector.
-            xDiff = xPlus - validAssociationsDict[signalName]['xPlus']
+                # Compute the difference between the jointly-updated state vector,
+                # and the locally updated state vector.
+                xDiff = xPlus - validAssociationsDict[signalName]['xPlus']
 
-            spreadOfMeans = (
-                spreadOfMeans +
-                currentPR * np.outer(xDiff, xDiff)
-            )
-        if self.covarianceStorage == 'covariance':
-            PPlus = PPlus + spreadOfMeans
-        elif self.covarianceStorage == 'cholesky':
-            spreadOfMeans = np.linalg.cholesky(spreadOfMeans)
-            PPlus = np.vstack([PPlus, spreadOfMeans])
+                spreadOfMeans = (
+                    spreadOfMeans +
+                    currentPR * np.outer(xDiff, xDiff)
+                )
+            print("Valid associations:")
+            print(validAssociationsDict)
+            print("Spread of means term:")
+            print(spreadOfMeans)
+            if self.covarianceStorage == 'covariance':
+                PPlus = PPlus + spreadOfMeans
+            elif self.covarianceStorage == 'cholesky':
+                spreadOfMeans = np.linalg.cholesky(spreadOfMeans)
+                PPlus = np.vstack([PPlus, spreadOfMeans])
+
+        if self.covarianceStorage == 'cholesky':
             QR = np.linalg.qr(PPlus)
             PPlus = QR[1]
             if PPlus[0,0] < 0:
                 PPlus = - PPlus
-            
+
         self.covarianceMatrix = PPlus
         
         self.storeGlobalStateVector(xPlus, PPlus, aPriori=False)
@@ -713,6 +723,7 @@ class ModularFilter():
             H,
             R
     ):
+        print(H)
         if self.covarianceStorage == 'covariance':
             # Standard Kalman Filter
             S = H.dot(PMinus).dot(H.transpose()) + R
@@ -729,7 +740,7 @@ class ModularFilter():
             )
         elif self.covarianceStorage == 'cholesky':
             W = PMinus
-            Z = W.transpose().dot(H)
+            Z = W.transpose().dot(H.transpose())
             U = np.linalg.cholesky(R + Z.transpose().dot(Z))
             V = np.linalg.cholesky(R)
             UInv = np.linalg.inv(U)
