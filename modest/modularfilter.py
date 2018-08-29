@@ -14,7 +14,7 @@
 # <a href="http://www.gnu.org/licenses/">GNU GPL</a>.
 
 import numpy as np
-from scipy.linalg import block_diag
+from scipy.linalg import block_diag, ldl
 from numpy import sin, cos, arcsin, arccos, arctan2, square, sqrt, abs, power
 from numpy.linalg import norm, inv
 import matplotlib.pyplot as plt
@@ -113,7 +113,7 @@ class ModularFilter():
                 self.covarianceMatrix.value,
                 otherCovariance.value
             ),
-            self.form
+            self.covarianceMatrix.form
         )
 
         self.subStates[name] = {
@@ -217,7 +217,7 @@ class ModularFilter():
         
         self.covarianceMatrix = covarianceContainer(PMinus, self.covarianceMatrix.form)
         
-        self.storeGlobalStateVector(xMinus, PMinus, aPriori=True)
+        self.storeGlobalStateVector(xMinus, self.covarianceMatrix, aPriori=True)
         
         return (xMinus, PMinus)
     
@@ -399,7 +399,7 @@ class ModularFilter():
                     )
 
                 if self.covarianceMatrix.form == 'covariance':
-                    if PPlus:
+                    if PPlus is not None:
                         PPlus = (
                             PPlus + (currentPR * updateDict['PPlus'].value)
                         )
@@ -410,7 +410,7 @@ class ModularFilter():
                     # If we're doing square root filtering, then we can't
                     # simply add the square roots of covariance together.
                     # Rather we have to stack them, then do the QR factorization.
-                    if PPlus:
+                    if PPlus is not None:
                         PPlus = np.vstack(
                             [PPlus, (np.sqrt(currentPR) * updateDict['PPlus'].value)]
                         )
@@ -433,7 +433,9 @@ class ModularFilter():
         # just have the standard KF
         if len(validAssociationsDict) > 1:
             # Initialize Spread Of Means matrix
-            spreadOfMeans = np.zeros([self.totalDimension, self.totalDimension])
+            # spreadOfMeans = np.zeros([self.totalDimension, self.totalDimension])
+            spreadOfMeans = None
+            
             # Compute the "spread of means" term
             for signalName in validAssociationsDict:
                 currentPR = signalAssociationProbability[signalName]
@@ -442,18 +444,32 @@ class ModularFilter():
                 # and the locally updated state vector.
                 xDiff = xPlus - validAssociationsDict[signalName]['xPlus']
 
-                spreadOfMeans = (
-                    spreadOfMeans +
-                    currentPR * np.outer(xDiff, xDiff)
-                )
-            print("Valid associations:")
-            print(validAssociationsDict)
-            print("Spread of means term:")
-            print(spreadOfMeans)
-            if self.covarianceStorage == 'covariance':
+                if spreadOfMeans is not None:
+                    if PMinus.form == 'covariance':
+                        spreadOfMeans = (
+                            spreadOfMeans +
+                            currentPR * np.outer(xDiff, xDiff)
+                        )
+                    elif PMinus.form == 'cholesky':
+                        spreadOfMeans = np.vstack(
+                            [spreadOfMeans,
+                             np.vstack([
+                                 xDiff * np.sqrt(currentPR),
+                                 np.zeros([self.totalDimension-1, self.totalDimension])]
+                             ).transpose()
+                            ]
+                        )
+                else:
+                    if PMinus.form == 'covariance':
+                        spreadOfMeans = currentPR * np.outer(xDiff, xDiff)
+                    elif PMinus.form == 'cholesky':
+                        spreadOfMeans = np.vstack([
+                            xDiff,
+                            np.zeros([self.totalDimension-1, self.totalDimension])]
+                        ).transpose()
+            if PMinus.form == 'covariance':
                 PPlus = PPlus + spreadOfMeans
-            elif self.covarianceStorage == 'cholesky':
-                spreadOfMeans = np.linalg.cholesky(spreadOfMeans)
+            elif PMinus.form == 'cholesky':
                 PPlus = np.vstack([PPlus, spreadOfMeans])
 
         if self.covarianceStorage == 'cholesky':
@@ -712,13 +728,12 @@ class ModularFilter():
             H,
             R
     ):
-        print(H)
         if PMinus.form == 'covariance':
             # Standard Kalman Filter
             S = H.dot(PMinus.value).dot(H.transpose()) + R
 
             # Could inversion of S be introducting instability?
-            K = PMinus.dot(H.transpose()).dot(np.linalg.inv(S))
+            K = PMinus.value.dot(H.transpose()).dot(np.linalg.inv(S))
 
             IminusKH = np.eye(self.totalDimension) - K.dot(H)
 
@@ -731,8 +746,18 @@ class ModularFilter():
         elif PMinus.form == 'cholesky':
             W = PMinus.value
             Z = W.transpose().dot(H.transpose())
-            U = np.linalg.cholesky(R + Z.transpose().dot(Z))
-            V = np.linalg.cholesky(R)
+
+            # Compute U.  Instead of using cholesky decomposition however, use
+            # LDL (since R + Z^TZ can be semidefinite)
+            # U = np.linalg.cholesky(R + Z.transpose().dot(Z))
+            
+            R_plus_ZTZ = R + Z.transpose().dot(Z)
+            myLDL = ldl(R_plus_ZTZ)
+            U = myLDL[0].dot(np.sqrt(myLDL[1]))
+            # Compute V
+            # V = np.linalg.cholesky(R)
+            myLDL = ldl(R)
+            V = myLDL[0].dot(np.sqrt(myLDL[1]))
             UInv = np.linalg.inv(U)
             WPlus = W.transpose().dot(
                 np.eye(self.totalDimension) -

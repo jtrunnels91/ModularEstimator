@@ -5,6 +5,7 @@ import numpy as np
 #from numpy import sin, cos, arcsin, arccos, arctan2, square, sqrt, abs, power
 import matplotlib.pyplot as plt
 from . import substate
+from .. utils import covarianceContainer
 
 ## @class CorrelationVector
 # @brief CorrelationVector estimates the correlation vector and delay between
@@ -118,7 +119,8 @@ class CorrelationVector(substate.SubState):
             peakFitPoints=1,
             processNoise=1e-12,
             measurementNoiseScaleFactor=1,
-            peakLockThreshold=1
+            peakLockThreshold=1,
+            covarianceStorage='covariance'
             ):
 
         self.peakLockThreshold = peakLockThreshold
@@ -162,10 +164,21 @@ class CorrelationVector(substate.SubState):
         self.correlationVector = correlationVector
 
         if correlationVectorCovariance is None:
-            correlationVectorCovariance = (
-                np.eye(self.__filterOrder__) *
-                np.square(self.__trueSignal__.peakAmplitude * self.__dT__)
-            )
+            if covarianceStorage == 'covariance':
+                correlationVectorCovariance = (
+                    np.eye(self.__filterOrder__) *
+                    np.square(self.__trueSignal__.peakAmplitude * self.__dT__)
+                )
+            elif covarianceStorage == 'cholesky':
+                correlationVectorCovariance = (
+                    np.eye(self.__filterOrder__) *
+                    self.__trueSignal__.peakAmplitude * self.__dT__
+                )
+        # Store the correlation vector covariance in a container
+        correlationVectorCovariance = covarianceContainer(
+            correlationVectorCovariance,
+            covarianceStorage
+        )
         ## @brief #correlationVectorCovariance is the covariance matrix of the
         # correlation vector estimate, #correlationVector
         self.correlationVectorCovariance = correlationVectorCovariance
@@ -720,7 +733,10 @@ class CorrelationVector(substate.SubState):
         hDimension = len(h)
 
         # Compute the square root of P.
-        sqrtP = np.linalg.cholesky(hDimension * P)
+        if P.form == 'covariance':
+            sqrtP = np.linalg.cholesky(hDimension * P.value)
+        elif P.form == 'cholesky':
+            sqrtP = P.value * np.sqrt(hDimension)
                 
         sigmaPoints = h + np.append(sqrtP, -sqrtP, axis=0)
 
@@ -733,7 +749,7 @@ class CorrelationVector(substate.SubState):
         # Compute the peak corresponding to each sigma point vector
         for i in range(len(sigmaPoints)):
             sigmaPointResults[i] = (
-                self.computeSignalTDOA(sigmaPoints[i], P)
+                self.computeSignalTDOA(sigmaPoints[i], P.convertCovariance('covariance').value)
             )
 
         meanTDOA = np.mean(sigmaPointResults)

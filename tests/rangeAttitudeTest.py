@@ -5,7 +5,7 @@ import pandas as pd
 from operator import itemgetter
 
 from pulsarData.loadPulsarData import loadPulsarData
-
+np.random.seed(0)
 
 
 plt.close('all')
@@ -17,10 +17,10 @@ pulsarList = ['J0437-4715']
 #pulsarList=['B1821-24']
 pulsarDir = './pulsarData/'
 pulsarCatalogFileName = 'pulsarCatalog.txt'
-tFinal = 10
+tFinal = 1000
 
 orbitPeriod = 100/(2*np.pi)
-orbitAmplitude = 0
+orbitAmplitude = 1000
 vVar = np.square(0.01) # km^2/s^2
 omegaVar = np.square(1e-10) # rad^2/s^2
 AOAVar = np.square(1e-10) # rad^2
@@ -99,8 +99,11 @@ def velocity(t):
 
 corrSubstateDict = {}
 photonMeasurements = []
+covarianceStorageMethod='covariance'
+#updateMethod = 'EKF'
+updateMethod = 'JPDAF'
 
-myFilter = md.ModularFilter(covarianceStorage='covariance')
+myFilter = md.ModularFilter(covarianceStorage=covarianceStorageMethod)
 
 # myPointSource = md.signals.StaticXRayPointSource(
 #     pulsarRaDec['RA'] + 0.001,
@@ -167,6 +170,7 @@ for pulsarName in pulsarList:
         processNoise=1e-15,
         centerPeak=True,
         peakLockThreshold=0.05,
+        covarianceStorage=covarianceStorageMethod
         )
 
     myFilter.addSignalSource(pulsarObjectDict[pulsarName].name, pulsarObjectDict[pulsarName])
@@ -186,10 +190,20 @@ photonMeasurements = sorted(photonMeasurements, key=lambda k: k['t']['value'])
 initialAttitude = md.utils.euler2quaternion(
     attitude(0, returnQ=False) + np.random.normal(0, scale=initialAttitudeSigma, size=3)
     )
-myAttitude = md.substates.Attitude(
-    attitudeQuaternion=initialAttitude,
-    attitudeErrorCovariance=np.eye(3)*np.square(initialAttitudeSigma),
-    gyroBiasCovariance=np.eye(3)*1e-100)
+if covarianceStorageMethod == 'covariance':
+    myAttitude = md.substates.Attitude(
+        attitudeQuaternion=initialAttitude,
+        attitudeErrorCovariance=np.eye(3)*np.square(initialAttitudeSigma),
+        gyroBiasCovariance=np.eye(3)*1e-100,
+        covarianceStorage=covarianceStorageMethod
+    )
+else:
+    myAttitude = md.substates.Attitude(
+        attitudeQuaternion=initialAttitude,
+        attitudeErrorCovariance=np.eye(3)*initialAttitudeSigma,
+        gyroBiasCovariance=np.eye(3)*np.sqrt(1e-100),
+        covarianceStorage=covarianceStorageMethod
+    )    
 myFilter.addStates('attitude', myAttitude)
 myFilter.addSignalSource('background', backgroundNoise)
 
@@ -225,9 +239,11 @@ for photonMeas in photonMeasurements:
     photonMeas['DEC']['var'] = AOAVar
     photonMeas['t']['var'] = 1e-20
     photonMeas['t']['value'] -= constantOffset
-              
-    #myFilter.measurementUpdateEKF(photonMeas, photonMeas['name'])
-    myFilter.measurementUpdateJPDAF(photonMeas)
+
+    if updateMethod == 'EKF':
+        myFilter.measurementUpdateEKF(photonMeas, photonMeas['name'])
+    elif updateMethod == 'JPDAF':
+        myFilter.measurementUpdateJPDAF(photonMeas)
     if (arrivalT-lastUpdateTime) > 100:
         lastUpdateTime = int(arrivalT)
         print('time: %f\test TDOA: %f\ttrue TDOA %f' %

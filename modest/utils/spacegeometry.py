@@ -6,7 +6,6 @@ import warnings
 planets = load('de421.bsp')
 timeObj = load.timescale()
 earthObj = planets['earth']
-import yoctopy as yp
 
 def phaseError(estDelay, trueDelay, period):
     if hasattr(estDelay, '__len__'):
