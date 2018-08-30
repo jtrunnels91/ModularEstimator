@@ -47,6 +47,7 @@ class TestModularFilters(unittest.TestCase):
                 HDict = {}
                 RDict = {}
                 dyDict = {}
+                
                 if isinstance(source, oneDObjectMeasurement) and source.objectID == self.objectID:
                     if 'position' in measurement:
                         H = np.array([[1, 0]])
@@ -64,7 +65,6 @@ class TestModularFilters(unittest.TestCase):
                             [[measurement['velocity']['var']]]
                         )
                         dyDict['%s velocity' %self.objectID] = dY
-
                 return {'H': HDict, 'R': RDict, 'dY': dyDict}
 
         self.oneDPositionVelocity = oneDPositionVelocity
@@ -330,10 +330,46 @@ class TestModularFilters(unittest.TestCase):
         self.assertTrue(np.allclose(x1Plus, positionObj1.stateVector))
         self.assertTrue(np.allclose(P1Plus, positionObj1.covariance()))
 
+        # Verify that the covariances are stored properly in the filter
         self.assertTrue(
             np.allclose(block_diag(P1Plus, P2Plus), myFilter.covarianceMatrix)
         )
+
+        myFilter.timeUpdateEKF(1)
+        x1Minus = positionObj1.stateVector
+        P1Minus = positionObj1.covariance()
+        x2Minus = positionObj2.stateVector
+        P2Minus = positionObj2.covariance()
+
+        # Generate position and velocity measurement for state1
+        vVar = 0.01
+        x1Meas = np.random.normal(x1Minus[0], 1)
+        v1Meas = np.random.normal(x1Minus[1], np.sqrt(vVar))
+        state1Meas = {
+            'velocity': {
+                'value': v1Meas,
+                'var': vVar
+                },
+            'position': {
+                'value': x1Meas,
+                'var': 1
+                }
+        }
+        myFilter.measurementUpdateEKF(state1Meas, 'object1')
+
+        # Now compute the measurement update independently.
+        H = np.array([[1,0],[0,1]])
+        R = np.array([[1,0],[0,vVar]])
+        S = H.dot(P1Minus).dot(H.transpose()) + R
+        K = P1Minus.dot(H.transpose()).dot(np.linalg.inv(S))
+        dY = np.array([x1Meas, v1Meas]) - H.dot(x1Minus)
+        x1Plus = x1Minus + K.dot(dY)
+        IminusKH = (np.eye(2) - K.dot(H))
+        P1Plus = IminusKH.dot(P1Minus).dot(IminusKH.transpose()) + K.dot(R).dot(K.transpose())
         
+        # Verify that state 1 is updated
+        self.assertTrue(np.allclose(x1Plus, positionObj1.stateVector))
+        self.assertTrue(np.allclose(P1Plus, positionObj1.covariance()))
         
     
 unittest.main(argv=['ignored','-v'], exit=False)
