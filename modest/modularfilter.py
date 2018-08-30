@@ -550,10 +550,14 @@ class ModularFilter():
                                    len(localdYDict[key]))
                                 )
                     else:
-                        newdYLength = totaldYLength + len(localdYDict[key])
-                        
+                        if hasattr(localdYDict[key], '__len__'):
+                            localdYLength = len(localdYDict[key])
+                        else:
+                            localdYLength = 1
+
+                        newdYLength = totaldYLength + localdYLength
                         measurementDimensions[key] = {
-                            'length': len(localdYDict[key]),
+                            'length': localdYLength,
                             'index': slice(
                                 totaldYLength,
                                 newdYLength
@@ -623,9 +627,9 @@ class ModularFilter():
                             '(Q) with incompatible dimensions.\n Expected' +
                             'Dimensions: (%i, %i)\nReceived Dimensions: %s.'
                             % (
-                                localRDict[key].shape,
                                 measurementDimensions[key]['length'],
-                                measurementDimensions[key]['length']
+                                measurementDimensions[key]['length'],
+                                localRDict[key].shape
                             )
                         )
                     
