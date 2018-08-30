@@ -95,7 +95,8 @@ class SubState():
             
         
         ## @brief Stores the time-history of the sub-state state vector.
-        self.stateVectorHistory = SmartPanda(data=stateVectorHistory)
+        # self.stateVectorHistory = SmartPanda(data=stateVectorHistory)
+        self.stateVectorHistory = [stateVectorHistory]
 
         ## @brief Stores handle for real-time plotting        
         self.RTPlotHandle = None
@@ -131,7 +132,8 @@ class SubState():
     # @returns The dictionary containing the state vector, covariance matrix,
     # and aPriori status
     def getStateVector(self):
-        lastSV = self.stateVectorHistory.getDict(-1)
+        # lastSV = self.stateVectorHistory.getDict(-1)
+        lastSV = self.stateVectorHistory[-1]
 
         return(lastSV)
 
@@ -174,7 +176,8 @@ class SubState():
     #
     # @return Returns the covaraince matrix
     def covariance(self):
-        return self.stateVectorHistory.getDict(-1)['covariance']
+        # return self.stateVectorHistory.getDict(-1)['covariance']
+        return self.stateVectorHistory[-1]['covariance']
 
     ## @fun #dimension returns the dimension of the sub-state vector
     #
