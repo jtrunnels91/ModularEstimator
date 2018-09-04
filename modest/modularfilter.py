@@ -183,7 +183,7 @@ class ModularFilter():
             #         %stateName
             #     )
             F[mySlice, mySlice] = timeUpdateMatrices['F']
-            Q[mySlice, mySlice] = timeUpdateMatrices['Q'].convertCovariance(self.covarianceMatrix.form).value
+            Q[mySlice, mySlice] = timeUpdateMatrices['Q']
 
         # try:
         #     np.linalg.cholesky(Q)
@@ -194,22 +194,19 @@ class ModularFilter():
 
         if self.covarianceMatrix.form == 'covariance':
             # Standard Kalman Filter equation
-            PMinus = F.dot(self.covarianceMatrix.value).dot(F.transpose()) + Q.convertCovariance('covariance')
+            PMinus = F.dot(self.covarianceMatrix.value).dot(F.transpose()) + Q.value
             
         elif self.covarianceMatrix.form == 'cholesky':
             # Square root filter time update equation based on Gram-Schmidt
             # orthogonalization.  See Optimal State Estimation (Simon),
             # Page 162-163 for derivation.
-
             M = np.vstack([
-                self.covarianceMatrix.value.transpose().dot(F),
-                #self.covarianceMatrix.value.dot(F),
-                Q.convertCovariance('cholesky')
+                self.covarianceMatrix.value.transpose().dot(F.transpose()),
+                Q.value.transpose()
                 ]
             )
             T = np.linalg.qr(M)
             PMinus = T[1][0:self.totalDimension].transpose()
-            
             # if PMinus[0,0] < 0:
             #     PMinus = -PMinus
                     
@@ -754,6 +751,14 @@ class ModularFilter():
             )
             PPlus = covarianceContainer(PPlus, 'covariance')
         elif PMinus.form == 'cholesky':
+            print("Pminus")
+            print(PMinus.value)
+            print("H")
+            print(H)
+            print("dY")
+            print(dY)
+            print("R")
+            print(R)
             W = PMinus.value
             Z = W.transpose().dot(H.transpose())
 
@@ -768,14 +773,30 @@ class ModularFilter():
             # V = np.linalg.cholesky(R)
             myLDL = ldl(R)
             V = myLDL[0].dot(np.sqrt(myLDL[1]))
+            print("Z")
+            print(Z)
+            print("U")
+            print(U)
+            print("V")
+            print(V)
+            print("U+V")
+            print(U+V)
             UInv = np.linalg.inv(U)
-            WPlus = W.transpose().dot(
+            print("Z * U^-T * (U+V)^-1 * Z^T")
+            print(Z.dot(UInv.transpose()))
+            print(Z.dot(UInv.transpose()).dot(np.linalg.inv(U + V)))
+            print(Z.dot(UInv.transpose()).dot(np.linalg.inv(U + V)).dot(Z.transpose()))
+
+            WPlus = W.dot(
                 np.eye(self.totalDimension) -
                 Z.dot(UInv.transpose()).dot(np.linalg.inv(U + V)).dot(Z.transpose())
             )
             PPlus = covarianceContainer(WPlus, PMinus.form)
             xPlus = xMinus + W.dot(Z).dot(UInv.transpose()).dot(UInv).dot(dY)
-            
+            print('xplus')
+            print(xPlus)
+            print('pplus')
+            print(PPlus.value)
         return (xPlus, PPlus)
     
     @staticmethod

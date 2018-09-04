@@ -34,3 +34,8 @@ class covarianceContainer():
     def __getitem__(self, key):
         subMat = self.value[key]
         return covarianceContainer(subMat, self.form)
+    def __setitem__(self, key, newVal):
+        if isinstance(newVal, covarianceContainer):
+            self.value[key] = newVal.convertCovariance(self.form).value
+        else:
+            self.value[key] = newVal

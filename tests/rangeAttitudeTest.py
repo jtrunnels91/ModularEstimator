@@ -100,7 +100,8 @@ def velocity(t):
 corrSubstateDict = {}
 photonMeasurements = []
 covarianceStorageMethod='covariance'
-#updateMethod = 'EKF'
+covarianceStorageMethod='cholesky'
+updateMethod = 'EKF'
 #updateMethod = 'JPDAF'
 
 myFilter = md.ModularFilter(covarianceStorage=covarianceStorageMethod)
@@ -169,7 +170,7 @@ for pulsarName in pulsarList:
         measurementNoiseScaleFactor=3,
         processNoise=1e-15,
         centerPeak=True,
-        peakLockThreshold=0.05,
+        peakLockThreshold=0.0001,
         covarianceStorage=covarianceStorageMethod
         )
 
