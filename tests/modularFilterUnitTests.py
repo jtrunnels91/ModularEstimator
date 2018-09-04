@@ -6,17 +6,22 @@ from scipy.stats import multivariate_normal as mvn
 class TestModularFilters(unittest.TestCase):
     def setUp(self):
         class simpleState(md.substates.SubState):
-            def __init__(self, dimension, stateVectorHistory):
+            def __init__(self, dimension, stateVectorHistory, covarianceStorage='covariance'):
+                
                 if not isinstance(stateVectorHistory['covariance'], md.utils.covarianceContainer):
-                    stateVectorHistory['covariance'] = md.utils.covarianceContainer(stateVectorHistory['covariance'],'covariance')
+                    stateVectorHistory['covariance'] = md.utils.covarianceContainer(
+                        stateVectorHistory['covariance'],covarianceStorage
+                    )
                 super().__init__(stateDimension=dimension, stateVectorHistory=stateVectorHistory)
         self.simpleState = simpleState
         
         class oneDPositionVelocity(md.substates.SubState):
-            def __init__(self, objectID, stateVectorHistory):
-                super().__init__(stateDimension=2, stateVectorHistory=stateVectorHistory)
+            def __init__(self, objectID, stateVectorHistory,covarianceStorage='covariance'):
                 if not isinstance(stateVectorHistory['covariance'], md.utils.covarianceContainer):
-                    stateVectorHistory['covariance'] = md.utils.covarianceContainer(stateVectorHistory['covariance'],'covariance')
+                    stateVectorHistory['covariance'] = md.utils.covarianceContainer(
+                        stateVectorHistory['covariance'],covarianceStorage
+                    )
+                super().__init__(stateDimension=2, stateVectorHistory=stateVectorHistory)
                 self.stateVector = stateVectorHistory['stateVector']
                 self.objectID = objectID
 
@@ -34,7 +39,11 @@ class TestModularFilters(unittest.TestCase):
                 dT2 = np.square(dT)
                 dT3 = np.power(dT, 3)
                 dT4 = np.power(dT, 4)
-                Q = np.array([[dT4/4, dT3/2],[dT3/2, dT2]])
+                if self.covariance().form == 'covariance':
+                    Q = np.array([[dT4/4, dT3/2],[dT3/2, dT2]])
+                elif self.covariance().form == 'cholesky':
+                    Q = np.array([[dT2/2,0],[dT,0]])
+                
                 accelKey = self.objectID + 'acceleration'
                 if dynamics is not None and accelKey in dynamics:
                     acceleration = dynamics[accelKey]['value']
@@ -43,7 +52,11 @@ class TestModularFilters(unittest.TestCase):
                     acceleration = 0
                     accVar = 0
                 self.stateVector = F.dot(self.stateVector) + np.array([0, acceleration])
-                Q = Q * accVar
+                if self.covariance().form == 'covariance':
+                    Q = md.utils.covarianceContainer(Q * accVar, 'covariance')
+                elif self.covariance().form == 'cholesky':
+                    Q = md.utils.covarianceContainer(Q * np.sqrt(accVar), 'cholesky')
+                    
 
                 return {'F': F, 'Q': Q}
 
@@ -95,7 +108,13 @@ class TestModularFilters(unittest.TestCase):
 
                 if dY is not None:
                     P = stateDict[self.objectID].covariance()
-                    S = H.dot(P).dot(H.transpose()) + R
+                    if P.form == 'cholesky':
+                        Pval = P.value.dot(P.value.transpose())
+                    elif P.form == 'covariance':
+                        Pval = P.value
+                    else:
+                        raise ValueError('Unrecougnized covariance specifier %s' %P.form)
+                    S = H.dot(Pval).dot(H.transpose()) + R
 
                     myProbability = mvn.pdf(dY, cov=S)
                 else:
@@ -144,7 +163,7 @@ class TestModularFilters(unittest.TestCase):
         with self.assertRaises(ValueError):
             myFilter.addStates('state1', state2)
 
-    def testTimeUpdateEKF(self):
+    def testTimeUpdateEKFCovariance(self):
         myFilter = md.ModularFilter()
         position1 = np.random.normal(1)
         velocity1 = np.random.normal(1)
@@ -244,12 +263,135 @@ class TestModularFilters(unittest.TestCase):
         self.assertEqual(positionObj1.getStateVector()['t'], 2)
         self.assertEqual(positionObj2.getStateVector()['t'], 2)
 
-    def testMeasurementUpdateEKF(self):
-        myFilter = md.ModularFilter()
+    def testTimeUpdateEKFCholesky(self):
+        myFilter = md.ModularFilter(covarianceStorage='cholesky')
         position1 = np.random.normal(1)
         velocity1 = np.random.normal(1)
         x1 = np.array([position1, velocity1])
-        cov1 = np.eye(2) * np.abs(np.random.normal(1))
+        cov1 = np.random.normal(np.zeros([2,2]))
+        cov1 = cov1.dot(cov1.transpose())
+        cov1Sqrt = np.linalg.cholesky(cov1)
+        positionObj1 = self.oneDPositionVelocity(
+            'object1',
+            {'t': 0,
+             'stateVector': np.array([position1, velocity1]),
+             'covariance': cov1Sqrt,
+             'stateVectorID': 0
+             },
+            covarianceStorage='cholesky'
+        )
+        myFilter.addStates('object1', positionObj1)
+
+        position2 = np.random.normal(1)
+        velocity2 = np.random.normal(1)
+        cov2 = np.random.normal(np.zeros([2,2]))
+        cov2 = cov2.dot(cov2.transpose())
+        cov2Sqrt = np.linalg.cholesky(cov2)
+        x2 = np.array([position2, velocity2])
+        positionObj2 = self.oneDPositionVelocity(
+            'object2',
+            {'t': 0,
+             'stateVector': np.array([position2, velocity2]),
+             'covariance': cov2Sqrt,
+             'stateVectorID': 0
+             },
+            covarianceStorage='cholesky'
+        )
+        myFilter.addStates('object2', positionObj2)
+        self.assertEqual(positionObj1.covariance().form, 'cholesky')
+        self.assertEqual(positionObj2.covariance().form, 'cholesky')
+        self.assertEqual(myFilter.covarianceMatrix.form, 'cholesky')
+        
+        # First, test the time update without the dynamics
+        myFilter.timeUpdateEKF(1)
+        FMat = np.array([[1,1],[0,1]])
+        self.assertTrue(
+            np.allclose(
+                positionObj1.covariance().convertCovariance('covariance').value,
+                FMat.dot(cov1).dot(FMat.transpose())
+                )
+            )
+        self.assertTrue(
+            np.allclose(
+                positionObj1.getStateVector()['stateVector'],
+                FMat.dot(np.array([position1, velocity1]))
+            )
+        )
+        
+        self.assertTrue(
+            np.allclose(
+                positionObj2.covariance().convertCovariance('covariance').value,
+                FMat.dot(cov2).dot(FMat.transpose())
+                )
+            )
+        self.assertTrue(
+            np.allclose(
+                positionObj2.getStateVector()['stateVector'],
+                FMat.dot(np.array([position2, velocity2]))
+            )
+        )
+
+        # Now, do an update with dynamics
+        dynamics={
+            'object1acceleration': {'value':0,'var':1},
+            'object2acceleration': {'value':1,'var':1}
+        }
+        cov1 = positionObj1.covariance().convertCovariance('covariance').value
+        cov2 = positionObj2.covariance().convertCovariance('covariance').value
+        x1 = positionObj1.stateVector
+        x2 = positionObj2.stateVector
+        
+        print("position obj")
+        print(positionObj1.covariance().convertCovariance('covariance').value)
+        print("analytical")
+        print(cov1)
+        myFilter.timeUpdateEKF(1, dynamics=dynamics)
+
+        Q = np.array([[1/4, 1/2],[1/2, 1]])
+        print("position obj")
+        print(positionObj1.covariance().value)
+        print("analytical")
+        print(np.linalg.cholesky(FMat.dot(cov1).dot(FMat.transpose()) + Q))
+
+        self.assertTrue(
+            np.allclose(
+                positionObj1.covariance().convertCovariance('covariance').value,
+                FMat.dot(cov1).dot(FMat.transpose()) + Q
+                )
+            )
+        self.assertTrue(
+            np.allclose(
+                positionObj1.getStateVector()['stateVector'],
+                FMat.dot(x1)
+            )
+        )
+        
+        self.assertTrue(
+            np.allclose(
+                positionObj2.covariance().convertCovariance('covariance').value,
+                FMat.dot(cov2).dot(FMat.transpose()) + Q
+                )
+            )
+        self.assertTrue(
+            np.allclose(
+                positionObj2.getStateVector()['stateVector'],
+                FMat.dot(x2) + np.array([0,1])
+            )
+        )
+
+        self.assertTrue(positionObj1.getStateVector()['aPriori'])
+        self.assertTrue(positionObj2.getStateVector()['aPriori'])
+        
+        self.assertEqual(positionObj1.getStateVector()['t'], 2)
+        self.assertEqual(positionObj2.getStateVector()['t'], 2)
+
+    def testMeasurementUpdateEKF(self):
+        myFilter = md.ModularFilter()
+        
+        position1 = np.random.normal(1)
+        velocity1 = np.random.normal(1)
+        x1 = np.array([position1, velocity1])
+        cov1 = np.eye(2) * np.abs(np.random.normal(2))
         positionObj1 = self.oneDPositionVelocity(
             'object1',
             {'t': 0,
@@ -265,7 +407,7 @@ class TestModularFilters(unittest.TestCase):
         
         position2 = np.random.normal(1)
         velocity2 = np.random.normal(1)
-        cov2 = np.eye(2)*np.abs(np.random.normal(1))
+        cov2 = np.eye(2)*np.abs(np.random.normal(2))
         x2 = np.array([position2, velocity2])
         positionObj2 = self.oneDPositionVelocity(
             'object2',

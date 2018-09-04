@@ -159,7 +159,9 @@ class ModularFilter():
             ):
         
         F = np.zeros([self.totalDimension, self.totalDimension])
-        Q = np.zeros([self.totalDimension, self.totalDimension])
+        Q = covarianceContainer(
+            np.zeros([self.totalDimension, self.totalDimension]), self.covarianceMatrix.form
+        )
 
         # Assemble time-update matrix and process noise matrix based on
         # dynamics.
@@ -181,7 +183,7 @@ class ModularFilter():
             #         %stateName
             #     )
             F[mySlice, mySlice] = timeUpdateMatrices['F']
-            Q[mySlice, mySlice] = timeUpdateMatrices['Q']
+            Q[mySlice, mySlice] = timeUpdateMatrices['Q'].convertCovariance(self.covarianceMatrix.form).value
 
         # try:
         #     np.linalg.cholesky(Q)
@@ -192,21 +194,25 @@ class ModularFilter():
 
         if self.covarianceMatrix.form == 'covariance':
             # Standard Kalman Filter equation
-            PMinus = F.dot(self.covarianceMatrix.value).dot(F.transpose()) + Q
+            PMinus = F.dot(self.covarianceMatrix.value).dot(F.transpose()) + Q.convertCovariance('covariance')
             
         elif self.covarianceMatrix.form == 'cholesky':
             # Square root filter time update equation based on Gram-Schmidt
             # orthogonalization.  See Optimal State Estimation (Simon),
             # Page 162-163 for derivation.
+
             M = np.vstack([
                 self.covarianceMatrix.value.transpose().dot(F),
-                np.linalg.cholesky(Q).transpose()
+                #self.covarianceMatrix.value.dot(F),
+                Q.convertCovariance('cholesky')
                 ]
             )
             T = np.linalg.qr(M)
-            PMinus = T[1][0:self.totalDimension]
-            if PMinus[0,0] < 0:
-                PMinus = -PMinus
+            PMinus = T[1][0:self.totalDimension].transpose()
+            
+            # if PMinus[0,0] < 0:
+            #     PMinus = -PMinus
+                    
             
         # try:
         #     np.linalg.cholesky(PMinus)
