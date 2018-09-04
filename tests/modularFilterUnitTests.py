@@ -7,12 +7,16 @@ class TestModularFilters(unittest.TestCase):
     def setUp(self):
         class simpleState(md.substates.SubState):
             def __init__(self, dimension, stateVectorHistory):
+                if not isinstance(stateVectorHistory['covariance'], md.utils.covarianceContainer):
+                    stateVectorHistory['covariance'] = md.utils.covarianceContainer(stateVectorHistory['covariance'],'covariance')
                 super().__init__(stateDimension=dimension, stateVectorHistory=stateVectorHistory)
         self.simpleState = simpleState
         
         class oneDPositionVelocity(md.substates.SubState):
             def __init__(self, objectID, stateVectorHistory):
                 super().__init__(stateDimension=2, stateVectorHistory=stateVectorHistory)
+                if not isinstance(stateVectorHistory['covariance'], md.utils.covarianceContainer):
+                    stateVectorHistory['covariance'] = md.utils.covarianceContainer(stateVectorHistory['covariance'],'covariance')
                 self.stateVector = stateVectorHistory['stateVector']
                 self.objectID = objectID
 
@@ -116,7 +120,7 @@ class TestModularFilters(unittest.TestCase):
         )
         
         stateLength2 = np.random.randint(0, 10)
-        cov2 = np.random.randint(0, 10)
+        cov2 = np.random.randint(1, 10)
         state2 = self.simpleState(
             stateLength2,
             {
@@ -135,7 +139,7 @@ class TestModularFilters(unittest.TestCase):
         self.assertEqual(stateLength1 + stateLength2, myFilter.totalDimension)
 
         stackedCov = block_diag(np.eye(stateLength1) * cov1, np.eye(stateLength2) * cov2)
-        self.assertTrue(np.all(stackedCov == myFilter.covarianceMatrix))
+        self.assertTrue(np.all(stackedCov == myFilter.covarianceMatrix.value))
 
         with self.assertRaises(ValueError):
             myFilter.addStates('state1', state2)
@@ -177,7 +181,7 @@ class TestModularFilters(unittest.TestCase):
         FMat = np.array([[1,1],[0,1]])
         self.assertTrue(
             np.all(
-                positionObj1.covariance() == FMat.dot(cov1).dot(FMat.transpose())
+                positionObj1.covariance().value == FMat.dot(cov1).dot(FMat.transpose())
                 )
             )
         self.assertTrue(
@@ -189,7 +193,7 @@ class TestModularFilters(unittest.TestCase):
         
         self.assertTrue(
             np.all(
-                positionObj2.covariance() == FMat.dot(cov2).dot(FMat.transpose())
+                positionObj2.covariance().value == FMat.dot(cov2).dot(FMat.transpose())
                 )
             )
         self.assertTrue(
@@ -204,15 +208,15 @@ class TestModularFilters(unittest.TestCase):
             'object1acceleration': {'value':0,'var':1},
             'object2acceleration': {'value':1,'var':1}
         }
-        cov1 = positionObj1.covariance()
-        cov2 = positionObj2.covariance()
+        cov1 = positionObj1.covariance().value
+        cov2 = positionObj2.covariance().value
         x1 = positionObj1.stateVector
         x2 = positionObj2.stateVector
         myFilter.timeUpdateEKF(1, dynamics=dynamics)
         Q = np.array([[1/4, 1/2],[1/2, 1]])
         self.assertTrue(
             np.all(
-                positionObj1.covariance() == FMat.dot(cov1).dot(FMat.transpose()) + Q
+                positionObj1.covariance().value == FMat.dot(cov1).dot(FMat.transpose()) + Q
                 )
             )
         self.assertTrue(
@@ -224,7 +228,7 @@ class TestModularFilters(unittest.TestCase):
         
         self.assertTrue(
             np.all(
-                positionObj2.covariance() == FMat.dot(cov2).dot(FMat.transpose()) + Q
+                positionObj2.covariance().value == FMat.dot(cov2).dot(FMat.transpose()) + Q
                 )
             )
         self.assertTrue(
@@ -258,7 +262,6 @@ class TestModularFilters(unittest.TestCase):
 
         signalSource1 = self.oneDObjectMeasurement('object1')
         myFilter.addSignalSource('object1', signalSource1)
-
         
         position2 = np.random.normal(1)
         velocity2 = np.random.normal(1)
@@ -297,11 +300,11 @@ class TestModularFilters(unittest.TestCase):
 
         # Verify that the updated state vector and covariance matches ours
         self.assertTrue(np.allclose(x1Plus, positionObj1.stateVector))
-        self.assertTrue(np.allclose(P1Plus, positionObj1.covariance()))
+        self.assertTrue(np.allclose(P1Plus, positionObj1.covariance().value))
         
         # Verify that state 2 is unchanged
         self.assertTrue(np.allclose(x2,positionObj2.stateVector))
-        self.assertTrue(np.allclose(cov2, positionObj2.covariance()))
+        self.assertTrue(np.allclose(cov2, positionObj2.covariance().value))
         
         # Generate velocity measurement for state2
         vVar = 1
@@ -325,21 +328,21 @@ class TestModularFilters(unittest.TestCase):
         
         # Verify that state 2 is updated and matches our state2 computations
         self.assertTrue(np.allclose(x2Plus, positionObj2.stateVector))
-        self.assertTrue(np.allclose(P2Plus, positionObj2.covariance()))
+        self.assertTrue(np.allclose(P2Plus, positionObj2.covariance().value))
         # Verify that state 1 is unchanged
         self.assertTrue(np.allclose(x1Plus, positionObj1.stateVector))
-        self.assertTrue(np.allclose(P1Plus, positionObj1.covariance()))
+        self.assertTrue(np.allclose(P1Plus, positionObj1.covariance().value))
 
         # Verify that the covariances are stored properly in the filter
         self.assertTrue(
-            np.allclose(block_diag(P1Plus, P2Plus), myFilter.covarianceMatrix)
+            np.allclose(block_diag(P1Plus, P2Plus), myFilter.covarianceMatrix.value)
         )
 
         myFilter.timeUpdateEKF(1)
         x1Minus = positionObj1.stateVector
-        P1Minus = positionObj1.covariance()
+        P1Minus = positionObj1.covariance().value
         x2Minus = positionObj2.stateVector
-        P2Minus = positionObj2.covariance()
+        P2Minus = positionObj2.covariance().value
 
         # Generate position and velocity measurement for state1
         vVar = 0.01
@@ -369,11 +372,11 @@ class TestModularFilters(unittest.TestCase):
         
         # Verify that state 1 is updated
         self.assertTrue(np.allclose(x1Plus, positionObj1.stateVector))
-        self.assertTrue(np.allclose(P1Plus, positionObj1.covariance()))
+        self.assertTrue(np.allclose(P1Plus, positionObj1.covariance().value))
         
         # Verify that state 2 is unchanged
         self.assertTrue(np.allclose(x2Minus, positionObj2.stateVector))
-        self.assertTrue(np.allclose(P2Minus, positionObj2.covariance()))
+        self.assertTrue(np.allclose(P2Minus, positionObj2.covariance().value))
         
     
 unittest.main(argv=['ignored','-v'], exit=False)
