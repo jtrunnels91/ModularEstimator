@@ -101,7 +101,7 @@ corrSubstateDict = {}
 photonMeasurements = []
 covarianceStorageMethod='covariance'
 #updateMethod = 'EKF'
-updateMethod = 'JPDAF'
+#updateMethod = 'JPDAF'
 
 myFilter = md.ModularFilter(covarianceStorage=covarianceStorageMethod)
 
