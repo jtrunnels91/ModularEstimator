@@ -371,5 +371,9 @@ class TestModularFilters(unittest.TestCase):
         self.assertTrue(np.allclose(x1Plus, positionObj1.stateVector))
         self.assertTrue(np.allclose(P1Plus, positionObj1.covariance()))
         
+        # Verify that state 2 is unchanged
+        self.assertTrue(np.allclose(x2Minus, positionObj2.stateVector))
+        self.assertTrue(np.allclose(P2Minus, positionObj2.covariance()))
+        
     
 unittest.main(argv=['ignored','-v'], exit=False)
