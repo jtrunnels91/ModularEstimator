@@ -205,7 +205,8 @@ def plotTrajectory(
             # print(traj.results[resultsKey][run])
 
             if trajPlot[sortByKey] in resultsDict:
-                newVal = trajPlot.results[varName][run][0]
+                # newVal = trajPlot.results[varName][run][0]
+                newVal = trajPlot.results[varName][run]
                 try:
                     valueValid = not isnan(newVal)
                 except:
@@ -219,7 +220,8 @@ def plotTrajectory(
                         )
                         
             else:
-                resultsDict[trajPlot[sortByKey]] = [trajPlot.results[varName][run][0]]
+                # resultsDict[trajPlot[sortByKey]] = [trajPlot.results[varName][run][0]]
+                resultsDict[trajPlot[sortByKey]] = [trajPlot.results[varName][run]]
 
         processedResultsAbs = []
         processedResultsOrd = []
