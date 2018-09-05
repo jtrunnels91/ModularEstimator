@@ -477,14 +477,17 @@ class ModularFilter():
             elif PMinus.form == 'cholesky':
                 PPlus = np.vstack([PPlus, spreadOfMeans])
 
-        if self.covarianceStorage == 'cholesky':
-            QR = np.linalg.qr(PPlus)
-            PPlus = QR[1].transpose()
-            if PPlus[0,0] < 0:
-                PPlus = - PPlus
-            PPlus = covarianceContainer(PPlus, 'cholesky')
-        elif self.covarianceMatrix.form == 'covariance':
-            PPlus = covarianceContainer(PPlus, 'covariance')
+        if PPlus is not None:
+            if self.covarianceStorage == 'cholesky':
+                QR = np.linalg.qr(PPlus)
+                PPlus = QR[1].transpose()
+                if PPlus[0,0] < 0:
+                    PPlus = - PPlus
+                PPlus = covarianceContainer(PPlus, 'cholesky')
+            elif self.covarianceMatrix.form == 'covariance':
+                PPlus = covarianceContainer(PPlus, 'covariance')
+        else:
+            PPlus = PMinus    
 
         self.covarianceMatrix = PPlus
         
