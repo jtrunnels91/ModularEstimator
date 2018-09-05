@@ -35,9 +35,9 @@ def quaternion2euler(q):
 
 def eulerAngleDiff(angle1, angle2):
     if hasattr(angle1, "__len__"):
-        angleDiff = angle1 * 0
+        angleDiff = []
         for angleIt in range(len(angle1)):
-            angleDiff[angleIt] = eulerAngleDiff(angle1[angleIt], angle2[angleIt])
+            angleDiff.append(eulerAngleDiff(angle1[angleIt], angle2[angleIt]))
     else:
         angleDiff = angle1 - angle2
         if angleDiff > np.pi:
