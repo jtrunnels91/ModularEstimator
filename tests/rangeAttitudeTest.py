@@ -8,6 +8,12 @@ from pulsarData.loadPulsarData import loadPulsarData
 np.random.seed(0)
 
 
+covarianceStorageMethod='covariance'
+covarianceStorageMethod='cholesky'
+updateMethod = 'EKF'
+updateMethod = 'JPDAF'
+
+
 plt.close('all')
 pulsarList = ['J0534+2200']
 #pulsarList = ['J0030+0451', 'J0437-4715', 'B1937+21', 'B1957+20', 'B1821-24']
@@ -17,7 +23,7 @@ pulsarList = ['J0437-4715']
 #pulsarList=['B1821-24']
 pulsarDir = './pulsarData/'
 pulsarCatalogFileName = 'pulsarCatalog.txt'
-tFinal = 1000
+tFinal = 2000
 
 orbitPeriod = 100/(2*np.pi)
 orbitAmplitude = 1000
@@ -99,10 +105,6 @@ def velocity(t):
 
 corrSubstateDict = {}
 photonMeasurements = []
-covarianceStorageMethod='covariance'
-covarianceStorageMethod='cholesky'
-updateMethod = 'EKF'
-#updateMethod = 'JPDAF'
 
 myFilter = md.ModularFilter(covarianceStorage=covarianceStorageMethod)
 
@@ -170,7 +172,7 @@ for pulsarName in pulsarList:
         measurementNoiseScaleFactor=3,
         processNoise=1e-15,
         centerPeak=True,
-        peakLockThreshold=0.0001,
+        peakLockThreshold=0.001,
         covarianceStorage=covarianceStorageMethod
         )
 

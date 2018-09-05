@@ -415,10 +415,12 @@ class ModularFilter():
                     # Rather we have to stack them, then do the QR factorization.
                     if PPlus is not None:
                         PPlus = np.vstack(
-                            [PPlus, (np.sqrt(currentPR) * updateDict['PPlus'].value)]
+                            [PPlus,
+                             (np.sqrt(currentPR) * updateDict['PPlus'].value).transpose()
+                            ]
                         )
                     else:
-                        PPlus = (np.sqrt(currentPR) * updateDict['PPlus'].value)
+                        PPlus = (np.sqrt(currentPR) * updateDict['PPlus'].value).transpose()
                 else:
                     raise ValueError('Unrecougnized covariance storage method')
 
@@ -459,7 +461,7 @@ class ModularFilter():
                              np.vstack([
                                  xDiff * np.sqrt(currentPR),
                                  np.zeros([self.totalDimension-1, self.totalDimension])]
-                             ).transpose()
+                             )
                             ]
                         )
                 else:
@@ -467,9 +469,9 @@ class ModularFilter():
                         spreadOfMeans = currentPR * np.outer(xDiff, xDiff)
                     elif PMinus.form == 'cholesky':
                         spreadOfMeans = np.vstack([
-                            xDiff,
+                            xDiff * np.sqrt(currentPR),
                             np.zeros([self.totalDimension-1, self.totalDimension])]
-                        ).transpose()
+                        )
             if PMinus.form == 'covariance':
                 PPlus = PPlus + spreadOfMeans
             elif PMinus.form == 'cholesky':
@@ -477,7 +479,7 @@ class ModularFilter():
 
         if self.covarianceStorage == 'cholesky':
             QR = np.linalg.qr(PPlus)
-            PPlus = QR[1]
+            PPlus = QR[1].transpose()
             if PPlus[0,0] < 0:
                 PPlus = - PPlus
             PPlus = covarianceContainer(PPlus, 'cholesky')
@@ -751,14 +753,7 @@ class ModularFilter():
             )
             PPlus = covarianceContainer(PPlus, 'covariance')
         elif PMinus.form == 'cholesky':
-            print("Pminus")
-            print(PMinus.value)
-            print("H")
-            print(H)
-            print("dY")
-            print(dY)
-            print("R")
-            print(R)
+            
             W = PMinus.value
             Z = W.transpose().dot(H.transpose())
 
@@ -773,19 +768,7 @@ class ModularFilter():
             # V = np.linalg.cholesky(R)
             myLDL = ldl(R)
             V = myLDL[0].dot(np.sqrt(myLDL[1]))
-            print("Z")
-            print(Z)
-            print("U")
-            print(U)
-            print("V")
-            print(V)
-            print("U+V")
-            print(U+V)
             UInv = np.linalg.inv(U)
-            print("Z * U^-T * (U+V)^-1 * Z^T")
-            print(Z.dot(UInv.transpose()))
-            print(Z.dot(UInv.transpose()).dot(np.linalg.inv(U + V)))
-            print(Z.dot(UInv.transpose()).dot(np.linalg.inv(U + V)).dot(Z.transpose()))
 
             WPlus = W.dot(
                 np.eye(self.totalDimension) -
@@ -793,10 +776,6 @@ class ModularFilter():
             )
             PPlus = covarianceContainer(WPlus, PMinus.form)
             xPlus = xMinus + W.dot(Z).dot(UInv.transpose()).dot(UInv).dot(dY)
-            print('xplus')
-            print(xPlus)
-            print('pplus')
-            print(PPlus.value)
         return (xPlus, PPlus)
     
     @staticmethod
