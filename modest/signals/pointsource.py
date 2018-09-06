@@ -53,6 +53,9 @@ class PointSource(signalsource.SignalSource):
                 source=self
             )
             P = attitudeState.covariance()
+            
+            # Convert P from a covariance container to a plain matrix in covariance form
+            P = P.convertCovariance('covariance').value
 
             H = measurementMatrices['H']['unitVector']
 

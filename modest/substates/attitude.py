@@ -9,6 +9,7 @@ from pyquaternion import Quaternion
 #from . SubState import SubState
 from .. signals.pointsource import PointSource
 from . import substate
+from .. utils import covarianceContainer
 
 ## @class Attitude
 # @brief Estimates the attitude of a vehicle in three dimensions, along with
@@ -60,10 +61,10 @@ class Attitude(substate.SubState):
             attitudeErrorCovariance=np.eye(3),
             gyroBias=np.zeros(3),
             gyroBiasCovariance=np.eye(3),
-            t=0
+            t=0,
+            covarianceStorage='covariance'
             ):
 
-        
         ## @brief Current estimate of attitude, stored as a Quaternion object
         # Mathematically generally referred to as \f$\mathbf{\hat{q}}^{-}_{k}\f$
         # for the a priori value, or \f$\mathbf{\hat{q}}^{+}_{k}\f$ for the a
@@ -77,9 +78,12 @@ class Attitude(substate.SubState):
         # @details Upper 3x3 diagonal contains covariance of the attitude
         # estimate (related to #qHat), while lower 3x3 diagonal contains the
         # covariance of the gyro bias #bHat.
-        self.PHat = block_diag(
-            attitudeErrorCovariance,
-            gyroBiasCovariance
+        self.PHat = covarianceContainer(
+            block_diag(
+                attitudeErrorCovariance,
+                gyroBiasCovariance
+            ),
+            covarianceStorage
         )
 
         ## @brief Last measurement used to generate measurement matrices
@@ -103,7 +107,7 @@ class Attitude(substate.SubState):
                 'aPriori': True,
                 'q': self.qHat.q,
                 'eulerAngles': self.eulerAngles(),
-                'eulerSTD': np.sqrt(self.PHat.diagonal()[0:3]),
+                'eulerSTD': Attitude.eulerSTD(self.PHat),
                 'stateVectorID': -1
             }
         )
@@ -182,7 +186,7 @@ class Attitude(substate.SubState):
                 'aPriori': aPriori,
                 'q': self.qHat.q,
                 'eulerAngles': self.eulerAngles(),
-                'eulerSTD': np.sqrt(self.PHat.diagonal()[0:3]),
+                'eulerSTD': Attitude.eulerSTD(self.PHat),
                 'stateVectorID': svDict['stateVectorID']
             }
         )
@@ -772,3 +776,10 @@ class Attitude(substate.SubState):
         matrix[2, 1] = vector[0]
 
         return(matrix)
+
+    @staticmethod
+    def eulerSTD(covarianceMatrix):
+        newCov = covarianceMatrix.convertCovariance('covariance')
+        
+        eulerSTD = np.sqrt(newCov.value.diagonal()[0:3])
+        return eulerSTD

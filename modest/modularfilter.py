@@ -14,12 +14,13 @@
 # <a href="http://www.gnu.org/licenses/">GNU GPL</a>.
 
 import numpy as np
-from scipy.linalg import block_diag
+from scipy.linalg import block_diag, ldl
 from numpy import sin, cos, arcsin, arccos, arctan2, square, sqrt, abs, power
 from numpy.linalg import norm, inv
 import matplotlib.pyplot as plt
 # from pyquaternion import Quaternion
 
+from . utils import covarianceContainer
 import sys
 import os
 sys.path.append("/home/joel/Documents/astroSourceTracking/libraries")
@@ -48,12 +49,18 @@ class ModularFilter():
     def __init__(
             self,
             measurementValidationThreshold=1e-3,
-            time=0
+            time=0,
+            covarianceStorage='covariance'
     ):
+        ## covarianceStorage determines how the filter stores and updates
+        # covariance, or more generally, uncertainty.
+        # The standard approach is to use the covariance matrix, as in the
+        # standard Kalman filter formulation.
+        self.covarianceStorage=covarianceStorage
         self.plotHandle=None
 
         self.totalDimension = 0
-        self.covarianceMatrix = np.zeros([0, 0])
+        self.covarianceMatrix = covarianceContainer(np.zeros([0, 0]), covarianceStorage)
 
         self.subStates = {}
         self.signalSources = {}
@@ -97,9 +104,16 @@ class ModularFilter():
             self.totalDimension + stateObject.dimension()
             )
 
-        self.covarianceMatrix = block_diag(
-            self.covarianceMatrix,
-            stateObject.covariance()
+        otherCovariance = stateObject.covariance()
+        if otherCovariance.form != self.covarianceMatrix.form:
+            otherCovariance = otherCovariance.convertCovariance(self.covarianceMatrix.form)
+
+        self.covarianceMatrix = covarianceContainer(
+            block_diag(
+                self.covarianceMatrix.value,
+                otherCovariance.value
+            ),
+            self.covarianceMatrix.form
         )
 
         self.subStates[name] = {
@@ -143,19 +157,11 @@ class ModularFilter():
             dT,
             dynamics=None
             ):
-        try:
-            np.linalg.cholesky(self.covarianceMatrix)
-        except:
-            problemTerm = self.covarianceMatrix
-            print('Problem term: P^+')
-            print('Eigen values:')
-            print(np.linalg.eigvals(problemTerm))
-            print('Condition number:')
-            print(np.linalg.cond(problemTerm))
-            raise ValueError('P+ not PSD')
-
+        
         F = np.zeros([self.totalDimension, self.totalDimension])
-        Q = np.zeros([self.totalDimension, self.totalDimension])
+        Q = covarianceContainer(
+            np.zeros([self.totalDimension, self.totalDimension]), self.covarianceMatrix.form
+        )
 
         # Assemble time-update matrix and process noise matrix based on
         # dynamics.
@@ -185,9 +191,26 @@ class ModularFilter():
         #     raise ValueError('Q matrix in EKF time update not positive semidefinite')
         
         xMinus = F.dot(self.getGlobalStateVector())
-        
-        PMinus = F.dot(self.covarianceMatrix).dot(F.transpose()) + Q
-        
+
+        if self.covarianceMatrix.form == 'covariance':
+            # Standard Kalman Filter equation
+            PMinus = F.dot(self.covarianceMatrix.value).dot(F.transpose()) + Q.value
+            
+        elif self.covarianceMatrix.form == 'cholesky':
+            # Square root filter time update equation based on Gram-Schmidt
+            # orthogonalization.  See Optimal State Estimation (Simon),
+            # Page 162-163 for derivation.
+            M = np.vstack([
+                self.covarianceMatrix.value.transpose().dot(F.transpose()),
+                Q.value.transpose()
+                ]
+            )
+            T = np.linalg.qr(M)
+            PMinus = T[1][0:self.totalDimension].transpose()
+            # if PMinus[0,0] < 0:
+            #     PMinus = -PMinus
+                    
+            
         # try:
         #     np.linalg.cholesky(PMinus)
         # except:
@@ -195,9 +218,9 @@ class ModularFilter():
 
         self.tCurrent = self.tCurrent + dT
         
-        self.covarianceMatrix = PMinus
+        self.covarianceMatrix = covarianceContainer(PMinus, self.covarianceMatrix.form)
         
-        self.storeGlobalStateVector(xMinus, PMinus, aPriori=True)
+        self.storeGlobalStateVector(xMinus, self.covarianceMatrix, aPriori=True)
         
         return (xMinus, PMinus)
     
@@ -342,18 +365,7 @@ class ModularFilter():
     def measurementUpdateJPDAF(
             self,
             measurement
-    ):
-        try:
-            np.linalg.cholesky(self.covarianceMatrix)
-        except:
-            problemTerm = self.covarianceMatrix
-            print('Problem term: P^-')
-            print('Eigen values:')
-            print(np.linalg.eigvals(problemTerm))
-            print('Condition number:')
-            print(np.linalg.cond(problemTerm))
-            raise ValueError('P- not PSD')
-        
+    ):        
         signalAssociationProbability = (
             self.computeAssociationProbabilities(measurement)
             )
@@ -365,7 +377,8 @@ class ModularFilter():
         PMinus = self.covarianceMatrix
 
         xPlus = np.zeros(self.totalDimension)
-        PPlus = np.zeros([self.totalDimension, self.totalDimension])
+        PPlus = None
+            
 
         validAssociationsDict = {}
         for signalName in signalAssociationProbability:
@@ -383,55 +396,99 @@ class ModularFilter():
                     )
                 if currentPR < 0:
                     raise ValueError('Probability less than zero!')
-                # try:
-                #     np.linalg.cholesky(updateDict['PPlus'])
-                # except:
-                #     print('PPlus subcomponent = %s' %updateDict['PPlus'])
-                #     raise ValueError('Subcomponent of updated covariance is not positive semi-definite.  Signal %s.' %signalName)
 
                 xPlus = (
                     xPlus + (currentPR * updateDict['xPlus'])
                     )
 
-                PPlus = (
-                    PPlus + (currentPR * updateDict['PPlus'])
-                )
-                
+                if self.covarianceMatrix.form == 'covariance':
+                    if PPlus is not None:
+                        PPlus = (
+                            PPlus + (currentPR * updateDict['PPlus'].value)
+                        )
+                    else:
+                        PPlus = currentPR * updateDict['PPlus'].value
+                        
+                elif self.covarianceMatrix.form == 'cholesky':
+                    # If we're doing square root filtering, then we can't
+                    # simply add the square roots of covariance together.
+                    # Rather we have to stack them, then do the QR factorization.
+                    if PPlus is not None:
+                        PPlus = np.vstack(
+                            [PPlus,
+                             (np.sqrt(currentPR) * updateDict['PPlus'].value).transpose()
+                            ]
+                        )
+                    else:
+                        PPlus = (np.sqrt(currentPR) * updateDict['PPlus'].value).transpose()
+                else:
+                    raise ValueError('Unrecougnized covariance storage method')
 
                 # If the signal association was valid, store it in a dict so
                 # that we can go back and compute the spread of means term
                 validAssociationsDict[signalName] = updateDict
 
-        # try:
-        #     np.linalg.cholesky(PPlus)
-        # except:
-        #     print('PPlus = %s' %PPlus)
-        #     raise ValueError('JPDAF measurement matrix not positive semi-definite (pre spread-of-means term)')
-        
-        # Initialize Spread Of Means matrix
-        spreadOfMeans = np.zeros([self.totalDimension, self.totalDimension])
-        # Compute the "spread of means" term
-        for signalName in validAssociationsDict:
-            currentPR = signalAssociationProbability[signalName]
-
-            # Compute the difference between the jointly-updated state vector,
-            # and the locally updated state vector.
-            xDiff = xPlus - validAssociationsDict[signalName]['xPlus']
-
-            spreadOfMeans = (
-                spreadOfMeans +
-                currentPR * np.outer(xDiff, xDiff)
-            )
+        # Here, we compute the spread of means.  Note that we compute it the
+        # same way regardless of which covariance storage we're using.  If
+        # square root filtering, we'll just take the cholesky decomposition
+        # after the computation is finished.
+        #
+        # Also note that we only need to compute the spread of means term if
+        # there was more than one valid association.  Otherwise we essentially
+        # just have the standard KF
+        if len(validAssociationsDict) > 1:
+            # Initialize Spread Of Means matrix
+            # spreadOfMeans = np.zeros([self.totalDimension, self.totalDimension])
+            spreadOfMeans = None
             
-        PPlus = PPlus + spreadOfMeans
+            # Compute the "spread of means" term
+            for signalName in validAssociationsDict:
+                currentPR = signalAssociationProbability[signalName]
 
-        # try:
-        #     np.linalg.cholesky(PPlus)
-        # except:
-        #     print('PPlus = %s' %PPlus)
-        #     print('Measurement ID %s' %(self.lastMeasurementID + 1))
-        #     raise ValueError('JPDAF measurement matrix not positive semi-definite (post spread-of-means term')
-            
+                # Compute the difference between the jointly-updated state vector,
+                # and the locally updated state vector.
+                xDiff = xPlus - validAssociationsDict[signalName]['xPlus']
+
+                if spreadOfMeans is not None:
+                    if PMinus.form == 'covariance':
+                        spreadOfMeans = (
+                            spreadOfMeans +
+                            currentPR * np.outer(xDiff, xDiff)
+                        )
+                    elif PMinus.form == 'cholesky':
+                        spreadOfMeans = np.vstack(
+                            [spreadOfMeans,
+                             np.vstack([
+                                 xDiff * np.sqrt(currentPR),
+                                 np.zeros([self.totalDimension-1, self.totalDimension])]
+                             )
+                            ]
+                        )
+                else:
+                    if PMinus.form == 'covariance':
+                        spreadOfMeans = currentPR * np.outer(xDiff, xDiff)
+                    elif PMinus.form == 'cholesky':
+                        spreadOfMeans = np.vstack([
+                            xDiff * np.sqrt(currentPR),
+                            np.zeros([self.totalDimension-1, self.totalDimension])]
+                        )
+            if PMinus.form == 'covariance':
+                PPlus = PPlus + spreadOfMeans
+            elif PMinus.form == 'cholesky':
+                PPlus = np.vstack([PPlus, spreadOfMeans])
+
+        if PPlus is not None:
+            if self.covarianceStorage == 'cholesky':
+                QR = np.linalg.qr(PPlus)
+                PPlus = QR[1].transpose()
+                if PPlus[0,0] < 0:
+                    PPlus = - PPlus
+                PPlus = covarianceContainer(PPlus, 'cholesky')
+            elif self.covarianceMatrix.form == 'covariance':
+                PPlus = covarianceContainer(PPlus, 'covariance')
+        else:
+            PPlus = PMinus    
+
         self.covarianceMatrix = PPlus
         
         self.storeGlobalStateVector(xPlus, PPlus, aPriori=False)
@@ -474,7 +531,7 @@ class ModularFilter():
     localStateUpdateMatrices
     This function is responsible for assembling a sub-component of the global
     measurement matrix, assuming that the signal in question originated from a
-    single signal source.
+    given signal source.
 
     Inputs:
     - measurement: A dictionary containing all measured quantities being used
@@ -659,59 +716,14 @@ class ModularFilter():
                             measurementDimensions[key]['index']
                         ] + localdYDict[key]
                     )
-
-        S = totalHMatrix.dot(PMinus).dot(totalHMatrix.transpose()) + totalRMatrix
-
-        # Could inversion of S be introducting instability?
-        K = PMinus.dot(totalHMatrix.transpose()).dot(np.linalg.inv(S))
-
-        IminusKH = np.eye(self.totalDimension) - K.dot(totalHMatrix)
-
-        xPlus = xMinus + K.dot(totaldYMatrix)
-        # try:
-        #     np.linalg.cholesky(totalRMatrix) 
-        # except:
-        #     raise ValueError('TotalR is not positive semidefinite going into measurement update.')
-        # try:
-        #     np.linalg.cholesky(PMinus) 
-        # except:
-        #     raise ValueError('PMinus is not positive semidefinite going into measurement update.')
-
-        # try:
-        #     np.linalg.cholesky(IminusKH.dot(PMinus).dot(IminusKH.transpose()))
-        # except:
-        #     problemTerm = IminusKH.dot(PMinus).dot(IminusKH.transpose())
-        #     print('Problem term: (I-KH)P(I-KH)^T')
-        #     print('Eigen values:')
-        #     print(np.linalg.eigvals(problemTerm))
-        #     print('Condition number:')
-        #     print(np.linalg.cond(problemTerm))
-        #     raise ValueError('(I-KH)P(I-KH)^T not PSD')
-        
-        # try:
-        #     np.linalg.cholesky(K.dot(totalRMatrix).dot(K.transpose()))
-        # except:
-        #     problemTerm = K.dot(totalRMatrix).dot(K.transpose())
-        #     print('Problem term: KRK^T')
-        #     print('Eigen values:')
-        #     print(np.linalg.eigvals(problemTerm))
-        #     print('Condition number:')
-        #     print(np.linalg.cond(problemTerm))
-        #     raise ValueError('(I-KH)P(I-KH)^T not PSD')
-        #     raise ValueError('(K)R(K)^T not PSD')
-        PPlus = (
-            IminusKH.dot(PMinus).dot(IminusKH.transpose()) +
-            K.dot(totalRMatrix).dot(K.transpose())
+        xPlus, PPlus = self.computeUpdatedStateandCovariance(
+            xMinus,
+            PMinus,
+            totaldYMatrix,
+            totalHMatrix,
+            totalRMatrix
             )
-        # PPlus = (PPlus + PPlus.transpose())/2
-        # try:
-        #     np.linalg.cholesky(PPlus)
-        # except:
-        #     print('I - KH:')
-        #     print(IminusKH)
-        #     print('K:')
-        #     print(K)
-        #     raise ValueError('PPlus is not positive semidefinite, even though PMinus and R were.  Big problem.')
+
         return({
             'xPlus': xPlus,
             'PPlus': PPlus,
@@ -719,6 +731,56 @@ class ModularFilter():
             'R': totalRMatrix,
             'dY': totaldYMatrix
             })
+
+    def computeUpdatedStateandCovariance(
+            self,
+            xMinus,
+            PMinus,
+            dY,
+            H,
+            R
+    ):
+        if PMinus.form == 'covariance':
+            # Standard Kalman Filter
+            S = H.dot(PMinus.value).dot(H.transpose()) + R
+
+            # Could inversion of S be introducting instability?
+            K = PMinus.value.dot(H.transpose()).dot(np.linalg.inv(S))
+
+            IminusKH = np.eye(self.totalDimension) - K.dot(H)
+
+            xPlus = xMinus + K.dot(dY)
+            PPlus = (
+                IminusKH.dot(PMinus.value).dot(IminusKH.transpose()) +
+                K.dot(R).dot(K.transpose())
+            )
+            PPlus = covarianceContainer(PPlus, 'covariance')
+        elif PMinus.form == 'cholesky':
+            
+            W = PMinus.value
+            Z = W.transpose().dot(H.transpose())
+
+            # Compute U.  Instead of using cholesky decomposition however, use
+            # LDL (since R + Z^TZ can be semidefinite)
+            # U = np.linalg.cholesky(R + Z.transpose().dot(Z))
+            
+            R_plus_ZTZ = R + Z.transpose().dot(Z)
+            myLDL = ldl(R_plus_ZTZ)
+            U = myLDL[0].dot(np.sqrt(myLDL[1]))
+            # Compute V
+            # V = np.linalg.cholesky(R)
+            myLDL = ldl(R)
+            V = myLDL[0].dot(np.sqrt(myLDL[1]))
+            UInv = np.linalg.inv(U)
+
+            WPlus = W.dot(
+                np.eye(self.totalDimension) -
+                Z.dot(UInv.transpose()).dot(np.linalg.inv(U + V)).dot(Z.transpose())
+            )
+            PPlus = covarianceContainer(WPlus, PMinus.form)
+            xPlus = xMinus + W.dot(Z).dot(UInv.transpose()).dot(UInv).dot(dY)
+        return (xPlus, PPlus)
+    
     @staticmethod
     def covarianceInverse(P):
         cholPInv = np.linalg.inv(np.linalg.cholesky(P))

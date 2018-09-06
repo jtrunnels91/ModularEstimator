@@ -6,7 +6,6 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 # import matplotlib as mp
 import matplotlib.pyplot as plt
-from smartpanda import SmartPanda
 
 ## @class SubState
 # @brief This is an abstract base class for objects used as sub-states in
