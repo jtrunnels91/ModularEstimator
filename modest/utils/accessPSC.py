@@ -97,7 +97,10 @@ def localCatalog_coneSearch(
             for columnName, columnInfo in columnIndexDict.items():
                 if not skipVal:
                     if 'unit' in columnInfo:
-                        mySrcDict[columnName] = {'value': source[columnName],'unit': columnInfo['unit']}
+                        mySrcDict[columnName] = {
+                            'value': source[columnName],
+                            'unit': columnInfo['unit'].replace('cm2', 'cm^2')
+                        }
                     else:
                         mySrcDict[columnName] = source[columnName]
                     if removeNaNs:
