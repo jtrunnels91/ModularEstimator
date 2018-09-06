@@ -8,7 +8,8 @@ def plotAreaVsAngleError(
         trajectory,
         resultsDir='/home/joel/Documents/pythonDev/modules/ModularFilter/tests/MCResults/',
         logx=True,
-        logy=True
+        logy=True,
+        figure=None
         ):
     def meanSqrt(val):
         return np.mean(np.sqrt(val))
@@ -40,12 +41,13 @@ def plotAreaVsAngleError(
         }
     }
 
-    return plotTrajectory(trajectory,
-                   'detectorArea',
-                   plotResultsKeys,
-                   logx=logx,
-                   logy=logy,
-                   resultsDir=resultsDir
+    return plotTrajectory(
+        trajectory,
+        'detectorArea',
+        plotResultsKeys,
+        logx=logx,
+        logy=logy,
+        resultsDir=resultsDir
     )
 
     
@@ -54,8 +56,8 @@ def plotKeyVsError(
         key,
         resultsDir='/home/joel/Documents/pythonDev/modules/ModularFilter/tests/MCResults/',
         logx=True,
-        logy=True
-
+        logy=True,
+        figure=None
 ):
     def meanSqrt(val):
         return np.mean(np.sqrt(val))
@@ -83,15 +85,17 @@ def plotKeyVsError(
         }
     }
 
-    return plotTrajectory(trajectory,
-                   key,
-                   plotResultsKeys,
-                   logx=logx,
-                   logy=logy,
-                   resultsDir=resultsDir
+    return plotTrajectory(
+        trajectory,
+        key,
+        plotResultsKeys,
+        logx=logx,
+        logy=logy,
+        resultsDir=resultsDir,
+        figure=figure
     )
 
-def plotNTapsVsError(trajectory):
+def plotNTapsVsError(trajectory, figure=None):
     def meanSqrt(val):
         return np.mean(np.sqrt(val))
 
@@ -122,11 +126,12 @@ def plotNTapsVsError(trajectory):
         }
     }
 
-    return plotTrajectory(trajectory, sortByKey, plotResultsKeys, logx=False)
+    return plotTrajectory(trajectory, sortByKey, plotResultsKeys, figure=None, logx=False)
 
 def plotAreaVsError(
         trajectory,
         rejectNonPeakLock=False,
+        figure=None,
         resultsDir='/home/joel/Documents/pythonDev/modules/ModularFilter/tests/MCResults/'
 ):
 
@@ -167,18 +172,19 @@ def plotAreaVsError(
         }
     }
 
-    return plotTrajectory(trajectory, sortByKey, plotResultsKeys, resultsDir=resultsDir)
+    return plotTrajectory(trajectory, sortByKey, plotResultsKeys, figure=figure, resultsDir=resultsDir)
     
 def plotTrajectory(
         trajPlot,
         sortByKey,
         plotResultsKeys,
+        figure=None,
         resultsDir='/home/joel/Documents/pythonDev/modules/ModularFilter/tests/MCResults/',
         logx=True,
         logy=True
         ):
     if not isinstance(trajPlot, Trajectory):
-        trajName = trajPlot
+        trajName = trajPlot.replace('.hdf5', '')
         trajPlot = Trajectory(trajName, add_time=False)
         MCFileName = resultsDir + '%s.hdf5' %trajName
 
@@ -187,7 +193,8 @@ def plotTrajectory(
     else:
         trajPlot.f_load(load_results=pypetconstants.LOAD_DATA)
 
-    myFigure = plt.figure()
+    if figure is None:
+        figure = plt.figure()
     ax = plt.gca()
 
     for resultsKey in plotResultsKeys:
@@ -275,4 +282,4 @@ def plotTrajectory(
     plt.grid()
     plt.legend()
     plt.show(block=False)
-    return myFigure
+    return figure
