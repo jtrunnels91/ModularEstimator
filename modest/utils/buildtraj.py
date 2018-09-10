@@ -22,6 +22,9 @@ def buildEnvironment(yamlFile):
             dataMap['environment']['trajectory'] +
             '.hdf5'
         )
+        dataMap['environment']['add_time'] = False
+    else:
+        dataMap['environment']['add_time'] = True
         
     # Initialize Environment with any paramters in the environment branch of initalization file
     env = Environment(**dataMap['environment'])

@@ -196,6 +196,10 @@ def plotTrajectory(
     if figure is None:
         figure = plt.figure()
     ax = plt.gca()
+    if logx:
+        ax.set_xscale('log')
+    if logy:
+        ax.set_yscale('log')
 
     for resultsKey in plotResultsKeys:
         print(resultsKey)
@@ -213,6 +217,7 @@ def plotTrajectory(
 
             if trajPlot[sortByKey] in resultsDict:
                 # newVal = trajPlot.results[varName][run][0]
+                
                 newVal = trajPlot.results[varName][run]
                 try:
                     valueValid = not isnan(newVal)
@@ -232,15 +237,24 @@ def plotTrajectory(
 
         processedResultsAbs = []
         processedResultsOrd = []
+        abscissaUnits = None
         for sortKeyVal in resultsDict:
-            if plotResultsKeys[resultsKey]['plot'] is 'line':
+                
+            if plotResultsKeys[resultsKey]['plot'] == 'line':
+                if abscissaUnits is None:
+                    try:
+                        abscissaUnits = sortKeyVal.unit
+                        sortKeyVal = sortKeyVal.value
+                    except:
+                        abscissaUnits = None
+                
                 processedResultsAbs.append(sortKeyVal)
                 if plotResultsKeys[resultsKey]['function'] is not None:
                     processedResultsOrd.append(
                         plotResultsKeys[resultsKey]['function'](resultsDict[sortKeyVal])
                     )
                     
-            elif plotResultsKeys[resultsKey]['plot'] is 'scatter':
+            elif plotResultsKeys[resultsKey]['plot'] == 'scatter':
                 if plotResultsKeys[resultsKey]['function'] is not None:
                     scatterPointsOrd = plotResultsKeys[resultsKey]['function'](
                         resultsDict[sortKeyVal]
@@ -252,26 +266,24 @@ def plotTrajectory(
                 if not isinstance(scatterPointsOrd, list):
                     scatterPointsOrd = scatterPointsOrd.tolist()
                 processedResultsOrd += scatterPointsOrd
+        print(processedResultsAbs)
+        print(processedResultsOrd)
 
-        if plotResultsKeys[resultsKey]['plot'] is 'line':
+        if plotResultsKeys[resultsKey]['plot'] == 'line':
             plt.plot(
                 processedResultsAbs,
                 processedResultsOrd,
                 label=plotResultsKeys[resultsKey]['name']
             )
 
-        elif plotResultsKeys[resultsKey]['plot'] is 'scatter':
-            print('scatterplot!')
+        elif plotResultsKeys[resultsKey]['plot'] == 'scatter':
             plt.scatter(
                 processedResultsAbs,
                 processedResultsOrd,
                 label=plotResultsKeys[resultsKey]['name']
             )
+            print('scatterplot!')
 
-    if logx:
-        ax.set_xscale('log')
-    if logy:
-        ax.set_yscale('log')
 
     sortByKey = sortByKey.replace('.value', '')
     try:
