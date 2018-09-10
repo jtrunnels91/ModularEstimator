@@ -1,13 +1,28 @@
 import yaml
 from pypet import Environment, cartesian_product
 import numpy as np
-
+import datetime
+import os
 ## @fun buildEnvironment creates a pypet envorinment based on a YAML input file
 def buildEnvironment(yamlFile):
     # Read initialization file (assumed to be YAML)
     with open(yamlFile) as f:
         dataMap = yaml.safe_load(f)
 
+    createDirectory = dataMap['environment'].pop('createDirectory')
+    if createDirectory:
+        dateTimeString = (
+            datetime.date.today().strftime('%Y_%m_%d_') +
+            datetime.datetime.now().strftime('%Hh%Mm%Ss')
+        )
+        newDir = dataMap['environment']['filename'] + '/' + dateTimeString
+        os.mkdir(dataMap['environment']['filename'] + '/' + dateTimeString)
+        dataMap['environment']['filename'] = (
+            newDir + '/' +
+            dataMap['environment']['trajectory'] +
+            '.hdf5'
+        )
+        
     # Initialize Environment with any paramters in the environment branch of initalization file
     env = Environment(**dataMap['environment'])
 
