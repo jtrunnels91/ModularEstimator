@@ -202,6 +202,7 @@ def plotTrajectory(
         ax.set_yscale('log')
 
     for resultsKey in plotResultsKeys:
+        ordinateUnit = None
         print(resultsKey)
         resultsDict = {}
 
@@ -217,8 +218,13 @@ def plotTrajectory(
 
             if trajPlot[sortByKey] in resultsDict:
                 # newVal = trajPlot.results[varName][run][0]
-                
-                newVal = trajPlot.results[varName][run]
+
+                try:
+                    newVal = trajPlot.results[varName][run].value
+                    ordinateUnits = trajPlot.results[varName][run].unit
+                except:
+                    newVal = trajPlot.results[varName][run]
+                print(newVal)
                 try:
                     valueValid = not isnan(newVal)
                 except:
