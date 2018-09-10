@@ -173,7 +173,128 @@ def plotAreaVsError(
     }
 
     return plotTrajectory(trajectory, sortByKey, plotResultsKeys, figure=figure, resultsDir=resultsDir)
+
+def plotTrajWithFunction(
+        traj,
+        abscissa,
+        ordinate,
+        function=None,
+        axis=None,
+        plotOptions=None
+    ):
+    traj.f_load(load_results=pypetconstants.LOAD_DATA)
+
+    if axis is None:
+        axis = plt.gca()
+
+    excludeNaN = False
+    if plotOptions:
+        if 'logx' in plotOptions and plotOptions['logx']:
+            axis.set_xscale('log')
+        if 'logy' in plotOptions and plotOptions['logy']:
+            axis.set_yscale('log')
+        if 'excludeNaN' in plotOptions and plotOptions['excludeNaN']:
+            excludeNaN = True
     
+    abscissaOrdinateDict = {}
+    abscissaUnits = None
+    ordinateUnits = None
+    for run in traj.f_iter_runs(yields='idx'):
+        traj.v_idx = run
+        
+        newAbscissaVal, abscissaUnits = checkForUnits(
+            traj.parameters[abscissa],
+            abscissaUnits
+        )
+        newOrdinateVal, ordinateUnits = checkForUnits(
+            traj.results[ordinate][run],
+            ordinateUnits
+        )
+        if not excludeNaN or not isnan(newOrdinateVal):
+            if newAbscissaVal in abscissaOrdinateDict:
+                abscissaOrdinateDict[newAbscissaVal].append(newOrdinateVal)
+            else:
+                abscissaOrdinateDict[newAbscissaVal] = [newOrdinateVal]
+
+    abscissaList = []
+    ordinateList = []
+    for abscissaVal, ordinateVals in abscissaOrdinateDict.items():
+        abscissaList.append(abscissaVal)
+        if function is not None:
+            ordinateList.append(function(ordinateVals))
+        else:
+            ordinateList.append(ordinateVals)
+    axis.plot(abscissaList, ordinateList)
+    return axis
+    
+
+def checkForUnits(myVal, currentUnits):
+    if currentUnits is not None:
+        if myVal.unit != currentUnits:
+            raise ValueError('Units must match')
+        myVal = myVal.value
+    else:
+        try:
+            currentUnits = myVal.unit
+            myVal = myVal.value
+        except:
+            currentUnits = None
+    return myVal, currentUnits
+    
+
+def scatterPlotTraj(
+        traj,
+        abscissa,
+        ordinate,
+        axis=None,
+        plotOptions=None,
+        function=None
+    ):
+    traj.f_load(load_results=pypetconstants.LOAD_DATA)
+    
+    excludeNaN = False
+    if plotOptions:
+        if 'logx' in plotOptions and plotOptions['logx']:
+            axis.set_xscale('log')
+        if 'logy' in plotOptions and plotOptions['logy']:
+            axis.set_yscale('log')
+        if 'excludeNaN' in plotOptions and plotOptions['excludeNaN']:
+            excludeNaN = True
+    
+    if axis is None:
+        axis = plt.gca()
+
+    abscissaList = []
+    ordinateList = []
+    abscissaUnits = None
+    ordinateUnits = None
+    for run in traj.f_iter_runs(yields='idx'):
+        traj.v_idx = run
+
+        newAbscissaVal, abscissaUnits = checkForUnits(
+            traj.parameters[abscissa],
+            abscissaUnits
+        )
+        newOrdinateVal, ordinateUnits = checkForUnits(
+            traj.results[ordinate][run],
+            ordinateUnits
+        )
+        
+        if not excludeNaN or not isnan(newOrdinateVal):
+
+            abscissaList.append(newAbscissaVal)
+            if function is not None:
+                ordinateList.append(function(newOrdinateVal))
+            else:
+                ordinateList.append(newOrdinateVal)
+                
+
+    # print(abscissaList)
+    # print(ordinateList)
+    axis.scatter(abscissaList, ordinateList)
+
+    return axis
+
 def plotTrajectory(
         trajPlot,
         sortByKey,
@@ -203,7 +324,6 @@ def plotTrajectory(
 
     for resultsKey in plotResultsKeys:
         ordinateUnit = None
-        print(resultsKey)
         resultsDict = {}
 
         varName = plotResultsKeys[resultsKey]['varName']
@@ -224,7 +344,6 @@ def plotTrajectory(
                     ordinateUnits = trajPlot.results[varName][run].unit
                 except:
                     newVal = trajPlot.results[varName][run]
-                print(newVal)
                 try:
                     valueValid = not isnan(newVal)
                 except:
@@ -245,25 +364,29 @@ def plotTrajectory(
         processedResultsOrd = []
         abscissaUnits = None
         for sortKeyVal in resultsDict:
+            currentResult = resultsDict[sortKeyVal]
+            try:
+                currentResult=[subResult.value for subResult in currentResult]
+            except:
+                currentResult = currentResult
+            try:
+                abscissaUnits = sortKeyVal.unit
+                sortKeyVal = sortKeyVal.value
+            except:
+                abscissaUnits = None
                 
             if plotResultsKeys[resultsKey]['plot'] == 'line':
-                if abscissaUnits is None:
-                    try:
-                        abscissaUnits = sortKeyVal.unit
-                        sortKeyVal = sortKeyVal.value
-                    except:
-                        abscissaUnits = None
                 
                 processedResultsAbs.append(sortKeyVal)
                 if plotResultsKeys[resultsKey]['function'] is not None:
                     processedResultsOrd.append(
-                        plotResultsKeys[resultsKey]['function'](resultsDict[sortKeyVal])
+                        plotResultsKeys[resultsKey]['function'](currentResult)
                     )
                     
             elif plotResultsKeys[resultsKey]['plot'] == 'scatter':
                 if plotResultsKeys[resultsKey]['function'] is not None:
                     scatterPointsOrd = plotResultsKeys[resultsKey]['function'](
-                        resultsDict[sortKeyVal]
+                        currentResult
                     )
                 else:
                     scatterPointsOrd = resultsDict[sortKeyVal]
@@ -272,8 +395,6 @@ def plotTrajectory(
                 if not isinstance(scatterPointsOrd, list):
                     scatterPointsOrd = scatterPointsOrd.tolist()
                 processedResultsOrd += scatterPointsOrd
-        print(processedResultsAbs)
-        print(processedResultsOrd)
 
         if plotResultsKeys[resultsKey]['plot'] == 'line':
             plt.plot(
