@@ -224,7 +224,7 @@ def plotTrajWithFunction(
             ordinateList.append(function(ordinateVals))
         else:
             ordinateList.append(ordinateVals)
-    axis.plot(abscissaList, ordinateList)
+    myLine = axis.plot(abscissaList, ordinateList)
     
     if abscissaUnits is not None:
         axis.set_xlabel(abscissa + ' (' + abscissaUnits + ')')
@@ -233,7 +233,7 @@ def plotTrajWithFunction(
         
     if ordinateUnits is not None:
         axis.set_ylabel('(' + ordinateUnits + ')')
-    return axis
+    return myLine
     
 
 def checkForUnits(myVal, currentUnits):
@@ -304,9 +304,9 @@ def scatterPlotTraj(
     if ordinateUnits is not None:
         axis.set_ylabel('(' + ordinateUnits + ')')
 
-    axis.scatter(abscissaList, ordinateList)
+    myPoints = axis.scatter(abscissaList, ordinateList)
 
-    return axis
+    return myPoints
 
 def plotTrajectory(
         trajPlot,
