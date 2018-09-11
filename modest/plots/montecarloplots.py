@@ -225,6 +225,14 @@ def plotTrajWithFunction(
         else:
             ordinateList.append(ordinateVals)
     axis.plot(abscissaList, ordinateList)
+    
+    if abscissaUnits is not None:
+        axis.set_xlabel(abscissa + ' (' + abscissaUnits + ')')
+    else:
+        axis.set_xlabel(abscissa)
+        
+    if ordinateUnits is not None:
+        axis.set_ylabel('(' + ordinateUnits + ')')
     return axis
     
 
@@ -288,9 +296,14 @@ def scatterPlotTraj(
             else:
                 ordinateList.append(newOrdinateVal)
                 
+    if abscissaUnits is not None:
+        axis.set_xlabel(abscissa + ' (' + abscissaUnits + ')')
+    else:
+        axis.set_xlabel(abscissa)
+        
+    if ordinateUnits is not None:
+        axis.set_ylabel('(' + ordinateUnits + ')')
 
-    # print(abscissaList)
-    # print(ordinateList)
     axis.scatter(abscissaList, ordinateList)
 
     return axis
