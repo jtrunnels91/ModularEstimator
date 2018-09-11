@@ -224,11 +224,7 @@ def plotTrajWithFunction(
             ordinateList.append(function(ordinateVals))
         else:
             ordinateList.append(ordinateVals)
-    print(abscissaList)
-    print(ordinateList)
     abscissaList, ordinateList = zip(*sorted(zip(abscissaList,ordinateList)))
-    print(abscissaList)
-    print(ordinateList)
     myLine = axis.plot(abscissaList, ordinateList)
     
     if abscissaUnits is not None:
