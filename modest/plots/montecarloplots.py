@@ -301,7 +301,7 @@ def scatterPlotTraj(
         axis.set_xlabel(abscissa + ' (' + abscissaUnits + ')')
     else:
         axis.set_xlabel(abscissa)
-        
+    print(ordinateUnits)
     if ordinateUnits is not None:
         axis.set_ylabel('(' + ordinateUnits + ')')
 
