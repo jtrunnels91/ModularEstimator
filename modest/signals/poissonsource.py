@@ -119,7 +119,7 @@ class DynamicPoissonSource(PoissonSource):
                 measuredTVar = measurement['t']['var'] + state['TDOAVar']
             else:
                 measuredTVar = measurement['t']['var']
-                print('State TDOA var is Nan; excluding from TOA probability calculations')
+                # print('State TDOA var is Nan; excluding from TOA probability calculations')
         else:
             measuredTVar = measurement['t']['var']
         # Hack to try and limit the erroneous locking behavior
