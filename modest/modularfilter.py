@@ -19,7 +19,7 @@ from numpy import sin, cos, arcsin, arccos, arctan2, square, sqrt, abs, power
 from numpy.linalg import norm, inv
 import matplotlib.pyplot as plt
 # from pyquaternion import Quaternion
-
+from math import isnan
 from . utils import covarianceContainer
 import sys
 import os
@@ -258,7 +258,11 @@ class ModularFilter():
                     'Got negative probability for measurement %s, signal source %s'
                     %(measurement, signalKey)
                     )
-                                 
+            elif isnan(currentProbability):
+                raise ValueError(
+                    'Got NaN probability for measurement %s, signal source %s'
+                    %(measurement, signalKey)
+                    )
             probabilityDict[signalKey] = currentProbability
             probabilitySum = probabilitySum + currentProbability
 
@@ -383,6 +387,15 @@ class ModularFilter():
         validAssociationsDict = {}
         for signalName in signalAssociationProbability:
             currentPR = signalAssociationProbability[signalName]
+            if isnan(currentPR):
+                print(signalAssociationProbability)
+                raise ValueError('Received NaN for probability')
+            elif currentPR < 0:
+                print(signalAssociationProbability)
+                raise ValueError('Received negaitve probability')
+            elif currentPR > 1:
+                print(signalAssociationProbability)
+                raise ValueError('Received probability greater than 1')
 
             if (
                     currentPR >

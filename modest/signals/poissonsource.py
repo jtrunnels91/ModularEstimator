@@ -1,4 +1,5 @@
 import numpy as np
+from math import isnan
 # from scipy.stats import multivariate_normal
 from . import signalsource
 from abc import ABCMeta, abstractmethod
@@ -114,22 +115,30 @@ class DynamicPoissonSource(PoissonSource):
             state = state.getStateVector()
         #print('Current TDOA std: %.2e' %np.sqrt(state['TDOAVar']))
         if 'TDOAVar' in state:
-            measuredTVar = measurement['t']['var'] + state['TDOAVar']
+            if not isnan(state['TDOAVar']):
+                measuredTVar = measurement['t']['var'] + state['TDOAVar']
+            else:
+                measuredTVar = measurement['t']['var']
+                print('State TDOA var is Nan; excluding from TOA probability calculations')
         else:
             measuredTVar = measurement['t']['var']
         # Hack to try and limit the erroneous locking behavior
-        tVarScaleFactor = 2
+        # tVarScaleFactor = 1.0
+        # print('T var components')
+        # print('Measurement tvar: %s' %measurement['t']['var'])
+        # print('State tvar: %s' %state['TDOAVar'])
+        # print('Current time: %s current tVar: %s' %(measurement['t']['value'], measuredTVar))
         currentFlux = self.getSignal(
             measurement['t']['value'],
-            tVar=measuredTVar * tVarScaleFactor,
+            tVar=measuredTVar,
             #state=state
         )
-        #print(currentFlux)
+        # print('Computed current flux %s' %currentFlux)
 
         poissonProb = super().computeAssociationProbability(
             currentFlux,
             measurement
         )
-
-        #print(poissonProb)
+        
+        # print('Dynamic poisson TOA probability %s' %poissonProb)
         return(poissonProb)

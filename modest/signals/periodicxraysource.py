@@ -2,7 +2,7 @@
 # @brief This file contains the PeriodicXRaySource class
 
 import numpy as np
-from math import factorial
+from math import factorial, isnan
 import matplotlib.pyplot as plt
 
 from . import pointsource
@@ -545,7 +545,14 @@ class PeriodicXRaySource(
             )
 
         # poisPR = 1.0
-        return (anglePR * poisPR * self.peakAmplitude)
+        myPr = (anglePR * poisPR * self.peakAmplitude)
+        if isnan(myPr):
+            raise ValueError(
+                'Computed NaN probability.  Components: AOA %s, TOA %s, Flux %s'
+                %(anglePR, poisPR, self.peakAmplitude)
+            )
+        
+        return myPr
     
     def plot(self,
              nPeriods=1,
