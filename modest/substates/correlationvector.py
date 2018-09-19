@@ -469,7 +469,9 @@ class CorrelationVector(substate.SubState):
             if (self.peakLock is True) and (self.centerPeak is True):
                 FMatrixDT = -self.peakOffsetFromCenter * self.__dT__
                 FMatrixShift = -self.peakOffsetFromCenter
-                self.peakCenteringDT = self.peakCenteringDT - velocityTDOA + FMatrixDT
+                newPCDT = self.peakCenteringDT - velocityTDOA + FMatrixDT
+                if not isnan(newPCDT):
+                    self.peakCenteringDT = newPCDT
                 self.signalTDOA = self.signalTDOA + velocityTDOA - FMatrixDT
                 self.TDOAVar = self.TDOAVar + (Q * np.square(self.__dT__))
             else:
