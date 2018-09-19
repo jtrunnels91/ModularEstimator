@@ -297,7 +297,10 @@ class SubState():
         if normalized is True:
             self.RTPaxisHandle.set_ylim([0, 1.1])
             yAxis = yAxis - np.min(yAxis)
-            yAxis = yAxis/np.max(yAxis)
+            try:
+                yAxis = yAxis/np.max(yAxis)
+            except:
+                pass
 
         if 'xAxis' in stateDict:
             xAxis = stateDict['xAxis']
