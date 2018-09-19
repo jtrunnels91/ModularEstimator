@@ -284,8 +284,8 @@ class CorrelationVector(substate.SubState):
                 self.signalTDOA = newTDOA
                 self.TDOAVar = newTDOAVar
 
-                svDict['signalTDOA'] = newTDOA
-                svDict['TDOAVar'] = newTDOAVar
+            svDict['signalTDOA'] = self.signalTDOA
+            svDict['TDOAVar'] = self.TDOAVar
             # xAxis = np.linspace(0, self.__filterOrder__-1, self.__filterOrder__)
             # xAxis = (xAxis * self.__dT__) - self.peakCenteringDT
 
