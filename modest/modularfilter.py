@@ -500,6 +500,7 @@ class ModularFilter():
             elif self.covarianceMatrix.form == 'covariance':
                 PPlus = covarianceContainer(PPlus, 'covariance')
         else:
+            xPlus = xMinus
             PPlus = PMinus    
 
         self.covarianceMatrix = PPlus
@@ -527,6 +528,8 @@ class ModularFilter():
             ):
         newSVID = self.lastStateVectorID + 1
         for stateName in self.subStates:
+            if np.any([isnan(stateVal) for stateVal in globalStateVector[mySlice]]):
+                raise ValueError('NaN state vector for substate %s' %stateName)
             mySlice = self.subStates[stateName]['index']
             svDict = {
                 'stateVector': globalStateVector[mySlice],
