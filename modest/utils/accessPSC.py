@@ -7,6 +7,37 @@ import subprocess
 from astropy.io import fits
 from . import spacegeometry
 
+def getHeaderInfo(
+        key,
+        header
+    ):
+    catKeys = list(header.keys())
+    foundKey = False
+    for index in range(len(header)):
+        if key == header[index]:
+            catKey = catKeys[index]
+            unitKey = catKey.replace('TYPE', 'UNIT')
+            if unitKey == catKey:
+                unitKey = catKey.replace('TYP', 'UNIT')
+                
+            if unitKey in header:
+                columnUnit = header[unitKey]
+            else:
+                columnUnit = None
+            columnIndexDict = {
+                'index': index,
+                'key': catKey
+            }
+            if columnUnit:
+                columnIndexDict['unit'] = columnUnit
+            foundKey = True
+
+    if not foundKey:
+        raise ValueError('Did not find columns %s in local catalog.' %key)
+
+
+    return columnIndexDict
+
 def localCatalog_coneSearch(
         RA,
         DEC,
