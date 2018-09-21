@@ -8,10 +8,11 @@ from abc import ABCMeta, abstractmethod
 class PoissonSource(signalsource.SignalSource):
     def __init__(
             self,
-            flux
+            flux,
+            startTime=0
             ):
         signalsource.SignalSource.__init__(self)
-        self.lastTime = 0
+        self.lastTime = startTime
         self.flux = flux
         return
 
@@ -29,9 +30,10 @@ class PoissonSource(signalsource.SignalSource):
 class StaticPoissonSource(PoissonSource):
     def __init__(
             self,
-            flux
+            flux,
+            startTime=0
             ):
-        super().__init__(flux)
+        super().__init__(flux, startTime=startTime)
 
     def computeAssociationProbability(
             self,
@@ -84,10 +86,11 @@ class DynamicPoissonSource(PoissonSource):
     def __init__(
             self,
             maxFlux,
-            correlationStateName='correlation'
+            correlationStateName='correlation',
+            startTime=0
     ):
         self.correlationStateName = correlationStateName
-        PoissonSource.__init__(self, maxFlux)
+        PoissonSource.__init__(self, maxFlux, startTime=startTime)
         return
 
     @abstractmethod

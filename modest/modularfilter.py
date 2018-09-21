@@ -282,7 +282,7 @@ class ModularFilter():
     measurementUpdateEKF is a standard Extended Kalman Filter measurement
     update.  This function only works when the signal source is known, which
     may or may not be a realistic assumption, depending on the problem.
-    Alternatively, it can be used for comparison to other data association
+    Al)ternatively, it can be used for comparison to other data association
     methods.
 
     The following inputs are required:

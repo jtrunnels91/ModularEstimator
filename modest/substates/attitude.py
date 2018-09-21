@@ -742,10 +742,17 @@ class Attitude(substate.SubState):
     def sidUnitVec(
             self,
             RaDec):
-        cosD = np.cos(RaDec['DEC'])
-        sinD = np.sin(RaDec['DEC'])
-        cosRA = np.cos(RaDec['RA'])
-        sinRA = np.sin(RaDec['RA'])
+        if isinstance(RaDec['DEC'], dict) and isinstance(RaDec['RA'], dict):
+            cosD = np.cos(RaDec['DEC']['value'])
+            sinD = np.sin(RaDec['DEC']['value'])
+            cosRA = np.cos(RaDec['RA']['value'])
+            sinRA = np.sin(RaDec['RA']['value'])
+        else:
+            cosD = np.cos(RaDec['DEC'])
+            sinD = np.sin(RaDec['DEC'])
+            cosRA = np.cos(RaDec['RA'])
+            sinRA = np.sin(RaDec['RA'])
+
 
         return np.array([cosD * cosRA, cosD * sinRA, sinD])
     

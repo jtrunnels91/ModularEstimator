@@ -32,7 +32,8 @@ class PeriodicXRaySource(
             name=None,
             attitudeStateName='attitude',
             correlationStateName=None,
-            useProfileColumn=None
+            useProfileColumn=None,
+            startTime=0
     ):
         
         # Store the user-passed arguments first.  These take priority of
@@ -124,7 +125,8 @@ class PeriodicXRaySource(
         poissonsource.DynamicPoissonSource.__init__(
             self,
             self.peakAmplitude,
-            correlationStateName=correlationStateName
+            correlationStateName=correlationStateName,
+            startTime=startTime
         )
         
         return

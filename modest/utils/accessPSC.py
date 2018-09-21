@@ -54,7 +54,7 @@ def localCatalog_coneSearch(
     catalogData = hdulist[1].data
     hdulist.close()
 
-    columns = ['UNIQUE_SRCNAME', 'RA', 'DEC', fluxKey]
+    columns = ['UNIQUE_SRCNAME', 'RA', 'DEC', 'EXT_B6', fluxKey]
     savedColumns = []
     columnIndexDict = {}
     catKeys = list(catalogHeader.keys())
