@@ -265,11 +265,16 @@ class ModularFilter():
                     )
             probabilityDict[signalKey] = currentProbability
             probabilitySum = probabilitySum + currentProbability
-
         for probabilityKey in probabilityDict:
-            probabilityDict[probabilityKey] = (
-                probabilityDict[probabilityKey] / probabilitySum
+            if probabilitySum > 0:
+                probabilityDict[probabilityKey] = (
+                    probabilityDict[probabilityKey] / probabilitySum
                 )
+            else:
+                probabilityDict[probabilityKey] = (
+                    probabilityDict[probabilityKey]
+                )
+
         # print(probabilityDict)
         return (probabilityDict)
 
