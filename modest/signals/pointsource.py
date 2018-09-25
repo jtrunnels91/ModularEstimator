@@ -9,6 +9,7 @@ class PointSource(signalsource.SignalSource):
             self,
             RA,
             DEC,
+            extent=0,
             attitudeStateName='attitude'
     ):
         signalsource.SignalSource.__init__(self)
@@ -17,6 +18,7 @@ class PointSource(signalsource.SignalSource):
         self.__RaDec__ = {'RA': RA, 'DEC': DEC}
         self.attitudeStateName = attitudeStateName
         self.lastPDF = None
+        self.extent = extent
         return
 
     def RaDec(self):

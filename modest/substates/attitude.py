@@ -635,7 +635,7 @@ class Attitude(substate.SubState):
         H = estimatedAttitudeMatrix.dot(self.skewSymmetric(uTrue))
         H = np.append(H, np.zeros([3, 3]), axis=1)
 
-        varR = measurement['RA']['var']
+        varR = measurement['RA']['var'] + np.square(source.extent)
         # varD = measurement['DEC']['var']
 
         # measR = measurement['RA']['value']

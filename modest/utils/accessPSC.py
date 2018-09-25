@@ -7,6 +7,13 @@ import subprocess
 from astropy.io import fits
 from . import spacegeometry
 
+def getChandraObs(
+        obsID,
+        fileList
+        ):
+    pass
+
+
 def getHeaderInfo(
         key,
         header
@@ -45,7 +52,8 @@ def localCatalog_coneSearch(
         catalogName='xmmsl2_clean.fits',
         dirpath='/home/joel/Documents/pythonDev/research/pulsarJPDAF/pulsarData/xray_catalogs/',
         removeNaNs=True,
-        fluxKey='FLUX_B8'
+        fluxKey='FLUX_B8',
+        extentKey='EXT_B8'
         ):
 
     hdulist = fits.open(dirpath + catalogName)
@@ -54,7 +62,7 @@ def localCatalog_coneSearch(
     catalogData = hdulist[1].data
     hdulist.close()
 
-    columns = ['UNIQUE_SRCNAME', 'RA', 'DEC', 'EXT_B6', fluxKey]
+    columns = ['UNIQUE_SRCNAME', 'RA', 'DEC', fluxKey, extentKey]
     savedColumns = []
     columnIndexDict = {}
     catKeys = list(catalogHeader.keys())

@@ -33,7 +33,8 @@ class PeriodicXRaySource(
             attitudeStateName='attitude',
             correlationStateName=None,
             useProfileColumn=None,
-            startTime=0
+            startTime=0,
+            extent=0
     ):
         
         # Store the user-passed arguments first.  These take priority of
@@ -86,7 +87,9 @@ class PeriodicXRaySource(
 
 
         # Initialize PointSource with Right ascension and declination values
-        pointsource.PointSource.__init__(self, RA, DEC, attitudeStateName)
+        pointsource.PointSource.__init__(
+            self, RA, DEC, attitudeStateName=attitudeStateName, extent=extent
+        )
 
         # Check to make sure that we received either a phaseDerivatives dict
         # or a value for pulsar period
