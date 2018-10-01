@@ -19,7 +19,7 @@ plt.close('all')
 def omega(t):
     # omegaT = np.array([sin(pi * t/4), cos(pi * t/12), sin(pi * t/16)])
     #omegaT = np.random.normal(np.zeros(3))
-    omegaT = np.array([cos(t/4)/4, 0, 0])
+    omegaT = np.array([cos(pi*t/4)/4, 0, 0])
     return(omegaT)
 def attitude(t,returnQ=True):
     euler = np.array([sin(pi * t/4), 0, 0])
@@ -141,8 +141,9 @@ photonArrivals = (
         TOA_StdDev=1e-100
     )
 )
-myJPDAF.addSignalSource('noise', myNoise)
-myML.addSignalSource('noise', myNoise)
+myJPDAF.addSignalSource('background', myNoise)
+myML.addSignalSource('background', myNoise)
+myEKF.addSignalSource('background', myNoise)
 
 photonArrivals = sorted(photonArrivals, key=lambda k: k['t']['value'])
 
@@ -249,8 +250,8 @@ for photonMeasurement in photonArrivals:
 
     myJPDAF.measurementUpdateJPDAF(photonMeasurement)
     myML.measurementUpdateML(photonMeasurement)
-    if photonMeasurement['name'] != 'background':
-        myEKF.measurementUpdateEKF(photonMeasurement, photonMeasurement['name'])
+    myEKF.measurementUpdateEKF(photonMeasurement, photonMeasurement['name'])
+        
 
     # starArrivalTimes[nextStarIndex] = (
     #     starArrivalTimes[nextStarIndex] +
@@ -264,23 +265,23 @@ plt.figure()
 plt.title('Euler angles')
 plt.subplot(311)
 plt.plot(
-    JPDAFAtt.stateVectorHistory['t'],
-    JPDAFAtt.stateVectorHistory['eulerAngles'][:,0],
+    [sv['t'] for sv in JPDAFAtt.stateVectorHistory],
+    [sv['eulerAngles'][0] for sv in JPDAFAtt.stateVectorHistory],
     label='JPDAF'
 )
 plt.plot(
-    MLAtt.stateVectorHistory['t'],
-    MLAtt.stateVectorHistory['eulerAngles'][:,0],
+    [sv['t'] for sv in MLAtt.stateVectorHistory],
+    [sv['eulerAngles'][0] for sv in MLAtt.stateVectorHistory],
     label='ML'
 )
 plt.plot(
-    EKFAtt.stateVectorHistory['t'],
-    EKFAtt.stateVectorHistory['eulerAngles'][:,0],
+    [sv['t'] for sv in EKFAtt.stateVectorHistory],
+    [sv['eulerAngles'][0] for sv in EKFAtt.stateVectorHistory],
     label='Ideal'
 )
 plt.plot(
-    TUOnlyAtt.stateVectorHistory['t'],
-    TUOnlyAtt.stateVectorHistory['eulerAngles'][:,0],
+    [sv['t'] for sv in TUOnlyAtt.stateVectorHistory],
+    [sv['eulerAngles'][0] for sv in TUOnlyAtt.stateVectorHistory],
     ls='-.'
 )
 plt.plot(
@@ -292,21 +293,54 @@ plt.plot(
 plt.legend()
 
 plt.subplot(312)
-plt.plot(JPDAFAtt.stateVectorHistory['t'], JPDAFAtt.stateVectorHistory['eulerAngles'][:,1])
-plt.plot(MLAtt.stateVectorHistory['t'], MLAtt.stateVectorHistory['eulerAngles'][:,1])
-plt.plot(EKFAtt.stateVectorHistory['t'], EKFAtt.stateVectorHistory['eulerAngles'][:,1],ls='-')
-plt.plot(TUOnlyAtt.stateVectorHistory['t'], TUOnlyAtt.stateVectorHistory['eulerAngles'][:,1],ls='-.')
+plt.plot(
+    [sv['t'] for sv in JPDAFAtt.stateVectorHistory],
+    [sv['eulerAngles'][1] for sv in JPDAFAtt.stateVectorHistory],
+    label='JPDAF'
+)
+plt.plot(
+    [sv['t'] for sv in MLAtt.stateVectorHistory],
+    [sv['eulerAngles'][1] for sv in MLAtt.stateVectorHistory],
+    label='ML'
+)
+plt.plot(
+    [sv['t'] for sv in EKFAtt.stateVectorHistory],
+    [sv['eulerAngles'][1] for sv in EKFAtt.stateVectorHistory],
+    label='Ideal'
+)
+plt.plot(
+    [sv['t'] for sv in TUOnlyAtt.stateVectorHistory],
+    [sv['eulerAngles'][1] for sv in TUOnlyAtt.stateVectorHistory],
+    ls='-.'
+)
 plt.plot(
     [eu['t'] for eu in eulerAnglesTrue],
     [eu['eulerAngles'][1] for eu in eulerAnglesTrue],
     ls='-'
 )
 
+
 plt.subplot(313)
-plt.plot(JPDAFAtt.stateVectorHistory['t'], JPDAFAtt.stateVectorHistory['eulerAngles'][:,2])
-plt.plot(MLAtt.stateVectorHistory['t'], MLAtt.stateVectorHistory['eulerAngles'][:,2])
-plt.plot(EKFAtt.stateVectorHistory['t'], EKFAtt.stateVectorHistory['eulerAngles'][:,2],ls='-')
-plt.plot(TUOnlyAtt.stateVectorHistory['t'], TUOnlyAtt.stateVectorHistory['eulerAngles'][:,2],ls='-.')
+plt.plot(
+    [sv['t'] for sv in JPDAFAtt.stateVectorHistory],
+    [sv['eulerAngles'][2] for sv in JPDAFAtt.stateVectorHistory],
+    label='JPDAF'
+)
+plt.plot(
+    [sv['t'] for sv in MLAtt.stateVectorHistory],
+    [sv['eulerAngles'][2] for sv in MLAtt.stateVectorHistory],
+    label='ML'
+)
+plt.plot(
+    [sv['t'] for sv in EKFAtt.stateVectorHistory],
+    [sv['eulerAngles'][2] for sv in EKFAtt.stateVectorHistory],
+    label='Ideal'
+)
+plt.plot(
+    [sv['t'] for sv in TUOnlyAtt.stateVectorHistory],
+    [sv['eulerAngles'][2] for sv in TUOnlyAtt.stateVectorHistory],
+    ls='-.'
+)
 plt.plot(
     [eu['t'] for eu in eulerAnglesTrue],
     [eu['eulerAngles'][2] for eu in eulerAnglesTrue],

@@ -332,7 +332,7 @@ class ModularFilter():
             self.computeAssociationProbabilities(measurement)
             )
 
-        del signalAssociationProbability['noise']
+        del signalAssociationProbability['background']
 
         maxLikelihoodSignal = max(
             signalAssociationProbability,
