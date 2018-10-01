@@ -698,11 +698,12 @@ class Attitude(substate.SubState):
     # @param self The object pointer
     #
     # @returns A list containing the three angles
-    def eulerAngles(self):
-        q = self.qHat
-        phi = arctan2(2*(q[0]*q[1] + q[2]*q[3]), 1 - 2*(square(q[1]) + square(q[2])))
-        theta = arcsin(2 * ((q[0] * q[2]) - (q[3] * q[1])))
-        psi = arctan2(2 * (q[0] * q[3] + q[1]*q[2]), 1 - 2*(square(q[2]) + square(q[3])))
+    def eulerAngles(self, t=None):
+        if t is None:
+            q = self.qHat
+            phi = arctan2(2*(q[0]*q[1] + q[2]*q[3]), 1 - 2*(square(q[1]) + square(q[2])))
+            theta = arcsin(2 * ((q[0] * q[2]) - (q[3] * q[1])))
+            psi = arctan2(2 * (q[0] * q[3] + q[1]*q[2]), 1 - 2*(square(q[2]) + square(q[3])))
 
         return [phi, theta, psi]
 
