@@ -635,7 +635,7 @@ class Attitude(substate.SubState):
         H = estimatedAttitudeMatrix.dot(self.skewSymmetric(uTrue))
         H = np.append(H, np.zeros([3, 3]), axis=1)
 
-        varR = measurement['RA']['var']
+        varR = measurement['RA']['var'] + np.square(source.extent)
         # varD = measurement['DEC']['var']
 
         # measR = measurement['RA']['value']
@@ -698,11 +698,12 @@ class Attitude(substate.SubState):
     # @param self The object pointer
     #
     # @returns A list containing the three angles
-    def eulerAngles(self):
-        q = self.qHat
-        phi = arctan2(2*(q[0]*q[1] + q[2]*q[3]), 1 - 2*(square(q[1]) + square(q[2])))
-        theta = arcsin(2 * ((q[0] * q[2]) - (q[3] * q[1])))
-        psi = arctan2(2 * (q[0] * q[3] + q[1]*q[2]), 1 - 2*(square(q[2]) + square(q[3])))
+    def eulerAngles(self, t=None):
+        if t is None:
+            q = self.qHat
+            phi = arctan2(2*(q[0]*q[1] + q[2]*q[3]), 1 - 2*(square(q[1]) + square(q[2])))
+            theta = arcsin(2 * ((q[0] * q[2]) - (q[3] * q[1])))
+            psi = arctan2(2 * (q[0] * q[3] + q[1]*q[2]), 1 - 2*(square(q[2]) + square(q[3])))
 
         return [phi, theta, psi]
 
@@ -742,10 +743,17 @@ class Attitude(substate.SubState):
     def sidUnitVec(
             self,
             RaDec):
-        cosD = np.cos(RaDec['DEC'])
-        sinD = np.sin(RaDec['DEC'])
-        cosRA = np.cos(RaDec['RA'])
-        sinRA = np.sin(RaDec['RA'])
+        if isinstance(RaDec['DEC'], dict) and isinstance(RaDec['RA'], dict):
+            cosD = np.cos(RaDec['DEC']['value'])
+            sinD = np.sin(RaDec['DEC']['value'])
+            cosRA = np.cos(RaDec['RA']['value'])
+            sinRA = np.sin(RaDec['RA']['value'])
+        else:
+            cosD = np.cos(RaDec['DEC'])
+            sinD = np.sin(RaDec['DEC'])
+            cosRA = np.cos(RaDec['RA'])
+            sinRA = np.sin(RaDec['RA'])
+
 
         return np.array([cosD * cosRA, cosD * sinRA, sinD])
     

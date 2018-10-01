@@ -3,6 +3,46 @@ from pypet import Environment, cartesian_product
 import numpy as np
 import datetime
 import os
+from .. import substates
+
+## @fun buildPulsarCorrelationSubstate builds an correlation substate based on imported Traj
+def buildPulsarCorrelationSubstate(
+        traj,
+        pulsarObject,
+        processNoiseScaleFactor=None
+):
+    # Import and initialize values for correlation filter
+    processNoise = (
+        traj.correlationFilter.processNoise.value
+    )  # Unitless??
+
+    if processNoiseScaleFactor is not None:
+        processNoise = processNoise * processNoise
+    nFilterTaps = traj.correlationFilter.filterTaps.value
+    measurementNoiseScaleFactor = (
+        traj.correlationFilter.measurementNoiseScaleFactor.value
+    )
+    peakLockThreshold = (
+        traj.correlationFilter.peakLockThreshold.value
+    )
+
+    # Now initialize the correlation substate
+    correlationSubstate = substates.CorrelationVector(
+        pulsarObject,
+        nFilterTaps,
+        pulsarObject.pulsarPeriod/(nFilterTaps+1),
+        signalTDOA=0,
+        TDOAVar=pulsarObject.pulsarPeriod,
+        measurementNoiseScaleFactor=measurementNoiseScaleFactor,
+        processNoise=processNoise,
+        centerPeak=True,
+        peakLockThreshold=peakLockThreshold,
+    )
+    return correlationSubstate
+
+
+
+
 ## @fun buildEnvironment creates a pypet envorinment based on a YAML input file
 def buildEnvironment(yamlFile):
     # Read initialization file (assumed to be YAML)

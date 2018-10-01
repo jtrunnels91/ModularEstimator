@@ -5,7 +5,66 @@ from tempfile import NamedTemporaryFile
 import os
 import subprocess
 from astropy.io import fits
+import matplotlib.pyplot as plt
 from . import spacegeometry
+
+def getChandraObs(
+        obsID,
+        fileList
+        ):
+    pass
+
+
+def getHeaderInfo(
+        key,
+        header
+    ):
+    catKeys = list(header.keys())
+    foundKey = False
+    for index in range(len(header)):
+        if key == header[index]:
+            catKey = catKeys[index]
+            unitKey = catKey.replace('TYPE', 'UNIT')
+            if unitKey == catKey:
+                unitKey = catKey.replace('TYP', 'UNIT')
+                
+            if unitKey in header:
+                columnUnit = header[unitKey]
+            else:
+                columnUnit = None
+            columnIndexDict = {
+                'index': index,
+                'key': catKey
+            }
+            if columnUnit:
+                columnIndexDict['unit'] = columnUnit
+            foundKey = True
+
+    if not foundKey:
+        raise ValueError('Did not find columns %s in local catalog.' %key)
+
+    return columnIndexDict
+
+def plotLocalCatalog(
+        catalogName='xmmsl2_clean.fits',
+        dirpath='/home/joel/Documents/pythonDev/research/pulsarJPDAF/pulsarData/xray_catalogs/',
+        fluxKey='FLUX_B8'
+        ):
+    hdulist = fits.open(dirpath + catalogName)
+
+    catalogHeader = hdulist[1].header
+    catalogData = hdulist[1].data
+    hdulist.close()
+
+    minFlux = np.min(catalogData[fluxKey])
+    scaledFlux = np.array(catalogData[fluxKey] - minFlux)
+    maxFlux = np.max(scaledFlux)
+    scaledFlux = scaledFlux/maxFlux
+    plt.figure()
+    for index in range(len(catalogData)):
+        plt.scatter(catalogData[index]['RA'], catalogData[index]['DEC'], s=scaledFlux[index])
+    plt.show(block=False)
+    return
 
 def localCatalog_coneSearch(
         RA,
@@ -14,7 +73,11 @@ def localCatalog_coneSearch(
         catalogName='xmmsl2_clean.fits',
         dirpath='/home/joel/Documents/pythonDev/research/pulsarJPDAF/pulsarData/xray_catalogs/',
         removeNaNs=True,
-        fluxKey='FLUX_B8'
+        fluxKey='FLUX_B8',
+        extentKey='EXT_B8',
+        raKey='RA',
+        decKey='DEC',
+        srcNameKey='UNIQUE_SRCNAME'
         ):
 
     hdulist = fits.open(dirpath + catalogName)
@@ -23,7 +86,7 @@ def localCatalog_coneSearch(
     catalogData = hdulist[1].data
     hdulist.close()
 
-    columns = ['UNIQUE_SRCNAME', 'RA', 'DEC', fluxKey]
+    columns = [srcNameKey, raKey, decKey, fluxKey, extentKey]
     savedColumns = []
     columnIndexDict = {}
     catKeys = list(catalogHeader.keys())
@@ -49,13 +112,13 @@ def localCatalog_coneSearch(
     if columns:
         raise ValueError('Did not find columns %s in local catalog.' %columns)
 
-    if columnIndexDict['RA']['unit'] == 'rad':
+    if columnIndexDict[raKey]['unit'] == 'rad':
         raConversionFactor = 1
-    elif columnIndexDict['RA']['unit'] == 'degrees':
+    elif columnIndexDict[raKey]['unit'] == 'degrees' or columnIndexDict[raKey]['unit'] == 'degree':
         raConversionFactor = np.pi / 180.0
-    if columnIndexDict['DEC']['unit'] == 'rad':
+    if columnIndexDict[decKey]['unit'] == 'rad':
         decConversionFactor = 1
-    elif columnIndexDict['DEC']['unit'] == 'degrees':
+    elif columnIndexDict[decKey]['unit'] == 'degrees' or columnIndexDict[decKey]['unit'] == 'degree':
         decConversionFactor = np.pi/180.0
 
     if RA['unit'] == 'rad':
@@ -86,8 +149,8 @@ def localCatalog_coneSearch(
     mySourceDF = pd.DataFrame(columns=savedColumns)
     for source in catalogData:
         sourceUnitVector = spacegeometry.sidUnitVec(
-            source['RA'] * raConversionFactor,
-            source['DEC'] * decConversionFactor
+            source[raKey] * raConversionFactor,
+            source[decKey] * decConversionFactor
             )
         angularDiff = np.arccos(referenceUnitVector.dot(sourceUnitVector))
 

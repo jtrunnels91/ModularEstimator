@@ -265,11 +265,16 @@ class ModularFilter():
                     )
             probabilityDict[signalKey] = currentProbability
             probabilitySum = probabilitySum + currentProbability
-
         for probabilityKey in probabilityDict:
-            probabilityDict[probabilityKey] = (
-                probabilityDict[probabilityKey] / probabilitySum
+            if probabilitySum > 0:
+                probabilityDict[probabilityKey] = (
+                    probabilityDict[probabilityKey] / probabilitySum
                 )
+            else:
+                probabilityDict[probabilityKey] = (
+                    probabilityDict[probabilityKey]
+                )
+
         # print(probabilityDict)
         return (probabilityDict)
 
@@ -277,7 +282,7 @@ class ModularFilter():
     measurementUpdateEKF is a standard Extended Kalman Filter measurement
     update.  This function only works when the signal source is known, which
     may or may not be a realistic assumption, depending on the problem.
-    Alternatively, it can be used for comparison to other data association
+    Al)ternatively, it can be used for comparison to other data association
     methods.
 
     The following inputs are required:
@@ -500,6 +505,7 @@ class ModularFilter():
             elif self.covarianceMatrix.form == 'covariance':
                 PPlus = covarianceContainer(PPlus, 'covariance')
         else:
+            xPlus = xMinus
             PPlus = PMinus    
 
         self.covarianceMatrix = PPlus
@@ -528,6 +534,8 @@ class ModularFilter():
         newSVID = self.lastStateVectorID + 1
         for stateName in self.subStates:
             mySlice = self.subStates[stateName]['index']
+            if np.any([isnan(stateVal) for stateVal in globalStateVector[mySlice]]):
+                raise ValueError('NaN state vector for substate %s' %stateName)
             svDict = {
                 'stateVector': globalStateVector[mySlice],
                 'covariance': covariance[mySlice, mySlice],

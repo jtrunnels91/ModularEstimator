@@ -260,7 +260,8 @@ def scatterPlotTraj(
         function=None
     ):
     traj.f_load(load_results=pypetconstants.LOAD_DATA)
-    
+    print(abscissa)
+    print(ordinate)
     excludeNaN = False
     if plotOptions:
         if 'logx' in plotOptions and plotOptions['logx']:

@@ -66,7 +66,7 @@ def backgroundFluxPerSR(lowerE,
 
 
 def radianFOVToSR(radian):
-    return 2 * np.pi * (1 - np.cos(radian / 2))
+    return 2 * np.pi * (1 - np.cos(radian))
 
 
 def degreeFOVToSR(degree):

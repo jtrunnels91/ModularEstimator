@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from . import substate
 from .. utils import covarianceContainer
+from math import isnan
 
 ## @class CorrelationVector
 # @brief CorrelationVector estimates the correlation vector and delay between
@@ -279,16 +280,17 @@ class CorrelationVector(substate.SubState):
                 self.__dT__
             ) - self.peakCenteringDT
             newTDOAVar = tdoaDict['varTDOA'] * np.square(self.__dT__)
-            self.signalTDOA = newTDOA
-            self.TDOAVar = newTDOAVar
+            if not isnan(newTDOA) and not isnan(newTDOAVar):
+                self.signalTDOA = newTDOA
+                self.TDOAVar = newTDOAVar
 
+            svDict['signalTDOA'] = self.signalTDOA
+            svDict['TDOAVar'] = self.TDOAVar
             # xAxis = np.linspace(0, self.__filterOrder__-1, self.__filterOrder__)
             # xAxis = (xAxis * self.__dT__) - self.peakCenteringDT
 
             svDict['xAxis'] = self.xAxis - self.peakCenteringDT
 
-            svDict['signalTDOA'] = newTDOA
-            svDict['TDOAVar'] = newTDOAVar
                   
             if self.peakLock is True and self.centerPeak is True:
                 self.peakOffsetFromCenter = tdoaDict['meanTDOA'] - self.__halfLength__ + 1
@@ -467,7 +469,9 @@ class CorrelationVector(substate.SubState):
             if (self.peakLock is True) and (self.centerPeak is True):
                 FMatrixDT = -self.peakOffsetFromCenter * self.__dT__
                 FMatrixShift = -self.peakOffsetFromCenter
-                self.peakCenteringDT = self.peakCenteringDT - velocityTDOA + FMatrixDT
+                newPCDT = self.peakCenteringDT - velocityTDOA + FMatrixDT
+                if not isnan(newPCDT):
+                    self.peakCenteringDT = newPCDT
                 self.signalTDOA = self.signalTDOA + velocityTDOA - FMatrixDT
                 self.TDOAVar = self.TDOAVar + (Q * np.square(self.__dT__))
             else:

@@ -9,6 +9,7 @@ class PointSource(signalsource.SignalSource):
             self,
             RA,
             DEC,
+            extent=0,
             attitudeStateName='attitude'
     ):
         signalsource.SignalSource.__init__(self)
@@ -17,6 +18,7 @@ class PointSource(signalsource.SignalSource):
         self.__RaDec__ = {'RA': RA, 'DEC': DEC}
         self.attitudeStateName = attitudeStateName
         self.lastPDF = None
+        self.extent = extent
         return
 
     def RaDec(self):
@@ -74,7 +76,7 @@ class PointSource(signalsource.SignalSource):
                     )
                 )
 
-                maxProb = 1/_np.sqrt(_np.linalg.det(2 * _np.pi * residualVariance))
+                # maxProb = 1/_np.sqrt(_np.linalg.det(2 * _np.pi * residualVariance))
                 if maxProb < uniformProbability:
 #                    print("using uniform probability")
                     probability = uniformProbability
@@ -86,12 +88,15 @@ class PointSource(signalsource.SignalSource):
                     #         self.lastPDF = {
                     #             'stateVectorID': stateDict['stateVectorID'],
                     #             'dist': _mvn(cov=residualVariance
-                    probability = (
-                        maxProb * 
-                        _np.exp(-dY.dot(_np.linalg.inv(residualVariance)).dot(dY)/2)
-                    )
-                    # probability = _mvn.pdf(dY, cov=residualVariance, allow_singular=True)
-
+                    # probability = (
+                    #     maxProb * 
+                    #     _np.exp(-dY.dot(_np.linalg.inv(residualVariance)).dot(dY)/2)
+                    # )
+                    probability = _mvn.pdf(dY, cov=residualVariance, allow_singular=True)
+                # print('AOA probability: %s' %probability)
+                # print('max Prob: %s' %maxProb)
+                # print('dY: %s' %dY)
+                # print('var: %s' %residualVariance)
             except:
                 probability = 0
                 print('Error computing probability; setting to zero')

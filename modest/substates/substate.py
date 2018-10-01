@@ -96,6 +96,7 @@ class SubState():
         ## @brief Stores the time-history of the sub-state state vector.
         # self.stateVectorHistory = SmartPanda(data=stateVectorHistory)
         self.stateVectorHistory = [stateVectorHistory]
+        self.timeList = [stateVectorHistory['t']]
 
         ## @brief Stores handle for real-time plotting        
         self.RTPlotHandle = None
@@ -130,11 +131,15 @@ class SubState():
     #
     # @returns The dictionary containing the state vector, covariance matrix,
     # and aPriori status
-    def getStateVector(self):
+    def getStateVector(self, t=None):
         # lastSV = self.stateVectorHistory.getDict(-1)
-        lastSV = self.stateVectorHistory[-1]
+        if t is None:
+            stateVector = self.stateVectorHistory[-1]
+        else:
+            timeIndex = np.searchsorted(self.timeList, t)
+            stateVector = self.stateVectorHistory[timeIndex]
 
-        return(lastSV)
+        return(stateVector)
 
     ## @fun #storeStateVector stores the most recent value of the state vector.
     #
@@ -157,7 +162,9 @@ class SubState():
     # @param self The object pointer
     # @param svDict A dictionary containing the current state estimate.
     def storeStateVector(self, svDict):
+        
         self.stateVectorHistory.append(svDict)
+        self.timeList.append(svDict['t'])
         return
     
     ## @fun #covariance returns the SubState covariance matrix
@@ -297,7 +304,10 @@ class SubState():
         if normalized is True:
             self.RTPaxisHandle.set_ylim([0, 1.1])
             yAxis = yAxis - np.min(yAxis)
-            yAxis = yAxis/np.max(yAxis)
+            try:
+                yAxis = yAxis/np.max(yAxis)
+            except:
+                pass
 
         if 'xAxis' in stateDict:
             xAxis = stateDict['xAxis']
