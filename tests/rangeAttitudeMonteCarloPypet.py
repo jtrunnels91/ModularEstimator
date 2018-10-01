@@ -372,7 +372,7 @@ env = Environment(
     add_time=True,
     # git_repository='../.git',
     # git_message='Monte carlo of range error vs initial attitude uncertainty, testing again with EKF',
-    file_title='Monte carlo of range error vs initial attitude uncertainty, JPDAF',
+    file_title='Monte carlo of range error vs initial attitude uncertainty, testing again with EKF',
     overwrite_file=True
     )
 
@@ -427,8 +427,8 @@ traj.f_add_parameter('initialAttitudeSigma', np.float64(1e-9 * np.pi/180.0), com
 traj.f_explore(
     cartesian_product(
         {
-            'initialAttitudeSigma': np.logspace(-4,0,5) * np.pi/180.0,
-            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=50)
+            'initialAttitudeSigma': np.logspace(-4,-4,1) * np.pi/180.0,
+            'constantPhaseOffset': np.random.uniform(low=0.0, high=1.0, size=1)
         }
     )
 )

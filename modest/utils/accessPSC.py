@@ -1,26 +1,116 @@
 import requests
 import pandas as pd
+import numpy as np
 from tempfile import NamedTemporaryFile
 import os
 import subprocess
 from astropy.io import fits
-
+from . import spacegeometry
 
 def localCatalog_coneSearch(
         RA,
         DEC,
         FOV,
-        catalogName = 'xmmsl2_clean.fits',
-        removeNullFlux=True,
-        fluxKey='flux'
+        catalogName='xmmsl2_clean.fits',
+        dirpath='/home/joel/Documents/pythonDev/research/pulsarJPDAF/pulsarData/xray_catalogs/',
+        removeNaNs=True,
+        fluxKey='FLUX_B8'
         ):
-    dirpath = '/home/joel/Documents/pythonDev/modules/ModularFilter/modest/utils/'
-    
+
     hdulist = fits.open(dirpath + catalogName)
 
-    dataHeader = hdulist[1].header
-    columns = ['UNIQUE_SRCNAME', 'RA', "DEC"]
-    return hdulist
+    catalogHeader = hdulist[1].header
+    catalogData = hdulist[1].data
+    hdulist.close()
+
+    columns = ['UNIQUE_SRCNAME', 'RA', 'DEC', fluxKey]
+    savedColumns = []
+    columnIndexDict = {}
+    catKeys = list(catalogHeader.keys())
+    for index in range(len(catalogHeader)):
+        for column in columns:
+            if column == catalogHeader[index]:
+                catKey = catKeys[index]
+                unitKey = catKey.replace('TYPE', 'UNIT')
+                if unitKey in catalogHeader:
+                    columnUnit = catalogHeader[unitKey]
+                else:
+                    columnUnit = None
+                columnIndexDict[column] = {
+                    'index': index,
+                    'key': catKey
+                }
+                if columnUnit:
+                    columnIndexDict[column]['unit'] = columnUnit
+
+                columns.remove(column)
+                savedColumns.append(column)
+
+    if columns:
+        raise ValueError('Did not find columns %s in local catalog.' %columns)
+
+    if columnIndexDict['RA']['unit'] == 'rad':
+        raConversionFactor = 1
+    elif columnIndexDict['RA']['unit'] == 'degrees':
+        raConversionFactor = np.pi / 180.0
+    if columnIndexDict['DEC']['unit'] == 'rad':
+        decConversionFactor = 1
+    elif columnIndexDict['DEC']['unit'] == 'degrees':
+        decConversionFactor = np.pi/180.0
+
+    if RA['unit'] == 'rad':
+        referenceRA = RA['value']
+    elif RA['unit'] == 'degrees':
+        referenceRA = RA['value'] * np.pi / 180.0
+    else:
+        raise ValueError('Unrecougnized RA units %s' % RA['unit'])
+    
+    if DEC['unit'] == 'rad':
+        referenceDec = DEC['value']
+    elif DEC['unit'] == 'degrees':
+        referenceDec = DEC['value'] * np.pi / 180.0
+    else:
+        raise ValueError('Unrecougnized Dec units %s' % DEC['unit'])
+
+    if FOV['unit'] == 'rad':
+        FOVVal = FOV['value']
+    elif FOV['unit'] == 'degrees':
+        FOVVal = FOV['value'] * np.pi / 180.0
+    else:
+        raise ValueError('Unrecougnized FOV units %s' % FOV['unit'])
+
+    referenceUnitVector = spacegeometry.sidUnitVec(
+        referenceRA,
+        referenceDec
+    )
+    mySourceDF = pd.DataFrame(columns=savedColumns)
+    for source in catalogData:
+        sourceUnitVector = spacegeometry.sidUnitVec(
+            source['RA'] * raConversionFactor,
+            source['DEC'] * decConversionFactor
+            )
+        angularDiff = np.arccos(referenceUnitVector.dot(sourceUnitVector))
+
+        if angularDiff < (FOVVal/2):
+            mySrcDict = {}
+            skipVal = False
+            for columnName, columnInfo in columnIndexDict.items():
+                if not skipVal:
+                    if 'unit' in columnInfo:
+                        mySrcDict[columnName] = {
+                            'value': source[columnName],
+                            'unit': columnInfo['unit'].replace('cm2', 'cm^2')
+                        }
+                    else:
+                        mySrcDict[columnName] = source[columnName]
+                    if removeNaNs:
+                        try:
+                            skipVal = np.isnan(source[columnName])
+                        except:
+                            skipVal = False
+            if not skipVal:
+                mySourceDF = mySourceDF.append(mySrcDict, ignore_index=True)
+    return mySourceDF
 
 def xamin_coneSearch(
         RA,

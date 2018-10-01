@@ -2,7 +2,7 @@
 # @brief This file contains the PeriodicXRaySource class
 
 import numpy as np
-from math import factorial
+from math import factorial, isnan
 import matplotlib.pyplot as plt
 
 from . import pointsource
@@ -538,14 +538,21 @@ class PeriodicXRaySource(
             validationThreshold
         )
 
-        # poisPR = poissonsource.DynamicPoissonSource.computeAssociationProbability(
-        #     self,
-        #     measurement,
-        #     stateDict
-        #     )
+        poisPR = poissonsource.DynamicPoissonSource.computeAssociationProbability(
+            self,
+            measurement,
+            stateDict
+            )
 
-        poisPR = 1.0
-        return (anglePR * poisPR * self.peakAmplitude)
+        # poisPR = 1.0
+        myPr = (anglePR * poisPR * self.peakAmplitude)
+        if isnan(myPr):
+            raise ValueError(
+                'Computed NaN probability.  Components: AOA %s, TOA %s, Flux %s'
+                %(anglePR, poisPR, self.peakAmplitude)
+            )
+        
+        return myPr
     
     def plot(self,
              nPeriods=1,
@@ -574,7 +581,9 @@ class PeriodicXRaySource(
             t0=0,
             position=None,
             attitude=None,
-            FOV=None
+            FOV=None,
+            AOA_StdDev=None,
+            TOA_StdDev=None
             ):
 
         nCandidates = np.int((tMax - t0) * self.peakAmplitude * 1.1)
@@ -626,14 +635,27 @@ class PeriodicXRaySource(
                 else:
                     newPhotonArrivalTime = tNextCandidate
                     photonArrivalTimes.append(tNextCandidate)
-                measurementDict = {
-                    't': {'value': newPhotonArrivalTime},
-                    'name': self.name
+
+                if TOA_StdDev:
+                    newPhotonArrivalTime = (
+                        newPhotonArrivalTime + np.random.normal(scale=TOA_StdDev)
+                    )
+                    measurementDict = {
+                        't': {
+                            'value': newPhotonArrivalTime,
+                            'var': np.square(TOA_StdDev)
+                        },
+                        'name': self.name
+                    }
+                else:
+                    measurementDict = {
+                        't': {'value': newPhotonArrivalTime},
+                        'name': self.name
                     }
 
                 if attitude is not None:
                     measurementDict.update(
-                        self.generateArrivalVector(attitude(newPhotonArrivalTime))
+                        self.generateArrivalVector(attitude(newPhotonArrivalTime), AOA_StdDev)
                     )
                     # measurementDict = {
                     #     't': {'value': newPhotonArrivalTime},

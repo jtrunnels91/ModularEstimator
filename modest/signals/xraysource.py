@@ -7,7 +7,7 @@
 # These classes generally inherit from two different types of signals: pointsource.PointSource and poissonsource.PoissonSource
 
 import numpy as np
-from math import factorial
+from math import factorial, isnan
 import matplotlib.pyplot as plt
 
 from . import pointsource
@@ -49,8 +49,14 @@ class StaticXRayPointSource(
             self,
             measurement
             )
-
-        return (anglePR * poisPR * self.peakPhotonFlux)
+        myPr = (anglePR * poisPR * self.peakPhotonFlux)
+        if isnan(myPr):
+            raise ValueError(
+                'Computed NaN probability.  Components: AOA %s, TOA %s, Flux %s'
+                %(anglePR, poisPR, self.peakPhotonFlux)
+            )
+        
+        return myPr
 
 
 class UniformNoiseXRaySource(poissonsource.StaticPoissonSource):

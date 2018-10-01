@@ -82,18 +82,31 @@ class StaticXRayPointSource(
             tMax,
             t0=0,
             attitude=None,
-            FOV=None
+            FOV=None,
+            AOA_StdDev=None,
+            TOA_StdDev=None
     ):
         poissonEvents = self.generateEvents(tMax, t0=t0)
         measurements = []
         for event in poissonEvents:
-            nextMeasurement = {
-                't': {'value': event},
-                'name': self.name
+            if TOA_StdDev:
+                event = event + np.random.normal(scale=TOA_StdDev)
+                nextMeasurement = {
+                    't': {
+                        'value': event,
+                        'var': np.square(TOA_StdDev)
+                    },
+                    'name': self.name
                 }
+            else:
+                nextMeasurement = {
+                    't': {'value': event},
+                    'name': self.name
+                }
+                
             if attitude is not None:
                 nextMeasurement.update(
-                    self.generateArrivalVector(attitude(event))
+                    self.generateArrivalVector(attitude(event), AOA_StdDev)
                     )
             measurements.append(nextMeasurement)
         return(measurements)

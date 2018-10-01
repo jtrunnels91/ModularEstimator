@@ -55,7 +55,9 @@ class UniformNoiseXRaySource(poissonsource.StaticPoissonSource):
             t0=0,
             position=None,
             attitude=None,
-            FOV=None
+            FOV=None,
+            AOA_StdDev=None,
+            TOA_StdDev=None
             ):
         poissonEvents = self.generateEvents(tMax, t0=t0)
         arrivalVectors = self.generateUniformArrivalVectors(len(poissonEvents), FOV)
@@ -67,11 +69,29 @@ class UniformNoiseXRaySource(poissonsource.StaticPoissonSource):
             
             # Generate a uniformly distributed random arrival vector
             Ra, Dec = sg.unitVector2RaDec(arrivalVector)
+            if TOA_StdDev:
+                tDict = {
+                    'value': arrivalTime + np.random.normal(scale=TOA_StdDev),
+                    'var': np.square(TOA_StdDev)
+                }
+            else:
+                tDict = {
+                    'value': arrivalTime
+                }
+
+            if AOA_StdDev:
+                RaDict = {'value': Ra, 'var': np.square(AOA_StdDev)}
+                DecDict = {'value': Dec, 'var': np.square(AOA_StdDev)}
+                
+            else:
+                RaDict = {'value': Ra}
+                DecDict = {'value': Dec}
+                
             measurementDict = {
-                't': {'value': arrivalTime},
+                't': tDict,
                 'unitVec': {'value': arrivalVector},
-                'RA': {'value': Ra},
-                'DEC': {'value': Dec},
+                'RA': RaDict,
+                'DEC': DecDict,
                 'name': 'background'
             }
 
