@@ -19,10 +19,10 @@ plt.close('all')
 def omega(t):
     # omegaT = np.array([sin(pi * t/4), cos(pi * t/12), sin(pi * t/16)])
     #omegaT = np.random.normal(np.zeros(3))
-    omegaT = np.array([cos(pi*t/4)/4, 0, 0])
+    omegaT = 0*np.array([cos(pi*t/4)*pi/4, 0, 0])
     return(omegaT)
 def attitude(t,returnQ=True):
-    euler = np.array([sin(pi * t/4), 0, 0])
+    euler = 0*np.array([sin(pi * t/4), 0, 0])
     if returnQ:
         return euler2quaternion(euler)
     else:
@@ -39,16 +39,22 @@ biasSTD = 0.01
 eulerT0True = np.array([0, 0, 0])
 biasTrue = np.random.normal(np.zeros(3), scale=biasSTD)
 
-eulerErrorSTD = 0.0001
-biasErrorSTD = 0.0001
+rollErrorStd = 1e-9
+RAErrorStd = 1
+DecErrorStd = 1e-9
+biasErrorSTD = 1e-100
 
-eulerT0Est = np.random.normal(eulerT0True, eulerErrorSTD)
+eulerT0Est = np.array([
+    np.random.normal(eulerT0True[0], rollErrorStd),
+    np.random.normal(eulerT0True[1], DecErrorStd),
+    np.random.normal(eulerT0True[2], RAErrorStd)
+])
 biasEst = np.random.normal(biasTrue, scale=biasErrorSTD)
 
 q0 = euler2quaternion(eulerT0True)
 
-QScalar = 0.01
-RScalar = 0.0001
+QScalar = 1e-9
+RScalar = 1e-9
 
 
 # Initiate filters
@@ -56,32 +62,37 @@ myJPDAF = me.ModularFilter(measurementValidationThreshold=0)
 myEKF = me.ModularFilter()
 myML = me.ModularFilter(measurementValidationThreshold=1e-3)
 myTUOnly = me.ModularFilter()
+initialAttitudeCovariance = np.zeros([3,3])
+initialAttitudeCovariance[0,0] = np.square(rollErrorStd)
+initialAttitudeCovariance[1,1] = np.square(DecErrorStd)
+initialAttitudeCovariance[2,2] = np.square(RAErrorStd)
+
 
 # Initiate attitude stubstates
 JPDAFAtt = me.substates.Attitude(
     euler2quaternion(eulerT0Est),
-    np.eye(3) * np.square(eulerErrorSTD),
+    initialAttitudeCovariance,
     np.zeros(3),
     np.eye(3) * np.square(biasSTD + biasErrorSTD)
 )
 
 EKFAtt = me.substates.Attitude(
     euler2quaternion(eulerT0Est),
-    np.eye(3) * np.square(eulerErrorSTD),
+    initialAttitudeCovariance,
     np.zeros(3),
     np.eye(3) * np.square(biasSTD + biasErrorSTD)
 )
 
 MLAtt = me.substates.Attitude(
     euler2quaternion(eulerT0Est),
-    np.eye(3) * np.square(eulerErrorSTD),
+    initialAttitudeCovariance,
     np.zeros(3),
     np.eye(3) * np.square(biasSTD + biasErrorSTD)
 )
 
 TUOnlyAtt = me.substates.Attitude(
     euler2quaternion(eulerT0Est),
-    np.eye(3) * np.square(eulerErrorSTD),
+    initialAttitudeCovariance,
     np.zeros(3),
     np.eye(3) * np.square(biasSTD + biasErrorSTD)
 )
@@ -92,13 +103,19 @@ myEKF.addStates('attitude', EKFAtt)
 myTUOnly.addStates('attitude', TUOnlyAtt)
 
 # Star and background info
-backgroundFlux = 1
+backgroundFlux = 100
 nStars = 5
 starVecs = np.random.normal(np.zeros([nStars, 3]))
 starCoordinates = np.zeros([nStars, 2])
 fluxes = np.zeros(nStars + 1)
 starArrivalTimes = np.zeros(nStars + 1)
 bkgArrivalTime = exponential(1/backgroundFlux)
+
+myNoise = me.signals.UniformNoiseXRaySource(backgroundFlux)
+myJPDAF.addSignalSource('background', myNoise)
+myML.addSignalSource('background', myNoise)
+myEKF.addSignalSource('background', myNoise)
+
 
 starList = []
 photonArrivals = []
@@ -131,7 +148,6 @@ for i in range(nStars):
             TOA_StdDev=1e-100
         )
     )
-myNoise = me.signals.UniformNoiseXRaySource(backgroundFlux)
 photonArrivals = (
     photonArrivals +
     myNoise.generatePhotonArrivals(
@@ -141,10 +157,6 @@ photonArrivals = (
         TOA_StdDev=1e-100
     )
 )
-myJPDAF.addSignalSource('background', myNoise)
-myML.addSignalSource('background', myNoise)
-myEKF.addSignalSource('background', myNoise)
-
 photonArrivals = sorted(photonArrivals, key=lambda k: k['t']['value'])
 
 
@@ -231,7 +243,13 @@ for photonMeasurement in photonArrivals:
                 )
             }
         )
-
+        attitudeMat = attitude(photonMeasurement['t']['value']).rotation_matrix
+        myRaDec = me.utils.spacegeometry.unitVector2RaDec(
+            attitudeMat.dot(JPDAFAtt.sidUnitVec(photonMeasurement))
+        )
+        photonMeasurement['TrueRA'] = myRaDec[0]
+        photonMeasurement['TrueDEC'] = myRaDec[1]
+    
     # if nextStarIndex < nStars:
     #     starVecBodyFrame = (
     #         q0.rotation_matrix.transpose().dot(starVecs[nextStarIndex])

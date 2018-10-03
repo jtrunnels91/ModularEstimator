@@ -1,14 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plotSourcesAndProbabilities(modFilter, measurementList, pointSize=1):
+def plotSourcesAndProbabilities(modFilter, measurementList, pointSize=1, plotAttitude=False):
     plt.figure()
     for signalName, signal in modFilter.signalSources.items():
         if hasattr(signal, 'RaDec'):
             myPoints=plt.scatter(signal.RaDec()['RA'], signal.RaDec()['DEC'], label=signalName,marker='*')
             myColor = myPoints.get_facecolor()
         else:
-            myColor = [[0.75,0.75,0.75,1]]
+            myColor = [[0.5,0.5,0.5,0.1]]
 
         probArray = [
             singleMeas['associationProbabilities'][signalName]
@@ -21,7 +21,7 @@ def plotSourcesAndProbabilities(modFilter, measurementList, pointSize=1):
         myRaList = []
         myDecList = []
         myProbList = []
-        for index, photonMeasurement in enumerate(photonMeasurementList):
+        for index, photonMeasurement in enumerate(measurementList):
             if probArray[index] > 0:
                 myRaList.append(photonMeasurement['TrueRA'])
                 myDecList.append(photonMeasurement['TrueDEC'])
@@ -30,16 +30,17 @@ def plotSourcesAndProbabilities(modFilter, measurementList, pointSize=1):
         myProbList = np.array(myProbList)
         plt.scatter(myRaList, myDecList, color=myColor, edgecolors=myColor, marker='.', s=myProbList*pointSize)
 
-        c = np.asarray([
-            list(myColor[0][0:3]) + [prob]
-            for prob in myProbList]
-        )
+        # c = np.asarray([
+        #     list(myColor[0][0:3]) + [prob]
+        #     for prob in myProbList]
+        # )
 
-    euList=[
-        svDict['eulerAngles']
-        for svDict in myFilter.subStates['attitude']['stateObject'].stateVectorHistory
-    ]
-    plt.plot([eu[2] for eu in euList],[-eu[1] for eu in euList])
+    if plotAttitude:
+        euList=[
+            svDict['eulerAngles']
+            for svDict in modFilter.subStates['attitude']['stateObject'].stateVectorHistory
+        ]
+        plt.plot([eu[2] for eu in euList],[-eu[1] for eu in euList])
     plt.legend()
     plt.show(block=False)
 
