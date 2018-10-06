@@ -40,8 +40,8 @@ eulerT0True = np.array([0, 0, 0])
 biasTrue = np.random.normal(np.zeros(3), scale=biasSTD)
 
 rollErrorStd = 1e-9
-RAErrorStd = 1
-DecErrorStd = 1e-9
+RAErrorStd = 1e-1
+DecErrorStd = 1e-1
 biasErrorSTD = 1e-100
 
 eulerT0Est = np.array([
