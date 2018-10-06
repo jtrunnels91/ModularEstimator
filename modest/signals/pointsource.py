@@ -78,7 +78,7 @@ class PointSource(signalsource.SignalSource):
 
                 # maxProb = 1/_np.sqrt(_np.linalg.det(2 * _np.pi * residualVariance))
                 if maxProb < uniformProbability:
-#                    print("using uniform probability")
+                    print("using uniform probability")
                     probability = uniformProbability
                 else:
                     # if self.lastPDF:

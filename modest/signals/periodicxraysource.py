@@ -337,6 +337,28 @@ class PeriodicXRaySource(
             )
         return(phase)
 
+    def getFrequency(
+            self,
+            observatoryTime
+    ):
+        frequency = 0
+        for order in self.phaseDerivatives:
+            if order > 0:
+                frequency  = (
+                    frequency +
+                    (
+                        self.phaseDerivatives[order] *
+                        np.power(observatoryTime, order-1)/
+                        factorial(order - 1)
+                    )
+                )
+        return frequency
+    def getPeriod(
+            self,
+            observatoryTime
+    ):
+        return 1/self.getFrequency(observatoryTime)
+    
     ## @fun #getSignalMJD is a wrapper function that returns the photon flux
     # at a given Modified Julian Date
     #
@@ -556,7 +578,6 @@ class PeriodicXRaySource(
                 'Computed NaN probability.  Components: AOA %s, TOA %s, Flux %s'
                 %(anglePR, poisPR, self.peakAmplitude)
             )
-        
         return myPr
     
     def plot(self,

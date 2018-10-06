@@ -51,7 +51,7 @@ class UniformNoiseXRaySource(poissonsource.StaticPoissonSource):
         totalPR = anglePR * poisPR * self.photonFlux
 
         return totalPR
-    
+
     def generatePhotonArrivals(
             self,
             tMax,

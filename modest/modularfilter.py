@@ -406,15 +406,28 @@ class ModularFilter():
                     currentPR >
                     self.measurementValidationThreshold
             ):
-                updateDict = self.localStateUpdateMatrices(
-                    measurement,
-                    signalName,
-                    xMinus,
-                    PMinus
+                try:
+                    updateDict = self.localStateUpdateMatrices(
+                        measurement,
+                        signalName,
+                        xMinus,
+                        PMinus
                     )
-                if currentPR < 0:
-                    raise ValueError('Probability less than zero!')
+                except:
+                    print(measurement)
+                    print(signalName)
+                    print(xMinus)
+                    print(PMinus)
+                    raise ValueError('Computed NaN state update')
 
+                if np.any([isnan(stateVal) for stateVal in updateDict['xPlus']]):
+                    raise ValueError(
+                        'The following signal association computed a NaN ' +
+                        'state vector:\n' +
+                        'Association: %s \n'
+                        #'Association Probability: %s\n' +
+                        % signalName
+                    )
                 xPlus = (
                     xPlus + (currentPR * updateDict['xPlus'])
                     )
@@ -535,6 +548,8 @@ class ModularFilter():
         for stateName in self.subStates:
             mySlice = self.subStates[stateName]['index']
             if np.any([isnan(stateVal) for stateVal in globalStateVector[mySlice]]):
+                print(globalStateVector)
+                print('A priori: %s' %aPriori)
                 raise ValueError('NaN state vector for substate %s' %stateName)
             svDict = {
                 'stateVector': globalStateVector[mySlice],
@@ -737,13 +752,16 @@ class ModularFilter():
                             measurementDimensions[key]['index']
                         ] + localdYDict[key]
                     )
-        xPlus, PPlus = self.computeUpdatedStateandCovariance(
-            xMinus,
-            PMinus,
-            totaldYMatrix,
-            totalHMatrix,
-            totalRMatrix
+        try:
+            xPlus, PPlus = self.computeUpdatedStateandCovariance(
+                xMinus,
+                PMinus,
+                totaldYMatrix,
+                totalHMatrix,
+                totalRMatrix
             )
+        except:
+            raise ValueError('Got NaN state vector')
 
         return({
             'xPlus': xPlus,
@@ -800,6 +818,11 @@ class ModularFilter():
             )
             PPlus = covarianceContainer(WPlus, PMinus.form)
             xPlus = xMinus + W.dot(Z).dot(UInv.transpose()).dot(UInv).dot(dY)
+        if np.any([isnan(stateVal) for stateVal in xPlus]):
+            print(xPlus)
+            raise ValueError(
+                'Computed a NaN updated state vector'
+            )
         return (xPlus, PPlus)
     
     @staticmethod
