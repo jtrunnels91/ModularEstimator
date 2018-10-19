@@ -387,7 +387,7 @@ class ModularFilter():
 
         xPlus = np.zeros(self.totalDimension)
         PPlus = None
-            
+        # print('Started measurement update')
 
         validAssociationsDict = {}
         for signalName in signalAssociationProbability:
@@ -434,10 +434,17 @@ class ModularFilter():
 
                 if self.covarianceMatrix.form == 'covariance':
                     if PPlus is not None:
+
+                        # print('PPlus is not none')
+                        # print(signalName)
                         PPlus = (
                             PPlus + (currentPR * updateDict['PPlus'].value)
                         )
                     else:
+                        # print('PPlus is none')
+                        # print(signalName)
+                        # print(PMinus.value - updateDict['PPlus'].value)
+                        
                         PPlus = currentPR * updateDict['PPlus'].value
                         
                 elif self.covarianceMatrix.form == 'cholesky':
@@ -467,7 +474,7 @@ class ModularFilter():
         # Also note that we only need to compute the spread of means term if
         # there was more than one valid association.  Otherwise we essentially
         # just have the standard KF
-        if len(validAssociationsDict) > 1:
+        if len(validAssociationsDict) > 0:
             # Initialize Spread Of Means matrix
             # spreadOfMeans = np.zeros([self.totalDimension, self.totalDimension])
             spreadOfMeans = None

@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 # from smartpanda import SmartPanda
-import modest as me
+from context import modest as me
 
 from numpy import sin, cos, pi, sqrt
 from numpy.random import exponential
@@ -14,15 +14,17 @@ from SpaceGeometry import sidUnitVec, unitVector2RaDec
 from QuaternionHelperFunctions import euler2quaternion, quaternion2euler, eulerAngleDiff
 
 plt.close('all')
-
+FOV = 5
 # Function defining angular velocity
+euler0 = np.random.uniform(-np.pi/2, np.pi/2, 3)
+# euler0 = np.array([np.pi/2,0,0])
 def omega(t):
     # omegaT = np.array([sin(pi * t/4), cos(pi * t/12), sin(pi * t/16)])
     #omegaT = np.random.normal(np.zeros(3))
-    omegaT = 0*np.array([cos(pi*t/4)*pi/4, 0, 0])
+    omegaT = np.array([0, 0, 0])
     return(omegaT)
 def attitude(t,returnQ=True):
-    euler = 0*np.array([sin(pi * t/4), 0, 0])
+    euler = np.array([euler0[0], -euler0[1], euler0[2]])
     if returnQ:
         return euler2quaternion(euler)
     else:
@@ -33,15 +35,15 @@ lastPrintTime=0
 # Dynamics info
 tCurrent = 0
 timeStep = 0.01
-tMax = 100
+tMax = 10
 
-biasSTD = 0.01
-eulerT0True = np.array([0, 0, 0])
+biasSTD = 1e-10
+eulerT0True = attitude(0, returnQ=False)
 biasTrue = np.random.normal(np.zeros(3), scale=biasSTD)
 
-rollErrorStd = 1e-9
-RAErrorStd = 1
-DecErrorStd = 1e-9
+rollErrorStd = 1e-1
+RAErrorStd = 1e-3
+DecErrorStd = 1e-3
 biasErrorSTD = 1e-100
 
 eulerT0Est = np.array([
@@ -53,12 +55,12 @@ biasEst = np.random.normal(biasTrue, scale=biasErrorSTD)
 
 q0 = euler2quaternion(eulerT0True)
 
-QScalar = 1e-9
-RScalar = 1e-9
+QScalar = 1e-6
+RScalar = 1e-6
 
 
 # Initiate filters
-myJPDAF = me.ModularFilter(measurementValidationThreshold=0)
+myJPDAF = me.ModularFilter(measurementValidationThreshold=0, covarianceStorage='cholesky')
 myEKF = me.ModularFilter()
 myML = me.ModularFilter(measurementValidationThreshold=1e-3)
 myTUOnly = me.ModularFilter()
@@ -67,6 +69,7 @@ initialAttitudeCovariance[0,0] = np.square(rollErrorStd)
 initialAttitudeCovariance[1,1] = np.square(DecErrorStd)
 initialAttitudeCovariance[2,2] = np.square(RAErrorStd)
 
+initialAttitudeCovariance = attitude(0).rotation_matrix.dot(initialAttitudeCovariance).dot(attitude(0).rotation_matrix.transpose())
 
 # Initiate attitude stubstates
 JPDAFAtt = me.substates.Attitude(
@@ -111,7 +114,7 @@ fluxes = np.zeros(nStars + 1)
 starArrivalTimes = np.zeros(nStars + 1)
 bkgArrivalTime = exponential(1/backgroundFlux)
 
-myNoise = me.signals.UniformNoiseXRaySource(backgroundFlux)
+myNoise = me.signals.UniformNoiseXRaySource(backgroundFlux, detectorFOV=FOV*2)
 myJPDAF.addSignalSource('background', myNoise)
 myML.addSignalSource('background', myNoise)
 myEKF.addSignalSource('background', myNoise)
@@ -121,13 +124,13 @@ starList = []
 photonArrivals = []
 # Generate signal objects, add them to filters
 for i in range(nStars):
-    fluxes[i] = 1
+    fluxes[i] = 10
     starVecs[i] = starVecs[i]/np.linalg.norm(starVecs[i])
     starCoordinates[i] = unitVector2RaDec(starVecs[i])
     name = 'star%i' %i
     star = me.signals.StaticXRayPointSource(
-        starCoordinates[i][0],
-        starCoordinates[i][1],
+        np.random.uniform(euler0[2]-(FOV*np.pi/180), euler0[2] + (FOV*np.pi/180)),
+        np.random.uniform(euler0[1]-(FOV*np.pi/180), euler0[1] + (FOV*np.pi/180)),
         fluxes[i],
         name=name
     )
@@ -195,10 +198,10 @@ for photonMeasurement in photonArrivals:
 
         dynamicsDict = {
             'omega': {'value': omegaMeas, 'var': QScalar},
-            'gyroBias': {'var': 1e-2}
+            'gyroBias': {'var': 1e-10}
             }
 
-        myJPDAF.timeUpdateEKF(currentDT, dynamicsDict)
+        # myJPDAF.timeUpdateEKF(currentDT, dynamicsDict)
         myML.timeUpdateEKF(currentDT, dynamicsDict)
         myEKF.timeUpdateEKF(currentDT, dynamicsDict)
         myTUOnly.timeUpdateEKF(currentDT, dynamicsDict)
@@ -266,10 +269,12 @@ for photonMeasurement in photonArrivals:
     # photonMeasurement['DEC']['var'] = RScalar
     # photonMeasurement['t']['var'] = 1e-1000
 
-    myJPDAF.measurementUpdateJPDAF(photonMeasurement)
     myML.measurementUpdateML(photonMeasurement)
-    myEKF.measurementUpdateEKF(photonMeasurement, photonMeasurement['name'])
+    if photonMeasurement['name'] is not 'background':
+        myEKF.measurementUpdateEKF(photonMeasurement, photonMeasurement['name'])
         
+    # myJPDAF.measurementUpdateJPDAF(photonMeasurement)
+    photonMeasurement['associationProbabilities']=myJPDAF.computeAssociationProbabilities(photonMeasurement)
 
     # starArrivalTimes[nextStarIndex] = (
     #     starArrivalTimes[nextStarIndex] +
@@ -380,17 +385,17 @@ plt.plot(
 plt.plot(
     [je['t'] for je in MLError],
     [je['eulerAngles'][0] for je in MLError],
-    label='JPDAF'
+    label='ML'
 )
 plt.plot(
     [je['t'] for je in EKFError],
     [je['eulerAngles'][0] for je in EKFError],
-    label='JPDAF'
+    label='Ideal'
 )
 plt.plot(
     [je['t'] for je in TUError],
     [je['eulerAngles'][0] for je in TUError],
-    label='JPDAF'
+    label='Time update only'
 )
 
 plt.legend()
@@ -403,17 +408,17 @@ plt.plot(
 plt.plot(
     [je['t'] for je in MLError],
     [je['eulerAngles'][1] for je in MLError],
-    label='JPDAF'
+    label='ML'
 )
 plt.plot(
     [je['t'] for je in EKFError],
     [je['eulerAngles'][1] for je in EKFError],
-    label='JPDAF'
+    label='Ideal'
 )
 plt.plot(
     [je['t'] for je in TUError],
     [je['eulerAngles'][1] for je in TUError],
-    label='JPDAF'
+    label='Time update only'
 )
 
 plt.subplot(313)
@@ -425,18 +430,19 @@ plt.plot(
 plt.plot(
     [je['t'] for je in MLError],
     [je['eulerAngles'][2] for je in MLError],
-    label='JPDAF'
+    label='ML'
 )
 plt.plot(
     [je['t'] for je in EKFError],
     [je['eulerAngles'][2] for je in EKFError],
-    label='JPDAF'
+    label='Ideal'
 )
-plt.plot(
-    [je['t'] for je in TUError],
-    [je['eulerAngles'][2] for je in TUError],
-    label='JPDAF'
-)
+# plt.plot(
+#     [je['t'] for je in TUError],
+#     [je['eulerAngles'][2] for je in TUError],
+#     label='Time update only'
+# )
 
 plt.show(block=False)
 
+me.plots.photonscatterplot.plotSourcesAndProbabilities(myJPDAF, photonArrivals, pointSize=100, ignoreBackground=False,plotAttitude=True)

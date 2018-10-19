@@ -66,40 +66,43 @@ class PointSource(signalsource.SignalSource):
             dY = measurementMatrices['dY']['unitVector']
             
             residualVariance = H.dot(P).dot(H.transpose()) + R
-            try:
-                uniformProbability = 1/(4 * _np.pi)
-                maxProb = (
-                    1 /
-                    _np.sqrt(
-                        _np.power((2*_np.pi), len(dY)) *
-                        _np.linalg.det(residualVariance)
-                    )
+            # try:
+            uniformProbability = 1/(4 * _np.pi)
+            maxProb = (
+                1 /
+                _np.sqrt(
+                    _np.power((2*_np.pi), len(dY)) *
+                    _np.linalg.det(residualVariance)
                 )
+            )
 
-                # maxProb = 1/_np.sqrt(_np.linalg.det(2 * _np.pi * residualVariance))
-                if maxProb < uniformProbability:
-                    print("using uniform probability")
-                    probability = uniformProbability
+            # maxProb = 1/_np.sqrt(_np.linalg.det(2 * _np.pi * residualVariance))
+            if maxProb < uniformProbability:
+                print("using uniform probability")
+                probability = uniformProbability
+            else:
+                # if self.lastPDF:
+                #     if self.lastPDF['stateVectorID'] == stateDict['stateVectorID']:
+                #         probability = self.lastPDF['dist'].pdf(dY)
+                #     else:
+                #         self.lastPDF = {
+                #             'stateVectorID': stateDict['stateVectorID'],
+                #             'dist': _mvn(cov=residualVariance
+                expArg = -dY.dot(_np.linalg.inv(residualVariance)).dot(dY)/2
+                if expArg < -1e1:
+                    probability = 0
                 else:
-                    # if self.lastPDF:
-                    #     if self.lastPDF['stateVectorID'] == stateDict['stateVectorID']:
-                    #         probability = self.lastPDF['dist'].pdf(dY)
-                    #     else:
-                    #         self.lastPDF = {
-                    #             'stateVectorID': stateDict['stateVectorID'],
-                    #             'dist': _mvn(cov=residualVariance
-                    # probability = (
-                    #     maxProb * 
-                    #     _np.exp(-dY.dot(_np.linalg.inv(residualVariance)).dot(dY)/2)
-                    # )
-                    probability = _mvn.pdf(dY, cov=residualVariance, allow_singular=True)
-                # print('AOA probability: %s' %probability)
-                # print('max Prob: %s' %maxProb)
-                # print('dY: %s' %dY)
-                # print('var: %s' %residualVariance)
-            except:
-                probability = 0
-                print('Error computing probability; setting to zero')
+                    probability = (
+                        maxProb * _np.exp(expArg)
+                    )
+                # probability = _mvn.pdf(dY, cov=residualVariance, allow_singular=True)
+            # print('AOA probability: %s' %probability)
+            # print('max Prob: %s' %maxProb)
+            # print('dY: %s' %dY)
+            # print('var: %s' %residualVariance)
+            # except:
+            #     probability = 0
+            #     print('Error computing probability; setting to zero')
                 # print('P:')
                 # print(P)
                 # print('H:')

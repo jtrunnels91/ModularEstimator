@@ -9,7 +9,7 @@ from pyquaternion import Quaternion
 #from . SubState import SubState
 from .. signals.pointsource import PointSource
 from . import substate
-from .. utils import covarianceContainer
+from .. utils import covarianceContainer, spacegeometry
 
 ## @class Attitude
 # @brief Estimates the attitude of a vehicle in three dimensions, along with
@@ -107,7 +107,7 @@ class Attitude(substate.SubState):
                 'aPriori': True,
                 'q': self.qHat.q,
                 'eulerAngles': self.eulerAngles(),
-                'eulerSTD': Attitude.eulerSTD(self.PHat),
+                'eulerSTD': self.eulerSTD(),
                 'stateVectorID': -1
             }
         )
@@ -186,7 +186,7 @@ class Attitude(substate.SubState):
                 'aPriori': aPriori,
                 'q': self.qHat.q,
                 'eulerAngles': self.eulerAngles(),
-                'eulerSTD': Attitude.eulerSTD(self.PHat),
+                'eulerSTD': self.eulerSTD(),
                 'stateVectorID': svDict['stateVectorID']
             }
         )
@@ -293,10 +293,14 @@ class Attitude(substate.SubState):
         if (
                 isinstance(source, PointSource)
         ):
-            measurementMatrices = self.RaDecMeasMatrices(
+            measurementMatrices = self.unitVectorMeasurmentMatrices(
                 source,
                 measurement
                 )
+            # measurementMatrices = self.RaDecMeasurementMatrices(
+            #     source,
+            #     measurement
+            #     )
 
             HDict = {'unitVector': measurementMatrices['H']}
             RDict = {'unitVector': measurementMatrices['R']}
@@ -559,7 +563,73 @@ class Attitude(substate.SubState):
                     
         return(Q)
 
-    ## @fun RaDecMeasMatrices generates measurement matrices for a angle
+    ## @fun RaDecMeasurementMatrices
+    def RaDecMeasurementMatrices(
+            self,
+            source,
+            measurement
+    ):
+        sourceRaDec = source.RaDec()
+        
+        # sourceUnitVec = self.sidUnitVec(sourceRaDec)
+        
+        # estimatedAttitudeMatrix = self.qHat.rotation_matrix.transpose()
+
+        # sourceUnitVecLocal = estimatedAttitudeMatrix.dot(sourceUnitVec)
+
+        # sourceRaLocal, sourceDecLocal = spacegeometry.unitVector2RaDec(
+        #     sourceUnitVecLocal
+        # )
+        
+        raDecRoll = self.RaDecRoll()
+        raEst = raDecRoll[0]
+        decEst = raDecRoll[1]
+        rollEst = raDecRoll[2]
+
+        raDiff = sourceRaDec['RA'] - raEst
+        decDiff = sourceRaDec['DEC'] - decEst
+        
+        sinTheta = np.sin(rollEst)
+        cosTheta = np.cos(rollEst)
+        H = np.array(
+            [
+                [-raDiff*sinTheta + decDiff*cosTheta, -cosTheta, sinTheta],
+                [-raDiff*cosTheta - decDiff*sinTheta, -sinTheta, -cosTheta]
+            ]
+        )
+
+        # H = np.array(
+        #     [
+        #         [-raDiff*sinTheta + decDiff*cosTheta, -cosTheta, -sinTheta],
+        #         [-raDiff*cosTheta - decDiff*sinTheta, sinTheta, -cosTheta]
+        #     ]
+        # )
+
+        H = np.hstack([H, np.zeros([2,3])])
+        # print(H)
+        # predictedRa = (raDiff * cosTheta) - (decDiff * sinTheta)
+        # predictedDec = (raDiff * sinTheta) + (decDiff * cosTheta)
+        predictedRa = (raDiff * cosTheta) + (decDiff * sinTheta)
+        predictedDec = -(raDiff * sinTheta) + (decDiff * cosTheta)
+        # predictedRa = sourceRaLocal
+        # predictedDec = sourceDecLocal
+        dY = np.array([
+            measurement['RA']['value'] - predictedRa,
+            measurement['DEC']['value'] - predictedDec
+        ])
+
+        R = block_diag(measurement['RA']['var'], measurement['DEC']['var'])
+        
+        measMatrices = {
+            'H': H,
+            'R': R,
+            'dY': dY
+            }
+        
+        return(measMatrices)
+    
+    
+    ## @fun unitVectorMeasurmentMatrices generates measurement matrices for a angle
     # measurement of a point source.
     #
     # @details
@@ -612,7 +682,7 @@ class Attitude(substate.SubState):
     # and variance.
     #
     # @returns A dictionary containing the measurement matrices H, R, and dY
-    def RaDecMeasMatrices(
+    def unitVectorMeasurmentMatrices(
             self,
             source,
             measurement
@@ -754,8 +824,9 @@ class Attitude(substate.SubState):
             cosRA = np.cos(RaDec['RA'])
             sinRA = np.sin(RaDec['RA'])
 
-
-        return np.array([cosD * cosRA, cosD * sinRA, sinD])
+        myUV = np.array([cosD * cosRA, cosD * sinRA, sinD])
+        myUV = myUV / np.linalg.norm(myUV)
+        return myUV
     
     ## @fun skewSymmetric generates a skew-symmetric matrix from a 3x1 vector
     #
@@ -785,9 +856,14 @@ class Attitude(substate.SubState):
 
         return(matrix)
 
-    @staticmethod
-    def eulerSTD(covarianceMatrix):
-        newCov = covarianceMatrix.convertCovariance('covariance')
+    def eulerSTD(self):
         
-        eulerSTD = np.sqrt(newCov.value.diagonal()[0:3])
+        newCov = self.PHat.convertCovariance('covariance').value[0:3,0:3]
+        newCov = (
+            self.qHat.rotation_matrix.transpose().dot(
+                newCov
+            ).dot(self.qHat.rotation_matrix)
+        )
+
+        eulerSTD = np.sqrt(newCov.diagonal()[0:3])
         return eulerSTD
