@@ -126,7 +126,7 @@ class DynamicPoissonSource(PoissonSource):
         else:
             measuredTVar = measurement['t']['var']
         # Hack to try and limit the erroneous locking behavior
-        # tVarScaleFactor = 1.0
+        tVarScaleFactor = 1.0
         # print('T var components')
         # print('Measurement tvar: %s' %measurement['t']['var'])
         # print('State tvar: %s' %state['TDOAVar'])

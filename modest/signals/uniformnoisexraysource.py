@@ -47,7 +47,7 @@ class UniformNoiseXRaySource(poissonsource.StaticPoissonSource):
         anglePR = 1/(self.FOV_SolidAngle)
 
         poisPR = super().computeAssociationProbability(measurement)
-        
+        poisPR = 1
         totalPR = anglePR * poisPR * self.photonFlux
 
         return totalPR

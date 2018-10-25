@@ -9,7 +9,7 @@ from pyquaternion import Quaternion
 #from . SubState import SubState
 from .. signals.pointsource import PointSource
 from . import substate
-from .. utils import covarianceContainer, spacegeometry
+from .. utils import covarianceContainer, spacegeometry, QuaternionHelperFunctions
 
 ## @class Attitude
 # @brief Estimates the attitude of a vehicle in three dimensions, along with
@@ -287,24 +287,31 @@ class Attitude(substate.SubState):
     def getMeasurementMatrices(
             self,
             measurement,
-            source=None
+            source=None,
+            useUnitVector=False
     ):
             
         if (
                 isinstance(source, PointSource)
         ):
-            measurementMatrices = self.unitVectorMeasurmentMatrices(
-                source,
-                measurement
-                )
-            # measurementMatrices = self.RaDecMeasurementMatrices(
-            #     source,
-            #     measurement
-            #     )
+            if useUnitVector:
+                measurementMatrices = self.unitVectorMeasurmentMatrices(
+                    source,
+                    measurement
+                    )
+                HDict = {'unitVector': measurementMatrices['H']}
+                RDict = {'unitVector': measurementMatrices['R']}
+                dyDict = {'unitVector': measurementMatrices['dY']}
+            else:
+                # print('using ra dec meas mat')
+                measurementMatrices = self.RaDecMeasurementMatrices(
+                    source,
+                    measurement
+                    )
 
-            HDict = {'unitVector': measurementMatrices['H']}
-            RDict = {'unitVector': measurementMatrices['R']}
-            dyDict = {'unitVector': measurementMatrices['dY']}
+                HDict = {'RaDec': measurementMatrices['H']}
+                RDict = {'RaDec': measurementMatrices['R']}
+                dyDict = {'RaDec': measurementMatrices['dY']}
             
         else:
             HDict = {'': None}
@@ -569,35 +576,75 @@ class Attitude(substate.SubState):
             source,
             measurement
     ):
-        sourceRaDec = source.RaDec()
-        
-        # sourceUnitVec = self.sidUnitVec(sourceRaDec)
-        
-        # estimatedAttitudeMatrix = self.qHat.rotation_matrix.transpose()
-
-        # sourceUnitVecLocal = estimatedAttitudeMatrix.dot(sourceUnitVec)
-
-        # sourceRaLocal, sourceDecLocal = spacegeometry.unitVector2RaDec(
-        #     sourceUnitVecLocal
-        # )
         
         raDecRoll = self.RaDecRoll()
         raEst = raDecRoll[0]
         decEst = raDecRoll[1]
         rollEst = raDecRoll[2]
+        
+        sourceRaDec = source.RaDec()
+        # # print("True Ra Dec:")
+        # print(source.name)
+        
+        
+        sourceUnitVec = self.sidUnitVec(sourceRaDec)
+        modifiedEulerAngles = QuaternionHelperFunctions.quaternion2euler(self.qHat)
+        modifiedEulerAngles[0] = 0 # Set roll to zero
+        modifiedRotationMatrix = QuaternionHelperFunctions.euler2quaternion(
+            modifiedEulerAngles).rotation_matrix
 
-        raDiff = sourceRaDec['RA'] - raEst
-        decDiff = sourceRaDec['DEC'] - decEst
+        sourceUnitVecLocal = modifiedRotationMatrix.dot(sourceUnitVec)
+
+        sourceRaLocal, sourceDecLocal = spacegeometry.unitVector2RaDec(
+            sourceUnitVecLocal
+        )
+        # print("Local (unrotated) RA and Dec")
+        # print(sourceRaLocal)
+        # print(sourceDecLocal)
+
+        predictedUnitVec = self.qHat.rotation_matrix.transpose().dot(sourceUnitVec)
+        predictedRa, predictedDec = spacegeometry.unitVector2RaDec(predictedUnitVec)
+        # print("Predicted (estimated) RA and Dec")
+        # print(predictedRa)
+        # print(predictedDec)
+        # print('Estimated Ra, Dec, Roll')
+        # print(raEst)
+        # print(decEst)
+        # print(rollEst)
+        # raDiff = sourceRaDec['RA'] - raEst
+        # while np.abs(raDiff) > np.pi:
+        #     raDiff = raDiff - np.pi*np.sign(raDiff)
+        # decDiff = sourceRaDec['DEC'] - decEst
+        # while np.abs(decDiff) > np.pi/2:
+        #     decDiff = decDiff - np.pi*np.sign(decDiff)/2
+        raDiff = sourceRaLocal
+        decDiff = sourceDecLocal
+        
+        # print('Source Ra, Dec')
+        # print(sourceRaDec['RA'])
+        # print(sourceRaDec['DEC'])
+        
+        # print('Ra, Dec Diff')
+        # print(raDiff)
+        # print(decDiff)
+        
         
         sinTheta = np.sin(rollEst)
         cosTheta = np.cos(rollEst)
+        # H = np.array(
+        #     [
+        #         [0, sinTheta, -cosTheta],
+        #         [0, cosTheta, sinTheta]
+        #     ]
+        # )
         H = np.array(
             [
-                [-raDiff*sinTheta + decDiff*cosTheta, -cosTheta, sinTheta],
-                [-raDiff*cosTheta - decDiff*sinTheta, -sinTheta, -cosTheta]
+                [-raDiff*sinTheta + decDiff*cosTheta, sinTheta, -cosTheta],
+                [-raDiff*cosTheta - decDiff*sinTheta, cosTheta, sinTheta]
             ]
         )
-
+        # print(H)
+        
         # H = np.array(
         #     [
         #         [-raDiff*sinTheta + decDiff*cosTheta, -cosTheta, -sinTheta],
@@ -609,8 +656,8 @@ class Attitude(substate.SubState):
         # print(H)
         # predictedRa = (raDiff * cosTheta) - (decDiff * sinTheta)
         # predictedDec = (raDiff * sinTheta) + (decDiff * cosTheta)
-        predictedRa = (raDiff * cosTheta) + (decDiff * sinTheta)
-        predictedDec = -(raDiff * sinTheta) + (decDiff * cosTheta)
+        # predictedRa = (raDiff * cosTheta) + (decDiff * sinTheta)
+        # predictedDec = -(raDiff * sinTheta) + (decDiff * cosTheta)
         # predictedRa = sourceRaLocal
         # predictedDec = sourceDecLocal
         dY = np.array([
@@ -702,7 +749,8 @@ class Attitude(substate.SubState):
 
         uPred = estimatedAttitudeMatrix.dot(uTrue)
 
-        H = estimatedAttitudeMatrix.dot(self.skewSymmetric(uTrue))
+        # H = estimatedAttitudeMatrix.dot(self.skewSymmetric(uTrue))
+        H = self.skewSymmetric(uPred)
         H = np.append(H, np.zeros([3, 3]), axis=1)
 
         varR = measurement['RA']['var'] + np.square(source.extent)

@@ -14,17 +14,18 @@ from SpaceGeometry import sidUnitVec, unitVector2RaDec
 from QuaternionHelperFunctions import euler2quaternion, quaternion2euler, eulerAngleDiff
 
 plt.close('all')
-FOV = 5
+FOV = 1
 # Function defining angular velocity
-euler0 = np.random.uniform(-np.pi/2, np.pi/2, 3)
-# euler0 = np.array([np.pi/2,0,0])
+# euler0 = np.random.uniform(-np.pi/4, np.pi/4, 3)
+euler0 = np.array([0,0,np.pi/2])
 def omega(t):
+    
     # omegaT = np.array([sin(pi * t/4), cos(pi * t/12), sin(pi * t/16)])
     #omegaT = np.random.normal(np.zeros(3))
     omegaT = np.array([0, 0, 0])
     return(omegaT)
 def attitude(t,returnQ=True):
-    euler = np.array([euler0[0], -euler0[1], euler0[2]])
+    euler = np.array([euler0[0], euler0[1], euler0[2]])
     if returnQ:
         return euler2quaternion(euler)
     else:
@@ -37,30 +38,32 @@ tCurrent = 0
 timeStep = 0.01
 tMax = 10
 
-biasSTD = 1e-10
+biasSTD = 1e-100
 eulerT0True = attitude(0, returnQ=False)
 biasTrue = np.random.normal(np.zeros(3), scale=biasSTD)
+biasTrue=np.array([0,0,0])
 
-rollErrorStd = 1e-1
-RAErrorStd = 1e-3
-DecErrorStd = 1e-3
+rollErrorStd = 1e-2
+RAErrorStd = 1e-6
+DecErrorStd = 1e-6
 biasErrorSTD = 1e-100
-
-eulerT0Est = np.array([
-    np.random.normal(eulerT0True[0], rollErrorStd),
-    np.random.normal(eulerT0True[1], DecErrorStd),
-    np.random.normal(eulerT0True[2], RAErrorStd)
-])
+eulerT0Est = eulerT0True
+# eulerT0Est = np.array([
+#     np.random.normal(eulerT0True[0], rollErrorStd),
+#     np.random.normal(eulerT0True[1], DecErrorStd),
+#     np.random.normal(eulerT0True[2], RAErrorStd)
+# ])
 biasEst = np.random.normal(biasTrue, scale=biasErrorSTD)
+biasEst=np.array([0,0,0])
 
 q0 = euler2quaternion(eulerT0True)
 
-QScalar = 1e-6
+QScalar = 1e-12
 RScalar = 1e-6
 
 
 # Initiate filters
-myJPDAF = me.ModularFilter(measurementValidationThreshold=0, covarianceStorage='cholesky')
+myJPDAF = me.ModularFilter(measurementValidationThreshold=0, covarianceStorage='covariance')
 myEKF = me.ModularFilter()
 myML = me.ModularFilter(measurementValidationThreshold=1e-3)
 myTUOnly = me.ModularFilter()
@@ -69,7 +72,7 @@ initialAttitudeCovariance[0,0] = np.square(rollErrorStd)
 initialAttitudeCovariance[1,1] = np.square(DecErrorStd)
 initialAttitudeCovariance[2,2] = np.square(RAErrorStd)
 
-initialAttitudeCovariance = attitude(0).rotation_matrix.dot(initialAttitudeCovariance).dot(attitude(0).rotation_matrix.transpose())
+# initialAttitudeCovariance = attitude(0).rotation_matrix.transpose().dot(initialAttitudeCovariance).dot(attitude(0).rotation_matrix)
 
 # Initiate attitude stubstates
 JPDAFAtt = me.substates.Attitude(
@@ -107,7 +110,7 @@ myTUOnly.addStates('attitude', TUOnlyAtt)
 
 # Star and background info
 backgroundFlux = 100
-nStars = 5
+nStars = 1
 starVecs = np.random.normal(np.zeros([nStars, 3]))
 starCoordinates = np.zeros([nStars, 2])
 fluxes = np.zeros(nStars + 1)
@@ -122,15 +125,22 @@ myEKF.addSignalSource('background', myNoise)
 
 starList = []
 photonArrivals = []
+
 # Generate signal objects, add them to filters
 for i in range(nStars):
     fluxes[i] = 10
     starVecs[i] = starVecs[i]/np.linalg.norm(starVecs[i])
     starCoordinates[i] = unitVector2RaDec(starVecs[i])
     name = 'star%i' %i
+    # star = me.signals.StaticXRayPointSource(
+    #     np.random.uniform(euler0[2]-(FOV*np.pi/180), euler0[2] + (FOV*np.pi/180)),
+    #     np.random.uniform(-euler0[1]-(FOV*np.pi/180), -euler0[1] + (FOV*np.pi/180)),
+    #     fluxes[i],
+    #     name=name
+    # )
     star = me.signals.StaticXRayPointSource(
-        np.random.uniform(euler0[2]-(FOV*np.pi/180), euler0[2] + (FOV*np.pi/180)),
-        np.random.uniform(euler0[1]-(FOV*np.pi/180), euler0[1] + (FOV*np.pi/180)),
+        euler0[2],
+        -euler0[1],
         fluxes[i],
         name=name
     )
@@ -170,7 +180,6 @@ JPDAFError = []
 MLError = []
 EKFError = []
 TUError = []
-
 for photonMeasurement in photonArrivals:
     nextArrivalTime = photonMeasurement['t']['value']
     # Propagate to next measurement time
@@ -270,8 +279,7 @@ for photonMeasurement in photonArrivals:
     # photonMeasurement['t']['var'] = 1e-1000
 
     myML.measurementUpdateML(photonMeasurement)
-    if photonMeasurement['name'] is not 'background':
-        myEKF.measurementUpdateEKF(photonMeasurement, photonMeasurement['name'])
+    myEKF.measurementUpdateEKF(photonMeasurement, photonMeasurement['name'])
         
     # myJPDAF.measurementUpdateJPDAF(photonMeasurement)
     photonMeasurement['associationProbabilities']=myJPDAF.computeAssociationProbabilities(photonMeasurement)
@@ -283,7 +291,6 @@ for photonMeasurement in photonArrivals:
     if tCurrent-lastPrintTime > printFrequency:
         print(np.floor(tCurrent))
         lastPrintTime = np.floor(tCurrent)
-
 plt.figure()
 plt.title('Euler angles')
 plt.subplot(311)
@@ -302,11 +309,11 @@ plt.plot(
     [sv['eulerAngles'][0] for sv in EKFAtt.stateVectorHistory],
     label='Ideal'
 )
-plt.plot(
-    [sv['t'] for sv in TUOnlyAtt.stateVectorHistory],
-    [sv['eulerAngles'][0] for sv in TUOnlyAtt.stateVectorHistory],
-    ls='-.'
-)
+# plt.plot(
+#     [sv['t'] for sv in TUOnlyAtt.stateVectorHistory],
+#     [sv['eulerAngles'][0] for sv in TUOnlyAtt.stateVectorHistory],
+#     ls='-.'
+# )
 plt.plot(
     [eu['t'] for eu in eulerAnglesTrue],
     [eu['eulerAngles'][0] for eu in eulerAnglesTrue],
@@ -331,11 +338,11 @@ plt.plot(
     [sv['eulerAngles'][1] for sv in EKFAtt.stateVectorHistory],
     label='Ideal'
 )
-plt.plot(
-    [sv['t'] for sv in TUOnlyAtt.stateVectorHistory],
-    [sv['eulerAngles'][1] for sv in TUOnlyAtt.stateVectorHistory],
-    ls='-.'
-)
+# plt.plot(
+#     [sv['t'] for sv in TUOnlyAtt.stateVectorHistory],
+#     [sv['eulerAngles'][1] for sv in TUOnlyAtt.stateVectorHistory],
+#     ls='-.'
+# )
 plt.plot(
     [eu['t'] for eu in eulerAnglesTrue],
     [eu['eulerAngles'][1] for eu in eulerAnglesTrue],
@@ -359,11 +366,11 @@ plt.plot(
     [sv['eulerAngles'][2] for sv in EKFAtt.stateVectorHistory],
     label='Ideal'
 )
-plt.plot(
-    [sv['t'] for sv in TUOnlyAtt.stateVectorHistory],
-    [sv['eulerAngles'][2] for sv in TUOnlyAtt.stateVectorHistory],
-    ls='-.'
-)
+# plt.plot(
+#     [sv['t'] for sv in TUOnlyAtt.stateVectorHistory],
+#     [sv['eulerAngles'][2] for sv in TUOnlyAtt.stateVectorHistory],
+#     ls='-.'
+# )
 plt.plot(
     [eu['t'] for eu in eulerAnglesTrue],
     [eu['eulerAngles'][2] for eu in eulerAnglesTrue],
@@ -392,11 +399,11 @@ plt.plot(
     [je['eulerAngles'][0] for je in EKFError],
     label='Ideal'
 )
-plt.plot(
-    [je['t'] for je in TUError],
-    [je['eulerAngles'][0] for je in TUError],
-    label='Time update only'
-)
+# plt.plot(
+#     [je['t'] for je in TUError],
+#     [je['eulerAngles'][0] for je in TUError],
+#     label='Time update only'
+# )
 
 plt.legend()
 plt.subplot(312)
@@ -415,11 +422,11 @@ plt.plot(
     [je['eulerAngles'][1] for je in EKFError],
     label='Ideal'
 )
-plt.plot(
-    [je['t'] for je in TUError],
-    [je['eulerAngles'][1] for je in TUError],
-    label='Time update only'
-)
+# plt.plot(
+#     [je['t'] for je in TUError],
+#     [je['eulerAngles'][1] for je in TUError],
+#     label='Time update only'
+# )
 
 plt.subplot(313)
 plt.plot(
@@ -445,4 +452,4 @@ plt.plot(
 
 plt.show(block=False)
 
-me.plots.photonscatterplot.plotSourcesAndProbabilities(myJPDAF, photonArrivals, pointSize=100, ignoreBackground=False,plotAttitude=True)
+me.plots.photonscatterplot.plotSourcesAndProbabilities(myJPDAF, photonArrivals, pointSize=100, ignoreBackground=False,plotAttitude=False)

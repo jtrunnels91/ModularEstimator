@@ -571,8 +571,8 @@ class PeriodicXRaySource(
             stateDict
             )
 
-        # poisPR = 1.0
-        myPr = (anglePR * poisPR * self.peakAmplitude)
+        poisPR = 1.0
+        myPr = (anglePR * poisPR * self.flux)
         if isnan(myPr):
             raise ValueError(
                 'Computed NaN probability.  Components: AOA %s, TOA %s, Flux %s'

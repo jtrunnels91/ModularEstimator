@@ -52,18 +52,21 @@ class PointSource(signalsource.SignalSource):
 
             measurementMatrices = attitudeState.getMeasurementMatrices(
                 measurement,
-                source=self
+                source=self,
+                useUnitVector=False
             )
             P = attitudeState.covariance()
             
             # Convert P from a covariance container to a plain matrix in covariance form
             P = P.convertCovariance('covariance').value
 
-            H = measurementMatrices['H']['unitVector']
-
-            R = measurementMatrices['R']['unitVector']
-
-            dY = measurementMatrices['dY']['unitVector']
+            H = measurementMatrices['H']['RaDec']
+            R = measurementMatrices['R']['RaDec']
+            dY = measurementMatrices['dY']['RaDec']
+            
+            # H = measurementMatrices['H']['unitVector']
+            # R = measurementMatrices['R']['unitVector']
+            # dY = measurementMatrices['dY']['unitVector']
             
             residualVariance = H.dot(P).dot(H.transpose()) + R
             # try:

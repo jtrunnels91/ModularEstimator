@@ -6,6 +6,9 @@ def plotSourcesAndProbabilities(modFilter, measurementList, pointSize=1, plotAtt
     for signalName, signal in modFilter.signalSources.items():
         isPointSource=False
         if hasattr(signal, 'RaDec'):
+            myRaDec = signal.RaDec()
+            if myRaDec['RA'] > np.pi:
+                myRaDec['RA'] = myRaDec['RA'] - (np.pi*2)
             myPoints=plt.scatter(signal.RaDec()['RA'], signal.RaDec()['DEC'], label=signalName,marker='*')
             isPointSource = True
             myColor = myPoints.get_facecolor()
