@@ -3,21 +3,24 @@ import matplotlib.pyplot as plt
 import sys
 # from smartpanda import SmartPanda
 from context import modest as me
-
 from numpy import sin, cos, pi, sqrt
 from numpy.random import exponential
 
-sys.path.append("/home/joel/Documents/astroSourceTracking/libraries")
+np.random.seed(0)
+#sys.path.append("/home/joel/Documents/astroSourceTracking/libraries")
 # sys.path.append("/home/joel/Documents/astroSourceTracking/libraries/ModularFilter")
 
 from SpaceGeometry import sidUnitVec, unitVector2RaDec
 from QuaternionHelperFunctions import euler2quaternion, quaternion2euler, eulerAngleDiff
 
 plt.close('all')
-FOV = 1
+FOV = 5
+useUnitVector=True
 # Function defining angular velocity
-# euler0 = np.random.uniform(-np.pi/4, np.pi/4, 3)
-euler0 = np.array([0,0,np.pi/2])
+euler0 = np.random.uniform(-np.pi/2.1, np.pi/2.1, 3)
+
+# euler0 = np.array([0,0,np.pi/2])
+#euler0 = np.array([0,0,0])
 def omega(t):
     
     # omegaT = np.array([sin(pi * t/4), cos(pi * t/12), sin(pi * t/16)])
@@ -44,15 +47,15 @@ biasTrue = np.random.normal(np.zeros(3), scale=biasSTD)
 biasTrue=np.array([0,0,0])
 
 rollErrorStd = 1e-2
-RAErrorStd = 1e-6
-DecErrorStd = 1e-6
+RAErrorStd = 1e-2
+DecErrorStd = 1e-2
 biasErrorSTD = 1e-100
 eulerT0Est = eulerT0True
-# eulerT0Est = np.array([
-#     np.random.normal(eulerT0True[0], rollErrorStd),
-#     np.random.normal(eulerT0True[1], DecErrorStd),
-#     np.random.normal(eulerT0True[2], RAErrorStd)
-# ])
+eulerT0Est = np.array([
+    np.random.normal(eulerT0True[0], rollErrorStd),
+    np.random.normal(eulerT0True[1], DecErrorStd),
+    np.random.normal(eulerT0True[2], RAErrorStd)
+])
 biasEst = np.random.normal(biasTrue, scale=biasErrorSTD)
 biasEst=np.array([0,0,0])
 
@@ -64,9 +67,9 @@ RScalar = 1e-6
 
 # Initiate filters
 myJPDAF = me.ModularFilter(measurementValidationThreshold=0, covarianceStorage='covariance')
-myEKF = me.ModularFilter()
-myML = me.ModularFilter(measurementValidationThreshold=1e-3)
-myTUOnly = me.ModularFilter()
+myEKF = me.ModularFilter(covarianceStorage='covariance')
+myML = me.ModularFilter(measurementValidationThreshold=1e-3,covarianceStorage='covariance')
+myTUOnly = me.ModularFilter(covarianceStorage='covariance')
 initialAttitudeCovariance = np.zeros([3,3])
 initialAttitudeCovariance[0,0] = np.square(rollErrorStd)
 initialAttitudeCovariance[1,1] = np.square(DecErrorStd)
@@ -79,28 +82,32 @@ JPDAFAtt = me.substates.Attitude(
     euler2quaternion(eulerT0Est),
     initialAttitudeCovariance,
     np.zeros(3),
-    np.eye(3) * np.square(biasSTD + biasErrorSTD)
+    np.eye(3) * np.square(biasSTD + biasErrorSTD),
+    useUnitVector=useUnitVector
 )
 
 EKFAtt = me.substates.Attitude(
     euler2quaternion(eulerT0Est),
     initialAttitudeCovariance,
     np.zeros(3),
-    np.eye(3) * np.square(biasSTD + biasErrorSTD)
+    np.eye(3) * np.square(biasSTD + biasErrorSTD),
+    useUnitVector=useUnitVector
 )
 
 MLAtt = me.substates.Attitude(
     euler2quaternion(eulerT0Est),
     initialAttitudeCovariance,
     np.zeros(3),
-    np.eye(3) * np.square(biasSTD + biasErrorSTD)
+    np.eye(3) * np.square(biasSTD + biasErrorSTD),
+    useUnitVector=useUnitVector
 )
 
 TUOnlyAtt = me.substates.Attitude(
     euler2quaternion(eulerT0Est),
     initialAttitudeCovariance,
     np.zeros(3),
-    np.eye(3) * np.square(biasSTD + biasErrorSTD)
+    np.eye(3) * np.square(biasSTD + biasErrorSTD),
+    useUnitVector=useUnitVector
 )
 
 myJPDAF.addStates('attitude', JPDAFAtt)
@@ -109,8 +116,8 @@ myEKF.addStates('attitude', EKFAtt)
 myTUOnly.addStates('attitude', TUOnlyAtt)
 
 # Star and background info
-backgroundFlux = 100
-nStars = 1
+backgroundFlux = 500
+nStars = 5
 starVecs = np.random.normal(np.zeros([nStars, 3]))
 starCoordinates = np.zeros([nStars, 2])
 fluxes = np.zeros(nStars + 1)
@@ -132,18 +139,19 @@ for i in range(nStars):
     starVecs[i] = starVecs[i]/np.linalg.norm(starVecs[i])
     starCoordinates[i] = unitVector2RaDec(starVecs[i])
     name = 'star%i' %i
+    star = me.signals.StaticXRayPointSource(
+        np.random.uniform(euler0[2]-(FOV*np.pi/180), euler0[2] + (FOV*np.pi/180)),
+        np.random.uniform(-euler0[1]-(FOV*np.pi/180), -euler0[1] + (FOV*np.pi/180)),
+        fluxes[i],
+        name=name,
+        useUnitVector=useUnitVector
+    )
     # star = me.signals.StaticXRayPointSource(
-    #     np.random.uniform(euler0[2]-(FOV*np.pi/180), euler0[2] + (FOV*np.pi/180)),
-    #     np.random.uniform(-euler0[1]-(FOV*np.pi/180), -euler0[1] + (FOV*np.pi/180)),
+    #     euler0[2] + 0.9*FOV*np.pi/180,
+    #     -euler0[1],
     #     fluxes[i],
     #     name=name
     # )
-    star = me.signals.StaticXRayPointSource(
-        euler0[2],
-        -euler0[1],
-        fluxes[i],
-        name=name
-    )
     myJPDAF.addSignalSource('star%i' %i, star)
 
     myML.addSignalSource('star%i' %i, star)
@@ -210,7 +218,7 @@ for photonMeasurement in photonArrivals:
             'gyroBias': {'var': 1e-10}
             }
 
-        # myJPDAF.timeUpdateEKF(currentDT, dynamicsDict)
+        myJPDAF.timeUpdateEKF(currentDT, dynamicsDict)
         myML.timeUpdateEKF(currentDT, dynamicsDict)
         myEKF.timeUpdateEKF(currentDT, dynamicsDict)
         myTUOnly.timeUpdateEKF(currentDT, dynamicsDict)
@@ -278,11 +286,13 @@ for photonMeasurement in photonArrivals:
     # photonMeasurement['DEC']['var'] = RScalar
     # photonMeasurement['t']['var'] = 1e-1000
 
-    myML.measurementUpdateML(photonMeasurement)
     myEKF.measurementUpdateEKF(photonMeasurement, photonMeasurement['name'])
+    # if photonMeasurement['name'] != 'background':
+    #     1/0
+    myML.measurementUpdateML(photonMeasurement)
         
-    # myJPDAF.measurementUpdateJPDAF(photonMeasurement)
-    photonMeasurement['associationProbabilities']=myJPDAF.computeAssociationProbabilities(photonMeasurement)
+    myJPDAF.measurementUpdateJPDAF(photonMeasurement)
+    # photonMeasurement['associationProbabilities']=myJPDAF.computeAssociationProbabilities(photonMeasurement)
 
     # starArrivalTimes[nextStarIndex] = (
     #     starArrivalTimes[nextStarIndex] +
@@ -379,6 +389,11 @@ plt.plot(
 
 plt.show(block=False)
 
+EKFT=[sv['t'] for sv in EKFAtt.stateVectorHistory]
+rollSTD = np.array([sv['eulerSTD'][0] for sv in EKFAtt.stateVectorHistory])
+pitchSTD = np.array([sv['eulerSTD'][1] for sv in EKFAtt.stateVectorHistory])
+yawSTD = np.array([sv['eulerSTD'][2] for sv in EKFAtt.stateVectorHistory])
+
 plt.figure()
 plt.subplot(311)
 # plt.plot(myJPDAF.subStates['attitude']['stateObject'].eulerAngleVec['t'],
@@ -398,6 +413,14 @@ plt.plot(
     [je['t'] for je in EKFError],
     [je['eulerAngles'][0] for je in EKFError],
     label='Ideal'
+)
+plt.plot(
+    EKFT,
+    rollSTD, color=[0.5,0.5,0.5]
+)
+plt.plot(
+    EKFT,
+    -rollSTD, color=[0.5,0.5,0.5]
 )
 # plt.plot(
 #     [je['t'] for je in TUError],
@@ -422,6 +445,15 @@ plt.plot(
     [je['eulerAngles'][1] for je in EKFError],
     label='Ideal'
 )
+plt.plot(
+    EKFT,
+    pitchSTD, color=[0.5,0.5,0.5]
+)
+plt.plot(
+    EKFT,
+    -pitchSTD, color=[0.5,0.5,0.5]
+)
+
 # plt.plot(
 #     [je['t'] for je in TUError],
 #     [je['eulerAngles'][1] for je in TUError],
@@ -444,6 +476,15 @@ plt.plot(
     [je['eulerAngles'][2] for je in EKFError],
     label='Ideal'
 )
+plt.plot(
+    EKFT,
+    yawSTD, color=[0.5,0.5,0.5]
+)
+plt.plot(
+    EKFT,
+    -yawSTD, color=[0.5,0.5,0.5]
+)
+
 # plt.plot(
 #     [je['t'] for je in TUError],
 #     [je['eulerAngles'][2] for je in TUError],

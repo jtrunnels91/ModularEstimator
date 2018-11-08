@@ -31,6 +31,22 @@ class covarianceContainer():
                 raise ValueError('Unrecougnized covariance form %s' %self.form)
         return newCov
 
+    def __add__(self, other):
+        if other.form != self.form:
+            other = other.convertCovariance(self.form)
+        
+        if self.form == 'covariance':
+            mySum = covarianceContainer(self.value + other.value, 'covariance')
+        else:
+            matStack = np.vstack([self.value, other.value])
+            QR = np.linalg.qr(matStack)
+            mySumValue = QR[1].transpose()
+            if mySum[0,0] < 0:
+                mySumValue = - mySumValue
+            mySum = covarianceContainer(mySumValue, 'cholesky')
+            
+        return mySum
+    
     def __getitem__(self, key):
         subMat = self.value[key]
         return covarianceContainer(subMat, self.form)
@@ -39,3 +55,18 @@ class covarianceContainer():
             self.value[key] = newVal.convertCovariance(self.form).value
         else:
             self.value[key] = newVal
+
+    def __repr__(self):
+        repString = 'covarianceContainer (form=%s, value=\n' %self.form
+        repString += '%s)' %self.value
+        return repString
+    def mahalanobisDistance(self, dX):
+        if self.form == 'covariance':
+            MSquared = dX.transpose().dot(
+                np.linalg.inv(self.value)
+            ).dot(dX)
+        elif self.form == 'cholesky':
+            V = dX.transpose().dot(np.linalg.inv(self.value))
+            MSquared = V.dot(V)
+        M = np.sqrt(MSquared)
+        return(M)

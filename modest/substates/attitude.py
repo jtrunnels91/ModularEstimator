@@ -62,9 +62,11 @@ class Attitude(substate.SubState):
             gyroBias=np.zeros(3),
             gyroBiasCovariance=np.eye(3),
             t=0,
-            covarianceStorage='covariance'
+            covarianceStorage='covariance',
+            useUnitVector=True
             ):
 
+        self.useUnitVector = useUnitVector
         ## @brief Current estimate of attitude, stored as a Quaternion object
         # Mathematically generally referred to as \f$\mathbf{\hat{q}}^{-}_{k}\f$
         # for the a priori value, or \f$\mathbf{\hat{q}}^{+}_{k}\f$ for the a
@@ -158,7 +160,7 @@ class Attitude(substate.SubState):
         # a measurement update.  The attitude class is responsible for
         # time-updating the quaternion.
         
-        if aPriori is False:
+        if not aPriori:
             errorQ = Quaternion(
                 array=np.array([
                     1.0,
@@ -166,7 +168,7 @@ class Attitude(substate.SubState):
                     xPlus[1]/2.0,
                     xPlus[2]/2.0
                 ]))
-            qPlus = errorQ * self.qHat
+            qPlus = self.qHat * errorQ
             qPlus = qPlus.normalised
 
             self.qHat = qPlus
@@ -288,12 +290,14 @@ class Attitude(substate.SubState):
             self,
             measurement,
             source=None,
-            useUnitVector=False
+            useUnitVector=None
     ):
             
         if (
                 isinstance(source, PointSource)
         ):
+            if useUnitVector is None:
+                useUnitVector = self.useUnitVector
             if useUnitVector:
                 measurementMatrices = self.unitVectorMeasurmentMatrices(
                     source,
@@ -591,7 +595,7 @@ class Attitude(substate.SubState):
         modifiedEulerAngles = QuaternionHelperFunctions.quaternion2euler(self.qHat)
         modifiedEulerAngles[0] = 0 # Set roll to zero
         modifiedRotationMatrix = QuaternionHelperFunctions.euler2quaternion(
-            modifiedEulerAngles).rotation_matrix
+            modifiedEulerAngles).rotation_matrix.transpose()
 
         sourceUnitVecLocal = modifiedRotationMatrix.dot(sourceUnitVec)
 
@@ -665,7 +669,10 @@ class Attitude(substate.SubState):
             measurement['DEC']['value'] - predictedDec
         ])
 
-        R = block_diag(measurement['RA']['var'], measurement['DEC']['var'])
+        R = block_diag(
+            measurement['RA']['var'] + np.square(source.extent),
+            measurement['DEC']['var'] + np.square(source.extent)
+        )
         
         measMatrices = {
             'H': H,
@@ -735,9 +742,9 @@ class Attitude(substate.SubState):
             measurement
             ):
 
-        RaDecTrue = source.RaDec()
-        
-        uTrue = self.sidUnitVec(RaDecTrue)
+        # RaDecTrue = source.RaDec()
+        uTrue = source.unitVec()
+        # uTrue = self.sidUnitVec(RaDecTrue)
         uMeas = self.sidUnitVec(
             {
                 'RA': measurement['RA']['value'],
@@ -746,6 +753,7 @@ class Attitude(substate.SubState):
         )
         
         estimatedAttitudeMatrix = self.qHat.rotation_matrix.transpose()
+        # estimatedAttitudeMatrix = self.qHat.rotation_matrix
 
         uPred = estimatedAttitudeMatrix.dot(uTrue)
 
@@ -799,7 +807,7 @@ class Attitude(substate.SubState):
             'R': R,
             'dY': dY
             }
-        
+        # print(measMatrices)
         return(measMatrices)
 
     ## @fun eulerAngles computes the Euler angles (roll, pitch and yaw) based
@@ -907,11 +915,11 @@ class Attitude(substate.SubState):
     def eulerSTD(self):
         
         newCov = self.PHat.convertCovariance('covariance').value[0:3,0:3]
-        newCov = (
-            self.qHat.rotation_matrix.transpose().dot(
-                newCov
-            ).dot(self.qHat.rotation_matrix)
-        )
+        # newCov = (
+        #     self.qHat.rotation_matrix.transpose().dot(
+        #         newCov
+        #     ).dot(self.qHat.rotation_matrix)
+        # )
 
         eulerSTD = np.sqrt(newCov.diagonal()[0:3])
         return eulerSTD

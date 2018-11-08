@@ -31,7 +31,8 @@ class StaticXRayPointSource(
             attitudeStateName='attitude',
             name=None,
             startTime=0,
-            extent=0
+            extent=0,
+            useUnitVector=True
     ):
         if photonCountRate is None and photonEnergyFlux is None:
             raise ValueError(
@@ -50,7 +51,7 @@ class StaticXRayPointSource(
             self.detectorArea = detectorArea
             
         pointsource.PointSource.__init__(
-            self, RA, DEC, extent=extent, attitudeStateName=attitudeStateName
+            self, RA, DEC, extent=extent, attitudeStateName=attitudeStateName, useUnitVector=useUnitVector
         )
         poissonsource.StaticPoissonSource.__init__(self, photonCountRate, startTime=startTime)
         self.peakPhotonFlux = photonCountRate
@@ -79,8 +80,9 @@ class StaticXRayPointSource(
             measurement
             )
 
-        return (anglePR * poisPR * self.peakPhotonFlux)
-
+        # return (anglePR * poisPR * self.flux)
+        return anglePR * self.flux
+    
     def generatePhotonArrivals(
             self,
             tMax,

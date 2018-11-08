@@ -10,8 +10,10 @@ class PointSource(signalsource.SignalSource):
             RA,
             DEC,
             extent=0,
-            attitudeStateName='attitude'
+            attitudeStateName='attitude',
+            useUnitVector=True
     ):
+        self.useUnitVector = useUnitVector
         signalsource.SignalSource.__init__(self)
         self.__RA__ = RA
         self.__DEC__ = DEC
@@ -53,20 +55,21 @@ class PointSource(signalsource.SignalSource):
             measurementMatrices = attitudeState.getMeasurementMatrices(
                 measurement,
                 source=self,
-                useUnitVector=False
+                useUnitVector=self.useUnitVector
             )
             P = attitudeState.covariance()
             
             # Convert P from a covariance container to a plain matrix in covariance form
             P = P.convertCovariance('covariance').value
 
-            H = measurementMatrices['H']['RaDec']
-            R = measurementMatrices['R']['RaDec']
-            dY = measurementMatrices['dY']['RaDec']
-            
-            # H = measurementMatrices['H']['unitVector']
-            # R = measurementMatrices['R']['unitVector']
-            # dY = measurementMatrices['dY']['unitVector']
+            if self.useUnitVector:
+                H = measurementMatrices['H']['unitVector']
+                R = measurementMatrices['R']['unitVector']
+                dY = measurementMatrices['dY']['unitVector']
+            else:
+                H = measurementMatrices['H']['RaDec']
+                R = measurementMatrices['R']['RaDec']
+                dY = measurementMatrices['dY']['RaDec']
             
             residualVariance = H.dot(P).dot(H.transpose()) + R
             # try:

@@ -23,7 +23,7 @@ class PoissonSource(signalsource.SignalSource):
             ):
         time = measurement['t']['value']
         dT = time - self.lastTime
-        self.lastTime = time
+        # self.lastTime = time
         return np.exp(-self.flux * dT) * currentFlux
 
 

@@ -11,7 +11,9 @@ def loadPulsarData(
         pulsarDir=None,
         pulsarCatalogFileName='pulsarCatalog.xls',
         PARDir='PAR_files/',
-        profileDir='profiles/'):
+        profileDir='profiles/',
+        observatoryMJDREF=None
+):
     if pulsarDir is None:
         pulsarDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '.')) + '/'
     electronVoltPerPhoton = 6e3  # Electron-Volt x 10^3
@@ -44,6 +46,7 @@ def loadPulsarData(
                 avgPhotonFlux=photonFlux,
                 pulsedFraction=pulsarRow['Pulsed fraction']/100,
                 name=pulsarName,
-                useProfileColumn=useColumn
+                useProfileColumn=useColumn,
+                observatoryMJDREF=observatoryMJDREF
             )
     return pulsarDict

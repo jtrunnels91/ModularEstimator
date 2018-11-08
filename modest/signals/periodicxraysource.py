@@ -28,7 +28,9 @@ class PeriodicXRaySource(
             pulsarPeriod=None,
             RA=None,
             DEC=None,
+            observatoryMJDREF=None,
             TZRMJD=None,
+            PEPOCH=None,
             name=None,
             attitudeStateName='attitude',
             correlationStateName=None,
@@ -57,8 +59,14 @@ class PeriodicXRaySource(
 
 
         ## @brief #TZRMJD stores the Modified Julian Date (MJD) corresponding
-        # to t=0 seconds.
+        # to t=0 seconds (for the purpose of computing the pulsar phase)
         self.TZRMJD = TZRMJD
+
+        self.PEPOCH = PEPOCH
+        
+        ## @brief #observatoryMJDREF stores the MJD corresponding to t=0 seconds
+        # for photon observations
+        self.observatoryMJDREF = observatoryMJDREF
 
         ## @brief #name is an arbitrary string that is used to identify the
         # signal.  Can be set to whatever the user wants, since it is only
@@ -105,6 +113,7 @@ class PeriodicXRaySource(
                 "- PARFile containing frequency information"
             )
 
+        
         ## @brief #normalizeProfile is a boolean flag used to indicate whether
         # the profile is normalized from zero to one.  If so, then the signal
         # should be multiplied by #peakAmplitude.
@@ -112,6 +121,14 @@ class PeriodicXRaySource(
         
         # Process whatever was passed as the profile
         self.processProfile(profile, normalizeProfile, movePeakToZero, useProfileColumn)
+        print('PEPOCH MJDREF')
+        print(self.PEPOCH)
+        print('OBSERVATORY MJDREF')
+        print(self.observatoryMJDREF)
+        if (self.PEPOCH is not None) and (self.observatoryMJDREF is not None):
+            self.TZeroDiff = (self.PEPOCH - self.observatoryMJDREF)*24*60*60
+        else:
+            self.TZeroDiff = 0
 
         if correlationStateName is None:
             correlationStateName = self.name
@@ -247,6 +264,12 @@ class PeriodicXRaySource(
                     PAR_TZRMJD = float(splitLine[1])
                     if (self.TZRMJD is None) or (replaceCurrentValues is True):
                         self.TZRMJD = PAR_TZRMJD
+                        
+                # PEPOCH Mod Julian Date
+                elif (splitLine[0] == 'PEPOCH'):
+                    PAR_PEPOCH = float(splitLine[1])
+                    if (self.PEPOCH is None) or (replaceCurrentValues is True):
+                        self.PEPOCH = PAR_PEPOCH
 
                 # Pulsar Name
                 elif ((splitLine[0] == 'PSRJ')
@@ -326,12 +349,13 @@ class PeriodicXRaySource(
             observatoryTime
     ):
         phase = 0
+        shiftedObservatoryTime = observatoryTime - self.TZeroDiff
         for order in self.phaseDerivatives:
             phase = (
                 phase +
                 (
                     self.phaseDerivatives[order] *
-                    np.power(observatoryTime, order) /
+                    np.power(shiftedObservatoryTime, order) /
                     factorial(order)
                 )
             )
@@ -342,13 +366,15 @@ class PeriodicXRaySource(
             observatoryTime
     ):
         frequency = 0
+        shiftedObservatoryTime = observatoryTime - self.TZeroDiff
+        
         for order in self.phaseDerivatives:
             if order > 0:
                 frequency  = (
                     frequency +
                     (
                         self.phaseDerivatives[order] *
-                        np.power(observatoryTime, order-1)/
+                        np.power(shiftedObservatoryTime, order-1)/
                         factorial(order - 1)
                     )
                 )
@@ -544,13 +570,13 @@ class PeriodicXRaySource(
             self,
             MJD
     ):
-        return (MJD - self.TZRMJD) * (24.0 * 60.0 * 60.0)
+        return (MJD - self.PEPOCH) * (24.0 * 60.0 * 60.0)
 
     def seconds2MJD(
             self,
             seconds
     ):
-        return self.TZRMJD + (seconds/(24.0 * 60.0 * 60.0))
+        return self.PEPOCH + (seconds/(24.0 * 60.0 * 60.0))
     
     def computeAssociationProbability(
             self,
@@ -571,14 +597,15 @@ class PeriodicXRaySource(
             stateDict
             )
 
-        poisPR = 1.0
+        # poisPR = 1.0
         myPr = (anglePR * poisPR * self.flux)
         if isnan(myPr):
             raise ValueError(
                 'Computed NaN probability.  Components: AOA %s, TOA %s, Flux %s'
                 %(anglePR, poisPR, self.peakAmplitude)
             )
-        return myPr
+        # return myPr
+        return anglePR * self.flux
     
     def plot(self,
              nPeriods=1,

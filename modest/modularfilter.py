@@ -160,7 +160,7 @@ class ModularFilter():
         
         F = np.zeros([self.totalDimension, self.totalDimension])
         Q = covarianceContainer(
-            np.zeros([self.totalDimension, self.totalDimension]), self.covarianceMatrix.form
+            np.zeros([self.totalDimension, self.totalDimension]), 'covariance'#self.covarianceMatrix.form
         )
 
         # Assemble time-update matrix and process noise matrix based on
@@ -202,11 +202,11 @@ class ModularFilter():
             # Page 162-163 for derivation.
             M = np.vstack([
                 self.covarianceMatrix.value.transpose().dot(F.transpose()),
-                Q.value.transpose()
+                Q.convertCovariance('cholesky').value.transpose()
                 ]
             )
             T = np.linalg.qr(M)
-            PMinus = T[1][0:self.totalDimension].transpose()
+            PMinus = T[1].transpose()
             # if PMinus[0,0] < 0:
             #     PMinus = -PMinus
                     
@@ -299,7 +299,7 @@ class ModularFilter():
             ):
 
         if 'ID' not in measurement:
-            if self.lastMeasurementID is None:
+            if self.lastMeasurementID == None:
                 self.lastMeasurementID = -1
             measurement['ID'] = self.lastMeasurementID + 1
 
@@ -406,6 +406,8 @@ class ModularFilter():
                     currentPR >
                     self.measurementValidationThreshold
             ):
+                # currentPR = 1
+                # signalAssociationProbability[signalName]=1
                 try:
                     updateDict = self.localStateUpdateMatrices(
                         measurement,
@@ -465,6 +467,10 @@ class ModularFilter():
                 # If the signal association was valid, store it in a dict so
                 # that we can go back and compute the spread of means term
                 validAssociationsDict[signalName] = updateDict
+            # else:
+            #     currentPR = 0
+            #     signalAssociationProbability[signalName]=0
+
 
         # Here, we compute the spread of means.  Note that we compute it the
         # same way regardless of which covariance storage we're using.  If
@@ -474,11 +480,10 @@ class ModularFilter():
         # Also note that we only need to compute the spread of means term if
         # there was more than one valid association.  Otherwise we essentially
         # just have the standard KF
-        if len(validAssociationsDict) > 0:
+        spreadOfMeans=None
+        if len(validAssociationsDict) > 1:
             # Initialize Spread Of Means matrix
             # spreadOfMeans = np.zeros([self.totalDimension, self.totalDimension])
-            spreadOfMeans = None
-            
             # Compute the "spread of means" term
             for signalName in validAssociationsDict:
                 currentPR = signalAssociationProbability[signalName]
@@ -486,18 +491,20 @@ class ModularFilter():
                 # Compute the difference between the jointly-updated state vector,
                 # and the locally updated state vector.
                 xDiff = xPlus - validAssociationsDict[signalName]['xPlus']
-
+                # print(np.linalg.norm(xDiff))
                 if spreadOfMeans is not None:
                     if PMinus.form == 'covariance':
                         spreadOfMeans = (
                             spreadOfMeans +
                             currentPR * np.outer(xDiff, xDiff)
+                            # np.outer(xDiff, xDiff)
                         )
                     elif PMinus.form == 'cholesky':
                         spreadOfMeans = np.vstack(
                             [spreadOfMeans,
                              np.vstack([
                                  xDiff * np.sqrt(currentPR),
+                                 # xDiff,
                                  np.zeros([self.totalDimension-1, self.totalDimension])]
                              )
                             ]
@@ -505,9 +512,11 @@ class ModularFilter():
                 else:
                     if PMinus.form == 'covariance':
                         spreadOfMeans = currentPR * np.outer(xDiff, xDiff)
+                        # spreadOfMeans = np.outer(xDiff, xDiff)
                     elif PMinus.form == 'cholesky':
                         spreadOfMeans = np.vstack([
                             xDiff * np.sqrt(currentPR),
+                            # xDiff,
                             np.zeros([self.totalDimension-1, self.totalDimension])]
                         )
             if PMinus.form == 'covariance':
@@ -532,7 +541,7 @@ class ModularFilter():
         
         self.storeGlobalStateVector(xPlus, PPlus, aPriori=False)
         # print(signalAssociationProbability)
-        return (xPlus, PPlus, measurement)
+        return (xPlus, PPlus, measurement, validAssociationsDict, spreadOfMeans)
 
     def getGlobalStateVector(
             self
@@ -841,7 +850,7 @@ class ModularFilter():
             self,
             plotHandle=None
     ):
-        if plotHandle is None:
+        if plotHandle == None:
             self.plotHandle = plt.figure()
         else:
             self.plotHandle = plotHandle
@@ -863,7 +872,7 @@ class ModularFilter():
             self,
             normalized=True
     ):
-        if self.plotHandle is None:
+        if self.plotHandle == None:
             self.initializeRealTimePlot()
         for substate in self.subStates:
             self.subStates[substate]['stateObject'].realTimePlot(normalized)

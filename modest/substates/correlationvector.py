@@ -264,7 +264,7 @@ class CorrelationVector(substate.SubState):
         # Compute new estimate of delay based on new state vector, store in
         # svDict and local attributes
         #if False is False:
-        if svDict['aPriori'] is False:
+        if not svDict['aPriori']:
             self.correlationVector = svDict['stateVector']
             self.correlationVectorCovariance = svDict['covariance']
 
@@ -286,11 +286,9 @@ class CorrelationVector(substate.SubState):
 
             svDict['signalTDOA'] = self.signalTDOA
             svDict['TDOAVar'] = self.TDOAVar
+            self.sigmaPoints = tdoaDict['sigmaPoints']
             # xAxis = np.linspace(0, self.__filterOrder__-1, self.__filterOrder__)
             # xAxis = (xAxis * self.__dT__) - self.peakCenteringDT
-
-            svDict['xAxis'] = self.xAxis - self.peakCenteringDT
-
                   
             if self.peakLock is True and self.centerPeak is True:
                 self.peakOffsetFromCenter = tdoaDict['meanTDOA'] - self.__halfLength__ + 1
@@ -309,6 +307,8 @@ class CorrelationVector(substate.SubState):
             self.correlationVectorCovariance = svDict['covariance']
             svDict['signalTDOA'] = self.signalTDOA
             svDict['TDOAVar'] = self.TDOAVar
+        svDict['xAxis'] = self.xAxis - self.peakCenteringDT
+        
         tdoaSTD = np.sqrt(self.TDOAVar)
         if tdoaSTD < (self.peakLockThreshold * self.__dT__):
             if not self.peakLock:
@@ -473,9 +473,9 @@ class CorrelationVector(substate.SubState):
                 if not isnan(newPCDT):
                     self.peakCenteringDT = newPCDT
                 self.signalTDOA = self.signalTDOA + velocityTDOA - FMatrixDT
-                self.TDOAVar = self.TDOAVar + (Q * np.square(self.__dT__))
             else:
                 FMatrixShift = peakShift
+            self.TDOAVar = self.TDOAVar + (Q * np.square(self.__dT__))
             # self.signalDelay = self.signalDelay + timeDelay
 
             Q = (
@@ -731,7 +731,8 @@ class CorrelationVector(substate.SubState):
     def estimateSignalTDOA_UT(
             self,
             h,
-            P
+            P,
+            useMean=True
     ):
         # Compute sigma points
         hDimension = len(h)
@@ -740,7 +741,10 @@ class CorrelationVector(substate.SubState):
         if P.form == 'covariance':
             sqrtP = np.linalg.cholesky(hDimension * P.value)
         elif P.form == 'cholesky':
-            sqrtP = P.value * np.sqrt(hDimension)
+            PVal = P.convertCovariance('covariance').value
+            sqrtP = np.linalg.cholesky(hDimension * PVal)
+            
+            # sqrtP = P.value * np.sqrt(hDimension)
                 
         sigmaPoints = h + np.append(sqrtP, -sqrtP, axis=0)
 
@@ -755,13 +759,13 @@ class CorrelationVector(substate.SubState):
             sigmaPointResults[i] = (
                 self.computeSignalTDOA(sigmaPoints[i], P.convertCovariance('covariance').value)
             )
-
+        
         meanTDOA = np.mean(sigmaPointResults)
         # meanTDOA = sigmaPointResults[0]
         # meanTDOA = self.computeSignalTDOA(h, P)
         varTDOA = np.var(sigmaPointResults)
 
-        return {'meanTDOA': meanTDOA, 'varTDOA': varTDOA}
+        return {'meanTDOA': meanTDOA, 'varTDOA': varTDOA, 'sigmaPoints': sigmaPointResults}
 
     
     def speedOfLight(
@@ -803,3 +807,28 @@ class CorrelationVector(substate.SubState):
             coef = np.linalg.inv(X_T.dot(X)).dot(X_T).dot(y)
             
         return coef
+
+    def initializeRealTimePlot(
+            self,
+            plotHandle=None,
+            axisHandle=None            
+    ):
+        super().initializeRealTimePlot(plotHandle, axisHandle)
+        self.RTPlotTDOA = self.RTPaxisHandle.scatter(
+            self.signalTDOA,
+            1
+        )
+        
+        return
+    
+    def realTimePlot(
+            self,
+            normalized=True
+    ):
+        if self.RTPlotHandle is None:
+            self.initializeRealTimePlot()
+        
+        self.RTPlotTDOA.set_offsets([self.signalTDOA, 1])
+        super().realTimePlot(normalized)
+        return
+
