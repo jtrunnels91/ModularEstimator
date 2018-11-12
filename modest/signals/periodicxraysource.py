@@ -604,7 +604,7 @@ class PeriodicXRaySource(
                 'Computed NaN probability.  Components: AOA %s, TOA %s, Flux %s'
                 %(anglePR, poisPR, self.peakAmplitude)
             )
-        # return myPr
+        #return myPr
         return anglePR * self.flux
     
     def plot(self,

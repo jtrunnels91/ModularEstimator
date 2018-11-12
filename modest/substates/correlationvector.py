@@ -819,6 +819,14 @@ class CorrelationVector(substate.SubState):
             1
         )
         
+        self.RTPlotTDOA_error, = self.RTPaxisHandle.plot(
+            [
+                self.signalTDOA - np.sqrt(self.TDOAVar),
+                self.signalTDOA + np.sqrt(self.TDOAVar)
+            ],
+            [1,1]
+        )
+        
         return
     
     def realTimePlot(
@@ -829,6 +837,13 @@ class CorrelationVector(substate.SubState):
             self.initializeRealTimePlot()
         
         self.RTPlotTDOA.set_offsets([self.signalTDOA, 1])
+        self.RTPlotTDOA_error.set_data(
+            [
+                self.signalTDOA - np.sqrt(self.TDOAVar),
+                self.signalTDOA + np.sqrt(self.TDOAVar)
+            ],
+            [1,1]
+        )
         super().realTimePlot(normalized)
         return
 
