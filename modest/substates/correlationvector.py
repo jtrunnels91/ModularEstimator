@@ -33,7 +33,7 @@ from math import isnan
 # be found in the journal article..
 
 class CorrelationVector(substate.SubState):
-
+    
     ## @fun #__init__ is responsible for initializing a correlation vector
     # estimator
     #
@@ -123,7 +123,7 @@ class CorrelationVector(substate.SubState):
             peakLockThreshold=1,
             covarianceStorage='covariance'
             ):
-
+        print('updated correlation filter')
         self.peakLockThreshold = peakLockThreshold
         #self.peakCenteringDT = trueSignal.pulsarPeriod/10
         self.peakCenteringDT = 0
@@ -278,7 +278,7 @@ class CorrelationVector(substate.SubState):
                     tdoaDict['meanTDOA'] 
                 ) *
                 self.__dT__
-            ) - self.peakCenteringDT
+            ) + self.peakCenteringDT
             newTDOAVar = tdoaDict['varTDOA'] * np.square(self.__dT__)
             if not isnan(newTDOA) and not isnan(newTDOAVar):
                 self.signalTDOA = newTDOA
@@ -293,7 +293,7 @@ class CorrelationVector(substate.SubState):
             if self.peakLock is True and self.centerPeak is True:
                 self.peakOffsetFromCenter = tdoaDict['meanTDOA'] - self.__halfLength__ + 1
                 # self.peakOffsetFromCenter = np.mod(tdoaDict['meanTDOA'], self.__dT__)
-                
+                # print(self.peakOffsetFromCenter)
             else:
                 self.peakOffsetFromCenter = 0
 
@@ -302,12 +302,21 @@ class CorrelationVector(substate.SubState):
 #                svDict['stateVector'] = self.correlationVector
 #            else:
                 
+            # self.correlationVector = svDict['stateVector']
+            # if self.peakOffsetFromCenter != 0:
+            #     FLDict = self.buildFLMatrices(
+            #         -self.peakOffsetFromCenter*self.__dT__,
+            #         self.correlationVector
+            #     )
+            #     self.correlationVector = FLDict['F'].dot(self.correlationVector)
+            #     self.peakOffsetFromCenter = 0
             self.correlationVector = svDict['stateVector']
-            
             self.correlationVectorCovariance = svDict['covariance']
             svDict['signalTDOA'] = self.signalTDOA
             svDict['TDOAVar'] = self.TDOAVar
-        svDict['xAxis'] = self.xAxis - self.peakCenteringDT
+            self.peakOffsetFromCenter = 0
+        svDict['xAxis'] = self.xAxis + self.peakCenteringDT
+        # svDict['xAxis'] = self.xAxis - self.signalTDOA
         
         tdoaSTD = np.sqrt(self.TDOAVar)
         if tdoaSTD < (self.peakLockThreshold * self.__dT__):
@@ -324,6 +333,7 @@ class CorrelationVector(substate.SubState):
                     %(self.__trueSignal__.name, self.t)
                 )
                 self.peakLock = False
+                self.peakOffsetFromCenter = 0
             
         super().storeStateVector(svDict)
         return
@@ -465,17 +475,31 @@ class CorrelationVector(substate.SubState):
                 np.square(indexDiff / self.speedOfLight())
             )
             
-            
-            if (self.peakLock is True) and (self.centerPeak is True):
-                FMatrixDT = -self.peakOffsetFromCenter * self.__dT__
-                FMatrixShift = -self.peakOffsetFromCenter
-                newPCDT = self.peakCenteringDT - velocityTDOA + FMatrixDT
-                if not isnan(newPCDT):
-                    self.peakCenteringDT = newPCDT
-                self.signalTDOA = self.signalTDOA + velocityTDOA - FMatrixDT
-            else:
-                FMatrixShift = peakShift
-            self.TDOAVar = self.TDOAVar + (Q * np.square(self.__dT__))
+            FMatrixShift = -self.peakOffsetFromCenter # - peakShift
+            self.signalTDOA = (
+                self.signalTDOA +
+                velocityTDOA
+            )
+            self.peakCenteringDT = (
+                self.peakCenteringDT + velocityTDOA  +
+                (self.peakOffsetFromCenter*self.__dT__)
+            )
+
+            # if self.peakLock:
+            #     self.peakCenteringDT = (
+            #         self.peakCenteringDT -
+            #         self.peakOffsetFromCenter * self.__dT__
+            #     )
+            # if (self.peakLock is True) and (self.centerPeak is True):
+            #     FMatrixDT = -self.peakOffsetFromCenter * self.__dT__
+            #     FMatrixShift = -self.peakOffsetFromCenter
+            #     newPCDT = self.peakCenteringDT - velocityTDOA + FMatrixDT
+            #     if not isnan(newPCDT):
+            #         self.peakCenteringDT = newPCDT
+            #     self.signalTDOA = self.signalTDOA + velocityTDOA - FMatrixDT
+            # else:
+            #     FMatrixShift = peakShift
+            # self.TDOAVar = self.TDOAVar + (Q * np.square(self.__dT__))
             # self.signalDelay = self.signalDelay + timeDelay
 
             Q = (
@@ -484,7 +508,10 @@ class CorrelationVector(substate.SubState):
                 ).dot(self.__unitVecToSignal__) *
                 np.square(indexDiff / self.speedOfLight())
             )
-            
+
+            # FLDict = self.buildFLMatrices(FMatrixShift, h)
+            # F = FLDict['F']
+            # L = FLDict['L']
             # Initialize empty matricies
             F = np.zeros([self.__filterOrder__, self.__filterOrder__])
             L = np.zeros([self.__filterOrder__, self.__filterOrder__])
@@ -542,6 +569,49 @@ class CorrelationVector(substate.SubState):
         
         return(timeUpdateDict)
 
+    def buildFLMatrices(self, peakShift, h):
+        # Initialize empty matricies
+        F = np.zeros([self.__filterOrder__, self.__filterOrder__])
+        L = np.zeros([self.__filterOrder__, self.__filterOrder__])
+
+        # Build arrays of indicies from which to form the sinc function
+
+        if np.mod(self.__filterOrder__, 2) == 0:
+            baseVec = (
+                np.linspace(
+                    1 - self.__halfLength__,
+                    self.__halfLength__,
+                    self.__filterOrder__
+                )
+            )
+
+        else:
+            baseVec = (
+                np.linspace(
+                    1 - self.__halfLength__,
+                    self.__halfLength__ - 1,
+                    self.__filterOrder__
+                )
+            )
+
+        # Compute the sinc function of the base vector
+        sincBase = np.sinc(baseVec + peakShift)
+        diffBase = np.zeros_like(sincBase)
+
+        for i in range(len(baseVec)):
+            diffBase[i] = self.sincDiff(baseVec[i] + peakShift)
+            
+        sincBase = np.roll(sincBase, 1 - int(self.__halfLength__))
+        diffBase = np.roll(diffBase, 1 - int(self.__halfLength__))
+
+        for i in range(len(F)):
+            F[i] = np.roll(sincBase, i)
+            L[i] = np.roll(diffBase, i)
+
+        L = L.dot(h)
+
+        return {'F':F, 'L':L}
+
     ## @}
     
     ## @{
@@ -557,7 +627,7 @@ class CorrelationVector(substate.SubState):
     ):
         photonTOA = measurement['t']['value']
         
-        adjustedTOA = photonTOA - self.peakCenteringDT
+        adjustedTOA = photonTOA + self.peakCenteringDT
         
         H = np.eye(self.__filterOrder__)
 

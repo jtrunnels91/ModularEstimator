@@ -5,11 +5,11 @@ import numpy as np
 plt.close('all')
 
 orbitPeriod = 100/(2*np.pi)
-orbitAmplitude = 0
+orbitAmplitude = 1000
 
-tFinal = 300
+tFinal = 500
 
-vVar = np.square(1e-6)
+vVar = np.square(100)
 nTaps = 9
 
 myProfile = './pulsarData/profiles/J0534+2200_profile.txt'
@@ -34,7 +34,7 @@ myPulsar = md.signals.PeriodicXRaySource(
 )
 
 myUnitVec = myPulsar.unitVec()
-constantOffset = -myUnitVec * myPulsar.speedOfLight() * 0.0033622786515540015 * 0
+constantOffset = -myUnitVec * myPulsar.speedOfLight() * 0.0033622786515540015 * 1
 
 def position(t):
     return(
@@ -69,7 +69,8 @@ myCorrelation = md.substates.CorrelationVector(
     TDOAVar=0,
     measurementNoiseScaleFactor=1,
     processNoise=1e-100,
-    centerPeak=True
+    centerPeak=True,
+    peakLockThreshold=0.75
     )
 
 myFilter = md.ModularFilter()
@@ -94,7 +95,9 @@ for photonMeas in photonMeasurements:
     vMeas = velocity(arrivalT) + np.random.normal(0,scale=np.sqrt(vVar),size=3)
     TUOTDOA = vMeas.dot(myUnitVec) * (arrivalT - lastT)/myPulsar.speedOfLight() + lastTUOTDOA
     timeUpdateOnlyTDOA.append(TUOTDOA)
+    timeUpdateOnlyTDOA.append(TUOTDOA)
     lastTUOTDOA = TUOTDOA
+    timeUpdateOnlyT.append(arrivalT)
     timeUpdateOnlyT.append(arrivalT)
     
     dynamics = {
@@ -112,31 +115,39 @@ for photonMeas in photonMeasurements:
         myCorrelation.realTimePlot()
         lastUpdateTime = int(arrivalT)
         print('time: %f' % arrivalT)
+        print('True TDOA: %f' %(position(arrivalT).dot(myUnitVec)/myPulsar.speedOfLight()))
+        print('Peak offset: %f' %(myCorrelation.peakCenteringDT))
     lastT = arrivalT
+timeUpdateOnlyTDOA.append(TUOTDOA)
+timeUpdateOnlyT.append(arrivalT)
+timeUpdateOnlyTDOA.append(TUOTDOA)
+timeUpdateOnlyT.append(arrivalT)
+tVec = [sv['t'] for sv in myCorrelation.stateVectorHistory]
+trueTDOA = np.array([
+    (position(t).transpose().dot(myPulsar.unitVec())/myPulsar.speedOfLight())
+    for t in tVec
+])
 
-trueDelay = (
-    position(myCorrelation.stateVectorHistory['t']).transpose().dot(myPulsar.unitVec()) /
-    myPulsar.speedOfLight()
-    )
+estTDOA = np.array([sv['signalTDOA'] for sv in myCorrelation.stateVectorHistory])
 plt.figure()
 plt.plot(
-    myCorrelation.stateVectorHistory['t'],
-    trueDelay
-)
-plt.plot(
-    myCorrelation.stateVectorHistory['t'],
-    myCorrelation.stateVectorHistory['signalTDOA']
+    tVec,
+    trueTDOA-estTDOA,
+    label='estimate error'
 )
 plt.plot(
     timeUpdateOnlyT,
-    timeUpdateOnlyTDOA
+    trueTDOA - timeUpdateOnlyTDOA,
+    label='Time update only'
+)
+tdoaSTD = np.array([np.sqrt(sv['TDOAVar']) for sv in myCorrelation.stateVectorHistory])
+plt.plot(
+    tVec,
+    tdoaSTD
 )
 plt.plot(
-    myCorrelation.stateVectorHistory['t'],
-    np.sqrt(myCorrelation.stateVectorHistory['TDOAVar'])
+    tVec,
+    -tdoaSTD
 )
-plt.plot(
-    myCorrelation.stateVectorHistory['t'],
-    -np.sqrt(myCorrelation.stateVectorHistory['TDOAVar'])
-)
+plt.legend()
 plt.show(block=False)
