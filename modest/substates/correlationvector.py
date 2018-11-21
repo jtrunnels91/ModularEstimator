@@ -281,6 +281,15 @@ class CorrelationVector(substate.SubState):
             ) + self.peakCenteringDT
             newTDOAVar = tdoaDict['varTDOA'] * np.square(self.__dT__)
             if not isnan(newTDOA) and not isnan(newTDOAVar):
+                # TDOAResidual = newTDOA - self.signalTDOA
+                # TDOAResidualVar = newTDOAVar + self.TDOAVar
+                # TDOA_gain = self.TDOAVar/TDOAResidualVar
+                # self.signalTDOA = self.signalTDOA + TDOA_gain*TDOAResidual
+                # IMinusKH = 1.0 - TDOA_gain
+                # self.TDOAVar = (
+                #     np.square(IMinusKH)*self.TDOAVar +
+                #     np.square(TDOA_gain)*newTDOAVar
+                # )
                 self.signalTDOA = newTDOA
                 self.TDOAVar = newTDOAVar
 
@@ -467,19 +476,30 @@ class CorrelationVector(substate.SubState):
                 self.speedOfLight()
             )
 
-            velocityTDOA = peakShift * self.__dT__
+            # velocityTDOA = peakShift * self.__dT__
+            velocityTDOA = (
+                velocity.dot(self.__unitVecToSignal__) * deltaT /
+                self.speedOfLight()
+            )
             Q = (
                 self.__unitVecToSignal__.dot(
                     vVar
                 ).dot(self.__unitVecToSignal__) *
                 np.square(indexDiff / self.speedOfLight())
             )
+            tdoaQ = (
+                self.__unitVecToSignal__.dot(vVar
+                ).dot(self.__unitVecToSignal__) *
+                np.square(deltaT/self.speedOfLight()))
+
             
             FMatrixShift = -self.peakOffsetFromCenter # - peakShift
             self.signalTDOA = (
                 self.signalTDOA +
                 velocityTDOA
             )
+            self.TDOAVar = self.TDOAVar + tdoaQ
+            
             self.peakCenteringDT = (
                 self.peakCenteringDT + velocityTDOA  +
                 (self.peakOffsetFromCenter*self.__dT__)
@@ -502,12 +522,12 @@ class CorrelationVector(substate.SubState):
             # self.TDOAVar = self.TDOAVar + (Q * np.square(self.__dT__))
             # self.signalDelay = self.signalDelay + timeDelay
 
-            Q = (
-                self.__unitVecToSignal__.dot(
-                    vVar
-                ).dot(self.__unitVecToSignal__) *
-                np.square(indexDiff / self.speedOfLight())
-            )
+            # Q = (
+            #     self.__unitVecToSignal__.dot(
+            #         vVar
+            #     ).dot(self.__unitVecToSignal__) *
+            #     np.square(indexDiff / self.speedOfLight())
+            # )
 
             # FLDict = self.buildFLMatrices(FMatrixShift, h)
             # F = FLDict['F']
@@ -811,10 +831,10 @@ class CorrelationVector(substate.SubState):
         if P.form == 'covariance':
             sqrtP = np.linalg.cholesky(hDimension * P.value)
         elif P.form == 'cholesky':
-            PVal = P.convertCovariance('covariance').value
-            sqrtP = np.linalg.cholesky(hDimension * PVal)
+            # PVal = P.convertCovariance('covariance').value
+            # sqrtP = np.linalg.cholesky(hDimension * PVal)
             
-            # sqrtP = P.value * np.sqrt(hDimension)
+            sqrtP = P.value * np.sqrt(hDimension)
                 
         sigmaPoints = h + np.append(sqrtP, -sqrtP, axis=0)
 

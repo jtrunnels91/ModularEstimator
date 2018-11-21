@@ -34,7 +34,7 @@ myPulsar = md.signals.PeriodicXRaySource(
 )
 
 myUnitVec = myPulsar.unitVec()
-constantOffset = -myUnitVec * myPulsar.speedOfLight() * 0.0033622786515540015 * 1
+constantOffset = -myUnitVec * myPulsar.speedOfLight() * 0.0033622786515540015 * 0
 
 def position(t):
     return(
