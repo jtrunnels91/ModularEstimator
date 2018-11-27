@@ -70,7 +70,7 @@ class Attitude(substate.SubState):
         ## @brief Current estimate of attitude, stored as a Quaternion object
         # Mathematically generally referred to as \f$\mathbf{\hat{q}}^{-}_{k}\f$
         # for the a priori value, or \f$\mathbf{\hat{q}}^{+}_{k}\f$ for the a
-        # posteriori value.
+        # posteriori 
         self.qHat = attitudeQuaternion
 
         ## @brief Current estimate of gyro bias
