@@ -374,11 +374,12 @@ class ModularFilter():
     def measurementUpdateJPDAF(
             self,
             measurement
-    ):        
+    ):
+        
         signalAssociationProbability = (
             self.computeAssociationProbabilities(measurement)
             )
-
+        # print(signalAssociationProbability)
         measurement['associationProbabilities']=signalAssociationProbability
 
         #print(signalAssociationProbability)
