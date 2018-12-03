@@ -827,6 +827,12 @@ class CorrelationVector(substate.SubState):
         # Compute sigma points
         hDimension = len(h)
 
+        maxHIndex = np.argmax(h)
+        rollAmount = -maxHIndex + self.__halfLength__
+        # rollAmount = 1
+        # hRolled = np.roll(h, rollAmount)
+        
+        # PRolled = np.roll(np.roll(P.value, rollAmount, axis=0), rollAmount, axis=1)
         # Compute the square root of P.
         if P.form == 'covariance':
             sqrtP = np.linalg.cholesky(hDimension * P.value)
@@ -849,9 +855,11 @@ class CorrelationVector(substate.SubState):
             sigmaPointResults[i] = (
                 self.computeSignalTDOA(sigmaPoints[i], P.convertCovariance('covariance').value)
             )
+            
+
         
-        meanTDOA = np.mean(sigmaPointResults)
-        # meanTDOA = sigmaPointResults[0]
+        #meanTDOA = np.mean(sigmaPointResults)
+        meanTDOA = sigmaPointResults[0]
         # meanTDOA = self.computeSignalTDOA(h, P)
         varTDOA = np.var(sigmaPointResults)
 

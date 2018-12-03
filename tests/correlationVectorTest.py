@@ -7,7 +7,7 @@ plt.close('all')
 orbitPeriod = 100/(2*np.pi)
 orbitAmplitude = 1000
 
-tFinal = 500
+tFinal = 50
 
 vVar = np.square(100)
 nTaps = 9
@@ -70,7 +70,7 @@ myCorrelation = md.substates.CorrelationVector(
     measurementNoiseScaleFactor=1,
     processNoise=1e-100,
     centerPeak=True,
-    peakLockThreshold=0.75
+    peakLockThreshold=0.000001
     )
 
 myFilter = md.ModularFilter()
