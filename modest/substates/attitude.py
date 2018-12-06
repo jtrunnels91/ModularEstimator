@@ -592,6 +592,7 @@ class Attitude(substate.SubState):
         
         
         sourceUnitVec = self.sidUnitVec(sourceRaDec)
+        
         modifiedEulerAngles = QuaternionHelperFunctions.quaternion2euler(self.qHat)
         modifiedEulerAngles[0] = 0 # Set roll to zero
         modifiedRotationMatrix = QuaternionHelperFunctions.euler2quaternion(
@@ -621,6 +622,8 @@ class Attitude(substate.SubState):
         # decDiff = sourceRaDec['DEC'] - decEst
         # while np.abs(decDiff) > np.pi/2:
         #     decDiff = decDiff - np.pi*np.sign(decDiff)/2
+
+        
         raDiff = sourceRaLocal
         decDiff = sourceDecLocal
         
@@ -647,14 +650,14 @@ class Attitude(substate.SubState):
                 [-raDiff*cosTheta - decDiff*sinTheta, cosTheta, sinTheta]
             ]
         )
+        H = np.array(
+            [
+                [raDiff*sinTheta + decDiff*cosTheta, 0, -1],
+                [-raDiff*cosTheta - decDiff*sinTheta, 1, 0]
+            ]
+        )
         # print(H)
         
-        # H = np.array(
-        #     [
-        #         [-raDiff*sinTheta + decDiff*cosTheta, -cosTheta, -sinTheta],
-        #         [-raDiff*cosTheta - decDiff*sinTheta, sinTheta, -cosTheta]
-        #     ]
-        # )
 
         H = np.hstack([H, np.zeros([2,3])])
         # print(H)

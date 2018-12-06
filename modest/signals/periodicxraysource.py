@@ -236,7 +236,7 @@ class PeriodicXRaySource(
                     # PAR files store right ascension as HH:MM:SS, so split
                     # on the ":" character
                     hmsArray = splitLine[1].split(':')
-
+                    print(hmsArray)
                     PAR_RA = (
                         sg.hms2rad(
                             float(hmsArray[0]),

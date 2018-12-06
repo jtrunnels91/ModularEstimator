@@ -14,13 +14,14 @@ from SpaceGeometry import sidUnitVec, unitVector2RaDec
 from QuaternionHelperFunctions import euler2quaternion, quaternion2euler, eulerAngleDiff
 
 plt.close('all')
-FOV = 5
-useUnitVector=True
+FOV = 1
+useUnitVector=False
 # Function defining angular velocity
-euler0 = np.random.uniform(-np.pi/2.1, np.pi/2.1, 3)
+#euler0 = np.random.uniform(-np.pi/2.1, np.pi/2.1, 3)
 
-# euler0 = np.array([0,0,np.pi/2])
-#euler0 = np.array([0,0,0])
+#euler0 = np.array([np.pi,0,0])
+euler0 = np.array([3.046710761327998, 1.2100470620888801, 1.483962756901154])
+#euler0 = np.array([0, 1.2100470620888801, 1.483962756901154])
 def omega(t):
     
     # omegaT = np.array([sin(pi * t/4), cos(pi * t/12), sin(pi * t/16)])
@@ -116,8 +117,8 @@ myEKF.addStates('attitude', EKFAtt)
 myTUOnly.addStates('attitude', TUOnlyAtt)
 
 # Star and background info
-backgroundFlux = 500
-nStars = 5
+backgroundFlux = 100
+nStars = 3
 starVecs = np.random.normal(np.zeros([nStars, 3]))
 starCoordinates = np.zeros([nStars, 2])
 fluxes = np.zeros(nStars + 1)
