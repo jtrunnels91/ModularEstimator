@@ -1,15 +1,15 @@
 from context import modest as md
 import matplotlib.pyplot as plt
 import numpy as np
-
+np.random.seed(1)
 plt.close('all')
 
 orbitPeriod = 100/(2*np.pi)
 orbitAmplitude = 1000
 
-tFinal = 50
+tFinal = 150
 
-vVar = np.square(100)
+vVar = np.square(1000)
 nTaps = 9
 
 myProfile = './pulsarData/profiles/J0534+2200_profile.txt'
@@ -24,7 +24,7 @@ myFlux = 9.93e-9 # erg/cm^2/s
 myFlux = myFlux * electronVoltPerErg / electronVoltPerPhoton  # photons / s * cm^2
 myFlux = myFlux * detectorArea  # photons/s
 
-myPulseFraction = 0.70
+myPulseFraction = 0.7
 
 myPulsar = md.signals.PeriodicXRaySource(
     myProfile,
@@ -67,10 +67,10 @@ myCorrelation = md.substates.CorrelationVector(
     myPulsar.pulsarPeriod/nTaps,
     signalTDOA=0,
     TDOAVar=0,
-    measurementNoiseScaleFactor=1,
+    measurementNoiseScaleFactor=2,
     processNoise=1e-100,
     centerPeak=True,
-    peakLockThreshold=0.000001
+    peakLockThreshold=1
     )
 
 myFilter = md.ModularFilter()
@@ -86,7 +86,7 @@ lastUpdateTime = 0
 lastT = 0
 
 timeUpdateOnlyTDOA = []
-lastTUOTDOA = position(0).dot(myUnitVec)/myPulsar.speedOfLight()
+lastTUOTDOA = position(0).dot(myUnitVec)/ myPulsar.speedOfLight()
 timeUpdateOnlyT = []
 
 
@@ -104,7 +104,8 @@ for photonMeas in photonMeasurements:
             'velocity': {'value': vMeas, 'var': np.eye(3)*vVar}
             }
     
-    myFilter.timeUpdateEKF(arrivalT-lastT, dynamics=dynamics)
+    # myFilter.timeUpdateEKF(arrivalT-lastT, dynamics=dynamics)
+    myFilter.timeUpdateEKF(arrivalT-lastT, dynamics=None)
 #    if myCorrelation.peakLock is True:
 #        myCorrelation.realTimePlot()
     #myFilter.timeUpdateEKF(photon-lastT)
@@ -149,5 +150,43 @@ plt.plot(
     tVec,
     -tdoaSTD
 )
+plt.figure()
+navPos = np.array([sv['stateVector'][0] for sv in myCorrelation.internalNavFilter.subStates['oneDPositionVelocity']['stateObject'].stateVectorHistory])
+navPosStd = np.sqrt(np.array([sv['covariance'].value[0,0] for sv in myCorrelation.internalNavFilter.subStates['oneDPositionVelocity']['stateObject'].stateVectorHistory]))
+
+navVel = np.array([sv['stateVector'][1] for sv in myCorrelation.internalNavFilter.subStates['oneDPositionVelocity']['stateObject'].stateVectorHistory])
+navVelStd = np.sqrt(np.array([sv['covariance'].value[1,1] for sv in myCorrelation.internalNavFilter.subStates['oneDPositionVelocity']['stateObject'].stateVectorHistory]))
+plt.plot(
+    tVec,
+    trueTDOA - navPos,
+    label='Nav filter pos'
+)
+plt.plot(
+    tVec,
+    navPosStd,
+)
+plt.plot(
+    tVec,
+    -navPosStd,
+)
+
+plt.legend()
+plt.show(block=False)
+
+plt.figure()
+plt.plot(
+    tVec,
+    navVel - np.array([velocity(t).dot(myPulsar.unitVec())/myPulsar.speedOfLight() for t in tVec]),
+    label='Nav filter vel'
+)
+plt.plot(
+    tVec,
+    navVelStd,
+)
+plt.plot(
+    tVec,
+    -navVelStd,
+)
+
 plt.legend()
 plt.show(block=False)
