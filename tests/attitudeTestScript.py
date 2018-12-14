@@ -14,13 +14,13 @@ from SpaceGeometry import sidUnitVec, unitVector2RaDec
 from QuaternionHelperFunctions import euler2quaternion, quaternion2euler, eulerAngleDiff
 
 plt.close('all')
-FOV = 1
+FOV = 10
 useUnitVector=False
 # Function defining angular velocity
 #euler0 = np.random.uniform(-np.pi/2.1, np.pi/2.1, 3)
 
-#euler0 = np.array([np.pi,0,0])
-euler0 = np.array([3.046710761327998, 1.2100470620888801, 1.483962756901154])
+euler0 = np.array([np.pi/2,np.pi/4,np.pi/2])
+# euler0 = np.array([3.046710761327998, 1.2100470620888801, 1.483962756901154])
 #euler0 = np.array([0, 1.2100470620888801, 1.483962756901154])
 def omega(t):
     
@@ -40,7 +40,7 @@ lastPrintTime=0
 # Dynamics info
 tCurrent = 0
 timeStep = 0.01
-tMax = 10
+tMax = 50
 
 biasSTD = 1e-100
 eulerT0True = attitude(0, returnQ=False)
