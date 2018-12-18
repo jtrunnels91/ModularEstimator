@@ -4,7 +4,17 @@ from . import substate
 from .. utils import covarianceContainer
 
 class oneDPositionVelocity(substate.SubState):
-    def __init__(self, objectID, stateVectorHistory, covarianceStorage='covariance', biasState=True):
+    def __init__(
+            self,
+            objectID,
+            stateVectorHistory,
+            covarianceStorage='covariance',
+            biasState=True,
+            artificialBiasMeas=True,
+            biasStateTimeConstant=0.9,
+            biasStateProcessNoiseVar=1e-3,
+            biasMeasVar=1
+    ):
         
         if not isinstance(stateVectorHistory['covariance'], covarianceContainer):
             stateVectorHistory['covariance'] = covarianceContainer(
@@ -17,13 +27,24 @@ class oneDPositionVelocity(substate.SubState):
             super().__init__(stateDimension=2, stateVectorHistory=stateVectorHistory)
         self.stateVector = stateVectorHistory['stateVector']
         self.objectID = objectID
-        self.velocityVar = 1
-        self.positionVar = 1
+        self.velocityVar = (
+            stateVectorHistory['covariance'].convertCovariance('covariance').value[1,1]
+        )
+        self.positionVar = (
+            stateVectorHistory['covariance'].convertCovariance('covariance').value[0,0]
+        )
+        stateVectorHistory['positionStd'] = np.sqrt(self.positionVar)
+        stateVectorHistory['velocityStd'] = np.sqrt(self.velocityVar)
         self.currentPosition = 0
         self.currentVelocity=0
         self.currentBiasState = 0
+        
+        self.artificialBiasMeas = artificialBiasMeas
 
-        self.biasStateProcessNoiseVar = 1e-4
+        self.biasStateProcessNoiseVar = biasStateProcessNoiseVar
+        self.biasStateTimeConstant = biasStateTimeConstant
+        self.artificialBiasMeasVar = biasMeasVar
+
     def storeStateVector(self, svDict):
         xPlus = svDict['stateVector']
         aPriori = svDict['aPriori']
@@ -50,8 +71,8 @@ class oneDPositionVelocity(substate.SubState):
 
     def timeUpdate(self, dT, dynamics=None):
         if self.biasState:
-            # F = np.array([[1, dT, 0],[0, 1, 0], [0, 0, np.power(1 + 1e-1, -dT)]])
-            F = np.array([[1, dT, 0],[0, 1, 0], [0, 0, np.power(1 + 1.5e-1, -dT)]])
+            #F = np.array([[1, dT, 0],[0, 1, 0], [0, 0, np.power(1 + 1e-1, -dT)]])
+            F = np.array([[1, dT, 0],[0, 1, 0], [0, 0, np.power(self.biasStateTimeConstant, -dT)]])
         else:
             F = np.array([[1, dT],[0, 1]])
         dT2 = np.square(dT)
@@ -59,7 +80,7 @@ class oneDPositionVelocity(substate.SubState):
         dT4 = np.power(dT, 4)
         if self.covariance().form == 'covariance':
             if self.biasState:
-                Q = np.array([[dT4/4, dT3/2, 0],[dT3/2, dT2, 0], [0,0,0]])
+                Q = np.array([[dT4/4, dT3/2, 0],[dT3/2, dT2, 0], [0,0,self.biasStateProcessNoiseVar * dT2]])
             else:
                 Q = np.array([[dT4/4, dT3/2],[dT3/2, dT2]])
         elif self.covariance().form == 'cholesky':
@@ -120,10 +141,10 @@ class oneDPositionVelocity(substate.SubState):
             )
             dyDict['%s velocity' %self.objectID] = dY
 
-        if self.biasState:
+        if self.biasState and self.artificialBiasMeas:
             HDict['artificialBiasMeas'] = np.array([[0,0,1]])
-            # RDict['artificialBiasMeas'] = np.array([[0.01]])
-            RDict['artificialBiasMeas'] = np.array([[0.01]])
+            RDict['artificialBiasMeas'] = np.array([[self.artificialBiasMeasVar]])
+            # RDict['artificialBiasMeas'] = np.array([[1]])
             dyDict['artificialBiasMeas'] = -self.stateVector[2]
         return {'H': HDict, 'R': RDict, 'dY': dyDict}
 

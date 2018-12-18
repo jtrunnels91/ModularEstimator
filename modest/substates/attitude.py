@@ -656,6 +656,12 @@ class Attitude(substate.SubState):
                 [-raDiff*cosTheta - decDiff*sinTheta, 1, 0]
             ]
         )
+        H = np.array(
+            [
+                [decDiff, 0, -1],
+                [-raDiff, 1, 0]
+            ]
+        )
         # print(H)
         
 
