@@ -126,7 +126,9 @@ class CorrelationVector(substate.SubState):
             peakLockThreshold=1,
             covarianceStorage='covariance',
             internalNavFilter=None,
-            defaultOneDAccelerationVar=1
+            defaultOneDAccelerationVar=1,
+            tdoaStdDevThreshold=None,
+            velStdDevThreshold=None
             ):
         print('updated correlation filter')
         self.peakLockThreshold = peakLockThreshold
@@ -249,6 +251,9 @@ class CorrelationVector(substate.SubState):
         self.defaultOneDAccelerationVar = defaultOneDAccelerationVar
         #self.defaultOneDAccelerationVar = np.square(0.01/self.speedOfLight())
 
+        self.tdoaStdDevThreshold = tdoaStdDevThreshold
+        self.velStdDevThreshold = velStdDevThreshold
+
         if internalNavFilter:
             self.navState = self.internalNavFilter.subStates['oneDPositionVelocity']['stateObject']
         return
@@ -314,7 +319,7 @@ class CorrelationVector(substate.SubState):
             # xAxis = (xAxis * self.__dT__) - self.peakCenteringDT
 
             if self.internalNavFilter:
-                if np.sqrt(self.TDOAVar) < (10*self.peakLockThreshold * self.__dT__):
+                if np.sqrt(self.TDOAVar) < (self.tdoaStdDevThreshold):
                     self.internalNavFilter.measurementUpdateEKF(
                         {'position': {'value': self.signalTDOA, 'var': self.TDOAVar}},
                         'oneDPositionVelocity'
@@ -527,7 +532,7 @@ class CorrelationVector(substate.SubState):
                 (dynamics is not None and 'velocity' in dynamics) or
                 (
                     self.internalNavFilter and
-                    np.sqrt(self.navState.velocityVar) < 10/self.speedOfLight())
+                    np.sqrt(self.navState.velocityVar) < self.velStdDevThreshold)
         ):
             if 'velocity' in dynamics:
 
@@ -557,7 +562,6 @@ class CorrelationVector(substate.SubState):
                     np.square(deltaT/self.speedOfLight()))
             elif self.internalNavFilter:
 
-                # print('using internalNavFilter velocity')
                 peakShift = self.navState.currentVelocity * indexDiff
                 velocityTDOA = self.navState.currentVelocity * deltaT
                 Q = self.navState.velocityVar * np.square(indexDiff)
