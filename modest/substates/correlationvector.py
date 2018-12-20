@@ -128,7 +128,9 @@ class CorrelationVector(substate.SubState):
             internalNavFilter=None,
             defaultOneDAccelerationVar=1,
             tdoaStdDevThreshold=None,
-            velStdDevThreshold=None
+            velStdDevThreshold=None,
+            tdoaNoiseScaleFactor=None,
+            velocityNoiseScaleFactor=None
             ):
         print('updated correlation filter')
         self.peakLockThreshold = peakLockThreshold
@@ -254,6 +256,9 @@ class CorrelationVector(substate.SubState):
         self.tdoaStdDevThreshold = tdoaStdDevThreshold
         self.velStdDevThreshold = velStdDevThreshold
 
+        self.tdoaNoiseScaleFactor = tdoaNoiseScaleFactor
+        self.velocityNoiseScaleFactor = velocityNoiseScaleFactor
+
         if internalNavFilter:
             self.navState = self.internalNavFilter.subStates['oneDPositionVelocity']['stateObject']
         return
@@ -319,9 +324,15 @@ class CorrelationVector(substate.SubState):
             # xAxis = (xAxis * self.__dT__) - self.peakCenteringDT
 
             if self.internalNavFilter:
-                if np.sqrt(self.TDOAVar) < (self.tdoaStdDevThreshold):
+                if (
+                        (np.sqrt(self.TDOAVar) < (self.tdoaStdDevThreshold))
+                        or (self.tdoaStdDevThreshold == 0)
+                ):
                     self.internalNavFilter.measurementUpdateEKF(
-                        {'position': {'value': self.signalTDOA, 'var': self.TDOAVar}},
+                        {'position': {
+                            'value': self.signalTDOA,
+                            'var': self.TDOAVar * self.tdoaNoiseScaleFactor
+                        }},
                         'oneDPositionVelocity'
                     )
                 else:
@@ -532,12 +543,15 @@ class CorrelationVector(substate.SubState):
                 (dynamics is not None and 'velocity' in dynamics) or
                 (
                     self.internalNavFilter and
-                    np.sqrt(self.navState.velocityVar) < self.velStdDevThreshold)
+                    ((np.sqrt(self.navState.velocityVar) < self.velStdDevThreshold) or
+                     self.velStdDevThreshold == 0
+                    )
+                )
         ):
             if 'velocity' in dynamics:
 
                 velocity = dynamics['velocity']['value']
-                vVar = dynamics['velocity']['var']
+                vVar = dynamics['velocity']['var'] * self.velocityNoiseScaleFactor
 
 
                 peakShift = (

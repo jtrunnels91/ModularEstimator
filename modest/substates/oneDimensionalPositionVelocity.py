@@ -60,6 +60,8 @@ class oneDPositionVelocity(substate.SubState):
         if self.biasState:
             self.currentBiasState = xPlus[2]
             svDict['biasState'] = self.currentBiasState
+        else:
+            svDict['biasState'] = 0
 
         svDict['position'] = self.currentPosition
         svDict['velocity'] = self.currentVelocity
