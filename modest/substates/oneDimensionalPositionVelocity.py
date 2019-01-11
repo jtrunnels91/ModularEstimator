@@ -74,7 +74,7 @@ class oneDPositionVelocity(substate.SubState):
     def timeUpdate(self, dT, dynamics=None):
         if self.biasState:
             #F = np.array([[1, dT, 0],[0, 1, 0], [0, 0, np.power(1 + 1e-1, -dT)]])
-            F = np.array([[1, dT, 0],[0, 1, 0], [0, 0, np.power(self.biasStateTimeConstant, -dT)]])
+            F = np.array([[1, dT, 0],[0, 1, 0], [0, 0, np.exp(-dT/self.biasStateTimeConstant)]])
         else:
             F = np.array([[1, dT],[0, 1]])
         dT2 = np.square(dT)

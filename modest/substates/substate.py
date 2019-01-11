@@ -100,6 +100,7 @@ class SubState():
 
         ## @brief Stores handle for real-time plotting        
         self.RTPlotHandle = None
+        self.THPlotHandle = None
 
         self.RTPlotData = None
 
@@ -321,4 +322,67 @@ class SubState():
 
         return
 
+
+    def timeHistoryPlot(
+            self
+    ):
+        if self.THPlotHandle is None:
+            self.initializeTimeHistoryPlot()
+            
+        for stateCounter in range(self.dimension()):
+            self.THPlotDataList[stateCounter]['x'].append(self.stateVectorHistory[-1]['t'])
+            self.THPlotDataList[stateCounter]['y'].append(
+                self.stateVectorHistory[-1]['stateVector'][stateCounter]
+            )
+            
+            self.THPlotObjectList[stateCounter].set_data(
+                self.THPlotDataList[stateCounter]['x'],
+                self.THPlotDataList[stateCounter]['x']
+            )
+            
+        self.THPlotHandle.canvas.draw()
+        self.THPlotHandle.canvas.flush_events()
+        
+        return
+    def initializeTimeHistoryPlot(
+            self,
+            plotHandle=None
+    ):
+        if plotHandle is None:
+            self.THPlotHandle = plt.figure()
+        else:
+            self.THPlotHandle = plotHandle
+        # if axisHandle is None:
+        #     self.THPaxisHandle = plt.gca()
+        # else:
+        #     self.THPaxisHandle = axisHandle
+
+        self.THPaxisList = []
+        self.THPlotDataList = []
+        self.THPlotObjectList = []
+        for stateCounter in range(self.dimension()):
+            newAxis = plt.subplot2grid(
+                (self.dimension(), 1), (stateCounter, 0)
+            )
+            self.THPaxisList.append(newAxis)
+            newAxisX = [self.stateVectorHistory[0]['t'], self.stateVectorHistory[-1]['t']]
+            newAxisY = [
+                self.stateVectorHistory[0]['stateVector'][stateCounter],
+                self.stateVectorHistory[-1]['stateVector'][stateCounter]
+            ]
+            newPlot, = plt.plot(newAxisX, newAxisY)
+            self.THPlotObjectList.append(newPlot)
+            self.THPlotDataList.append(
+                {
+                    'x': newAxisX,
+                    'y': newAxisY
+                }
+            )
+                
+        plt.tight_layout()
+        
+        plt.show(block=False)
+        return
+        
+        
     # @}
