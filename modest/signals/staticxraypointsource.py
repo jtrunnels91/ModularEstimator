@@ -80,8 +80,8 @@ class StaticXRayPointSource(
             measurement
             )
 
-        #return (anglePR * poisPR * self.flux)
-        return anglePR * self.flux
+        return (anglePR * poisPR * self.flux)
+        #return anglePR * self.flux 
     
     def generatePhotonArrivals(
             self,

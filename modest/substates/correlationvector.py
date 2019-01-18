@@ -5,6 +5,9 @@ import numpy as np
 #from numpy import sin, cos, arcsin, arccos, arctan2, square, sqrt, abs, power
 import matplotlib.pyplot as plt
 from . import substate
+from .. modularfilter import ModularFilter
+from . oneDimensionalPositionVelocity import oneDPositionVelocity
+from .. signals.oneDimensionalObject import oneDObjectMeasurement
 from .. utils import covarianceContainer
 from math import isnan
 
@@ -33,7 +36,7 @@ from math import isnan
 # be found in the journal article..
 
 class CorrelationVector(substate.SubState):
-
+    
     ## @fun #__init__ is responsible for initializing a correlation vector
     # estimator
     #
@@ -121,11 +124,16 @@ class CorrelationVector(substate.SubState):
             processNoise=1e-12,
             measurementNoiseScaleFactor=1,
             peakLockThreshold=1,
-            covarianceStorage='covariance'
+            covarianceStorage='covariance',
+            internalNavFilter=None,
+            defaultOneDAccelerationVar=1,
+            tdoaStdDevThreshold=None,
+            velStdDevThreshold=None,
+            tdoaNoiseScaleFactor=None,
+            velocityNoiseScaleFactor=None
             ):
-
+        print('updated correlation filter')
         self.peakLockThreshold = peakLockThreshold
-        #self.peakCenteringDT = trueSignal.pulsarPeriod/10
         self.peakCenteringDT = 0
         
         self.peakOffsetFromCenter = 0
@@ -153,6 +161,7 @@ class CorrelationVector(substate.SubState):
         # result of a time update (#aPriori = True) or a measurement update
         # (#aPriori = False)
         self.aPriori = aPriori
+
 
         if correlationVector is None:
             correlationVector = (
@@ -191,7 +200,7 @@ class CorrelationVector(substate.SubState):
         ## @brief #delayVar is the variance of the signal delay estimate
         # #signalDelay
         self.TDOAVar = TDOAVar
-
+        
         ## @brief #centerPeak indicates whether the correlation vector is
         # shifted to maintain the peak at the middle tap
         self.centerPeak = centerPeak
@@ -240,6 +249,18 @@ class CorrelationVector(substate.SubState):
             }
         )
 
+        self.internalNavFilter = internalNavFilter
+        self.defaultOneDAccelerationVar = defaultOneDAccelerationVar
+        #self.defaultOneDAccelerationVar = np.square(0.01/self.speedOfLight())
+
+        self.tdoaStdDevThreshold = tdoaStdDevThreshold
+        self.velStdDevThreshold = velStdDevThreshold
+
+        self.tdoaNoiseScaleFactor = tdoaNoiseScaleFactor
+        self.velocityNoiseScaleFactor = velocityNoiseScaleFactor
+
+        if internalNavFilter:
+            self.navState = self.internalNavFilter.subStates['oneDPositionVelocity']['stateObject']
         return
 
 
@@ -278,9 +299,21 @@ class CorrelationVector(substate.SubState):
                     tdoaDict['meanTDOA'] 
                 ) *
                 self.__dT__
-            ) - self.peakCenteringDT
+            ) + self.peakCenteringDT
+            
             newTDOAVar = tdoaDict['varTDOA'] * np.square(self.__dT__)
             if not isnan(newTDOA) and not isnan(newTDOAVar):
+                # if self.peakLock:
+                #     TDOAResidual = newTDOA - self.signalTDOA
+                #     TDOAResidualVar = newTDOAVar + self.TDOAVar
+                #     TDOA_gain = self.TDOAVar/TDOAResidualVar
+                #     self.signalTDOA = self.signalTDOA + TDOA_gain*TDOAResidual
+                #     IMinusKH = 1.0 - TDOA_gain
+                #     self.TDOAVar = (
+                #         np.square(IMinusKH)*self.TDOAVar +
+                #         np.square(TDOA_gain)*newTDOAVar
+                #     )
+                # else:
                 self.signalTDOA = newTDOA
                 self.TDOAVar = newTDOAVar
 
@@ -289,11 +322,28 @@ class CorrelationVector(substate.SubState):
             self.sigmaPoints = tdoaDict['sigmaPoints']
             # xAxis = np.linspace(0, self.__filterOrder__-1, self.__filterOrder__)
             # xAxis = (xAxis * self.__dT__) - self.peakCenteringDT
-                  
+
+            if self.internalNavFilter:
+                if (
+                        (np.sqrt(self.TDOAVar) < (self.tdoaStdDevThreshold))
+                        or (self.tdoaStdDevThreshold == 0)
+                ):
+                    self.internalNavFilter.measurementUpdateEKF(
+                        {'position': {
+                            'value': self.signalTDOA,
+                            'var': self.TDOAVar * self.tdoaNoiseScaleFactor
+                        }},
+                        'oneDPositionVelocity'
+                    )
+                else:
+                    self.internalNavFilter.measurementUpdateEKF(
+                        {}, ''
+                    )
+                
             if self.peakLock is True and self.centerPeak is True:
                 self.peakOffsetFromCenter = tdoaDict['meanTDOA'] - self.__halfLength__ + 1
                 # self.peakOffsetFromCenter = np.mod(tdoaDict['meanTDOA'], self.__dT__)
-                
+                # print(self.peakOffsetFromCenter)
             else:
                 self.peakOffsetFromCenter = 0
 
@@ -302,12 +352,23 @@ class CorrelationVector(substate.SubState):
 #                svDict['stateVector'] = self.correlationVector
 #            else:
                 
+            # self.correlationVector = svDict['stateVector']
+            # if self.peakOffsetFromCenter != 0:
+            #     FLDict = self.buildFLMatrices(
+            #         -self.peakOffsetFromCenter*self.__dT__,
+            #         self.correlationVector
+            #     )
+            #     self.correlationVector = FLDict['F'].dot(self.correlationVector)
+            #     self.peakOffsetFromCenter = 0
             self.correlationVector = svDict['stateVector']
-            
             self.correlationVectorCovariance = svDict['covariance']
             svDict['signalTDOA'] = self.signalTDOA
             svDict['TDOAVar'] = self.TDOAVar
-        svDict['xAxis'] = self.xAxis - self.peakCenteringDT
+            self.peakOffsetFromCenter = 0
+
+            
+        svDict['xAxis'] = self.xAxis + self.peakCenteringDT
+        # svDict['xAxis'] = self.xAxis - self.signalTDOA
         
         tdoaSTD = np.sqrt(self.TDOAVar)
         if tdoaSTD < (self.peakLockThreshold * self.__dT__):
@@ -324,6 +385,7 @@ class CorrelationVector(substate.SubState):
                     %(self.__trueSignal__.name, self.t)
                 )
                 self.peakLock = False
+                self.peakOffsetFromCenter = 0
             
         super().storeStateVector(svDict)
         return
@@ -362,6 +424,35 @@ class CorrelationVector(substate.SubState):
                           np.square(self.__trueSignal__.avgPhotonFlux * self.__dT__)
             )
         )
+
+        if dynamics is not None and 'acceleration' in dynamics:
+            oneDAcceleration = (
+                dynamics['acceleration']['value'].dot(self.__unitVecToSignal__) /
+                self.speedOfLight()
+            )
+            
+            oneDAccelerationVar = (
+                self.__unitVecToSignal__.dot(
+                    dynamics['acceleration']['value'].dot(
+                        self.__unitVecToSignal__.transpose()
+                    )
+                ) / np.square(self.speedOfLight())
+            )
+        else:
+            oneDAcceleration = 0
+            oneDAccelerationVar = self.defaultOneDAccelerationVar
+            
+        if self.internalNavFilter:
+            self.internalNavFilter.timeUpdateEKF(
+                dT,
+                dynamics = {
+                    'oneDPositionVelocityacceleration': {
+                        'value': oneDAcceleration,
+                        'var': oneDAccelerationVar
+                    }
+                }
+            )
+        
         
         return {'F': timeUpdateMatrices['F'], 'Q': Qmat}
 
@@ -445,94 +536,115 @@ class CorrelationVector(substate.SubState):
             dynamics,
             h
     ):
-        if dynamics is not None and 'velocity' in dynamics:
-
-            velocity = dynamics['velocity']['value']
-            vVar = dynamics['velocity']['var']
-
-            indexDiff = deltaT/self.__dT__
+        
+        indexDiff = deltaT/self.__dT__
             
-            peakShift = (
-                (velocity.dot(self.__unitVecToSignal__) * indexDiff) /
-                self.speedOfLight()
-            )
-
-            velocityTDOA = peakShift * self.__dT__
-            Q = (
-                self.__unitVecToSignal__.dot(
-                    vVar
-                ).dot(self.__unitVecToSignal__) *
-                np.square(indexDiff / self.speedOfLight())
-            )
-            
-            
-            if (self.peakLock is True) and (self.centerPeak is True):
-                FMatrixDT = -self.peakOffsetFromCenter * self.__dT__
-                FMatrixShift = -self.peakOffsetFromCenter
-                newPCDT = self.peakCenteringDT - velocityTDOA + FMatrixDT
-                if not isnan(newPCDT):
-                    self.peakCenteringDT = newPCDT
-                self.signalTDOA = self.signalTDOA + velocityTDOA - FMatrixDT
-            else:
-                FMatrixShift = peakShift
-            self.TDOAVar = self.TDOAVar + (Q * np.square(self.__dT__))
-            # self.signalDelay = self.signalDelay + timeDelay
-
-            Q = (
-                self.__unitVecToSignal__.dot(
-                    vVar
-                ).dot(self.__unitVecToSignal__) *
-                np.square(indexDiff / self.speedOfLight())
-            )
-            
-            # Initialize empty matricies
-            F = np.zeros([self.__filterOrder__, self.__filterOrder__])
-            L = np.zeros([self.__filterOrder__, self.__filterOrder__])
-
-            # Build arrays of indicies from which to form the sinc function
-
-            if np.mod(self.__filterOrder__, 2) == 0:
-                baseVec = (
-                    np.linspace(
-                        1 - self.__halfLength__,
-                        self.__halfLength__,
-                        self.__filterOrder__
+        if (
+                (dynamics is not None and 'velocity' in dynamics) or
+                (
+                    self.internalNavFilter and
+                    ((np.sqrt(self.navState.velocityVar) < self.velStdDevThreshold) or
+                     self.velStdDevThreshold == 0
                     )
                 )
+        ):
+            if 'velocity' in dynamics:
 
-            else:
-                baseVec = (
-                    np.linspace(
-                        1 - self.__halfLength__,
-                        self.__halfLength__ - 1,
-                        self.__filterOrder__
-                    )
+                velocity = dynamics['velocity']['value']
+                vVar = dynamics['velocity']['var'] * self.velocityNoiseScaleFactor
+
+
+                peakShift = (
+                    (velocity.dot(self.__unitVecToSignal__) * indexDiff) /
+                    self.speedOfLight()
                 )
 
-            # Compute the sinc function of the base vector
-            sincBase = np.sinc(baseVec + FMatrixShift)
-            diffBase = np.zeros_like(sincBase)
+                # velocityTDOA = peakShift * self.__dT__
+                velocityTDOA = (
+                    velocity.dot(self.__unitVecToSignal__) * deltaT /
+                    self.speedOfLight()
+                )
+                Q = (
+                    self.__unitVecToSignal__.dot(
+                        vVar
+                    ).dot(self.__unitVecToSignal__) *
+                    np.square(indexDiff / self.speedOfLight())
+                )
+                tdoaQ = (
+                    self.__unitVecToSignal__.dot(vVar
+                    ).dot(self.__unitVecToSignal__) *
+                    np.square(deltaT/self.speedOfLight()))
+            elif self.internalNavFilter:
 
-            for i in range(len(baseVec)):
-                diffBase[i] = self.sincDiff(baseVec[i] + peakShift)
-            
-            sincBase = np.roll(sincBase, 1 - int(self.__halfLength__))
-            diffBase = np.roll(diffBase, 1 - int(self.__halfLength__))
-
-            for i in range(len(F)):
-                F[i] = np.roll(sincBase, i)
-                L[i] = np.roll(diffBase, i)
-#            if (self.peakLock is True) and (self.centerPeak is True):
-#                F = np.eye(self.__filterOrder__)
-
-            L = L.dot(h)
+                peakShift = self.navState.currentVelocity * indexDiff
+                velocityTDOA = self.navState.currentVelocity * deltaT
+                Q = self.navState.velocityVar * np.square(indexDiff)
+                tdoaQ = self.navState.velocityVar * np.square(deltaT)
 
         else:
-            # If no velocity was included in dynamics, then do nothing during
-            # time update
-            F = np.eye(self.__filterOrder__)
-            L = np.zeros(self.__filterOrder__)
-            Q = 0
+            velocityTDOA = 0
+            peakShift = 0
+            Q = self.defaultOneDAccelerationVar * np.power(indexDiff,4)/4
+            
+            tdoaQ = self.defaultOneDAccelerationVar * np.power(deltaT,4)/4
+
+        FMatrixShift = -self.peakOffsetFromCenter # - peakShift
+        self.signalTDOA = (
+            self.signalTDOA +
+            velocityTDOA
+        )
+        self.TDOAVar = self.TDOAVar + tdoaQ
+
+        self.peakCenteringDT = (
+            self.peakCenteringDT + velocityTDOA  +
+            (self.peakOffsetFromCenter*self.__dT__)
+        )
+
+        # Initialize empty matricies
+        F = np.zeros([self.__filterOrder__, self.__filterOrder__])
+        L = np.zeros([self.__filterOrder__, self.__filterOrder__])
+
+        # Build arrays of indicies from which to form the sinc function
+
+        if np.mod(self.__filterOrder__, 2) == 0:
+            baseVec = (
+                np.linspace(
+                    1 - self.__halfLength__,
+                    self.__halfLength__,
+                    self.__filterOrder__
+                )
+            )
+
+        else:
+            baseVec = (
+                np.linspace(
+                    1 - self.__halfLength__,
+                    self.__halfLength__ - 1,
+                    self.__filterOrder__
+                )
+            )
+
+        # Compute the sinc function of the base vector
+        sincBase = np.sinc(baseVec + FMatrixShift)
+        diffBase = np.zeros_like(sincBase)
+        
+        for i in range(len(baseVec)):
+            diffBase[i] = self.sincDiff(baseVec[i] + peakShift)
+            
+        sincBase = np.roll(sincBase, 1 - int(self.__halfLength__))
+        diffBase = np.roll(diffBase, 1 - int(self.__halfLength__))
+
+        for i in range(len(F)):
+            F[i] = np.roll(sincBase, i)
+            L[i] = np.roll(diffBase, i)
+        L = L.dot(h)
+
+        # else:
+        #     # If no velocity was included in dynamics, then do nothing during
+        #     # time update
+        #     F = np.eye(self.__filterOrder__)
+        #     L = np.zeros(self.__filterOrder__)
+        #     Q = 0
         
         timeUpdateDict = {
             'F': F,
@@ -541,6 +653,49 @@ class CorrelationVector(substate.SubState):
         }
         
         return(timeUpdateDict)
+
+    def buildFLMatrices(self, peakShift, h):
+        # Initialize empty matricies
+        F = np.zeros([self.__filterOrder__, self.__filterOrder__])
+        L = np.zeros([self.__filterOrder__, self.__filterOrder__])
+
+        # Build arrays of indicies from which to form the sinc function
+
+        if np.mod(self.__filterOrder__, 2) == 0:
+            baseVec = (
+                np.linspace(
+                    1 - self.__halfLength__,
+                    self.__halfLength__,
+                    self.__filterOrder__
+                )
+            )
+
+        else:
+            baseVec = (
+                np.linspace(
+                    1 - self.__halfLength__,
+                    self.__halfLength__ - 1,
+                    self.__filterOrder__
+                )
+            )
+
+        # Compute the sinc function of the base vector
+        sincBase = np.sinc(baseVec + peakShift)
+        diffBase = np.zeros_like(sincBase)
+
+        for i in range(len(baseVec)):
+            diffBase[i] = self.sincDiff(baseVec[i] + peakShift)
+            
+        sincBase = np.roll(sincBase, 1 - int(self.__halfLength__))
+        diffBase = np.roll(diffBase, 1 - int(self.__halfLength__))
+
+        for i in range(len(F)):
+            F[i] = np.roll(sincBase, i)
+            L[i] = np.roll(diffBase, i)
+
+        L = L.dot(h)
+
+        return {'F':F, 'L':L}
 
     ## @}
     
@@ -557,7 +712,7 @@ class CorrelationVector(substate.SubState):
     ):
         photonTOA = measurement['t']['value']
         
-        adjustedTOA = photonTOA - self.peakCenteringDT
+        adjustedTOA = photonTOA + self.peakCenteringDT
         
         H = np.eye(self.__filterOrder__)
 
@@ -737,14 +892,20 @@ class CorrelationVector(substate.SubState):
         # Compute sigma points
         hDimension = len(h)
 
+        maxHIndex = np.argmax(h)
+        rollAmount = -maxHIndex + self.__halfLength__
+        # rollAmount = 1
+        # hRolled = np.roll(h, rollAmount)
+        
+        # PRolled = np.roll(np.roll(P.value, rollAmount, axis=0), rollAmount, axis=1)
         # Compute the square root of P.
         if P.form == 'covariance':
             sqrtP = np.linalg.cholesky(hDimension * P.value)
         elif P.form == 'cholesky':
-            PVal = P.convertCovariance('covariance').value
-            sqrtP = np.linalg.cholesky(hDimension * PVal)
+            # PVal = P.convertCovariance('covariance').value
+            # sqrtP = np.linalg.cholesky(hDimension * PVal)
             
-            # sqrtP = P.value * np.sqrt(hDimension)
+            sqrtP = P.value * np.sqrt(hDimension)
                 
         sigmaPoints = h + np.append(sqrtP, -sqrtP, axis=0)
 
@@ -759,9 +920,17 @@ class CorrelationVector(substate.SubState):
             sigmaPointResults[i] = (
                 self.computeSignalTDOA(sigmaPoints[i], P.convertCovariance('covariance').value)
             )
+            
+
         
-        meanTDOA = np.mean(sigmaPointResults)
-        # meanTDOA = sigmaPointResults[0]
+        #meanTDOA = np.mean(sigmaPointResults)
+        meanTDOA = sigmaPointResults[0]
+        for i in range(len(sigmaPoints)):
+            if (meanTDOA - sigmaPointResults[i]) > self.__halfLength__:
+                sigmaPointResults[i] += self.__dimension__
+            elif (sigmaPointResults[i] - meanTDOA) > self.__halfLength__:
+                sigmaPointResults[i] -= self.__dimension__
+        
         # meanTDOA = self.computeSignalTDOA(h, P)
         varTDOA = np.var(sigmaPointResults)
 

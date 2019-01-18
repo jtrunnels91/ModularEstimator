@@ -236,7 +236,7 @@ class PeriodicXRaySource(
                     # PAR files store right ascension as HH:MM:SS, so split
                     # on the ":" character
                     hmsArray = splitLine[1].split(':')
-
+                    print(hmsArray)
                     PAR_RA = (
                         sg.hms2rad(
                             float(hmsArray[0]),
@@ -604,8 +604,13 @@ class PeriodicXRaySource(
                 'Computed NaN probability.  Components: AOA %s, TOA %s, Flux %s'
                 %(anglePR, poisPR, self.peakAmplitude)
             )
-        #return myPr
-        return anglePR * self.flux
+        # print('Pulsar probability components')
+        # print('angle pr %s' %anglePR)
+        # print('poisPR pr %s' %poisPR)
+        # print('flux PR pr %s' %self.flux)
+        
+        return myPr
+        #return anglePR * self.flux
     
     def plot(self,
              nPeriods=1,

@@ -86,3 +86,7 @@ def ERGbackgroundFlux(lowerE,
     return (1.60218e-9 *
             backgroundFluxPerSR(lowerE, upperE) *
             degreeFOVToSR(FOVDegrees))
+
+
+def chandraBackgroundERG(FOVDegrees):
+    return 3.8e-12 * np.square(FOVDegrees*2)

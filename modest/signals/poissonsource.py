@@ -138,7 +138,7 @@ class DynamicPoissonSource(PoissonSource):
             #state=state
         )
         # print('Computed current flux %s' %currentFlux)
-
+        
         poissonProb = super().computeAssociationProbability(
             currentFlux,
             measurement
