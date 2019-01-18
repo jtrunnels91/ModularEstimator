@@ -4,12 +4,14 @@ __all__ = [
     'substates',
     'signals',
     'utils',
-    'ModularFilter'
+    'ModularFilter',
+    'spacecraft'
 ]
 
 from . import substates
 from . import signals
 from . import utils
+from . import spacecraft
 from . import plots
 from . modularfilter import ModularFilter
 
