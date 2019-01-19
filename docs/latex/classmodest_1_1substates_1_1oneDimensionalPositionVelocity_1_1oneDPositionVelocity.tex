@@ -1,0 +1,475 @@
+\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity}{}\section{modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity Class Reference}
+\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity}\index{modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity@{modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity}}
+
+
+Inheritance diagram for modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=264pt]{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=264pt]{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a01dab857d13926a0297edd0e15fc4f55}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self, \hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a805e7dfe302ac83ca52c1b15b171b93e}{object\+ID}, \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a38c12c9d0899bc1161f3502b584517a2}{state\+Vector\+History}, covariance\+Storage=\textquotesingle{}\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a6e308aadd13962e476d2892ec728e3a5}{covariance}\textquotesingle{}, \hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_adfefff9b378df18fdb575973cdb6cb52}{bias\+State}=True, \hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_adafaa6e838c7ecf09b4397bf46310622}{artificial\+Bias\+Meas}=True, \hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a4fc82761e11022f9643504aa5e2123b5}{bias\+State\+Time\+Constant}=0.\+9, \hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_ac365e7ee6e0ca28406ec88129d286429}{bias\+State\+Process\+Noise\+Var}=1e-\/3, bias\+Meas\+Var=1)
+\item 
+def \hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_af2b9f31a579e0cc41b96ecc8bbe37f2a}{store\+State\+Vector} (self, sv\+Dict)
+\item 
+def \hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a4f45b205f5a2c41f82c8916d3afcbbce}{time\+Update} (self, dT, dynamics=None)
+\item 
+def \hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a71b8ca17a8732b89e1dcaed2fcc5b3df}{get\+Measurement\+Matrices} (self, measurement, source=None)
+\end{DoxyCompactItemize}
+\begin{Indent}{\bf Mandatory Sub\+State Functions}\par
+{\em The following functions are functions which are required for the Sub\+State to function as a sub-\/state in State.\+Modular\+Filter. }\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}{get\+State\+Vector} (self, t=None)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}{get\+State\+Vector} returns the most recent value of the state vector \end{DoxyCompactList}\item 
+def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a6e308aadd13962e476d2892ec728e3a5}{covariance} (self)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a6e308aadd13962e476d2892ec728e3a5}{covariance} returns the \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State} covariance matrix \end{DoxyCompactList}\item 
+def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} (self)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} returns the dimension of the sub-\/state vector \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+\begin{Indent}{\bf Plotting Functions}\par
+{\em These functions provide generalized plotting capabilities }\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1adac64be88eab0a64bb952518c4268f}{initialize\+Real\+Time\+Plot} (self, plot\+Handle=None, axis\+Handle=None)
+\item 
+def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a2deb7d1ca3105eb20e50fa7e67298355}{real\+Time\+Plot} (self, normalized=True)
+\item 
+def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a643678c1193dd4029683a437e84229ac}{time\+History\+Plot} (self)
+\item 
+def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1853d44036e3ed35ada02414ea29f8ab}{initialize\+Time\+History\+Plot} (self, plot\+Handle=None)
+\end{DoxyCompactItemize}
+\end{Indent}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_adfefff9b378df18fdb575973cdb6cb52}{bias\+State}
+\item 
+\hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a685cabbbc121aa8e0bca238d5dd1b370}{state\+Vector}
+\item 
+\hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a805e7dfe302ac83ca52c1b15b171b93e}{object\+ID}
+\item 
+\hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_aeb9271160372d8db32e9317dd520bb8a}{velocity\+Var}
+\item 
+\hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a4fa306721c79ec47a2e56d366e68002b}{position\+Var}
+\item 
+\hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a11e9f155c003f833abc8dd013a04588d}{current\+Position}
+\item 
+\hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a111816573a8073e5c0d9d04754480592}{current\+Velocity}
+\item 
+\hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a57a153463c607dec6f91d0ce735eb5a9}{current\+Bias\+State}
+\item 
+\hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_adafaa6e838c7ecf09b4397bf46310622}{artificial\+Bias\+Meas}
+\item 
+\hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_ac365e7ee6e0ca28406ec88129d286429}{bias\+State\+Process\+Noise\+Var}
+\item 
+\hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a4fc82761e11022f9643504aa5e2123b5}{bias\+State\+Time\+Constant}
+\item 
+\hyperlink{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a2666c203f3b0af4e17069ad5c80072c2}{artificial\+Bias\+Meas\+Var}
+\item 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a38c12c9d0899bc1161f3502b584517a2}{state\+Vector\+History}
+\begin{DoxyCompactList}\small\item\em Stores the time-\/history of the sub-\/state state vector. \end{DoxyCompactList}\item 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a9b7a77e3b7dc14fc85962cda84e8cd58}{time\+List}
+\item 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a37ded775b84cea85b4dce0f1b16286c4}{R\+T\+Plot\+Handle}
+\begin{DoxyCompactList}\small\item\em Stores handle for real-\/time plotting. \end{DoxyCompactList}\item 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_af1d5d3bbdf73cf1e78925c835f1c616e}{T\+H\+Plot\+Handle}
+\item 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a9fefae1facc797a1132fb61a55e9ffa1}{R\+T\+Plot\+Data}
+\item 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a497ccbb6658589b02568e87c6382222e}{R\+T\+Paxis\+Handle}
+\item 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a22c12497c37f47d54d4ea909f6423222}{T\+H\+Paxis\+List}
+\item 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a0e1d545f7ede186d89db38ca613633cf}{T\+H\+Plot\+Data\+List}
+\item 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a9659535520a27090d79be1957ecce2eb}{T\+H\+Plot\+Object\+List}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 6 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+init\+\_\+\+\_\+(self, object\+I\+D, state\+Vector\+History, covariance\+Storage=\textquotesingle{}covariance\textquotesingle{}, bias\+State=\+True, artificial\+Bias\+Meas=\+True, bias\+State\+Time\+Constant=0.\+9, bias\+State\+Process\+Noise\+Var=1e-\/3, bias\+Meas\+Var=1)}{__init__(self, objectID, stateVectorHistory, covarianceStorage='covariance', biasState=True, artificialBiasMeas=True, biasStateTimeConstant=0.9, biasStateProcessNoiseVar=1e-3, biasMeasVar=1)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+\_\+\+\_\+init\+\_\+\+\_\+ (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{object\+ID, }
+\item[{}]{state\+Vector\+History, }
+\item[{}]{covariance\+Storage = {\ttfamily \textquotesingle{}{\bf covariance}\textquotesingle{}}, }
+\item[{}]{bias\+State = {\ttfamily True}, }
+\item[{}]{artificial\+Bias\+Meas = {\ttfamily True}, }
+\item[{}]{bias\+State\+Time\+Constant = {\ttfamily 0.9}, }
+\item[{}]{bias\+State\+Process\+Noise\+Var = {\ttfamily 1e-\/3}, }
+\item[{}]{bias\+Meas\+Var = {\ttfamily 1}}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a01dab857d13926a0297edd0e15fc4f55}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a01dab857d13926a0297edd0e15fc4f55}
+
+
+Definition at line 17 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+
+
+\subsection{Member Function Documentation}
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!covariance@{covariance}}
+\index{covariance@{covariance}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{covariance(self)}{covariance(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+substate.\+Sub\+State.\+covariance (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a6e308aadd13962e476d2892ec728e3a5}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a6e308aadd13962e476d2892ec728e3a5}
+
+
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a6e308aadd13962e476d2892ec728e3a5}{covariance} returns the \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State} covariance matrix 
+
+The \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a6e308aadd13962e476d2892ec728e3a5}{covariance} method returns the covariance of the estimate of the substate.
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000001}{Todo}]Currently, this method only returns the covariance of the most recent state estimate. Ideally, there should be an optional time parameter which would allow the user to get the covaraince matrix at a specified time (or the closest to that specified time).\end{DoxyRefDesc}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the covaraince matrix 
+\end{DoxyReturn}
+
+
+Definition at line 185 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!dimension@{dimension}}
+\index{dimension@{dimension}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{dimension(self)}{dimension(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+substate.\+Sub\+State.\+dimension (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}
+
+
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} returns the dimension of the sub-\/state vector 
+
+The \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} method returns the dimension of the sub-\/state vector estimated by the \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State}. This is the dimension as seen by the Modular\+Filter estimator.
+
+The default implementation is to return the class variable \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a5b1c0756a69da7f293a415c7d2d77843}{\+\_\+\+\_\+dimension\+\_\+\+\_\+}, which is saved at initialization. This is designated as a \char`\"{}protected\char`\"{} variable, and should not change during the course of the \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State}\textquotesingle{}s lifetime. If child class overwrites this implementation, care should be taken to ensure that the value returned by \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} does not change over \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State} object lifetime.
+
+For \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State} objects with auxilary states, or other quantities related to the state vector but not directly estimated by the Modular\+Filter, \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} should not count these states as part of the total dimension.
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Returns the dimension of state vector 
+\end{DoxyReturn}
+
+
+Definition at line 211 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!get\+Measurement\+Matrices@{get\+Measurement\+Matrices}}
+\index{get\+Measurement\+Matrices@{get\+Measurement\+Matrices}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{get\+Measurement\+Matrices(self, measurement, source=\+None)}{getMeasurementMatrices(self, measurement, source=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+get\+Measurement\+Matrices (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{measurement, }
+\item[{}]{source = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a71b8ca17a8732b89e1dcaed2fcc5b3df}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a71b8ca17a8732b89e1dcaed2fcc5b3df}
+
+
+Definition at line 118 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!get\+State\+Vector@{get\+State\+Vector}}
+\index{get\+State\+Vector@{get\+State\+Vector}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{get\+State\+Vector(self, t=\+None)}{getStateVector(self, t=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+substate.\+Sub\+State.\+get\+State\+Vector (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{t = {\ttfamily None}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}
+
+
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}{get\+State\+Vector} returns the most recent value of the state vector 
+
+The \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}{get\+State\+Vector} method is responsible for returning a dictionary object containing, at minimim, the following items\+:
+
+
+\begin{DoxyItemize}
+\item \textquotesingle{}state\+Vector\textquotesingle{}\+: A length \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} array containing the most recent state vector estimate
+\item \textquotesingle{}covariance\textquotesingle{}\+: A (\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} x \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension}) array containing the most recent covariance matrix
+\item \textquotesingle{}a\+Priori\textquotesingle{}\+: A boolean indicating if the most recent estimate is the
+\item result of a time update (a\+Priori=True) or a measurement update (a\+Priori=False)
+\end{DoxyItemize}
+
+This function can be used as-\/is, or can be overloaded to perform additional tasks specific to the substate.
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The dictionary containing the state vector, covariance matrix, and a\+Priori status 
+\end{DoxyReturn}
+
+
+Definition at line 135 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!initialize\+Real\+Time\+Plot@{initialize\+Real\+Time\+Plot}}
+\index{initialize\+Real\+Time\+Plot@{initialize\+Real\+Time\+Plot}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{initialize\+Real\+Time\+Plot(self, plot\+Handle=\+None, axis\+Handle=\+None)}{initializeRealTimePlot(self, plotHandle=None, axisHandle=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+substate.\+Sub\+State.\+initialize\+Real\+Time\+Plot (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{plot\+Handle = {\ttfamily None}, }
+\item[{}]{axis\+Handle = {\ttfamily None}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a1adac64be88eab0a64bb952518c4268f}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a1adac64be88eab0a64bb952518c4268f}
+
+
+Definition at line 271 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!initialize\+Time\+History\+Plot@{initialize\+Time\+History\+Plot}}
+\index{initialize\+Time\+History\+Plot@{initialize\+Time\+History\+Plot}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{initialize\+Time\+History\+Plot(self, plot\+Handle=\+None)}{initializeTimeHistoryPlot(self, plotHandle=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+substate.\+Sub\+State.\+initialize\+Time\+History\+Plot (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{plot\+Handle = {\ttfamily None}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a1853d44036e3ed35ada02414ea29f8ab}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a1853d44036e3ed35ada02414ea29f8ab}
+
+
+Definition at line 350 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!real\+Time\+Plot@{real\+Time\+Plot}}
+\index{real\+Time\+Plot@{real\+Time\+Plot}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{real\+Time\+Plot(self, normalized=\+True)}{realTimePlot(self, normalized=True)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+substate.\+Sub\+State.\+real\+Time\+Plot (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{normalized = {\ttfamily True}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a2deb7d1ca3105eb20e50fa7e67298355}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a2deb7d1ca3105eb20e50fa7e67298355}
+
+
+Definition at line 298 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!store\+State\+Vector@{store\+State\+Vector}}
+\index{store\+State\+Vector@{store\+State\+Vector}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{store\+State\+Vector(self, sv\+Dict)}{storeStateVector(self, svDict)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+store\+State\+Vector (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{sv\+Dict}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_af2b9f31a579e0cc41b96ecc8bbe37f2a}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_af2b9f31a579e0cc41b96ecc8bbe37f2a}
+
+
+Definition at line 48 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!time\+History\+Plot@{time\+History\+Plot}}
+\index{time\+History\+Plot@{time\+History\+Plot}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{time\+History\+Plot(self)}{timeHistoryPlot(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+substate.\+Sub\+State.\+time\+History\+Plot (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a643678c1193dd4029683a437e84229ac}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a643678c1193dd4029683a437e84229ac}
+
+
+Definition at line 328 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!time\+Update@{time\+Update}}
+\index{time\+Update@{time\+Update}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{time\+Update(self, d\+T, dynamics=\+None)}{timeUpdate(self, dT, dynamics=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+time\+Update (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{dT, }
+\item[{}]{dynamics = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a4f45b205f5a2c41f82c8916d3afcbbce}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a4f45b205f5a2c41f82c8916d3afcbbce}
+
+
+Definition at line 74 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+
+
+\subsection{Member Data Documentation}
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!artificial\+Bias\+Meas@{artificial\+Bias\+Meas}}
+\index{artificial\+Bias\+Meas@{artificial\+Bias\+Meas}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{artificial\+Bias\+Meas}{artificialBiasMeas}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+artificial\+Bias\+Meas}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_adafaa6e838c7ecf09b4397bf46310622}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_adafaa6e838c7ecf09b4397bf46310622}
+
+
+Definition at line 42 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!artificial\+Bias\+Meas\+Var@{artificial\+Bias\+Meas\+Var}}
+\index{artificial\+Bias\+Meas\+Var@{artificial\+Bias\+Meas\+Var}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{artificial\+Bias\+Meas\+Var}{artificialBiasMeasVar}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+artificial\+Bias\+Meas\+Var}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a2666c203f3b0af4e17069ad5c80072c2}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a2666c203f3b0af4e17069ad5c80072c2}
+
+
+Definition at line 46 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!bias\+State@{bias\+State}}
+\index{bias\+State@{bias\+State}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{bias\+State}{biasState}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+bias\+State}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_adfefff9b378df18fdb575973cdb6cb52}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_adfefff9b378df18fdb575973cdb6cb52}
+
+
+Definition at line 23 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!bias\+State\+Process\+Noise\+Var@{bias\+State\+Process\+Noise\+Var}}
+\index{bias\+State\+Process\+Noise\+Var@{bias\+State\+Process\+Noise\+Var}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{bias\+State\+Process\+Noise\+Var}{biasStateProcessNoiseVar}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+bias\+State\+Process\+Noise\+Var}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_ac365e7ee6e0ca28406ec88129d286429}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_ac365e7ee6e0ca28406ec88129d286429}
+
+
+Definition at line 44 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!bias\+State\+Time\+Constant@{bias\+State\+Time\+Constant}}
+\index{bias\+State\+Time\+Constant@{bias\+State\+Time\+Constant}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{bias\+State\+Time\+Constant}{biasStateTimeConstant}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+bias\+State\+Time\+Constant}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a4fc82761e11022f9643504aa5e2123b5}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a4fc82761e11022f9643504aa5e2123b5}
+
+
+Definition at line 45 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!current\+Bias\+State@{current\+Bias\+State}}
+\index{current\+Bias\+State@{current\+Bias\+State}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{current\+Bias\+State}{currentBiasState}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+current\+Bias\+State}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a57a153463c607dec6f91d0ce735eb5a9}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a57a153463c607dec6f91d0ce735eb5a9}
+
+
+Definition at line 40 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!current\+Position@{current\+Position}}
+\index{current\+Position@{current\+Position}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{current\+Position}{currentPosition}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+current\+Position}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a11e9f155c003f833abc8dd013a04588d}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a11e9f155c003f833abc8dd013a04588d}
+
+
+Definition at line 38 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!current\+Velocity@{current\+Velocity}}
+\index{current\+Velocity@{current\+Velocity}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{current\+Velocity}{currentVelocity}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+current\+Velocity}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a111816573a8073e5c0d9d04754480592}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a111816573a8073e5c0d9d04754480592}
+
+
+Definition at line 39 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!object\+ID@{object\+ID}}
+\index{object\+ID@{object\+ID}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{object\+ID}{objectID}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+object\+ID}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a805e7dfe302ac83ca52c1b15b171b93e}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a805e7dfe302ac83ca52c1b15b171b93e}
+
+
+Definition at line 29 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!position\+Var@{position\+Var}}
+\index{position\+Var@{position\+Var}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{position\+Var}{positionVar}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+position\+Var}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a4fa306721c79ec47a2e56d366e68002b}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a4fa306721c79ec47a2e56d366e68002b}
+
+
+Definition at line 33 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!R\+T\+Paxis\+Handle@{R\+T\+Paxis\+Handle}}
+\index{R\+T\+Paxis\+Handle@{R\+T\+Paxis\+Handle}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{R\+T\+Paxis\+Handle}{RTPaxisHandle}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+R\+T\+Paxis\+Handle\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a497ccbb6658589b02568e87c6382222e}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a497ccbb6658589b02568e87c6382222e}
+
+
+Definition at line 279 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!R\+T\+Plot\+Data@{R\+T\+Plot\+Data}}
+\index{R\+T\+Plot\+Data@{R\+T\+Plot\+Data}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{R\+T\+Plot\+Data}{RTPlotData}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+R\+T\+Plot\+Data\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a9fefae1facc797a1132fb61a55e9ffa1}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a9fefae1facc797a1132fb61a55e9ffa1}
+
+
+Definition at line 105 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!R\+T\+Plot\+Handle@{R\+T\+Plot\+Handle}}
+\index{R\+T\+Plot\+Handle@{R\+T\+Plot\+Handle}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{R\+T\+Plot\+Handle}{RTPlotHandle}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+R\+T\+Plot\+Handle\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a37ded775b84cea85b4dce0f1b16286c4}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a37ded775b84cea85b4dce0f1b16286c4}
+
+
+Stores handle for real-\/time plotting. 
+
+
+
+Definition at line 102 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!state\+Vector@{state\+Vector}}
+\index{state\+Vector@{state\+Vector}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{state\+Vector}{stateVector}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+state\+Vector}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a685cabbbc121aa8e0bca238d5dd1b370}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_a685cabbbc121aa8e0bca238d5dd1b370}
+
+
+Definition at line 28 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!state\+Vector\+History@{state\+Vector\+History}}
+\index{state\+Vector\+History@{state\+Vector\+History}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{state\+Vector\+History}{stateVectorHistory}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+state\+Vector\+History\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a38c12c9d0899bc1161f3502b584517a2}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a38c12c9d0899bc1161f3502b584517a2}
+
+
+Stores the time-\/history of the sub-\/state state vector. 
+
+self.\+state\+Vector\+History = Smart\+Panda(data=state\+Vector\+History) 
+
+Definition at line 98 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!T\+H\+Paxis\+List@{T\+H\+Paxis\+List}}
+\index{T\+H\+Paxis\+List@{T\+H\+Paxis\+List}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{T\+H\+Paxis\+List}{THPaxisList}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+T\+H\+Paxis\+List\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a22c12497c37f47d54d4ea909f6423222}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a22c12497c37f47d54d4ea909f6423222}
+
+
+Definition at line 360 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!T\+H\+Plot\+Data\+List@{T\+H\+Plot\+Data\+List}}
+\index{T\+H\+Plot\+Data\+List@{T\+H\+Plot\+Data\+List}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{T\+H\+Plot\+Data\+List}{THPlotDataList}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+T\+H\+Plot\+Data\+List\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a0e1d545f7ede186d89db38ca613633cf}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a0e1d545f7ede186d89db38ca613633cf}
+
+
+Definition at line 361 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!T\+H\+Plot\+Handle@{T\+H\+Plot\+Handle}}
+\index{T\+H\+Plot\+Handle@{T\+H\+Plot\+Handle}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{T\+H\+Plot\+Handle}{THPlotHandle}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+T\+H\+Plot\+Handle\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_af1d5d3bbdf73cf1e78925c835f1c616e}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_af1d5d3bbdf73cf1e78925c835f1c616e}
+
+
+Definition at line 103 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!T\+H\+Plot\+Object\+List@{T\+H\+Plot\+Object\+List}}
+\index{T\+H\+Plot\+Object\+List@{T\+H\+Plot\+Object\+List}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{T\+H\+Plot\+Object\+List}{THPlotObjectList}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+T\+H\+Plot\+Object\+List\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a9659535520a27090d79be1957ecce2eb}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a9659535520a27090d79be1957ecce2eb}
+
+
+Definition at line 362 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!time\+List@{time\+List}}
+\index{time\+List@{time\+List}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{time\+List}{timeList}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+time\+List\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a9b7a77e3b7dc14fc85962cda84e8cd58}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a9b7a77e3b7dc14fc85962cda84e8cd58}
+
+
+Definition at line 99 of file substate.\+py.
+
+\index{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}!velocity\+Var@{velocity\+Var}}
+\index{velocity\+Var@{velocity\+Var}!modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity@{modest\+::substates\+::one\+Dimensional\+Position\+Velocity\+::one\+D\+Position\+Velocity}}
+\subsubsection[{\texorpdfstring{velocity\+Var}{velocityVar}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+one\+Dimensional\+Position\+Velocity.\+one\+D\+Position\+Velocity.\+velocity\+Var}\hypertarget{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_aeb9271160372d8db32e9317dd520bb8a}{}\label{classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity_aeb9271160372d8db32e9317dd520bb8a}
+
+
+Definition at line 30 of file one\+Dimensional\+Position\+Velocity.\+py.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+modest/substates/\hyperlink{oneDimensionalPositionVelocity_8py}{one\+Dimensional\+Position\+Velocity.\+py}\end{DoxyCompactItemize}

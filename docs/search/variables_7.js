@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['measurementnoisescalefactor',['measurementNoiseScaleFactor',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#ae1c71753aea17170b58bd9fabc62c037',1,'modest::substates::correlationvector::CorrelationVector']]],
-  ['measurementvalidationthreshold',['measurementValidationThreshold',['../classmodest_1_1modularfilter_1_1ModularFilter.html#af91295c2d8f45afe04386215b5fa39aa',1,'modest::modularfilter::ModularFilter']]]
+  ['g',['G',['../namespacemodest_1_1utils_1_1physicalconstants.html#a4dbf6992bb8dc7fb3f56e2c16f6a44f6',1,'modest::utils::physicalconstants']]],
+  ['gyroconversionfactor',['gyroConversionFactor',['../classmodest_1_1spacecraft_1_1chandra_1_1ChandraDynamics.html#afe69133b89c99c1e82d45abbed9f67ce',1,'modest::spacecraft::chandra::ChandraDynamics']]],
+  ['gyrodata',['gyroData',['../classmodest_1_1spacecraft_1_1chandra_1_1Chandra.html#a36ed104ae479e208b38458de53ed5d02',1,'modest::spacecraft::chandra::Chandra']]],
+  ['gyrounits',['gyroUnits',['../classmodest_1_1spacecraft_1_1chandra_1_1ChandraDynamics.html#a14d24cfa07599c0d0a5011bc961ff7f3',1,'modest::spacecraft::chandra::ChandraDynamics']]]
 ];

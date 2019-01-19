@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['quaterniontimeupdatematrix',['quaternionTimeUpdateMatrix',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#ae21ed62061b674b0108f205df2122083',1,'modest::substates::attitude::Attitude']]]
+  ['omega',['omega',['../classmodest_1_1spacecraft_1_1chandra_1_1ChandraDynamics.html#aa24d12e3250a4d3ac3b6d986eba5e471',1,'modest::spacecraft::chandra::ChandraDynamics']]]
 ];

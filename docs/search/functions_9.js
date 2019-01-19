@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['localstateupdatematrices',['localStateUpdateMatrices',['../classmodest_1_1modularfilter_1_1ModularFilter.html#ab1dc914f4939e1219f4f2d0efbafd9dd',1,'modest::modularfilter::ModularFilter']]]
+  ['kevbackgroundflux',['KEVbackgroundFlux',['../namespacemodest_1_1utils_1_1xrayphotons.html#ad099f7b30fa16ed78149c6cf3b6e2046',1,'modest::utils::xrayphotons']]]
 ];

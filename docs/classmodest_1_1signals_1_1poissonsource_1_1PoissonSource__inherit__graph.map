@@ -1,8 +1,11 @@
 <map id="modest.signals.poissonsource.PoissonSource" name="modest.signals.poissonsource.PoissonSource">
-<area shape="rect" id="node3" href="$classmodest_1_1signals_1_1poissonsource_1_1DynamicPoissonSource.html" title="modest.signals.poissonsource.\lDynamicPoissonSource" alt="" coords="495,5,697,47"/>
-<area shape="rect" id="node5" href="$classmodest_1_1signals_1_1poissonsource_1_1StaticPoissonSource.html" title="modest.signals.poissonsource.\lStaticPoissonSource" alt="" coords="495,71,697,112"/>
-<area shape="rect" id="node2" href="$classmodest_1_1signals_1_1signalsource_1_1SignalSource.html" title="modest.signals.signalsource.\lSignalSource" alt="" coords="5,39,196,80"/>
-<area shape="rect" id="node4" href="$classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html" title="modest.signals.xraysource.\lPeriodicXRaySource" alt="" coords="745,5,928,47"/>
-<area shape="rect" id="node6" href="$classmodest_1_1signals_1_1xraysource_1_1StaticXRayPointSource.html" title="modest.signals.xraysource.\lStaticXRayPointSource" alt="" coords="745,71,928,112"/>
-<area shape="rect" id="node7" href="$classmodest_1_1signals_1_1xraysource_1_1UniformNoiseXRaySource.html" title="modest.signals.xraysource.\lUniformNoiseXRaySource" alt="" coords="745,136,928,177"/>
+<area shape="rect" id="node3" href="$classmodest_1_1signals_1_1poissonsource_1_1DynamicPoissonSource.html" title="modest.signals.poissonsource.\lDynamicPoissonSource" alt="" coords="495,71,697,112"/>
+<area shape="rect" id="node6" href="$classmodest_1_1signals_1_1poissonsource_1_1StaticPoissonSource.html" title="modest.signals.poissonsource.\lStaticPoissonSource" alt="" coords="495,201,697,243"/>
+<area shape="rect" id="node2" href="$classmodest_1_1signals_1_1signalsource_1_1SignalSource.html" title="modest.signals.signalsource.\lSignalSource" alt="" coords="5,136,196,177"/>
+<area shape="rect" id="node4" href="$classmodest_1_1signals_1_1periodicxraysource_1_1PeriodicXRaySource.html" title="modest.signals.periodicxraysource.\lPeriodicXRaySource" alt="" coords="760,5,987,47"/>
+<area shape="rect" id="node5" href="$classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html" title="modest.signals.xraysource.\lPeriodicXRaySource" alt="" coords="782,71,965,112"/>
+<area shape="rect" id="node7" href="$classmodest_1_1signals_1_1staticxraypointsource_1_1StaticXRayPointSource.html" title="modest.signals.staticxraypointsource.\lStaticXRayPointSource" alt="" coords="752,136,995,177"/>
+<area shape="rect" id="node8" href="$classmodest_1_1signals_1_1uniformnoisexraysource_1_1UniformNoiseXRaySource.html" title="modest.signals.uniformnoisexraysource.\lUniformNoiseXRaySource" alt="" coords="745,201,1001,243"/>
+<area shape="rect" id="node9" href="$classmodest_1_1signals_1_1xraysource_1_1StaticXRayPointSource.html" title="modest.signals.xraysource.\lStaticXRayPointSource" alt="" coords="782,267,965,308"/>
+<area shape="rect" id="node10" href="$classmodest_1_1signals_1_1xraysource_1_1UniformNoiseXRaySource.html" title="modest.signals.xraysource.\lUniformNoiseXRaySource" alt="" coords="782,332,965,373"/>
 </map>

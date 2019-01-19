@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['plot',['plot',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a640937825e6219bc7cc27168ed0e7fb0',1,'modest::signals::xraysource::PeriodicXRaySource']]],
-  ['processnoisematrix',['processNoiseMatrix',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a11f6e9a0803c6843d7c89061ffbb3c2c',1,'modest::substates::attitude::Attitude']]],
-  ['processparfile',['processPARFile',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a98ef4d72f127017fab68dcdeab0dad64',1,'modest::signals::xraysource::PeriodicXRaySource']]],
-  ['processprofile',['processProfile',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#a50045a93644e23cbaa88a4b4458694e2',1,'modest::signals::xraysource::PeriodicXRaySource']]]
+  ['mahalanobisdistance',['mahalanobisDistance',['../classmodest_1_1utils_1_1covarianceUtils_1_1covarianceContainer.html#a38becff5ec0b60d93b023baf2aa8bcd7',1,'modest::utils::covarianceUtils::covarianceContainer']]],
+  ['measurementupdateekf',['measurementUpdateEKF',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a493ccf6845ed800d565f1d26d063592c',1,'modest::modularfilter::ModularFilter']]],
+  ['measurementupdatejpdaf',['measurementUpdateJPDAF',['../classmodest_1_1modularfilter_1_1ModularFilter.html#ac3a26e2a7672ceedf00c48723104d55c',1,'modest::modularfilter::ModularFilter']]],
+  ['measurementupdateml',['measurementUpdateML',['../classmodest_1_1modularfilter_1_1ModularFilter.html#af1a7d5a4e219c494de176f94997ae110',1,'modest::modularfilter::ModularFilter']]],
+  ['mjd2seconds',['MJD2seconds',['../classmodest_1_1signals_1_1periodicxraysource_1_1PeriodicXRaySource.html#a75b3899dab7d513677ec0057078a6e11',1,'modest.signals.periodicxraysource.PeriodicXRaySource.MJD2seconds()'],['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#abdd0337b42d16288c8ad3dede15a99f2',1,'modest.signals.xraysource.PeriodicXRaySource.MJD2seconds()']]]
 ];

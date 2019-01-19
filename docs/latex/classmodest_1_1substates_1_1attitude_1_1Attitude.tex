@@ -26,13 +26,13 @@ Collaboration diagram for modest.\+substates.\+attitude.\+Attitude\+:\nopagebrea
 \subsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a6ae719302c377bbdb530a2edc4aa9f63}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self, attitude\+Quaternion=Quaternion(\mbox{[}1, 0, 0, 0\mbox{]}), attitude\+Error\+Covariance=np.\+eye(3), gyro\+Bias=np.\+zeros(3), gyro\+Bias\+Covariance=np.\+eye(3), t=0)
-\begin{DoxyCompactList}\small\item\em The \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a6ae719302c377bbdb530a2edc4aa9f63}{\+\_\+\+\_\+init\+\_\+\+\_\+} method initializes the 6\+D\+OF attitude estimator \end{DoxyCompactList}\item 
+def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_af09cd863335efb09a7a78bafd7b52ff6}{\+\_\+\+\_\+init\+\_\+\+\_\+} (self, attitude\+Quaternion=Quaternion(\mbox{[}1, 0, 0, 0\mbox{]}), attitude\+Error\+Covariance=np.\+eye(3), gyro\+Bias=np.\+zeros(3), gyro\+Bias\+Covariance=np.\+eye(3), t=0, covariance\+Storage=\textquotesingle{}\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a6e308aadd13962e476d2892ec728e3a5}{covariance}\textquotesingle{}, \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a528738f0ad3971fd2476007cc5ef0e1e}{use\+Unit\+Vector}=True)
+\begin{DoxyCompactList}\small\item\em The \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_af09cd863335efb09a7a78bafd7b52ff6}{\+\_\+\+\_\+init\+\_\+\+\_\+} method initializes the 6\+D\+OF attitude estimator \end{DoxyCompactList}\item 
 def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a7ed2c772a331dadab761afd11d980c9e}{store\+State\+Vector} (self, sv\+Dict)
 \begin{DoxyCompactList}\small\item\em store\+State\+Vector is responsible for taking an updated version of the state vector, and storing it in the class variables. \end{DoxyCompactList}\item 
 def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a07af5c587e6576e3421197a20880222e}{time\+Update} (self, dT, dynamics=None)
 \begin{DoxyCompactList}\small\item\em time\+Update returns the time-\/update matrices, and handles the internal time update of the attitude estimate \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a22a550534d908153baef2e52f7142c5e}{q\+Hat}. \end{DoxyCompactList}\item 
-def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_ac150d71af97353d06dda45984d20dbab}{get\+Measurement\+Matrices} (self, measurement, source=None)
+def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a62e542f722f0d5b50694ca3366ab81f0}{get\+Measurement\+Matrices} (self, measurement, source=None, \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a528738f0ad3971fd2476007cc5ef0e1e}{use\+Unit\+Vector}=None)
 \begin{DoxyCompactList}\small\item\em get\+Measurement\+Matrices computes and returns measurement update matrices \end{DoxyCompactList}\item 
 def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_ae21ed62061b674b0108f205df2122083}{quaternion\+Time\+Update\+Matrix} (self, my\+Omega, deltaT)
 \begin{DoxyCompactList}\small\item\em quaternion\+Time\+Update\+Matrix produces a time-\/update matrix for the attitude quaternion \end{DoxyCompactList}\item 
@@ -40,25 +40,31 @@ def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a06165c15ac5d742
 \begin{DoxyCompactList}\small\item\em error\+State\+Time\+Update\+Matrix produces a time-\/update matrix for the attitude error state \end{DoxyCompactList}\item 
 def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a11f6e9a0803c6843d7c89061ffbb3c2c}{process\+Noise\+Matrix} (self, deltaT, omega\+Var, bias\+Var)
 \begin{DoxyCompactList}\small\item\em process\+Noise\+Matrix generates a the process noise matrix \end{DoxyCompactList}\item 
-def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a1506706112528d3d926a77121bac7b1c}{Ra\+Dec\+Meas\+Matrices} (self, source, measurement)
-\begin{DoxyCompactList}\small\item\em Ra\+Dec\+Meas\+Matrices generates measurement matrices for a angle measurement of a point source. \end{DoxyCompactList}\item 
-def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_aaca8893538cf2e6118214ea9cef69055}{euler\+Angles} (self)
+def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a7b095e94e776bfc84b1ee3efe589e024}{Ra\+Dec\+Measurement\+Matrices} (self, source, measurement)
+\begin{DoxyCompactList}\small\item\em Ra\+Dec\+Measurement\+Matrices \end{DoxyCompactList}\item 
+def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a64a5d1ac99db8b5badc3baf1f101ad7d}{unit\+Vector\+Measurment\+Matrices} (self, source, measurement)
+\begin{DoxyCompactList}\small\item\em unit\+Vector\+Measurment\+Matrices generates measurement matrices for a angle measurement of a point source. \end{DoxyCompactList}\item 
+def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a39613e54a98638ebae88539212c723c9}{euler\+Angles} (self, t=None)
 \begin{DoxyCompactList}\small\item\em euler\+Angles computes the Euler angles (roll, pitch and yaw) based on the current attitude. \end{DoxyCompactList}\item 
 def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a6fdadf88372f53c3ac216eaf015947db}{Ra\+Dec\+Roll} (self)
 \begin{DoxyCompactList}\small\item\em Ra\+Dec\+Roll returns the current attitude in terms of right ascension, declination, and roll \end{DoxyCompactList}\item 
 def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_ae6d69671cf2517be4ad69bee7498e665}{sid\+Unit\+Vec} (self, Ra\+Dec)
 \begin{DoxyCompactList}\small\item\em sid\+Unit\+Vec generates a unit vector from two angles \end{DoxyCompactList}\item 
 def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_ae6f156a198d9c2328ddffde498c1ca19}{skew\+Symmetric} (self, vector)
-\begin{DoxyCompactList}\small\item\em skew\+Symmetric generates a skew-\/symmetric matrix from a 3x1 vector \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em skew\+Symmetric generates a skew-\/symmetric matrix from a 3x1 vector \end{DoxyCompactList}\item 
+def \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a6d0d2b9fcd181bdbf9cb55f370e1b575}{euler\+S\+TD} (self)
+\end{DoxyCompactItemize}
 \begin{Indent}{\bf Mandatory Sub\+State Functions}\par
 {\em The following functions are functions which are required for the Sub\+State to function as a sub-\/state in State.\+Modular\+Filter. }\begin{DoxyCompactItemize}
 \item 
-def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_aa18c8238415131b4b63cef0e4b2ff9fd}{get\+State\+Vector} (self)
-\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_aa18c8238415131b4b63cef0e4b2ff9fd}{get\+State\+Vector} returns the most recent value of the state vector \end{DoxyCompactList}\item 
+def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}{get\+State\+Vector} (self, t=None)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}{get\+State\+Vector} returns the most recent value of the state vector \end{DoxyCompactList}\item 
 def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a6e308aadd13962e476d2892ec728e3a5}{covariance} (self)
 \begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a6e308aadd13962e476d2892ec728e3a5}{covariance} returns the \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState}{Sub\+State} covariance matrix \end{DoxyCompactList}\item 
 def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} (self)
-\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} returns the dimension of the sub-\/state vector \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} returns the dimension of the sub-\/state vector \end{DoxyCompactList}\item 
+def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a98901b80c96264945362ec50b489a636}{get\+Measurement\+Matrices} (self, measurement, source=None)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}{get\+State\+Vector} returns the most recent value of the state vector \end{DoxyCompactList}\end{DoxyCompactItemize}
 \end{Indent}
 \begin{Indent}{\bf Plotting Functions}\par
 {\em These functions provide generalized plotting capabilities }\begin{DoxyCompactItemize}
@@ -66,13 +72,19 @@ def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c
 def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1adac64be88eab0a64bb952518c4268f}{initialize\+Real\+Time\+Plot} (self, plot\+Handle=None, axis\+Handle=None)
 \item 
 def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a2deb7d1ca3105eb20e50fa7e67298355}{real\+Time\+Plot} (self, normalized=True)
+\item 
+def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a643678c1193dd4029683a437e84229ac}{time\+History\+Plot} (self)
+\item 
+def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1853d44036e3ed35ada02414ea29f8ab}{initialize\+Time\+History\+Plot} (self, plot\+Handle=None)
 \end{DoxyCompactItemize}
 \end{Indent}
 \subsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
+\hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a528738f0ad3971fd2476007cc5ef0e1e}{use\+Unit\+Vector}
+\item 
 \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a22a550534d908153baef2e52f7142c5e}{q\+Hat}
-\begin{DoxyCompactList}\small\item\em Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as $\mathbf{\hat{q}}^{-}_{k}$ for the a priori value, or $\mathbf{\hat{q}}^{+}_{k}$ for the a posteriori value. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as $\mathbf{\hat{q}}^{-}_{k}$ for the a priori value, or $\mathbf{\hat{q}}^{+}_{k}$ for the a posteriori. \end{DoxyCompactList}\item 
 \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_aac0bc92dc53893d2f190c1252690053c}{b\+Hat}
 \begin{DoxyCompactList}\small\item\em Current estimate of gyro bias. \end{DoxyCompactList}\item 
 \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a2f79616ca660e0cc1e628adf94738249}{P\+Hat}
@@ -85,11 +97,21 @@ def \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a2deb7d1ca3105eb
 \begin{DoxyCompactList}\small\item\em Last set of measurement matrices. \end{DoxyCompactList}\item 
 \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a38c12c9d0899bc1161f3502b584517a2}{state\+Vector\+History}
 \begin{DoxyCompactList}\small\item\em Stores the time-\/history of the sub-\/state state vector. \end{DoxyCompactList}\item 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a9b7a77e3b7dc14fc85962cda84e8cd58}{time\+List}
+\item 
 \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a37ded775b84cea85b4dce0f1b16286c4}{R\+T\+Plot\+Handle}
 \begin{DoxyCompactList}\small\item\em Stores handle for real-\/time plotting. \end{DoxyCompactList}\item 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_af1d5d3bbdf73cf1e78925c835f1c616e}{T\+H\+Plot\+Handle}
+\item 
 \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a9fefae1facc797a1132fb61a55e9ffa1}{R\+T\+Plot\+Data}
 \item 
 \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a497ccbb6658589b02568e87c6382222e}{R\+T\+Paxis\+Handle}
+\item 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a22c12497c37f47d54d4ea909f6423222}{T\+H\+Paxis\+List}
+\item 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a0e1d545f7ede186d89db38ca613633cf}{T\+H\+Plot\+Data\+List}
+\item 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a9659535520a27090d79be1957ecce2eb}{T\+H\+Plot\+Object\+List}
 \end{DoxyCompactItemize}
 
 
@@ -104,26 +126,28 @@ The state uses quaternions to store attitude, which avoids issues of gimbal lock
 
 The algorithms used for the state update mostly come from the book \char`\"{}\+Fundamentals of Spacecraft Attitude Determination and Control\char`\"{} (F\+S\+A\+DC) by Markley and Crassidis. Chapter, section and page numbers will be referenced where appropriate. 
 
-Definition at line 38 of file attitude.\+py.
+Definition at line 39 of file attitude.\+py.
 
 
 
 \subsection{Constructor \& Destructor Documentation}
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}}
 \index{\+\_\+\+\_\+init\+\_\+\+\_\+@{\+\_\+\+\_\+init\+\_\+\+\_\+}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
-\subsubsection[{\texorpdfstring{\+\_\+\+\_\+init\+\_\+\+\_\+(self, attitude\+Quaternion=\+Quaternion([1, 0, 0, 0]), attitude\+Error\+Covariance=np.\+eye(3), gyro\+Bias=np.\+zeros(3), gyro\+Bias\+Covariance=np.\+eye(3), t=0)}{__init__(self, attitudeQuaternion=Quaternion([1, 0, 0, 0]), attitudeErrorCovariance=np.eye(3), gyroBias=np.zeros(3), gyroBiasCovariance=np.eye(3), t=0)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+attitude.\+Attitude.\+\_\+\+\_\+init\+\_\+\+\_\+ (
+\subsubsection[{\texorpdfstring{\+\_\+\+\_\+init\+\_\+\+\_\+(self, attitude\+Quaternion=\+Quaternion([1, 0, 0, 0]), attitude\+Error\+Covariance=np.\+eye(3), gyro\+Bias=np.\+zeros(3), gyro\+Bias\+Covariance=np.\+eye(3), t=0, covariance\+Storage=\textquotesingle{}covariance\textquotesingle{}, use\+Unit\+Vector=\+True)}{__init__(self, attitudeQuaternion=Quaternion([1, 0, 0, 0]), attitudeErrorCovariance=np.eye(3), gyroBias=np.zeros(3), gyroBiasCovariance=np.eye(3), t=0, covarianceStorage='covariance', useUnitVector=True)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+attitude.\+Attitude.\+\_\+\+\_\+init\+\_\+\+\_\+ (
 \begin{DoxyParamCaption}
 \item[{}]{self, }
 \item[{}]{attitude\+Quaternion = {\ttfamily Quaternion(\mbox{[}1,0,0,0\mbox{]})}, }
 \item[{}]{attitude\+Error\+Covariance = {\ttfamily np.eye(3)}, }
 \item[{}]{gyro\+Bias = {\ttfamily np.zeros(3)}, }
 \item[{}]{gyro\+Bias\+Covariance = {\ttfamily np.eye(3)}, }
-\item[{}]{t = {\ttfamily 0}}
+\item[{}]{t = {\ttfamily 0}, }
+\item[{}]{covariance\+Storage = {\ttfamily \textquotesingle{}{\bf covariance}\textquotesingle{}}, }
+\item[{}]{use\+Unit\+Vector = {\ttfamily True}}
 \end{DoxyParamCaption}
-)}\hypertarget{classmodest_1_1substates_1_1attitude_1_1Attitude_a6ae719302c377bbdb530a2edc4aa9f63}{}\label{classmodest_1_1substates_1_1attitude_1_1Attitude_a6ae719302c377bbdb530a2edc4aa9f63}
+)}\hypertarget{classmodest_1_1substates_1_1attitude_1_1Attitude_af09cd863335efb09a7a78bafd7b52ff6}{}\label{classmodest_1_1substates_1_1attitude_1_1Attitude_af09cd863335efb09a7a78bafd7b52ff6}
 
 
-The \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a6ae719302c377bbdb530a2edc4aa9f63}{\+\_\+\+\_\+init\+\_\+\+\_\+} method initializes the 6\+D\+OF attitude estimator 
+The \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_af09cd863335efb09a7a78bafd7b52ff6}{\+\_\+\+\_\+init\+\_\+\+\_\+} method initializes the 6\+D\+OF attitude estimator 
 
 This function is responsible for initializing an instance of the \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude}{Attitude} class and storing all the variables as member variables.
 
@@ -142,7 +166,7 @@ This function is responsible for initializing an instance of the \hyperlink{clas
 \end{DoxyParams}
 
 
-Definition at line 64 of file attitude.\+py.
+Definition at line 67 of file attitude.\+py.
 
 
 
@@ -174,7 +198,7 @@ Returns the covaraince matrix
 \end{DoxyReturn}
 
 
-Definition at line 169 of file substate.\+py.
+Definition at line 185 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!dimension@{dimension}}
 \index{dimension@{dimension}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -203,7 +227,7 @@ Returns the dimension of state vector
 \end{DoxyReturn}
 
 
-Definition at line 194 of file substate.\+py.
+Definition at line 211 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!error\+State\+Time\+Update\+Matrix@{error\+State\+Time\+Update\+Matrix}}
 \index{error\+State\+Time\+Update\+Matrix@{error\+State\+Time\+Update\+Matrix}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -250,15 +274,16 @@ Returns the error-\/state time update matrix, $\boldsymbol{\Phi}$
 \end{DoxyReturn}
 
 
-Definition at line 464 of file attitude.\+py.
+Definition at line 485 of file attitude.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!euler\+Angles@{euler\+Angles}}
 \index{euler\+Angles@{euler\+Angles}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
-\subsubsection[{\texorpdfstring{euler\+Angles(self)}{eulerAngles(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+attitude.\+Attitude.\+euler\+Angles (
+\subsubsection[{\texorpdfstring{euler\+Angles(self, t=\+None)}{eulerAngles(self, t=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+attitude.\+Attitude.\+euler\+Angles (
 \begin{DoxyParamCaption}
-\item[{}]{self}
+\item[{}]{self, }
+\item[{}]{t = {\ttfamily None}}
 \end{DoxyParamCaption}
-)}\hypertarget{classmodest_1_1substates_1_1attitude_1_1Attitude_aaca8893538cf2e6118214ea9cef69055}{}\label{classmodest_1_1substates_1_1attitude_1_1Attitude_aaca8893538cf2e6118214ea9cef69055}
+)}\hypertarget{classmodest_1_1substates_1_1attitude_1_1Attitude_a39613e54a98638ebae88539212c723c9}{}\label{classmodest_1_1substates_1_1attitude_1_1Attitude_a39613e54a98638ebae88539212c723c9}
 
 
 euler\+Angles computes the Euler angles (roll, pitch and yaw) based on the current attitude. 
@@ -278,17 +303,66 @@ A list containing the three angles
 \end{DoxyReturn}
 
 
-Definition at line 695 of file attitude.\+py.
+Definition at line 836 of file attitude.\+py.
+
+\index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!euler\+S\+TD@{euler\+S\+TD}}
+\index{euler\+S\+TD@{euler\+S\+TD}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
+\subsubsection[{\texorpdfstring{euler\+S\+T\+D(self)}{eulerSTD(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+attitude.\+Attitude.\+euler\+S\+TD (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1substates_1_1attitude_1_1Attitude_a6d0d2b9fcd181bdbf9cb55f370e1b575}{}\label{classmodest_1_1substates_1_1attitude_1_1Attitude_a6d0d2b9fcd181bdbf9cb55f370e1b575}
+
+
+Definition at line 924 of file attitude.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!get\+Measurement\+Matrices@{get\+Measurement\+Matrices}}
 \index{get\+Measurement\+Matrices@{get\+Measurement\+Matrices}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
-\subsubsection[{\texorpdfstring{get\+Measurement\+Matrices(self, measurement, source=\+None)}{getMeasurementMatrices(self, measurement, source=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+attitude.\+Attitude.\+get\+Measurement\+Matrices (
+\subsubsection[{\texorpdfstring{get\+Measurement\+Matrices(self, measurement, source=\+None)}{getMeasurementMatrices(self, measurement, source=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+substate.\+Sub\+State.\+get\+Measurement\+Matrices (
 \begin{DoxyParamCaption}
 \item[{}]{self, }
 \item[{}]{measurement, }
 \item[{}]{source = {\ttfamily None}}
 \end{DoxyParamCaption}
-)}\hypertarget{classmodest_1_1substates_1_1attitude_1_1Attitude_ac150d71af97353d06dda45984d20dbab}{}\label{classmodest_1_1substates_1_1attitude_1_1Attitude_ac150d71af97353d06dda45984d20dbab}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a98901b80c96264945362ec50b489a636}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a98901b80c96264945362ec50b489a636}
+
+
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}{get\+State\+Vector} returns the most recent value of the state vector 
+
+The \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}{get\+State\+Vector} method is responsible for returning a dictionary object containing, at minimim, the following items\+:
+
+
+\begin{DoxyItemize}
+\item \textquotesingle{}state\+Vector\textquotesingle{}\+: A length \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} array containing the most recent state vector estimate
+\item \textquotesingle{}covariance\textquotesingle{}\+: A (\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension} x \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_ab9027f6d1d7d57c47731612f519b7ee6}{dimension}) array containing the most recent covariance matrix
+\item \textquotesingle{}a\+Priori\textquotesingle{}\+: A boolean indicating if the most recent estimate is the
+\item result of a time update (a\+Priori=True) or a measurement update (a\+Priori=False)
+\end{DoxyItemize}
+
+This function can be used as-\/is, or can be overloaded to perform additional tasks specific to the substate.
+
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The dictionary containing the state vector, covariance matrix, and a\+Priori status 
+\end{DoxyReturn}
+
+
+Definition at line 254 of file substate.\+py.
+
+\index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!get\+Measurement\+Matrices@{get\+Measurement\+Matrices}}
+\index{get\+Measurement\+Matrices@{get\+Measurement\+Matrices}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
+\subsubsection[{\texorpdfstring{get\+Measurement\+Matrices(self, measurement, source=\+None, use\+Unit\+Vector=\+None)}{getMeasurementMatrices(self, measurement, source=None, useUnitVector=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+attitude.\+Attitude.\+get\+Measurement\+Matrices (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{measurement, }
+\item[{}]{source = {\ttfamily None}, }
+\item[{}]{use\+Unit\+Vector = {\ttfamily None}}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1substates_1_1attitude_1_1Attitude_a62e542f722f0d5b50694ca3366ab81f0}{}\label{classmodest_1_1substates_1_1attitude_1_1Attitude_a62e542f722f0d5b50694ca3366ab81f0}
 
 
 get\+Measurement\+Matrices computes and returns measurement update matrices 
@@ -315,20 +389,21 @@ Sub\+States.\+Sub\+State.\+get\+Measurement\+Matrices
 \end{DoxySeeAlso}
 
 
-Definition at line 285 of file attitude.\+py.
+Definition at line 294 of file attitude.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!get\+State\+Vector@{get\+State\+Vector}}
 \index{get\+State\+Vector@{get\+State\+Vector}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
-\subsubsection[{\texorpdfstring{get\+State\+Vector(self)}{getStateVector(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+substate.\+Sub\+State.\+get\+State\+Vector (
+\subsubsection[{\texorpdfstring{get\+State\+Vector(self, t=\+None)}{getStateVector(self, t=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+substate.\+Sub\+State.\+get\+State\+Vector (
 \begin{DoxyParamCaption}
-\item[{}]{self}
+\item[{}]{self, }
+\item[{}]{t = {\ttfamily None}}
 \end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_aa18c8238415131b4b63cef0e4b2ff9fd}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_aa18c8238415131b4b63cef0e4b2ff9fd}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}
 
 
-\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_aa18c8238415131b4b63cef0e4b2ff9fd}{get\+State\+Vector} returns the most recent value of the state vector 
+\hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}{get\+State\+Vector} returns the most recent value of the state vector 
 
-The \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_aa18c8238415131b4b63cef0e4b2ff9fd}{get\+State\+Vector} method is responsible for returning a dictionary object containing, at minimim, the following items\+:
+The \hyperlink{classmodest_1_1substates_1_1substate_1_1SubState_a1d8050de59c58969164f577899a55aa2}{get\+State\+Vector} method is responsible for returning a dictionary object containing, at minimim, the following items\+:
 
 
 \begin{DoxyItemize}
@@ -350,7 +425,7 @@ The dictionary containing the state vector, covariance matrix, and a\+Priori sta
 \end{DoxyReturn}
 
 
-Definition at line 126 of file substate.\+py.
+Definition at line 135 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!initialize\+Real\+Time\+Plot@{initialize\+Real\+Time\+Plot}}
 \index{initialize\+Real\+Time\+Plot@{initialize\+Real\+Time\+Plot}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -363,7 +438,19 @@ Definition at line 126 of file substate.\+py.
 )\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a1adac64be88eab0a64bb952518c4268f}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a1adac64be88eab0a64bb952518c4268f}
 
 
-Definition at line 254 of file substate.\+py.
+Definition at line 271 of file substate.\+py.
+
+\index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!initialize\+Time\+History\+Plot@{initialize\+Time\+History\+Plot}}
+\index{initialize\+Time\+History\+Plot@{initialize\+Time\+History\+Plot}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
+\subsubsection[{\texorpdfstring{initialize\+Time\+History\+Plot(self, plot\+Handle=\+None)}{initializeTimeHistoryPlot(self, plotHandle=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+substate.\+Sub\+State.\+initialize\+Time\+History\+Plot (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{plot\+Handle = {\ttfamily None}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a1853d44036e3ed35ada02414ea29f8ab}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a1853d44036e3ed35ada02414ea29f8ab}
+
+
+Definition at line 350 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!process\+Noise\+Matrix@{process\+Noise\+Matrix}}
 \index{process\+Noise\+Matrix@{process\+Noise\+Matrix}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -403,7 +490,7 @@ Returns the comibined 6x6 process noise matrix
 \end{DoxyReturn}
 
 
-Definition at line 534 of file attitude.\+py.
+Definition at line 555 of file attitude.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!quaternion\+Time\+Update\+Matrix@{quaternion\+Time\+Update\+Matrix}}
 \index{quaternion\+Time\+Update\+Matrix@{quaternion\+Time\+Update\+Matrix}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -448,53 +535,24 @@ The quaternion time-\/update matrix $\bar{\Theta}(\omegaVec[est=True,aPriori=Tru
 \end{DoxyReturn}
 
 
-Definition at line 380 of file attitude.\+py.
+Definition at line 401 of file attitude.\+py.
 
-\index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!Ra\+Dec\+Meas\+Matrices@{Ra\+Dec\+Meas\+Matrices}}
-\index{Ra\+Dec\+Meas\+Matrices@{Ra\+Dec\+Meas\+Matrices}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
-\subsubsection[{\texorpdfstring{Ra\+Dec\+Meas\+Matrices(self, source, measurement)}{RaDecMeasMatrices(self, source, measurement)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+attitude.\+Attitude.\+Ra\+Dec\+Meas\+Matrices (
+\index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!Ra\+Dec\+Measurement\+Matrices@{Ra\+Dec\+Measurement\+Matrices}}
+\index{Ra\+Dec\+Measurement\+Matrices@{Ra\+Dec\+Measurement\+Matrices}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
+\subsubsection[{\texorpdfstring{Ra\+Dec\+Measurement\+Matrices(self, source, measurement)}{RaDecMeasurementMatrices(self, source, measurement)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+attitude.\+Attitude.\+Ra\+Dec\+Measurement\+Matrices (
 \begin{DoxyParamCaption}
 \item[{}]{self, }
 \item[{}]{source, }
 \item[{}]{measurement}
 \end{DoxyParamCaption}
-)}\hypertarget{classmodest_1_1substates_1_1attitude_1_1Attitude_a1506706112528d3d926a77121bac7b1c}{}\label{classmodest_1_1substates_1_1attitude_1_1Attitude_a1506706112528d3d926a77121bac7b1c}
+)}\hypertarget{classmodest_1_1substates_1_1attitude_1_1Attitude_a7b095e94e776bfc84b1ee3efe589e024}{}\label{classmodest_1_1substates_1_1attitude_1_1Attitude_a7b095e94e776bfc84b1ee3efe589e024}
 
 
-Ra\+Dec\+Meas\+Matrices generates measurement matrices for a angle measurement of a point source. 
-
-This function generates the set of measurement matrices $ \mathbf{H} $, $ \mathbf{dY} $, and $ \mathbf{R} $ corresponding to an inferred unit vector measurement from a set of two angle measurments (local right ascension and declination of a point source).
-
-The measurement matrices are a function of the measurement itself, the source from which the measurement originated, and the current estimate of attitude, \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a22a550534d908153baef2e52f7142c5e}{q\+Hat}. They are defined as follows\+:
-
-\[ \mathbf{H}_k[\sv[aPriori=True,timeIndex=k]] = A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \times \]
-
-\[ \mathbf{dY} = \measurementVec[S](\RADEC) - A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \]
-
-\[ \mathbf{R} = \eye[3] \sigma^2_{\RADEC} \]
-
-The measured unit vector is a unit vector computed from the measured angles, using \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_ae6d69671cf2517be4ad69bee7498e665}{sid\+Unit\+Vec}.
-
-See Fundamentals of Spacecraft \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude}{Attitude} Determination and Control, Section 6.\+2.\+4, page 257, Table 6.\+3 for more details and derivation.
-
-\begin{DoxyNote}{Note}
-Currently, the measurement noise matrix is an identity matrix mutiplied by the angle measurement error. This is my interpretation of Section 6.\+2.\+3 in F\+S\+A\+DC. However, if we derive the measurement noise matrix using the usual E\+KF method, we get a different result which results in an unstable estimator. I\textquotesingle{}m not convinced I understand why this method is right, or why the E\+KF method is unstable, but it works, so we\textquotesingle{}re using it for now.
-\end{DoxyNote}
-
-\begin{DoxyParams}{Parameters}
-{\em self} & The object pointer \\
-\hline
-{\em source} & A Signals.\+Point\+Source object from which the measurement was generated. \\
-\hline
-{\em measurement} & A dictionary containing the right ascension and declination measurements as sub-\/dictionaries, each with their own value and variance.\\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-A dictionary containing the measurement matrices H, R, and dY 
-\end{DoxyReturn}
+Ra\+Dec\+Measurement\+Matrices 
 
 
-Definition at line 613 of file attitude.\+py.
+
+Definition at line 582 of file attitude.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!Ra\+Dec\+Roll@{Ra\+Dec\+Roll}}
 \index{Ra\+Dec\+Roll@{Ra\+Dec\+Roll}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -522,7 +580,7 @@ A list containing the three angles
 \end{DoxyReturn}
 
 
-Definition at line 719 of file attitude.\+py.
+Definition at line 861 of file attitude.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!real\+Time\+Plot@{real\+Time\+Plot}}
 \index{real\+Time\+Plot@{real\+Time\+Plot}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -534,7 +592,7 @@ Definition at line 719 of file attitude.\+py.
 )\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a2deb7d1ca3105eb20e50fa7e67298355}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a2deb7d1ca3105eb20e50fa7e67298355}
 
 
-Definition at line 281 of file substate.\+py.
+Definition at line 298 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!sid\+Unit\+Vec@{sid\+Unit\+Vec}}
 \index{sid\+Unit\+Vec@{sid\+Unit\+Vec}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -554,7 +612,7 @@ This function computes the unit vector in siderial coordinates from a measuremen
 \begin{DoxyParams}{Parameters}
 {\em self} & Object pointer \\
 \hline
-{\em Ra\+Dec} & A dictionary containing the two angles\\
+{\em Ra\+Dec} & A dictionary containing the two angles, in radians\\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -562,7 +620,7 @@ A unit vector generated from the angles given
 \end{DoxyReturn}
 
 
-Definition at line 738 of file attitude.\+py.
+Definition at line 880 of file attitude.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!skew\+Symmetric@{skew\+Symmetric}}
 \index{skew\+Symmetric@{skew\+Symmetric}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -590,7 +648,7 @@ The skew symmetric matrix
 \end{DoxyReturn}
 
 
-Definition at line 760 of file attitude.\+py.
+Definition at line 910 of file attitude.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!store\+State\+Vector@{store\+State\+Vector}}
 \index{store\+State\+Vector@{store\+State\+Vector}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -620,7 +678,18 @@ Sub\+States.\+Sub\+State.\+store\+State\+Vector
 \end{DoxySeeAlso}
 
 
-Definition at line 146 of file attitude.\+py.
+Definition at line 153 of file attitude.\+py.
+
+\index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!time\+History\+Plot@{time\+History\+Plot}}
+\index{time\+History\+Plot@{time\+History\+Plot}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
+\subsubsection[{\texorpdfstring{time\+History\+Plot(self)}{timeHistoryPlot(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+substate.\+Sub\+State.\+time\+History\+Plot (
+\begin{DoxyParamCaption}
+\item[{}]{self}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a643678c1193dd4029683a437e84229ac}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a643678c1193dd4029683a437e84229ac}
+
+
+Definition at line 328 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!time\+Update@{time\+Update}}
 \index{time\+Update@{time\+Update}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -656,7 +725,53 @@ Sub\+States.\+Sub\+State.\+time\+Update
 \end{DoxySeeAlso}
 
 
-Definition at line 217 of file attitude.\+py.
+Definition at line 225 of file attitude.\+py.
+
+\index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!unit\+Vector\+Measurment\+Matrices@{unit\+Vector\+Measurment\+Matrices}}
+\index{unit\+Vector\+Measurment\+Matrices@{unit\+Vector\+Measurment\+Matrices}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
+\subsubsection[{\texorpdfstring{unit\+Vector\+Measurment\+Matrices(self, source, measurement)}{unitVectorMeasurmentMatrices(self, source, measurement)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+substates.\+attitude.\+Attitude.\+unit\+Vector\+Measurment\+Matrices (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{source, }
+\item[{}]{measurement}
+\end{DoxyParamCaption}
+)}\hypertarget{classmodest_1_1substates_1_1attitude_1_1Attitude_a64a5d1ac99db8b5badc3baf1f101ad7d}{}\label{classmodest_1_1substates_1_1attitude_1_1Attitude_a64a5d1ac99db8b5badc3baf1f101ad7d}
+
+
+unit\+Vector\+Measurment\+Matrices generates measurement matrices for a angle measurement of a point source. 
+
+This function generates the set of measurement matrices $ \mathbf{H} $, $ \mathbf{dY} $, and $ \mathbf{R} $ corresponding to an inferred unit vector measurement from a set of two angle measurments (local right ascension and declination of a point source).
+
+The measurement matrices are a function of the measurement itself, the source from which the measurement originated, and the current estimate of attitude, \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a22a550534d908153baef2e52f7142c5e}{q\+Hat}. They are defined as follows\+:
+
+\[ \mathbf{H}_k[\sv[aPriori=True,timeIndex=k]] = A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \times \]
+
+\[ \mathbf{dY} = \measurementVec[S](\RADEC) - A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \]
+
+\[ \mathbf{R} = \eye[3] \sigma^2_{\RADEC} \]
+
+The measured unit vector is a unit vector computed from the measured angles, using \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_ae6d69671cf2517be4ad69bee7498e665}{sid\+Unit\+Vec}.
+
+See Fundamentals of Spacecraft \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude}{Attitude} Determination and Control, Section 6.\+2.\+4, page 257, Table 6.\+3 for more details and derivation.
+
+\begin{DoxyNote}{Note}
+Currently, the measurement noise matrix is an identity matrix mutiplied by the angle measurement error. This is my interpretation of Section 6.\+2.\+3 in F\+S\+A\+DC. However, if we derive the measurement noise matrix using the usual E\+KF method, we get a different result which results in an unstable estimator. I\textquotesingle{}m not convinced I understand why this method is right, or why the E\+KF method is unstable, but it works, so we\textquotesingle{}re using it for now.
+\end{DoxyNote}
+
+\begin{DoxyParams}{Parameters}
+{\em self} & The object pointer \\
+\hline
+{\em source} & A Signals.\+Point\+Source object from which the measurement was generated. \\
+\hline
+{\em measurement} & A dictionary containing the right ascension and declination measurements as sub-\/dictionaries, each with their own value and variance.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A dictionary containing the measurement matrices H, R, and dY 
+\end{DoxyReturn}
+
+
+Definition at line 752 of file attitude.\+py.
 
 
 
@@ -670,7 +785,7 @@ Current estimate of gyro bias.
 
 
 
-Definition at line 74 of file attitude.\+py.
+Definition at line 77 of file attitude.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!last\+Meas\+ID@{last\+Meas\+ID}}
 \index{last\+Meas\+ID@{last\+Meas\+ID}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -681,7 +796,7 @@ Last measurement used to generate measurement matrices.
 
 
 
-Definition at line 86 of file attitude.\+py.
+Definition at line 92 of file attitude.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!last\+Meas\+Mat@{last\+Meas\+Mat}}
 \index{last\+Meas\+Mat@{last\+Meas\+Mat}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -692,7 +807,7 @@ Last set of measurement matrices.
 
 This allows class to avoid redundant computation of the same set of measurement matrices. 
 
-Definition at line 94 of file attitude.\+py.
+Definition at line 100 of file attitude.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!last\+Source\+ID@{last\+Source\+ID}}
 \index{last\+Source\+ID@{last\+Source\+ID}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -703,7 +818,7 @@ Last signal used to generate measurement matrices.
 
 
 
-Definition at line 89 of file attitude.\+py.
+Definition at line 95 of file attitude.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!P\+Hat@{P\+Hat}}
 \index{P\+Hat@{P\+Hat}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -714,32 +829,32 @@ Current joint covariance matrix.
 
 Upper 3x3 diagonal contains covariance of the attitude estimate (related to \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_a22a550534d908153baef2e52f7142c5e}{q\+Hat}), while lower 3x3 diagonal contains the covariance of the gyro bias \hyperlink{classmodest_1_1substates_1_1attitude_1_1Attitude_aac0bc92dc53893d2f190c1252690053c}{b\+Hat}. 
 
-Definition at line 80 of file attitude.\+py.
+Definition at line 83 of file attitude.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!q\+Hat@{q\+Hat}}
 \index{q\+Hat@{q\+Hat}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
 \subsubsection[{\texorpdfstring{q\+Hat}{qHat}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+attitude.\+Attitude.\+q\+Hat}\hypertarget{classmodest_1_1substates_1_1attitude_1_1Attitude_a22a550534d908153baef2e52f7142c5e}{}\label{classmodest_1_1substates_1_1attitude_1_1Attitude_a22a550534d908153baef2e52f7142c5e}
 
 
-Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as $\mathbf{\hat{q}}^{-}_{k}$ for the a priori value, or $\mathbf{\hat{q}}^{+}_{k}$ for the a posteriori value. 
+Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as $\mathbf{\hat{q}}^{-}_{k}$ for the a priori value, or $\mathbf{\hat{q}}^{+}_{k}$ for the a posteriori. 
 
 
 
-Definition at line 71 of file attitude.\+py.
+Definition at line 74 of file attitude.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!R\+T\+Paxis\+Handle@{R\+T\+Paxis\+Handle}}
 \index{R\+T\+Paxis\+Handle@{R\+T\+Paxis\+Handle}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
 \subsubsection[{\texorpdfstring{R\+T\+Paxis\+Handle}{RTPaxisHandle}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+R\+T\+Paxis\+Handle\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a497ccbb6658589b02568e87c6382222e}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a497ccbb6658589b02568e87c6382222e}
 
 
-Definition at line 262 of file substate.\+py.
+Definition at line 279 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!R\+T\+Plot\+Data@{R\+T\+Plot\+Data}}
 \index{R\+T\+Plot\+Data@{R\+T\+Plot\+Data}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
 \subsubsection[{\texorpdfstring{R\+T\+Plot\+Data}{RTPlotData}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+R\+T\+Plot\+Data\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a9fefae1facc797a1132fb61a55e9ffa1}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a9fefae1facc797a1132fb61a55e9ffa1}
 
 
-Definition at line 96 of file substate.\+py.
+Definition at line 105 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!R\+T\+Plot\+Handle@{R\+T\+Plot\+Handle}}
 \index{R\+T\+Plot\+Handle@{R\+T\+Plot\+Handle}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -750,7 +865,7 @@ Stores handle for real-\/time plotting.
 
 
 
-Definition at line 94 of file substate.\+py.
+Definition at line 102 of file substate.\+py.
 
 \index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!state\+Vector\+History@{state\+Vector\+History}}
 \index{state\+Vector\+History@{state\+Vector\+History}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
@@ -759,9 +874,51 @@ Definition at line 94 of file substate.\+py.
 
 Stores the time-\/history of the sub-\/state state vector. 
 
+self.\+state\+Vector\+History = Smart\+Panda(data=state\+Vector\+History) 
+
+Definition at line 98 of file substate.\+py.
+
+\index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!T\+H\+Paxis\+List@{T\+H\+Paxis\+List}}
+\index{T\+H\+Paxis\+List@{T\+H\+Paxis\+List}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
+\subsubsection[{\texorpdfstring{T\+H\+Paxis\+List}{THPaxisList}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+T\+H\+Paxis\+List\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a22c12497c37f47d54d4ea909f6423222}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a22c12497c37f47d54d4ea909f6423222}
 
 
-Definition at line 91 of file substate.\+py.
+Definition at line 360 of file substate.\+py.
+
+\index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!T\+H\+Plot\+Data\+List@{T\+H\+Plot\+Data\+List}}
+\index{T\+H\+Plot\+Data\+List@{T\+H\+Plot\+Data\+List}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
+\subsubsection[{\texorpdfstring{T\+H\+Plot\+Data\+List}{THPlotDataList}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+T\+H\+Plot\+Data\+List\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a0e1d545f7ede186d89db38ca613633cf}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a0e1d545f7ede186d89db38ca613633cf}
+
+
+Definition at line 361 of file substate.\+py.
+
+\index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!T\+H\+Plot\+Handle@{T\+H\+Plot\+Handle}}
+\index{T\+H\+Plot\+Handle@{T\+H\+Plot\+Handle}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
+\subsubsection[{\texorpdfstring{T\+H\+Plot\+Handle}{THPlotHandle}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+T\+H\+Plot\+Handle\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_af1d5d3bbdf73cf1e78925c835f1c616e}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_af1d5d3bbdf73cf1e78925c835f1c616e}
+
+
+Definition at line 103 of file substate.\+py.
+
+\index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!T\+H\+Plot\+Object\+List@{T\+H\+Plot\+Object\+List}}
+\index{T\+H\+Plot\+Object\+List@{T\+H\+Plot\+Object\+List}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
+\subsubsection[{\texorpdfstring{T\+H\+Plot\+Object\+List}{THPlotObjectList}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+T\+H\+Plot\+Object\+List\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a9659535520a27090d79be1957ecce2eb}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a9659535520a27090d79be1957ecce2eb}
+
+
+Definition at line 362 of file substate.\+py.
+
+\index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!time\+List@{time\+List}}
+\index{time\+List@{time\+List}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
+\subsubsection[{\texorpdfstring{time\+List}{timeList}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+substate.\+Sub\+State.\+time\+List\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1substates_1_1substate_1_1SubState_a9b7a77e3b7dc14fc85962cda84e8cd58}{}\label{classmodest_1_1substates_1_1substate_1_1SubState_a9b7a77e3b7dc14fc85962cda84e8cd58}
+
+
+Definition at line 99 of file substate.\+py.
+
+\index{modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}!use\+Unit\+Vector@{use\+Unit\+Vector}}
+\index{use\+Unit\+Vector@{use\+Unit\+Vector}!modest\+::substates\+::attitude\+::\+Attitude@{modest\+::substates\+::attitude\+::\+Attitude}}
+\subsubsection[{\texorpdfstring{use\+Unit\+Vector}{useUnitVector}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+substates.\+attitude.\+Attitude.\+use\+Unit\+Vector}\hypertarget{classmodest_1_1substates_1_1attitude_1_1Attitude_a528738f0ad3971fd2476007cc5ef0e1e}{}\label{classmodest_1_1substates_1_1attitude_1_1Attitude_a528738f0ad3971fd2476007cc5ef0e1e}
+
+
+Definition at line 69 of file attitude.\+py.
 
 
 

@@ -106,8 +106,9 @@ Inheritance diagram for modest.substates.substate.SubState:</div>
 <div class="dyncontent">
 <div class="center"><img src="classmodest_1_1substates_1_1substate_1_1SubState__inherit__graph.png" border="0" usemap="#modest_8substates_8substate_8SubState_inherit__map" alt="Inheritance graph"/></div>
 <map name="modest_8substates_8substate_8SubState_inherit__map" id="modest_8substates_8substate_8SubState_inherit__map">
-<area shape="rect" id="node2" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html" title="Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states..." alt="" coords="264,5,441,47"/>
-<area shape="rect" id="node3" href="classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html" title="CorrelationVector estimates the correlation vector and delay between a signal and a time&#45;delayed meas..." alt="" coords="237,71,468,112"/>
+<area shape="rect" id="node2" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html" title="Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states..." alt="" coords="271,5,449,47"/>
+<area shape="rect" id="node3" href="classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html" title="CorrelationVector estimates the correlation vector and delay between a signal and a time&#45;delayed meas..." alt="" coords="245,71,475,112"/>
+<area shape="rect" id="node4" href="classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity.html" title="modest.substates.oneDimensional\lPositionVelocity.oneDPositionVelocity" alt="" coords="237,136,483,177"/>
 </map>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -119,9 +120,9 @@ Public Member Functions</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Mandatory SubState Functions</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>The following functions are functions which are required for the <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a> to function as a sub-state in State.ModularFilter. </p>
 </div></td></tr>
-<tr class="memitem:aa18c8238415131b4b63cef0e4b2ff9fd"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#aa18c8238415131b4b63cef0e4b2ff9fd">getStateVector</a> (self)</td></tr>
-<tr class="memdesc:aa18c8238415131b4b63cef0e4b2ff9fd"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#aa18c8238415131b4b63cef0e4b2ff9fd" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector  <a href="#aa18c8238415131b4b63cef0e4b2ff9fd">More...</a><br /></td></tr>
-<tr class="separator:aa18c8238415131b4b63cef0e4b2ff9fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d8050de59c58969164f577899a55aa2"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2">getStateVector</a> (self, t=None)</td></tr>
+<tr class="memdesc:a1d8050de59c58969164f577899a55aa2"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector  <a href="#a1d8050de59c58969164f577899a55aa2">More...</a><br /></td></tr>
+<tr class="separator:a1d8050de59c58969164f577899a55aa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3644149dc4cc19c0e32d0b7040998c96"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a3644149dc4cc19c0e32d0b7040998c96">storeStateVector</a> (self, svDict)</td></tr>
 <tr class="memdesc:a3644149dc4cc19c0e32d0b7040998c96"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a3644149dc4cc19c0e32d0b7040998c96" title="storeStateVector stores the most recent value of the state vector. ">storeStateVector</a> stores the most recent value of the state vector.  <a href="#a3644149dc4cc19c0e32d0b7040998c96">More...</a><br /></td></tr>
 <tr class="separator:a3644149dc4cc19c0e32d0b7040998c96"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -135,7 +136,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a06d147fa5babe4e147b3267e67054ab4"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a06d147fa5babe4e147b3267e67054ab4" title="timeUpdate returns time-update matrices ">timeUpdate</a> returns time-update matrices  <a href="#a06d147fa5babe4e147b3267e67054ab4">More...</a><br /></td></tr>
 <tr class="separator:a06d147fa5babe4e147b3267e67054ab4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98901b80c96264945362ec50b489a636"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a98901b80c96264945362ec50b489a636">getMeasurementMatrices</a> (self, measurement, source=None)</td></tr>
-<tr class="memdesc:a98901b80c96264945362ec50b489a636"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#aa18c8238415131b4b63cef0e4b2ff9fd" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector  <a href="#a98901b80c96264945362ec50b489a636">More...</a><br /></td></tr>
+<tr class="memdesc:a98901b80c96264945362ec50b489a636"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector  <a href="#a98901b80c96264945362ec50b489a636">More...</a><br /></td></tr>
 <tr class="separator:a98901b80c96264945362ec50b489a636"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Plotting Functions</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>These functions provide generalized plotting capabilities </p>
@@ -144,19 +145,33 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1adac64be88eab0a64bb952518c4268f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2deb7d1ca3105eb20e50fa7e67298355"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a2deb7d1ca3105eb20e50fa7e67298355">realTimePlot</a> (self, normalized=True)</td></tr>
 <tr class="separator:a2deb7d1ca3105eb20e50fa7e67298355"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a643678c1193dd4029683a437e84229ac"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a643678c1193dd4029683a437e84229ac">timeHistoryPlot</a> (self)</td></tr>
+<tr class="separator:a643678c1193dd4029683a437e84229ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1853d44036e3ed35ada02414ea29f8ab"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1853d44036e3ed35ada02414ea29f8ab">initializeTimeHistoryPlot</a> (self, plotHandle=None)</td></tr>
+<tr class="separator:a1853d44036e3ed35ada02414ea29f8ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a38c12c9d0899bc1161f3502b584517a2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a38c12c9d0899bc1161f3502b584517a2">stateVectorHistory</a></td></tr>
 <tr class="memdesc:a38c12c9d0899bc1161f3502b584517a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores the time-history of the sub-state state vector.  <a href="#a38c12c9d0899bc1161f3502b584517a2">More...</a><br /></td></tr>
 <tr class="separator:a38c12c9d0899bc1161f3502b584517a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b7a77e3b7dc14fc85962cda84e8cd58"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a9b7a77e3b7dc14fc85962cda84e8cd58">timeList</a></td></tr>
+<tr class="separator:a9b7a77e3b7dc14fc85962cda84e8cd58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37ded775b84cea85b4dce0f1b16286c4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a37ded775b84cea85b4dce0f1b16286c4">RTPlotHandle</a></td></tr>
 <tr class="memdesc:a37ded775b84cea85b4dce0f1b16286c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores handle for real-time plotting.  <a href="#a37ded775b84cea85b4dce0f1b16286c4">More...</a><br /></td></tr>
 <tr class="separator:a37ded775b84cea85b4dce0f1b16286c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1d5d3bbdf73cf1e78925c835f1c616e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#af1d5d3bbdf73cf1e78925c835f1c616e">THPlotHandle</a></td></tr>
+<tr class="separator:af1d5d3bbdf73cf1e78925c835f1c616e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fefae1facc797a1132fb61a55e9ffa1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a9fefae1facc797a1132fb61a55e9ffa1">RTPlotData</a></td></tr>
 <tr class="separator:a9fefae1facc797a1132fb61a55e9ffa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a497ccbb6658589b02568e87c6382222e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a497ccbb6658589b02568e87c6382222e">RTPaxisHandle</a></td></tr>
 <tr class="separator:a497ccbb6658589b02568e87c6382222e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22c12497c37f47d54d4ea909f6423222"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a22c12497c37f47d54d4ea909f6423222">THPaxisList</a></td></tr>
+<tr class="separator:a22c12497c37f47d54d4ea909f6423222"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e1d545f7ede186d89db38ca613633cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a0e1d545f7ede186d89db38ca613633cf">THPlotDataList</a></td></tr>
+<tr class="separator:a0e1d545f7ede186d89db38ca613633cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9659535520a27090d79be1957ecce2eb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a9659535520a27090d79be1957ecce2eb">THPlotObjectList</a></td></tr>
+<tr class="separator:a9659535520a27090d79be1957ecce2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -173,11 +188,11 @@ Static Private Attributes</h2></td></tr>
 <div class="textblock"><p>This is an abstract base class for objects used as sub-states in State.ModularFilter. </p>
 <p><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a> is an abstract base class that specifies the methods which are required for an object to function as a sub-state of State.ModularFilter.</p>
 <p>Some of these methods are implemented and most likely do not need to be reimplemented in a derived class implementation (for example the <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> and <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a6e308aadd13962e476d2892ec728e3a5" title="covariance returns the SubState covariance matrix ">covariance</a> methods.</p>
-<p>Other methods may have a rudimentary implementation that may be suitable for some derived classes, but not others, depending on the specific functionality of the derived class (for instance <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#aa18c8238415131b4b63cef0e4b2ff9fd" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> and <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a3644149dc4cc19c0e32d0b7040998c96" title="storeStateVector stores the most recent value of the state vector. ">storeStateVector</a>).</p>
+<p>Other methods may have a rudimentary implementation that may be suitable for some derived classes, but not others, depending on the specific functionality of the derived class (for instance <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> and <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a3644149dc4cc19c0e32d0b7040998c96" title="storeStateVector stores the most recent value of the state vector. ">storeStateVector</a>).</p>
 <p>Finally, some methods are specifically tagged as abstract methods and are not implemented at all. These methods must be implemented in the derived class. This is usually because there is no way to implement even a rudimentary version of what the method is supposed to do without having some knowledge of what kind of substate the derived class contains (for instance <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a06d147fa5babe4e147b3267e67054ab4" title="timeUpdate returns time-update matrices ">timeUpdate</a> and <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a98901b80c96264945362ec50b489a636" title="getStateVector returns the most recent value of the state vector ">getMeasurementMatrices</a>).</p>
 <p>In any case, the documentation for each method of <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a> contains a generalized description of what functionality the implementation should provide in a derived class. </p>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00037">37</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00036">36</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a51fb99c0857f81ea659ffeca810672a3"></a>
 <div class="memitem">
@@ -226,7 +241,7 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00061">61</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00060">60</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -256,7 +271,7 @@ Static Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the covaraince matrix </dd></dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00169">169</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00185">185</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -286,7 +301,7 @@ Static Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the dimension of state vector </dd></dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00194">194</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00211">211</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -320,8 +335,8 @@ Static Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#aa18c8238415131b4b63cef0e4b2ff9fd" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector </p>
-<p>The <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#aa18c8238415131b4b63cef0e4b2ff9fd" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> method is responsible for returning a dictionary object containing, at minimim, the following items:</p>
+<p><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector </p>
+<p>The <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> method is responsible for returning a dictionary object containing, at minimim, the following items:</p>
 <ul>
 <li>'stateVector': A length <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> array containing the most recent state vector estimate</li>
 <li>'covariance': A (<a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> x <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a>) array containing the most recent covariance matrix</li>
@@ -337,11 +352,11 @@ Static Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The dictionary containing the state vector, covariance matrix, and aPriori status </dd></dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00237">237</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00254">254</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aa18c8238415131b4b63cef0e4b2ff9fd"></a>
+<a class="anchor" id="a1d8050de59c58969164f577899a55aa2"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -349,14 +364,24 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">def modest.substates.substate.SubState.getStateVector </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>t</em> = <code>None</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#aa18c8238415131b4b63cef0e4b2ff9fd" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector </p>
-<p>The <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#aa18c8238415131b4b63cef0e4b2ff9fd" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> method is responsible for returning a dictionary object containing, at minimim, the following items:</p>
+<p><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector </p>
+<p>The <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> method is responsible for returning a dictionary object containing, at minimim, the following items:</p>
 <ul>
 <li>'stateVector': A length <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> array containing the most recent state vector estimate</li>
 <li>'covariance': A (<a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> x <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a>) array containing the most recent covariance matrix</li>
@@ -372,7 +397,7 @@ Static Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The dictionary containing the state vector, covariance matrix, and aPriori status </dd></dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00126">126</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00135">135</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -406,7 +431,35 @@ Static Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00254">254</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00271">271</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1853d44036e3ed35ada02414ea29f8ab"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def modest.substates.substate.SubState.initializeTimeHistoryPlot </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>plotHandle</em> = <code>None</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00350">350</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -434,7 +487,7 @@ Static Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00281">281</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00298">298</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -473,7 +526,25 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00151">151</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00165">165</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a643678c1193dd4029683a437e84229ac"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def modest.substates.substate.SubState.timeHistoryPlot </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00328">328</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -531,7 +602,7 @@ Static Private Attributes</h2></td></tr>
 </ul>
 </dd></dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00233">233</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00250">250</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -557,7 +628,7 @@ Static Private Attributes</h2></td></tr>
 <p>Stores the length of the state vector as seen by the ModularFilter. </p>
 <p>See the <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> function for details on implementation. </p>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00070">70</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00069">69</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -579,7 +650,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00038">38</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00037">37</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -593,7 +664,7 @@ Static Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00262">262</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00279">279</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -607,7 +678,7 @@ Static Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00096">96</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00105">105</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -623,7 +694,7 @@ Static Private Attributes</h2></td></tr>
 
 <p>Stores handle for real-time plotting. </p>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00094">94</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00102">102</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -638,8 +709,79 @@ Static Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Stores the time-history of the sub-state state vector. </p>
+<p>self.stateVectorHistory = SmartPanda(data=stateVectorHistory) </p>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00091">91</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00098">98</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a22c12497c37f47d54d4ea909f6423222"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">modest.substates.substate.SubState.THPaxisList</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00360">360</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0e1d545f7ede186d89db38ca613633cf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">modest.substates.substate.SubState.THPlotDataList</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00361">361</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af1d5d3bbdf73cf1e78925c835f1c616e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">modest.substates.substate.SubState.THPlotHandle</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00103">103</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9659535520a27090d79be1957ecce2eb"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">modest.substates.substate.SubState.THPlotObjectList</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00362">362</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9b7a77e3b7dc14fc85962cda84e8cd58"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">modest.substates.substate.SubState.timeList</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00099">99</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>

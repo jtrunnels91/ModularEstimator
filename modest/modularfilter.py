@@ -46,6 +46,7 @@ sys.path.append("/home/joel/Documents/astroSourceTracking/libraries")
 # respectively.  For instance, generation of time-update and measurement
 # update matrices is handled by the SubStates.SubState objects.
 class ModularFilter():
+    """ This is the ModularFilter Class """
     def __init__(
             self,
             measurementValidationThreshold=1e-3,

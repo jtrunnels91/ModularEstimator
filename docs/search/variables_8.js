@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['name',['name',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#aac8308319d4f31067e1087660a15db03',1,'modest::signals::xraysource::PeriodicXRaySource']]],
-  ['nextsignalid',['nextSignalID',['../classmodest_1_1signals_1_1signalsource_1_1SignalSource.html#a453eafb550b551adbec0903deb63dfce',1,'modest::signals::signalsource::SignalSource']]],
-  ['normalizeprofile',['normalizeProfile',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#ac7490bebcc1d508b7813ea274cc36702',1,'modest::signals::xraysource::PeriodicXRaySource']]]
+  ['internalnavfilter',['internalNavFilter',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#abed97a9642f23c9a7306d173ba37b428',1,'modest::substates::correlationvector::CorrelationVector']]]
 ];

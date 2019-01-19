@@ -29,11 +29,15 @@ def \hyperlink{classmodest_1_1signals_1_1pointsource_1_1PointSource_a295eb1a487e
 \item 
 def \hyperlink{classmodest_1_1signals_1_1pointsource_1_1PointSource_a133933430a784107258901e257778221}{unit\+Vec} (self, \hyperlink{classmodest_1_1signals_1_1pointsource_1_1PointSource_a295eb1a487e18c77029585ac2785db80}{Ra\+Dec}=None)
 \item 
+def \hyperlink{classmodest_1_1signals_1_1pointsource_1_1PointSource_abf359a17cf5bec4c51deef87c9e92cce}{generate\+Arrival\+Vector} (self, attitudeQ, A\+O\+A\+\_\+\+Std\+Dev=None)
+\item 
 def \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c2954f6ad61e4ca3518ea8ab}{signal\+ID} (self)
 \item 
 def \hyperlink{classmodest_1_1signals_1_1poissonsource_1_1StaticPoissonSource_a1754d94bff46d97817438bab552afef9}{compute\+Association\+Probability} (self, measurement)
 \item 
 def \hyperlink{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a2f8a73e6f51cbdcd0f1e646d6f4d4574}{compute\+Association\+Probability} (self, current\+Flux, measurement)
+\item 
+def \hyperlink{classmodest_1_1signals_1_1poissonsource_1_1StaticPoissonSource_acc0f087c93d5e90070f4cd0be95ace74}{generate\+Events} (self, t\+Max, t0=0)
 \item 
 def \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c2954f6ad61e4ca3518ea8ab}{signal\+ID} (self)
 \end{DoxyCompactItemize}
@@ -42,7 +46,13 @@ def \hyperlink{classmodest_1_1signals_1_1signalsource_1_1SignalSource_a9a64c6a9c
 \item 
 \hyperlink{classmodest_1_1signals_1_1xraysource_1_1StaticXRayPointSource_a45c2430decc163480da7732af27d1f99}{peak\+Photon\+Flux}
 \item 
+\hyperlink{classmodest_1_1signals_1_1pointsource_1_1PointSource_ac2dd52c4e1f7e6264c9d59a5ffbc43d1}{use\+Unit\+Vector}
+\item 
 \hyperlink{classmodest_1_1signals_1_1pointsource_1_1PointSource_a0924a2233bb4fd23e50d024e4f1b048e}{attitude\+State\+Name}
+\item 
+\hyperlink{classmodest_1_1signals_1_1pointsource_1_1PointSource_afde4a069238f53aaa11fbc54584b7a64}{last\+P\+DF}
+\item 
+\hyperlink{classmodest_1_1signals_1_1pointsource_1_1PointSource_a984b5a75c9e94cb3527707b9ac976f9e}{extent}
 \item 
 \hyperlink{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a34395fc83bd8743a0a5ee69f9392a606}{last\+Time}
 \item 
@@ -94,19 +104,7 @@ Definition at line 28 of file xraysource.\+py.
 )\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a2f8a73e6f51cbdcd0f1e646d6f4d4574}{}\label{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a2f8a73e6f51cbdcd0f1e646d6f4d4574}
 
 
-Definition at line 21 of file poissonsource.\+py.
-
-\index{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}!compute\+Association\+Probability@{compute\+Association\+Probability}}
-\index{compute\+Association\+Probability@{compute\+Association\+Probability}!modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}}
-\subsubsection[{\texorpdfstring{compute\+Association\+Probability(self, measurement)}{computeAssociationProbability(self, measurement)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+poissonsource.\+Static\+Poisson\+Source.\+compute\+Association\+Probability (
-\begin{DoxyParamCaption}
-\item[{}]{self, }
-\item[{}]{measurement}
-\end{DoxyParamCaption}
-)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1poissonsource_1_1StaticPoissonSource_a1754d94bff46d97817438bab552afef9}{}\label{classmodest_1_1signals_1_1poissonsource_1_1StaticPoissonSource_a1754d94bff46d97817438bab552afef9}
-
-
-Definition at line 38 of file poissonsource.\+py.
+Definition at line 23 of file poissonsource.\+py.
 
 \index{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}!compute\+Association\+Probability@{compute\+Association\+Probability}}
 \index{compute\+Association\+Probability@{compute\+Association\+Probability}!modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}}
@@ -122,6 +120,44 @@ Definition at line 38 of file poissonsource.\+py.
 
 Definition at line 41 of file xraysource.\+py.
 
+\index{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}!compute\+Association\+Probability@{compute\+Association\+Probability}}
+\index{compute\+Association\+Probability@{compute\+Association\+Probability}!modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}}
+\subsubsection[{\texorpdfstring{compute\+Association\+Probability(self, measurement)}{computeAssociationProbability(self, measurement)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+poissonsource.\+Static\+Poisson\+Source.\+compute\+Association\+Probability (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{measurement}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1poissonsource_1_1StaticPoissonSource_a1754d94bff46d97817438bab552afef9}{}\label{classmodest_1_1signals_1_1poissonsource_1_1StaticPoissonSource_a1754d94bff46d97817438bab552afef9}
+
+
+Definition at line 42 of file poissonsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}!generate\+Arrival\+Vector@{generate\+Arrival\+Vector}}
+\index{generate\+Arrival\+Vector@{generate\+Arrival\+Vector}!modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}}
+\subsubsection[{\texorpdfstring{generate\+Arrival\+Vector(self, attitude\+Q, A\+O\+A\+\_\+\+Std\+Dev=\+None)}{generateArrivalVector(self, attitudeQ, AOA_StdDev=None)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+pointsource.\+Point\+Source.\+generate\+Arrival\+Vector (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{attitudeQ, }
+\item[{}]{A\+O\+A\+\_\+\+Std\+Dev = {\ttfamily None}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1pointsource_1_1PointSource_abf359a17cf5bec4c51deef87c9e92cce}{}\label{classmodest_1_1signals_1_1pointsource_1_1PointSource_abf359a17cf5bec4c51deef87c9e92cce}
+
+
+Definition at line 143 of file pointsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}!generate\+Events@{generate\+Events}}
+\index{generate\+Events@{generate\+Events}!modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}}
+\subsubsection[{\texorpdfstring{generate\+Events(self, t\+Max, t0=0)}{generateEvents(self, tMax, t0=0)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+poissonsource.\+Static\+Poisson\+Source.\+generate\+Events (
+\begin{DoxyParamCaption}
+\item[{}]{self, }
+\item[{}]{t\+Max, }
+\item[{}]{t0 = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1poissonsource_1_1StaticPoissonSource_acc0f087c93d5e90070f4cd0be95ace74}{}\label{classmodest_1_1signals_1_1poissonsource_1_1StaticPoissonSource_acc0f087c93d5e90070f4cd0be95ace74}
+
+
+Definition at line 53 of file poissonsource.\+py.
+
 \index{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}!Ra\+Dec@{Ra\+Dec}}
 \index{Ra\+Dec@{Ra\+Dec}!modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}}
 \subsubsection[{\texorpdfstring{Ra\+Dec(self)}{RaDec(self)}}]{\setlength{\rightskip}{0pt plus 5cm}def modest.\+signals.\+pointsource.\+Point\+Source.\+Ra\+Dec (
@@ -131,7 +167,7 @@ Definition at line 41 of file xraysource.\+py.
 )\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1pointsource_1_1PointSource_a295eb1a487e18c77029585ac2785db80}{}\label{classmodest_1_1signals_1_1pointsource_1_1PointSource_a295eb1a487e18c77029585ac2785db80}
 
 
-Definition at line 21 of file pointsource.\+py.
+Definition at line 26 of file pointsource.\+py.
 
 \index{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}!signal\+ID@{signal\+ID}}
 \index{signal\+ID@{signal\+ID}!modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}}
@@ -165,7 +201,7 @@ Definition at line 17 of file signalsource.\+py.
 )\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1pointsource_1_1PointSource_a133933430a784107258901e257778221}{}\label{classmodest_1_1signals_1_1pointsource_1_1PointSource_a133933430a784107258901e257778221}
 
 
-Definition at line 26 of file pointsource.\+py.
+Definition at line 31 of file pointsource.\+py.
 
 
 
@@ -175,21 +211,35 @@ Definition at line 26 of file pointsource.\+py.
 \subsubsection[{\texorpdfstring{attitude\+State\+Name}{attitudeStateName}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+pointsource.\+Point\+Source.\+attitude\+State\+Name\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1pointsource_1_1PointSource_a0924a2233bb4fd23e50d024e4f1b048e}{}\label{classmodest_1_1signals_1_1pointsource_1_1PointSource_a0924a2233bb4fd23e50d024e4f1b048e}
 
 
-Definition at line 17 of file pointsource.\+py.
+Definition at line 21 of file pointsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}!extent@{extent}}
+\index{extent@{extent}!modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}}
+\subsubsection[{\texorpdfstring{extent}{extent}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+pointsource.\+Point\+Source.\+extent\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1pointsource_1_1PointSource_a984b5a75c9e94cb3527707b9ac976f9e}{}\label{classmodest_1_1signals_1_1pointsource_1_1PointSource_a984b5a75c9e94cb3527707b9ac976f9e}
+
+
+Definition at line 23 of file pointsource.\+py.
 
 \index{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}!flux@{flux}}
 \index{flux@{flux}!modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}}
 \subsubsection[{\texorpdfstring{flux}{flux}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+poissonsource.\+Poisson\+Source.\+flux\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a6f2c657ad936b921715d826ac74f7fe5}{}\label{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a6f2c657ad936b921715d826ac74f7fe5}
 
 
-Definition at line 14 of file poissonsource.\+py.
+Definition at line 16 of file poissonsource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}!last\+P\+DF@{last\+P\+DF}}
+\index{last\+P\+DF@{last\+P\+DF}!modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}}
+\subsubsection[{\texorpdfstring{last\+P\+DF}{lastPDF}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+pointsource.\+Point\+Source.\+last\+P\+DF\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1pointsource_1_1PointSource_afde4a069238f53aaa11fbc54584b7a64}{}\label{classmodest_1_1signals_1_1pointsource_1_1PointSource_afde4a069238f53aaa11fbc54584b7a64}
+
+
+Definition at line 22 of file pointsource.\+py.
 
 \index{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}!last\+Time@{last\+Time}}
 \index{last\+Time@{last\+Time}!modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}}
 \subsubsection[{\texorpdfstring{last\+Time}{lastTime}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+poissonsource.\+Poisson\+Source.\+last\+Time\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a34395fc83bd8743a0a5ee69f9392a606}{}\label{classmodest_1_1signals_1_1poissonsource_1_1PoissonSource_a34395fc83bd8743a0a5ee69f9392a606}
 
 
-Definition at line 13 of file poissonsource.\+py.
+Definition at line 15 of file poissonsource.\+py.
 
 \index{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}!next\+Signal\+ID@{next\+Signal\+ID}}
 \index{next\+Signal\+ID@{next\+Signal\+ID}!modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}}
@@ -211,6 +261,13 @@ Definition at line 8 of file signalsource.\+py.
 
 
 Definition at line 32 of file xraysource.\+py.
+
+\index{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}!use\+Unit\+Vector@{use\+Unit\+Vector}}
+\index{use\+Unit\+Vector@{use\+Unit\+Vector}!modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source@{modest\+::signals\+::xraysource\+::\+Static\+X\+Ray\+Point\+Source}}
+\subsubsection[{\texorpdfstring{use\+Unit\+Vector}{useUnitVector}}]{\setlength{\rightskip}{0pt plus 5cm}modest.\+signals.\+pointsource.\+Point\+Source.\+use\+Unit\+Vector\hspace{0.3cm}{\ttfamily [inherited]}}\hypertarget{classmodest_1_1signals_1_1pointsource_1_1PointSource_ac2dd52c4e1f7e6264c9d59a5ffbc43d1}{}\label{classmodest_1_1signals_1_1pointsource_1_1PointSource_ac2dd52c4e1f7e6264c9d59a5ffbc43d1}
+
+
+Definition at line 16 of file pointsource.\+py.
 
 
 

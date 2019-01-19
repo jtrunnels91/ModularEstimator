@@ -1,4 +1,5 @@
 <map id="modest.substates.substate.SubState" name="modest.substates.substate.SubState">
-<area shape="rect" id="node2" href="$classmodest_1_1substates_1_1attitude_1_1Attitude.html" title="Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states..." alt="" coords="264,5,441,47"/>
-<area shape="rect" id="node3" href="$classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html" title="CorrelationVector estimates the correlation vector and delay between a signal and a time&#45;delayed meas..." alt="" coords="237,71,468,112"/>
+<area shape="rect" id="node2" href="$classmodest_1_1substates_1_1attitude_1_1Attitude.html" title="Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states..." alt="" coords="271,5,449,47"/>
+<area shape="rect" id="node3" href="$classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html" title="CorrelationVector estimates the correlation vector and delay between a signal and a time&#45;delayed meas..." alt="" coords="245,71,475,112"/>
+<area shape="rect" id="node4" href="$classmodest_1_1substates_1_1oneDimensionalPositionVelocity_1_1oneDPositionVelocity.html" title="modest.substates.oneDimensional\lPositionVelocity.oneDPositionVelocity" alt="" coords="237,136,483,177"/>
 </map>

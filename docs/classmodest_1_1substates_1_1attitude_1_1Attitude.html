@@ -118,18 +118,18 @@ Collaboration diagram for modest.substates.attitude.Attitude:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6ae719302c377bbdb530a2edc4aa9f63"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a6ae719302c377bbdb530a2edc4aa9f63">__init__</a> (self, attitudeQuaternion=Quaternion([1, 0, 0, 0]), attitudeErrorCovariance=np.eye(3), gyroBias=np.zeros(3), gyroBiasCovariance=np.eye(3), t=0)</td></tr>
-<tr class="memdesc:a6ae719302c377bbdb530a2edc4aa9f63"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a6ae719302c377bbdb530a2edc4aa9f63" title="The __init__ method initializes the 6DOF attitude estimator ">__init__</a> method initializes the 6DOF attitude estimator  <a href="#a6ae719302c377bbdb530a2edc4aa9f63">More...</a><br /></td></tr>
-<tr class="separator:a6ae719302c377bbdb530a2edc4aa9f63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af09cd863335efb09a7a78bafd7b52ff6"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#af09cd863335efb09a7a78bafd7b52ff6">__init__</a> (self, attitudeQuaternion=Quaternion([1, 0, 0, 0]), attitudeErrorCovariance=np.eye(3), gyroBias=np.zeros(3), gyroBiasCovariance=np.eye(3), t=0, covarianceStorage='<a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a6e308aadd13962e476d2892ec728e3a5">covariance</a>', <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a528738f0ad3971fd2476007cc5ef0e1e">useUnitVector</a>=True)</td></tr>
+<tr class="memdesc:af09cd863335efb09a7a78bafd7b52ff6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#af09cd863335efb09a7a78bafd7b52ff6" title="The __init__ method initializes the 6DOF attitude estimator ">__init__</a> method initializes the 6DOF attitude estimator  <a href="#af09cd863335efb09a7a78bafd7b52ff6">More...</a><br /></td></tr>
+<tr class="separator:af09cd863335efb09a7a78bafd7b52ff6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ed2c772a331dadab761afd11d980c9e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a7ed2c772a331dadab761afd11d980c9e">storeStateVector</a> (self, svDict)</td></tr>
 <tr class="memdesc:a7ed2c772a331dadab761afd11d980c9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">storeStateVector is responsible for taking an updated version of the state vector, and storing it in the class variables.  <a href="#a7ed2c772a331dadab761afd11d980c9e">More...</a><br /></td></tr>
 <tr class="separator:a7ed2c772a331dadab761afd11d980c9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a07af5c587e6576e3421197a20880222e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a07af5c587e6576e3421197a20880222e">timeUpdate</a> (self, dT, dynamics=None)</td></tr>
 <tr class="memdesc:a07af5c587e6576e3421197a20880222e"><td class="mdescLeft">&#160;</td><td class="mdescRight">timeUpdate returns the time-update matrices, and handles the internal time update of the attitude estimate <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a22a550534d908153baef2e52f7142c5e" title="Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as  ...">qHat</a>.  <a href="#a07af5c587e6576e3421197a20880222e">More...</a><br /></td></tr>
 <tr class="separator:a07af5c587e6576e3421197a20880222e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac150d71af97353d06dda45984d20dbab"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#ac150d71af97353d06dda45984d20dbab">getMeasurementMatrices</a> (self, measurement, source=None)</td></tr>
-<tr class="memdesc:ac150d71af97353d06dda45984d20dbab"><td class="mdescLeft">&#160;</td><td class="mdescRight">getMeasurementMatrices computes and returns measurement update matrices  <a href="#ac150d71af97353d06dda45984d20dbab">More...</a><br /></td></tr>
-<tr class="separator:ac150d71af97353d06dda45984d20dbab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62e542f722f0d5b50694ca3366ab81f0"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a62e542f722f0d5b50694ca3366ab81f0">getMeasurementMatrices</a> (self, measurement, source=None, <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a528738f0ad3971fd2476007cc5ef0e1e">useUnitVector</a>=None)</td></tr>
+<tr class="memdesc:a62e542f722f0d5b50694ca3366ab81f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">getMeasurementMatrices computes and returns measurement update matrices  <a href="#a62e542f722f0d5b50694ca3366ab81f0">More...</a><br /></td></tr>
+<tr class="separator:a62e542f722f0d5b50694ca3366ab81f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae21ed62061b674b0108f205df2122083"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#ae21ed62061b674b0108f205df2122083">quaternionTimeUpdateMatrix</a> (self, myOmega, deltaT)</td></tr>
 <tr class="memdesc:ae21ed62061b674b0108f205df2122083"><td class="mdescLeft">&#160;</td><td class="mdescRight">quaternionTimeUpdateMatrix produces a time-update matrix for the attitude quaternion  <a href="#ae21ed62061b674b0108f205df2122083">More...</a><br /></td></tr>
 <tr class="separator:ae21ed62061b674b0108f205df2122083"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -139,12 +139,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a11f6e9a0803c6843d7c89061ffbb3c2c"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a11f6e9a0803c6843d7c89061ffbb3c2c">processNoiseMatrix</a> (self, deltaT, omegaVar, biasVar)</td></tr>
 <tr class="memdesc:a11f6e9a0803c6843d7c89061ffbb3c2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">processNoiseMatrix generates a the process noise matrix  <a href="#a11f6e9a0803c6843d7c89061ffbb3c2c">More...</a><br /></td></tr>
 <tr class="separator:a11f6e9a0803c6843d7c89061ffbb3c2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1506706112528d3d926a77121bac7b1c"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a1506706112528d3d926a77121bac7b1c">RaDecMeasMatrices</a> (self, source, measurement)</td></tr>
-<tr class="memdesc:a1506706112528d3d926a77121bac7b1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">RaDecMeasMatrices generates measurement matrices for a angle measurement of a point source.  <a href="#a1506706112528d3d926a77121bac7b1c">More...</a><br /></td></tr>
-<tr class="separator:a1506706112528d3d926a77121bac7b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaca8893538cf2e6118214ea9cef69055"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#aaca8893538cf2e6118214ea9cef69055">eulerAngles</a> (self)</td></tr>
-<tr class="memdesc:aaca8893538cf2e6118214ea9cef69055"><td class="mdescLeft">&#160;</td><td class="mdescRight">eulerAngles computes the Euler angles (roll, pitch and yaw) based on the current attitude.  <a href="#aaca8893538cf2e6118214ea9cef69055">More...</a><br /></td></tr>
-<tr class="separator:aaca8893538cf2e6118214ea9cef69055"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b095e94e776bfc84b1ee3efe589e024"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a7b095e94e776bfc84b1ee3efe589e024">RaDecMeasurementMatrices</a> (self, source, measurement)</td></tr>
+<tr class="memdesc:a7b095e94e776bfc84b1ee3efe589e024"><td class="mdescLeft">&#160;</td><td class="mdescRight">RaDecMeasurementMatrices  <a href="#a7b095e94e776bfc84b1ee3efe589e024">More...</a><br /></td></tr>
+<tr class="separator:a7b095e94e776bfc84b1ee3efe589e024"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64a5d1ac99db8b5badc3baf1f101ad7d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a64a5d1ac99db8b5badc3baf1f101ad7d">unitVectorMeasurmentMatrices</a> (self, source, measurement)</td></tr>
+<tr class="memdesc:a64a5d1ac99db8b5badc3baf1f101ad7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">unitVectorMeasurmentMatrices generates measurement matrices for a angle measurement of a point source.  <a href="#a64a5d1ac99db8b5badc3baf1f101ad7d">More...</a><br /></td></tr>
+<tr class="separator:a64a5d1ac99db8b5badc3baf1f101ad7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39613e54a98638ebae88539212c723c9"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a39613e54a98638ebae88539212c723c9">eulerAngles</a> (self, t=None)</td></tr>
+<tr class="memdesc:a39613e54a98638ebae88539212c723c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">eulerAngles computes the Euler angles (roll, pitch and yaw) based on the current attitude.  <a href="#a39613e54a98638ebae88539212c723c9">More...</a><br /></td></tr>
+<tr class="separator:a39613e54a98638ebae88539212c723c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fdadf88372f53c3ac216eaf015947db"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a6fdadf88372f53c3ac216eaf015947db">RaDecRoll</a> (self)</td></tr>
 <tr class="memdesc:a6fdadf88372f53c3ac216eaf015947db"><td class="mdescLeft">&#160;</td><td class="mdescRight">RaDecRoll returns the current attitude in terms of right ascension, declination, and roll  <a href="#a6fdadf88372f53c3ac216eaf015947db">More...</a><br /></td></tr>
 <tr class="separator:a6fdadf88372f53c3ac216eaf015947db"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -154,18 +157,23 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae6f156a198d9c2328ddffde498c1ca19"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#ae6f156a198d9c2328ddffde498c1ca19">skewSymmetric</a> (self, vector)</td></tr>
 <tr class="memdesc:ae6f156a198d9c2328ddffde498c1ca19"><td class="mdescLeft">&#160;</td><td class="mdescRight">skewSymmetric generates a skew-symmetric matrix from a 3x1 vector  <a href="#ae6f156a198d9c2328ddffde498c1ca19">More...</a><br /></td></tr>
 <tr class="separator:ae6f156a198d9c2328ddffde498c1ca19"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d0d2b9fcd181bdbf9cb55f370e1b575"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a6d0d2b9fcd181bdbf9cb55f370e1b575">eulerSTD</a> (self)</td></tr>
+<tr class="separator:a6d0d2b9fcd181bdbf9cb55f370e1b575"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Mandatory SubState Functions</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>The following functions are functions which are required for the SubState to function as a sub-state in State.ModularFilter. </p>
 </div></td></tr>
-<tr class="memitem:aa18c8238415131b4b63cef0e4b2ff9fd"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#aa18c8238415131b4b63cef0e4b2ff9fd">getStateVector</a> (self)</td></tr>
-<tr class="memdesc:aa18c8238415131b4b63cef0e4b2ff9fd"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#aa18c8238415131b4b63cef0e4b2ff9fd" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector  <a href="#aa18c8238415131b4b63cef0e4b2ff9fd">More...</a><br /></td></tr>
-<tr class="separator:aa18c8238415131b4b63cef0e4b2ff9fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d8050de59c58969164f577899a55aa2"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2">getStateVector</a> (self, t=None)</td></tr>
+<tr class="memdesc:a1d8050de59c58969164f577899a55aa2"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector  <a href="#a1d8050de59c58969164f577899a55aa2">More...</a><br /></td></tr>
+<tr class="separator:a1d8050de59c58969164f577899a55aa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e308aadd13962e476d2892ec728e3a5"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a6e308aadd13962e476d2892ec728e3a5">covariance</a> (self)</td></tr>
 <tr class="memdesc:a6e308aadd13962e476d2892ec728e3a5"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a6e308aadd13962e476d2892ec728e3a5" title="covariance returns the SubState covariance matrix ">covariance</a> returns the <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html" title="This is an abstract base class for objects used as sub-states in State.ModularFilter. ">SubState</a> covariance matrix  <a href="#a6e308aadd13962e476d2892ec728e3a5">More...</a><br /></td></tr>
 <tr class="separator:a6e308aadd13962e476d2892ec728e3a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9027f6d1d7d57c47731612f519b7ee6"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6">dimension</a> (self)</td></tr>
 <tr class="memdesc:ab9027f6d1d7d57c47731612f519b7ee6"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> returns the dimension of the sub-state vector  <a href="#ab9027f6d1d7d57c47731612f519b7ee6">More...</a><br /></td></tr>
 <tr class="separator:ab9027f6d1d7d57c47731612f519b7ee6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98901b80c96264945362ec50b489a636"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a98901b80c96264945362ec50b489a636">getMeasurementMatrices</a> (self, measurement, source=None)</td></tr>
+<tr class="memdesc:a98901b80c96264945362ec50b489a636"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector  <a href="#a98901b80c96264945362ec50b489a636">More...</a><br /></td></tr>
+<tr class="separator:a98901b80c96264945362ec50b489a636"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Plotting Functions</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>These functions provide generalized plotting capabilities </p>
 </div></td></tr>
@@ -173,11 +181,17 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1adac64be88eab0a64bb952518c4268f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2deb7d1ca3105eb20e50fa7e67298355"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a2deb7d1ca3105eb20e50fa7e67298355">realTimePlot</a> (self, normalized=True)</td></tr>
 <tr class="separator:a2deb7d1ca3105eb20e50fa7e67298355"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a643678c1193dd4029683a437e84229ac"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a643678c1193dd4029683a437e84229ac">timeHistoryPlot</a> (self)</td></tr>
+<tr class="separator:a643678c1193dd4029683a437e84229ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1853d44036e3ed35ada02414ea29f8ab"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1853d44036e3ed35ada02414ea29f8ab">initializeTimeHistoryPlot</a> (self, plotHandle=None)</td></tr>
+<tr class="separator:a1853d44036e3ed35ada02414ea29f8ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:a528738f0ad3971fd2476007cc5ef0e1e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a528738f0ad3971fd2476007cc5ef0e1e">useUnitVector</a></td></tr>
+<tr class="separator:a528738f0ad3971fd2476007cc5ef0e1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22a550534d908153baef2e52f7142c5e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a22a550534d908153baef2e52f7142c5e">qHat</a></td></tr>
-<tr class="memdesc:a22a550534d908153baef2e52f7142c5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as <img class="formulaInl" alt="$\mathbf{\hat{q}}^{-}_{k}$" src="form_19.png"/> for the a priori value, or <img class="formulaInl" alt="$\mathbf{\hat{q}}^{+}_{k}$" src="form_20.png"/> for the a posteriori value.  <a href="#a22a550534d908153baef2e52f7142c5e">More...</a><br /></td></tr>
+<tr class="memdesc:a22a550534d908153baef2e52f7142c5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as <img class="formulaInl" alt="$\mathbf{\hat{q}}^{-}_{k}$" src="form_19.png"/> for the a priori value, or <img class="formulaInl" alt="$\mathbf{\hat{q}}^{+}_{k}$" src="form_20.png"/> for the a posteriori.  <a href="#a22a550534d908153baef2e52f7142c5e">More...</a><br /></td></tr>
 <tr class="separator:a22a550534d908153baef2e52f7142c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac0bc92dc53893d2f190c1252690053c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#aac0bc92dc53893d2f190c1252690053c">bHat</a></td></tr>
 <tr class="memdesc:aac0bc92dc53893d2f190c1252690053c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Current estimate of gyro bias.  <a href="#aac0bc92dc53893d2f190c1252690053c">More...</a><br /></td></tr>
@@ -197,13 +211,23 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a38c12c9d0899bc1161f3502b584517a2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a38c12c9d0899bc1161f3502b584517a2">stateVectorHistory</a></td></tr>
 <tr class="memdesc:a38c12c9d0899bc1161f3502b584517a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores the time-history of the sub-state state vector.  <a href="#a38c12c9d0899bc1161f3502b584517a2">More...</a><br /></td></tr>
 <tr class="separator:a38c12c9d0899bc1161f3502b584517a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b7a77e3b7dc14fc85962cda84e8cd58"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a9b7a77e3b7dc14fc85962cda84e8cd58">timeList</a></td></tr>
+<tr class="separator:a9b7a77e3b7dc14fc85962cda84e8cd58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37ded775b84cea85b4dce0f1b16286c4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a37ded775b84cea85b4dce0f1b16286c4">RTPlotHandle</a></td></tr>
 <tr class="memdesc:a37ded775b84cea85b4dce0f1b16286c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stores handle for real-time plotting.  <a href="#a37ded775b84cea85b4dce0f1b16286c4">More...</a><br /></td></tr>
 <tr class="separator:a37ded775b84cea85b4dce0f1b16286c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1d5d3bbdf73cf1e78925c835f1c616e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#af1d5d3bbdf73cf1e78925c835f1c616e">THPlotHandle</a></td></tr>
+<tr class="separator:af1d5d3bbdf73cf1e78925c835f1c616e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fefae1facc797a1132fb61a55e9ffa1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a9fefae1facc797a1132fb61a55e9ffa1">RTPlotData</a></td></tr>
 <tr class="separator:a9fefae1facc797a1132fb61a55e9ffa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a497ccbb6658589b02568e87c6382222e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a497ccbb6658589b02568e87c6382222e">RTPaxisHandle</a></td></tr>
 <tr class="separator:a497ccbb6658589b02568e87c6382222e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22c12497c37f47d54d4ea909f6423222"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a22c12497c37f47d54d4ea909f6423222">THPaxisList</a></td></tr>
+<tr class="separator:a22c12497c37f47d54d4ea909f6423222"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e1d545f7ede186d89db38ca613633cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a0e1d545f7ede186d89db38ca613633cf">THPlotDataList</a></td></tr>
+<tr class="separator:a0e1d545f7ede186d89db38ca613633cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9659535520a27090d79be1957ecce2eb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a9659535520a27090d79be1957ecce2eb">THPlotObjectList</a></td></tr>
+<tr class="separator:a9659535520a27090d79be1957ecce2eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states. </p>
@@ -212,9 +236,9 @@ Public Attributes</h2></td></tr>
 <p>The state uses quaternions to store attitude, which avoids issues of gimbal lock and increases numerical stability over other approaches, such as Euler angles. The quaternion itself is not treated as a part of the state vector. Rather, the state vector includes three attitude "error states," which are updated at each measurement, then used to correct the attitude quaternion. After each correction, the error states are set back to zero.</p>
 <p>The algorithms used for the state update mostly come from the book "Fundamentals of Spacecraft Attitude Determination and Control" (FSADC) by Markley and Crassidis. Chapter, section and page numbers will be referenced where appropriate. </p>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00038">38</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00039">39</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a class="anchor" id="a6ae719302c377bbdb530a2edc4aa9f63"></a>
+<a class="anchor" id="af09cd863335efb09a7a78bafd7b52ff6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -252,7 +276,19 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>t</em> = <code>0</code>&#160;</td>
+          <td class="paramname"><em>t</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>covarianceStorage</em> = <code>'<a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a6e308aadd13962e476d2892ec728e3a5">covariance</a>'</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>useUnitVector</em> = <code>True</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -262,7 +298,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>The <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a6ae719302c377bbdb530a2edc4aa9f63" title="The __init__ method initializes the 6DOF attitude estimator ">__init__</a> method initializes the 6DOF attitude estimator </p>
+<p>The <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#af09cd863335efb09a7a78bafd7b52ff6" title="The __init__ method initializes the 6DOF attitude estimator ">__init__</a> method initializes the 6DOF attitude estimator </p>
 <p>This function is responsible for initializing an instance of the <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html" title="Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states...">Attitude</a> class and storing all the variables as member variables.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -275,7 +311,7 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00064">64</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00067">67</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
@@ -313,7 +349,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the covaraince matrix </dd></dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00169">169</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00185">185</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -351,7 +387,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the dimension of state vector </dd></dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00194">194</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00211">211</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -415,11 +451,11 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the error-state time update matrix, <img class="formulaInl" alt="$\boldsymbol{\Phi}$" src="form_9.png"/> </dd></dl>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00464">464</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00485">485</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aaca8893538cf2e6118214ea9cef69055"></a>
+<a class="anchor" id="a39613e54a98638ebae88539212c723c9"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -427,8 +463,18 @@ Public Attributes</h2></td></tr>
           <td class="memname">def modest.substates.attitude.Attitude.eulerAngles </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>t</em> = <code>None</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -444,11 +490,88 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A list containing the three angles </dd></dl>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00695">695</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00836">836</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="ac150d71af97353d06dda45984d20dbab"></a>
+<a class="anchor" id="a6d0d2b9fcd181bdbf9cb55f370e1b575"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def modest.substates.attitude.Attitude.eulerSTD </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00924">924</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a98901b80c96264945362ec50b489a636"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">def modest.substates.substate.SubState.getMeasurementMatrices </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>measurement</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>source</em> = <code>None</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector </p>
+<p>The <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> method is responsible for returning a dictionary object containing, at minimim, the following items:</p>
+<ul>
+<li>'stateVector': A length <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> array containing the most recent state vector estimate</li>
+<li>'covariance': A (<a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> x <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a>) array containing the most recent covariance matrix</li>
+<li>'aPriori': A boolean indicating if the most recent estimate is the</li>
+<li>result of a time update (aPriori=True) or a measurement update (aPriori=False)</li>
+</ul>
+<p>This function can be used as-is, or can be overloaded to perform additional tasks specific to the substate.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>The object pointer</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The dictionary containing the state vector, covariance matrix, and aPriori status </dd></dl>
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00254">254</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a62e542f722f0d5b50694ca3366ab81f0"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -468,7 +591,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>source</em> = <code>None</code>&#160;</td>
+          <td class="paramname"><em>source</em> = <code>None</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>useUnitVector</em> = <code>None</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -492,11 +621,11 @@ Public Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>A dictionary containing the measurement matrices H, R, and dY</dd></dl>
 <dl class="section see"><dt>See also</dt><dd>SubStates.SubState.getMeasurementMatrices </dd></dl>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00285">285</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00294">294</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="aa18c8238415131b4b63cef0e4b2ff9fd"></a>
+<a class="anchor" id="a1d8050de59c58969164f577899a55aa2"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -507,8 +636,18 @@ Public Attributes</h2></td></tr>
           <td class="memname">def modest.substates.substate.SubState.getStateVector </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>t</em> = <code>None</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -518,8 +657,8 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#aa18c8238415131b4b63cef0e4b2ff9fd" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector </p>
-<p>The <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#aa18c8238415131b4b63cef0e4b2ff9fd" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> method is responsible for returning a dictionary object containing, at minimim, the following items:</p>
+<p><a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> returns the most recent value of the state vector </p>
+<p>The <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#a1d8050de59c58969164f577899a55aa2" title="getStateVector returns the most recent value of the state vector ">getStateVector</a> method is responsible for returning a dictionary object containing, at minimim, the following items:</p>
 <ul>
 <li>'stateVector': A length <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> array containing the most recent state vector estimate</li>
 <li>'covariance': A (<a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a> x <a class="el" href="classmodest_1_1substates_1_1substate_1_1SubState.html#ab9027f6d1d7d57c47731612f519b7ee6" title="dimension returns the dimension of the sub-state vector ">dimension</a>) array containing the most recent covariance matrix</li>
@@ -535,7 +674,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The dictionary containing the state vector, covariance matrix, and aPriori status </dd></dl>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00126">126</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00135">135</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -577,7 +716,43 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00254">254</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00271">271</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a1853d44036e3ed35ada02414ea29f8ab"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">def modest.substates.substate.SubState.initializeTimeHistoryPlot </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>plotHandle</em> = <code>None</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00350">350</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -635,7 +810,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Returns the comibined 6x6 process noise matrix </dd></dl>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00534">534</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00555">555</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
@@ -694,16 +869,16 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The quaternion time-update matrix <img class="formulaInl" alt="$\bar{\Theta}(\omegaVec[est=True,aPriori=True, t=k], \Delta T)$" src="form_3.png"/> </dd></dl>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00380">380</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00401">401</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
-<a class="anchor" id="a1506706112528d3d926a77121bac7b1c"></a>
+<a class="anchor" id="a7b095e94e776bfc84b1ee3efe589e024"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">def modest.substates.attitude.Attitude.RaDecMeasMatrices </td>
+          <td class="memname">def modest.substates.attitude.Attitude.RaDecMeasurementMatrices </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>
@@ -728,32 +903,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>RaDecMeasMatrices generates measurement matrices for a angle measurement of a point source. </p>
-<p>This function generates the set of measurement matrices <img class="formulaInl" alt="$ \mathbf{H} $" src="form_13.png"/>, <img class="formulaInl" alt="$ \mathbf{dY} $" src="form_14.png"/>, and <img class="formulaInl" alt="$ \mathbf{R} $" src="form_15.png"/> corresponding to an inferred unit vector measurement from a set of two angle measurments (local right ascension and declination of a point source).</p>
-<p>The measurement matrices are a function of the measurement itself, the source from which the measurement originated, and the current estimate of attitude, <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a22a550534d908153baef2e52f7142c5e" title="Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as  ...">qHat</a>. They are defined as follows:</p>
-<p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \mathbf{H}_k[\sv[aPriori=True,timeIndex=k]] = A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \times \]" src="form_16.png"/>
-</p>
-<p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \mathbf{dY} = \measurementVec[S](\RADEC) - A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \]" src="form_17.png"/>
-</p>
-<p class="formulaDsp">
-<img class="formulaDsp" alt="\[ \mathbf{R} = \eye[3] \sigma^2_{\RADEC} \]" src="form_18.png"/>
-</p>
-<p>The measured unit vector is a unit vector computed from the measured angles, using <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#ae6d69671cf2517be4ad69bee7498e665" title="sidUnitVec generates a unit vector from two angles ">sidUnitVec</a>.</p>
-<p>See Fundamentals of Spacecraft <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html" title="Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states...">Attitude</a> Determination and Control, Section 6.2.4, page 257, Table 6.3 for more details and derivation.</p>
-<dl class="section note"><dt>Note</dt><dd>Currently, the measurement noise matrix is an identity matrix mutiplied by the angle measurement error. This is my interpretation of Section 6.2.3 in FSADC. However, if we derive the measurement noise matrix using the usual EKF method, we get a different result which results in an unstable estimator. I'm not convinced I understand why this method is right, or why the EKF method is unstable, but it works, so we're using it for now.</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">self</td><td>The object pointer </td></tr>
-    <tr><td class="paramname">source</td><td>A Signals.PointSource object from which the measurement was generated. </td></tr>
-    <tr><td class="paramname">measurement</td><td>A dictionary containing the right ascension and declination measurements as sub-dictionaries, each with their own value and variance.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A dictionary containing the measurement matrices H, R, and dY </dd></dl>
+<p>RaDecMeasurementMatrices </p>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00613">613</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00582">582</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
@@ -782,7 +934,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A list containing the three angles </dd></dl>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00719">719</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00861">861</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
@@ -818,7 +970,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00281">281</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00298">298</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -851,13 +1003,13 @@ Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">self</td><td>Object pointer </td></tr>
-    <tr><td class="paramname">RaDec</td><td>A dictionary containing the two angles</td></tr>
+    <tr><td class="paramname">RaDec</td><td>A dictionary containing the two angles, in radians</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A unit vector generated from the angles given </dd></dl>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00738">738</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00880">880</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
@@ -896,7 +1048,7 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The skew symmetric matrix </dd></dl>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00760">760</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00910">910</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
@@ -936,7 +1088,33 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section see"><dt>See also</dt><dd>SubStates.SubState.storeStateVector </dd></dl>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00146">146</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00153">153</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a643678c1193dd4029683a437e84229ac"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">def modest.substates.substate.SubState.timeHistoryPlot </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00328">328</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -984,7 +1162,66 @@ Public Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>A dict containing the state transition matrix ("F") and the process noise matrix ("Q")</dd></dl>
 <dl class="section see"><dt>See also</dt><dd>SubStates.SubState.timeUpdate </dd></dl>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00217">217</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00225">225</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a64a5d1ac99db8b5badc3baf1f101ad7d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def modest.substates.attitude.Attitude.unitVectorMeasurmentMatrices </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>source</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>measurement</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>unitVectorMeasurmentMatrices generates measurement matrices for a angle measurement of a point source. </p>
+<p>This function generates the set of measurement matrices <img class="formulaInl" alt="$ \mathbf{H} $" src="form_13.png"/>, <img class="formulaInl" alt="$ \mathbf{dY} $" src="form_14.png"/>, and <img class="formulaInl" alt="$ \mathbf{R} $" src="form_15.png"/> corresponding to an inferred unit vector measurement from a set of two angle measurments (local right ascension and declination of a point source).</p>
+<p>The measurement matrices are a function of the measurement itself, the source from which the measurement originated, and the current estimate of attitude, <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a22a550534d908153baef2e52f7142c5e" title="Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as  ...">qHat</a>. They are defined as follows:</p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \mathbf{H}_k[\sv[aPriori=True,timeIndex=k]] = A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \times \]" src="form_16.png"/>
+</p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \mathbf{dY} = \measurementVec[S](\RADEC) - A(\attVec[est=True,aPriori=True,t=k]) \unitVec[signalSource=S, frame=nav] \]" src="form_17.png"/>
+</p>
+<p class="formulaDsp">
+<img class="formulaDsp" alt="\[ \mathbf{R} = \eye[3] \sigma^2_{\RADEC} \]" src="form_18.png"/>
+</p>
+<p>The measured unit vector is a unit vector computed from the measured angles, using <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#ae6d69671cf2517be4ad69bee7498e665" title="sidUnitVec generates a unit vector from two angles ">sidUnitVec</a>.</p>
+<p>See Fundamentals of Spacecraft <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html" title="Estimates the attitude of a vehicle in three dimensions, along with three gyro bias states...">Attitude</a> Determination and Control, Section 6.2.4, page 257, Table 6.3 for more details and derivation.</p>
+<dl class="section note"><dt>Note</dt><dd>Currently, the measurement noise matrix is an identity matrix mutiplied by the angle measurement error. This is my interpretation of Section 6.2.3 in FSADC. However, if we derive the measurement noise matrix using the usual EKF method, we get a different result which results in an unstable estimator. I'm not convinced I understand why this method is right, or why the EKF method is unstable, but it works, so we're using it for now.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>The object pointer </td></tr>
+    <tr><td class="paramname">source</td><td>A Signals.PointSource object from which the measurement was generated. </td></tr>
+    <tr><td class="paramname">measurement</td><td>A dictionary containing the right ascension and declination measurements as sub-dictionaries, each with their own value and variance.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A dictionary containing the measurement matrices H, R, and dY </dd></dl>
+
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00752">752</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
@@ -1001,7 +1238,7 @@ Public Attributes</h2></td></tr>
 
 <p>Current estimate of gyro bias. </p>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00074">74</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00077">77</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
@@ -1017,7 +1254,7 @@ Public Attributes</h2></td></tr>
 
 <p>Last measurement used to generate measurement matrices. </p>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00086">86</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00092">92</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
@@ -1034,7 +1271,7 @@ Public Attributes</h2></td></tr>
 <p>Last set of measurement matrices. </p>
 <p>This allows class to avoid redundant computation of the same set of measurement matrices. </p>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00094">94</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00100">100</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
@@ -1050,7 +1287,7 @@ Public Attributes</h2></td></tr>
 
 <p>Last signal used to generate measurement matrices. </p>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00089">89</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00095">95</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
@@ -1067,7 +1304,7 @@ Public Attributes</h2></td></tr>
 <p>Current joint covariance matrix. </p>
 <p>Upper 3x3 diagonal contains covariance of the attitude estimate (related to <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#a22a550534d908153baef2e52f7142c5e" title="Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as  ...">qHat</a>), while lower 3x3 diagonal contains the covariance of the gyro bias <a class="el" href="classmodest_1_1substates_1_1attitude_1_1Attitude.html#aac0bc92dc53893d2f190c1252690053c" title="Current estimate of gyro bias. ">bHat</a>. </p>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00080">80</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00083">83</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
@@ -1081,9 +1318,9 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as <img class="formulaInl" alt="$\mathbf{\hat{q}}^{-}_{k}$" src="form_19.png"/> for the a priori value, or <img class="formulaInl" alt="$\mathbf{\hat{q}}^{+}_{k}$" src="form_20.png"/> for the a posteriori value. </p>
+<p>Current estimate of attitude, stored as a Quaternion object Mathematically generally referred to as <img class="formulaInl" alt="$\mathbf{\hat{q}}^{-}_{k}$" src="form_19.png"/> for the a priori value, or <img class="formulaInl" alt="$\mathbf{\hat{q}}^{+}_{k}$" src="form_20.png"/> for the a posteriori. </p>
 
-<p>Definition at line <a class="el" href="attitude_8py_source.html#l00071">71</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00074">74</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>
@@ -1105,7 +1342,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00262">262</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00279">279</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -1127,7 +1364,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00096">96</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00105">105</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -1151,7 +1388,7 @@ Public Attributes</h2></td></tr>
 
 <p>Stores handle for real-time plotting. </p>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00094">94</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00102">102</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
 
 </div>
 </div>
@@ -1174,8 +1411,133 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Stores the time-history of the sub-state state vector. </p>
+<p>self.stateVectorHistory = SmartPanda(data=stateVectorHistory) </p>
 
-<p>Definition at line <a class="el" href="substate_8py_source.html#l00091">91</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00098">98</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a22c12497c37f47d54d4ea909f6423222"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">modest.substates.substate.SubState.THPaxisList</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00360">360</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0e1d545f7ede186d89db38ca613633cf"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">modest.substates.substate.SubState.THPlotDataList</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00361">361</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af1d5d3bbdf73cf1e78925c835f1c616e"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">modest.substates.substate.SubState.THPlotHandle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00103">103</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9659535520a27090d79be1957ecce2eb"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">modest.substates.substate.SubState.THPlotObjectList</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00362">362</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a9b7a77e3b7dc14fc85962cda84e8cd58"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">modest.substates.substate.SubState.timeList</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="substate_8py_source.html#l00099">99</a> of file <a class="el" href="substate_8py_source.html">substate.py</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a528738f0ad3971fd2476007cc5ef0e1e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">modest.substates.attitude.Attitude.useUnitVector</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Definition at line <a class="el" href="attitude_8py_source.html#l00069">69</a> of file <a class="el" href="attitude_8py_source.html">attitude.py</a>.</p>
 
 </div>
 </div>

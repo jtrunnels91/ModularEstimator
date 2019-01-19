@@ -1,6 +1,21 @@
 var searchData=
 [
+  ['earthobj',['earthObj',['../namespacemodest_1_1utils_1_1spacegeometry.html#a5e817563041c43da2d36d223bade1512',1,'modest::utils::spacegeometry']]],
+  ['earthposition',['earthPosition',['../namespacemodest_1_1utils_1_1spacegeometry.html#a1484fe47eb291c0df85ccfefb26ac670',1,'modest::utils::spacegeometry']]],
+  ['earthvelocity',['earthVelocity',['../namespacemodest_1_1utils_1_1spacegeometry.html#a83a4fcc4870f205e081b127cb452e05d',1,'modest::utils::spacegeometry']]],
+  ['electronvoltpererg',['electronVoltPerErg',['../namespacemodest_1_1utils_1_1physicalconstants.html#ae4bd0051685a48d01b60178bf81e217a',1,'modest::utils::physicalconstants']]],
+  ['electronvoltperphoton',['electronVoltPerPhoton',['../namespacemodest_1_1utils_1_1physicalconstants.html#a5de6a1f36432c45571ffb47ac2f9363a',1,'modest::utils::physicalconstants']]],
+  ['ephemdata',['ephemData',['../classmodest_1_1spacecraft_1_1chandra_1_1Chandra.html#a6157130227b1be71b55cc53b9b477fcd',1,'modest::spacecraft::chandra::Chandra']]],
+  ['ephemtimeunits',['ephemTimeUnits',['../classmodest_1_1spacecraft_1_1chandra_1_1ChandraDynamics.html#a2c5ebd1a4d95dada84b299eae59357e8',1,'modest::spacecraft::chandra::ChandraDynamics']]],
+  ['ergbackgroundflux',['ERGbackgroundFlux',['../namespacemodest_1_1utils_1_1xrayphotons.html#a6a2dd2f334288f742ec7b0f731daec5e',1,'modest::utils::xrayphotons']]],
+  ['ergsperelectronvolt',['ergsPerElectronVolt',['../namespacemodest_1_1utils_1_1physicalconstants.html#ad65e050e106abd959ed2133d5d10480f',1,'modest::utils::physicalconstants']]],
   ['errorstatetimeupdatematrix',['errorStateTimeUpdateMatrix',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a06165c15ac5d7422a7bcd1e3f7ac24e7',1,'modest::substates::attitude::Attitude']]],
-  ['estimatesignaldelayut',['estimateSignalDelayUT',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a7bd7d1e68287728a48a414440c55c988',1,'modest::substates::correlationvector::CorrelationVector']]],
-  ['eulerangles',['eulerAngles',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#aaca8893538cf2e6118214ea9cef69055',1,'modest::substates::attitude::Attitude']]]
+  ['estimatesignaltdoa_5fut',['estimateSignalTDOA_UT',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#aa31a2d2e5216f801c0c01c4d1a4eab8a',1,'modest::substates::correlationvector::CorrelationVector']]],
+  ['euler2quaternion',['euler2quaternion',['../namespacemodest_1_1utils_1_1QuaternionHelperFunctions.html#a0e07033b643311bae70e9f5d720e929c',1,'modest::utils::QuaternionHelperFunctions']]],
+  ['euleranglediff',['eulerAngleDiff',['../namespacemodest_1_1utils_1_1QuaternionHelperFunctions.html#a955763e140b5e3e962fde413872fe566',1,'modest::utils::QuaternionHelperFunctions']]],
+  ['eulerangles',['eulerAngles',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a39613e54a98638ebae88539212c723c9',1,'modest::substates::attitude::Attitude']]],
+  ['eulerstd',['eulerSTD',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a6d0d2b9fcd181bdbf9cb55f370e1b575',1,'modest::substates::attitude::Attitude']]],
+  ['eventtimeconversionfactor',['eventTimeConversionFactor',['../classmodest_1_1spacecraft_1_1chandra_1_1ChandraDynamics.html#af42804586a4bce942c4c55b0ebc57163',1,'modest::spacecraft::chandra::ChandraDynamics']]],
+  ['extent',['extent',['../classmodest_1_1signals_1_1pointsource_1_1PointSource.html#a984b5a75c9e94cb3527707b9ac976f9e',1,'modest::signals::pointsource::PointSource']]],
+  ['extractedphotonevents',['extractedPhotonEvents',['../classmodest_1_1spacecraft_1_1chandra_1_1ChandraDetector.html#a7ea6a8de562ce6d1a24c31d87c4d70e1',1,'modest::spacecraft::chandra::ChandraDetector']]]
 ];

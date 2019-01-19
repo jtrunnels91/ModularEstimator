@@ -1,11 +1,19 @@
 var searchData=
 [
-  ['t',['t',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a127ca6c8eed6a2e822dbac7e83458bf3',1,'modest::substates::correlationvector::CorrelationVector']]],
-  ['tcurrent',['tCurrent',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a917f511b39632b804f3ecf667f5a6d96',1,'modest::modularfilter::ModularFilter']]],
-  ['timeupdate',['timeUpdate',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a07af5c587e6576e3421197a20880222e',1,'modest.substates.attitude.Attitude.timeUpdate()'],['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a59c13e5fa26ba27717494f687ec78ef8',1,'modest.substates.correlationvector.CorrelationVector.timeUpdate()'],['../classmodest_1_1substates_1_1substate_1_1SubState.html#a06d147fa5babe4e147b3267e67054ab4',1,'modest.substates.substate.SubState.timeUpdate()']]],
-  ['timeupdateekf',['timeUpdateEKF',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a7487bb7b6cad0d3af34c100d14e2e0a8',1,'modest::modularfilter::ModularFilter']]],
-  ['todo_20list',['Todo List',['../todo.html',1,'']]],
-  ['totaldimension',['totalDimension',['../classmodest_1_1modularfilter_1_1ModularFilter.html#ae7028964e7e7adf58d75b76aef9783f6',1,'modest::modularfilter::ModularFilter']]],
-  ['typecheck',['typecheck',['../classmodest_1_1substates_1_1substatehistory_1_1SubStateHistory.html#a9654b950c535c3da3efb5798ca1b7a93',1,'modest::substates::substatehistory::SubStateHistory']]],
-  ['tzrmjd',['TZRMJD',['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#aecd53533d34a4f821f4010c197edc2e8',1,'modest::signals::xraysource::PeriodicXRaySource']]]
+  ['rad2deg',['rad2deg',['../namespacemodest_1_1utils_1_1spacegeometry.html#a93e1720efcf2b495c628f0bbf244701d',1,'modest::utils::spacegeometry']]],
+  ['radec',['RaDec',['../classmodest_1_1signals_1_1pointsource_1_1PointSource.html#a295eb1a487e18c77029585ac2785db80',1,'modest::signals::pointsource::PointSource']]],
+  ['radecmeasurementmatrices',['RaDecMeasurementMatrices',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a7b095e94e776bfc84b1ee3efe589e024',1,'modest::substates::attitude::Attitude']]],
+  ['radecroll',['RaDecRoll',['../classmodest_1_1substates_1_1attitude_1_1Attitude.html#a6fdadf88372f53c3ac216eaf015947db',1,'modest::substates::attitude::Attitude']]],
+  ['radianfovtosr',['radianFOVToSR',['../namespacemodest_1_1utils_1_1xrayphotons.html#a3b81edfe248218f10f5e396c63ad0486',1,'modest::utils::xrayphotons']]],
+  ['realtimeplot',['realTimePlot',['../classmodest_1_1modularfilter_1_1ModularFilter.html#a028d2750278a922bb89e895b53112452',1,'modest.modularfilter.ModularFilter.realTimePlot()'],['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#ad59577dd3219b724a9a8680a706eb242',1,'modest.substates.correlationvector.CorrelationVector.realTimePlot()'],['../classmodest_1_1substates_1_1substate_1_1SubState.html#a2deb7d1ca3105eb20e50fa7e67298355',1,'modest.substates.substate.SubState.realTimePlot()']]],
+  ['recordeddecconversionfactor',['recordedDecConversionFactor',['../classmodest_1_1spacecraft_1_1chandra_1_1ChandraDynamics.html#ab3bd27682f648ccadadc0f2ea4d94a00',1,'modest::spacecraft::chandra::ChandraDynamics']]],
+  ['recordeddecunits',['recordedDECUnits',['../classmodest_1_1spacecraft_1_1chandra_1_1ChandraDynamics.html#af4ded860f3473bcf94a104e5a99c3c15',1,'modest::spacecraft::chandra::ChandraDynamics']]],
+  ['recordedraconversionfactor',['recordedRaConversionFactor',['../classmodest_1_1spacecraft_1_1chandra_1_1ChandraDynamics.html#aba11edaafb844edad6e00a63dc81efe5',1,'modest::spacecraft::chandra::ChandraDynamics']]],
+  ['recordedraunits',['recordedRAUnits',['../classmodest_1_1spacecraft_1_1chandra_1_1ChandraDynamics.html#a125e53edd0dd24e5a982947bf5053913',1,'modest::spacecraft::chandra::ChandraDynamics']]],
+  ['recordedrollconversionfactor',['recordedRollConversionFactor',['../classmodest_1_1spacecraft_1_1chandra_1_1ChandraDynamics.html#a75623219c9f19d354a55523742d7965e',1,'modest::spacecraft::chandra::ChandraDynamics']]],
+  ['recordedrollunits',['recordedRollUnits',['../classmodest_1_1spacecraft_1_1chandra_1_1ChandraDynamics.html#ad99131d48ee842bbc401a560c199c744',1,'modest::spacecraft::chandra::ChandraDynamics']]],
+  ['rtpaxishandle',['RTPaxisHandle',['../classmodest_1_1substates_1_1substate_1_1SubState.html#a497ccbb6658589b02568e87c6382222e',1,'modest::substates::substate::SubState']]],
+  ['rtplotdata',['RTPlotData',['../classmodest_1_1substates_1_1substate_1_1SubState.html#a9fefae1facc797a1132fb61a55e9ffa1',1,'modest::substates::substate::SubState']]],
+  ['rtplothandle',['RTPlotHandle',['../classmodest_1_1substates_1_1substate_1_1SubState.html#a37ded775b84cea85b4dce0f1b16286c4',1,'modest::substates::substate::SubState']]],
+  ['rtplottdoa',['RTPlotTDOA',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a331ea1c4d9514da5ebf40f71e7848129',1,'modest::substates::correlationvector::CorrelationVector']]]
 ];
