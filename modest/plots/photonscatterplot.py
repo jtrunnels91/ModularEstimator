@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def plotSourcesAndProbabilities(modFilter, measurementList, pointSize=1, plotAttitude=False, ignoreBackground=True):
-    plt.figure()
+    myFigure = plt.figure()
     for signalName, signal in modFilter.signalSources.items():
         isPointSource=False
         if hasattr(signal, 'RaDec'):
@@ -49,6 +49,7 @@ def plotSourcesAndProbabilities(modFilter, measurementList, pointSize=1, plotAtt
         plt.plot([eu[2] for eu in euList],[-eu[1] for eu in euList])
     plt.legend()
     plt.show(block=False)
+    return myFigure
 
 
 def photonScatterPlot(
@@ -97,4 +98,5 @@ def photonScatterPlot(
                     )
 
     plt.show(block=False)
+
     

@@ -111,6 +111,10 @@ class ChandraDetector():
             userData.detector.FOV.value *
             ureg(userData.detector.FOV.unit)
         ).to(ureg('rad')).magnitude
+        self.area = (
+            userData.detector.area.value *
+            ureg(userData.detector.area.unit)
+        ).to(ureg.cm ** 2).magnitude
 
         
         # Use pixel resolution to determine the standard deviation of
