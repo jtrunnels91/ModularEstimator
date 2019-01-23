@@ -24,10 +24,10 @@ def xRayBackground(E):
 
 def singleXRayBackground(E):
     background = None
-    if E < 1:
+    if E < 1e-2:
         raise ValueError(
             'Photon energies less than 2 keV are below the regime of this equation')
-    elif (E >= 1 and E <= 60):
+    elif (E >= 1e-2 and E <= 60):
         background = (
             7.877 * np.power(E, -0.29) * np.exp(-E / 41.13)
         )

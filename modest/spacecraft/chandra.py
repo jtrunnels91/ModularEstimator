@@ -110,7 +110,7 @@ class ChandraDetector():
         self.FOV = (
             userData.detector.FOV.value *
             ureg(userData.detector.FOV.unit)
-        ).to(ureg('rad')).magnitude
+        ).to(ureg('deg')).magnitude
         self.area = (
             userData.detector.area.value *
             ureg(userData.detector.area.unit)
