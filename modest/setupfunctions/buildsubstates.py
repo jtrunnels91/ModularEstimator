@@ -18,7 +18,20 @@ def buildPulsarCorrelationSubstate(
     tdoaNoiseScaleFactor = None
     tStart = mySpacecraft.tStart
     myPulsarPeriod = pulsarObject.getPeriod(tStart)
+    internalNavFilter = None
 
+    initialVelocityStdDev = (
+        traj.internalNavFilter.initialVelocityStdDev.value *
+        ureg(traj.internalNavFilter.initialVelocityStdDev.unit)
+    ).to(ureg.speed_of_light).magnitude
+    vInitial = (
+        mySpacecraft.dynamics.velocity(mySpacecraft.tStart).dot(pulsarObject.unitVec()) *
+        ureg.km/ureg.seconds
+    ).to(ureg.speed_of_light).magnitude
+    vInitial_C = np.random.normal(vInitial, initialVelocityStdDev)
+
+    velocityNoiseScaleFactor = traj.internalNavFilter.velocityNoiseScaleFactor.value
+    
     if traj.internalNavFilter.useINF.value:
         internalNavFilter = ModularFilter()
         # internalNavFilter = None
@@ -55,23 +68,10 @@ def buildPulsarCorrelationSubstate(
         ).to(ureg.speed_of_light).magnitude
 
         tdoaNoiseScaleFactor = traj.internalNavFilter.tdoaNoiseScaleFactor.value
-        velocityNoiseScaleFactor = traj.internalNavFilter.velocityNoiseScaleFactor.value
-
-        initialVelocityStdDev = (
-            traj.internalNavFilter.initialVelocityStdDev.value *
-            ureg(traj.internalNavFilter.initialVelocityStdDev.unit)
-        ).to(ureg.speed_of_light).magnitude
-
 
         navCov[1,1] = np.square(initialVelocityStdDev)
         # navCov[0,0] = myPulsarObject.getPeriod(tStart)/12
         navCov[0,0] = myPulsarPeriod/12
-
-        vInitial = (
-            mySpacecraft.dynamics.velocity(mySpacecraft.tStart).dot(pulsarObject.unitVec()) *
-            ureg.km/ureg.seconds
-        ).to(ureg.speed_of_light).magnitude
-        vInitial_C = np.random.normal(vInitial, initialVelocityStdDev)
 
         navX0[1] = vInitial_C
         if artificialBiasMeasStdDev:
