@@ -41,6 +41,29 @@ def singleXRayBackground(E):
     return background
 
 
+def backgroundCountRatePerSR(
+        lowerE,
+        upperE,
+        resolution=None
+):
+    energyBand = upperE - lowerE
+    if resolution is None:
+        nSteps = 100
+        resolution = energyBand / (nSteps - 1)
+    else:
+        nSteps = (energyBand / resolution) + 1
+
+    energySpectrum = np.linspace(lowerE, upperE, nSteps)
+
+    backgroundCountRate = 0
+    for i in range(len(energySpectrum)):
+        backgroundCountRate = (
+            backgroundCountRate +
+            xRayBackground(energySpectrum[i]) * resolution/energySpectrum[i]
+        )
+    return backgroundCountRate
+    
+
 # Perform an euler numerical integration to get the total background count
 # rates over an energy range
 def backgroundFluxPerSR(lowerE,
@@ -49,7 +72,7 @@ def backgroundFluxPerSR(lowerE,
 
     energyBand = upperE - lowerE
     if resolution is None:
-        nSteps = 100
+        nSteps = 1000
         resolution = energyBand / (nSteps - 1)
     else:
         nSteps = (energyBand / resolution) + 1
@@ -73,6 +96,12 @@ def degreeFOVToSR(degree):
     radian = degree * np.pi / (180)
     return radianFOVToSR(radian)
 
+# Returns counts per cm^2
+def backgroundCountRate(
+        lowerE,
+        upperE,
+        FOVDegrees):
+    return backgroundCountRatePerSR(lowerE, upperE) * degreeFOVToSR(FOVDegrees)
 
 def KEVbackgroundFlux(lowerE,
                       upperE,

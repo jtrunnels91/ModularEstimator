@@ -23,11 +23,17 @@ class UniformNoiseXRaySource(poissonsource.StaticPoissonSource):
             # self.FOV = None
             # self.detectorArea = None
         else:
-            photonsPerSqCm = xp.ERGbackgroundFlux(
+            # photonsPerSqCm = xp.ERGbackgroundFlux(
+            #     energyRangeKeV[0],
+            #     energyRangeKeV[1],
+            #     detectorFOV # function expects FOV in degrees
+            # ) * pc.electronVoltPerErg/(np.mean(energyRangeKeV)*1e3)
+            photonsPerSqCm = xp.backgroundCountRate(
                 energyRangeKeV[0],
                 energyRangeKeV[1],
-                detectorFOV # function expects FOV in degrees
-            ) * pc.electronVoltPerErg/(np.mean(energyRangeKeV))
+                detectorFOV
+            )
+            
             self.photonFlux = photonsPerSqCm * detectorArea
         self.FOV = detectorFOV
         self.FOV_SolidAngle = xp.degreeFOVToSR(detectorFOV)

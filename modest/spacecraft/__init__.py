@@ -1,5 +1,7 @@
 
 __all__ = [
-    'Chandra'
+    'Chandra',
+    'SimulatedSpacecraft'
 ]
 from . chandra import Chandra
+from . simulation import SimulatedSpacecraft

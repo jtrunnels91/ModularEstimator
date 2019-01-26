@@ -381,18 +381,35 @@ def plotTrajectory(
         processedResultsAbs = []
         processedResultsOrd = []
         abscissaUnits = None
+        print()
+        print()
+        print()
+
+        print('||======================================||')
+        print('  Printing results dict')
+        print('||======================================||')
+        print(resultsDict)
+        
         for sortKeyVal in resultsDict:
             currentResult = resultsDict[sortKeyVal]
+            for subResult in currentResult:
+                print(type(subResult))
+                print(subResult)
             try:
                 currentResult=[subResult.value for subResult in currentResult]
             except:
                 currentResult = currentResult
+            currentResult = currentResult.value
             try:
                 abscissaUnits = sortKeyVal.unit
                 sortKeyVal = sortKeyVal.value
             except:
                 abscissaUnits = None
-                
+
+                print('||======================================||')
+                print('  Printing current result')
+                print('||======================================||')
+            print(currentResult)
             if plotResultsKeys[resultsKey]['plot'] == 'line':
                 
                 processedResultsAbs.append(sortKeyVal)

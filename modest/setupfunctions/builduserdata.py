@@ -17,12 +17,32 @@ class UserData:
 
     def __getitem__(self, key):
         return self.__dict__[key]
+    def items(self):
+        return self.__dict__.items()
+    def keys(self):
+        return self.__dict__.keys()
+    def values(self):
+        return self.__dict__.values()
+    def __repr__(self):
+        return("UserData object %s" %self.__dict__)
+    def __contains__(self, key):
+        return self.__dict__.__contains__(key)
+    def __iter__(self):
+        return self.__dict__.__iter__()
 
+    def toDict(self):
+        newDict = {}
+        for k, v in self.__dict__.items():
+            if isinstance(v, UserData):
+                newDict[k] = v.toDict()
+            else:
+                newDict[k] = v
+        return newDict
 def buildUserData(yamlFile):
     with open(yamlFile) as f:
         dataMap = yaml.safe_load(f)
 
-    return UserData(**dataMap['parameters'])
+    return UserData(**dataMap)
 
 ## @fun buildEnvironment creates a pypet envorinment based on a YAML input file
 def buildEnvironment(yamlFile):
