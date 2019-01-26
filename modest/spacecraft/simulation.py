@@ -97,6 +97,7 @@ class SimulatedDynamics():
             userData,
             ureg
             ):
+        self.__initialAttitudeRotationMatrix__ = None
         # Define a series of functions which describe the dynamics of the spacecraft
         self.angularVelocity = (
             userData.dynamics.attitude.angularVelocity.value *
@@ -143,6 +144,12 @@ class SimulatedDynamics():
             else:
                 return(eulerAngles)
 
+    def initialAttitudeRotationMatrix(
+            self
+            ):
+        if self.__initialAttitudeRotationMatrix__ is None:
+            self.__initialAttitudeRotationMatrix__ = self.attitude(0).rotation_matrix
+        return self.__initialAttitudeRotationMatrix__
     def omega(
             self,
             t

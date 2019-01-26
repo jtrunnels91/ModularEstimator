@@ -1,31 +1,38 @@
 from . import UserData
 import numpy as np
 
+def findUniqueParameters(resultsDict, parameterString):
+    parameterList = parameterString.split('.')
+    uniqueParameterValues = []
+
+    for result in resultsDict:
+        for parameter in parameterList:
+            result = result[parameter]
+        result = result['value']
+        if result not in uniqueParameterValues:
+            uniqueParameterValues.append(result)
+    return uniqueParameterValues
+
 def findExplorationParameters(myUserData):
-    if ('start' and
-        'stop' and
-        'number' and
-        'rangeType' in myUserData
-    ):
-        if myUserData.rangeType == 'linear':
-            myExplorationParameters = np.linspace(myUserData.start, myUserData.stop, myUserData.number)
-        elif myUserData.rangeType == 'log':
-            myExplorationParameters = np.logspace(myUserData.start, myUserData.stop, myUserData.number)
-        else:
-            raise ValueError('Unrecougnized range type')
-    else:
-        myExplorationParameters = {}
-        for key, value in myUserData.items():
-            newParameters = findExplorationParameters(value)
-            if isinstance(newParameters, dict):
-                subKey = next(iter(newParameters))
-                newParameters = newParameters[subKey]
-                newKey = key + '.' + subKey
+    myExplorationParametersDict = {}
+    for parameterName, parameter in myUserData.items():
+        if ('start' and
+            'stop' and
+            'number' and
+            'rangeType' in parameter
+        ):
+            if parameter.rangeType == 'linear':
+                myExplorationParameters = np.linspace(
+                    parameter.start, parameter.stop, parameter.number)
+            elif parameter.rangeType == 'log':
+                myExplorationParameters = np.logspace(
+                    parameter.start, parameter.stop, parameter.number)
             else:
-                newKey = key
-                newParameters
-            myExplorationParameters[newKey] = newParameters
-    return myExplorationParameters
+                raise ValueError('Unrecougnized range type')
+        elif 'valueList' in parameter:
+            myExplorationParameters = parameter.valueList
+        myExplorationParametersDict[parameterName] = myExplorationParameters
+    return myExplorationParametersDict
 
 
 def executeSimulation(myExplorationParameters, myFunction, myUserData):
