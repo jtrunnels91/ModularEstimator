@@ -1,5 +1,6 @@
 from . import UserData
 import numpy as np
+import pickle
 
 def findUniqueParameters(resultsDict, parameterString):
     parameterList = parameterString.split('.')
@@ -35,26 +36,65 @@ def findExplorationParameters(myUserData):
     return myExplorationParametersDict
 
 
-def executeSimulation(myExplorationParameters, myFunction, myUserData):
+def executeSimulation(
+        myExplorationParameters,
+        myFunction,
+        myUserData,
+        outputFileName,
+        resultList,
+        currentKeyValueDict,
+        totalExplorationParameters
+):
     remainingParameters = dict(myExplorationParameters)
     key = next(iter(myExplorationParameters))
     value = myExplorationParameters[key]
     remainingParameters.pop(key)
     if len(remainingParameters) > 0:
-        resultList = []
         for subval in value:
+            currentKeyValueDict[key] = subval
             setParameters(myUserData, key, subval)
-            resultList += executeSimulation(remainingParameters, myFunction, myUserData)
+            resultList = executeSimulation(
+                remainingParameters,
+                myFunction,
+                myUserData,
+                outputFileName,
+                resultList,
+                currentKeyValueDict,
+                totalExplorationParameters
+            )
     else:
-        resultList = []
         for subval in value:
+            currentKeyValueDict[key] = subval
             setParameters(myUserData, key, subval)
-            singleResult = myFunction(myUserData)
+            currentKeyValueDict['currentRun'] += 1
+            print()
+            print()
+            print("||=================================================||")
+            print("  MONTE CARLO SIMULATION EXECUTOR ")
+            print("  Beginning run %i of %i " %(
+                currentKeyValueDict['currentRun'], currentKeyValueDict['totalRuns']
+            ))
+            for currentValKey, currentVal in currentKeyValueDict.items():
+                if currentValKey != 'currentRun' and currentValKey != 'totalRuns':
+                    print("  %s = %s"  %(currentValKey, currentVal))
+            print("||=================================================||")
+
+            try:
+                singleResult = myFunction(myUserData, currentKeyValueDict)
+            except:
+                singleResult = 'RUN FAILED'
             resultList.append(
                 {
                     'parameters': myUserData.toDict(),
                     'results': singleResult
                 }
+            )
+            pickle.dump(
+                {
+                    'results':resultList,
+                    'explorationParameters': totalExplorationParameters
+                },
+                open( outputFileName, "wb" )
             )
     return resultList
 
@@ -80,11 +120,23 @@ def setParameters(myUserData, parameterString, newValue):
         #         subItem.value = newValue
     return myUserData
 
-def runSimulation(userData, function):
+def runSimulation(userData, function, outputFileName):
+    exploreParameters = findExplorationParameters(userData.exploreParameters)
+    totalRuns = 1
+    for key, value in exploreParameters.items():
+        totalRuns = totalRuns * len(value)
+    currentStatusDict = {
+        'totalRuns': totalRuns,
+        'currentRun': 0
+    }
     results=executeSimulation(
-        findExplorationParameters(userData.exploreParameters),
+        exploreParameters,
         function,
-        userData.parameters
+        userData.parameters,
+        outputFileName,
+        [],
+        currentStatusDict,
+        exploreParameters
     )
     return results
 

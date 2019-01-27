@@ -14,7 +14,8 @@ def plotMCResults(
     if axis is None:
         myFig = plt.figure()
         axis = plt.gca()
-
+    abscissaUnits=None
+    ordinateUnits=None
     abscissaOrdinateValues ={}
     abscissaKeyList = abscissaDict['key'].split('.')
     for result in resultsDict:

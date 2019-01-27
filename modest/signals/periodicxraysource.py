@@ -121,10 +121,10 @@ class PeriodicXRaySource(
         
         # Process whatever was passed as the profile
         self.processProfile(profile, normalizeProfile, movePeakToZero, useProfileColumn)
-        print('PEPOCH MJDREF')
-        print(self.PEPOCH)
-        print('OBSERVATORY MJDREF')
-        print(self.observatoryMJDREF)
+        # print('PEPOCH MJDREF')
+        # print(self.PEPOCH)
+        # print('OBSERVATORY MJDREF')
+        # print(self.observatoryMJDREF)
         if (self.PEPOCH is not None) and (self.observatoryMJDREF is not None):
             self.TZeroDiff = (self.PEPOCH - self.observatoryMJDREF)*24*60*60
         else:
@@ -236,7 +236,7 @@ class PeriodicXRaySource(
                     # PAR files store right ascension as HH:MM:SS, so split
                     # on the ":" character
                     hmsArray = splitLine[1].split(':')
-                    print(hmsArray)
+                    # print(hmsArray)
                     PAR_RA = (
                         sg.hms2rad(
                             float(hmsArray[0]),
@@ -745,3 +745,44 @@ class PeriodicXRaySource(
             self
     ):
         return (299792)
+
+    def FWHM(self):
+        maxValue = self.profile[0]
+        halfMax = maxValue / 2
+
+        upperIndex = 0
+        lowerIndex = len(self.profile) - 1
+
+        while self.profile[upperIndex] > halfMax:
+            upperIndex += 1
+
+        upperIndex += -1
+        upperHalfIndex = (
+            upperIndex +
+            (
+                (halfMax - self.profile[upperIndex]) /
+                (
+                    self.profile[upperIndex + 1] -
+                    self.profile[upperIndex]
+                )
+            )
+        )
+
+        while self.profile[lowerIndex] > halfMax:
+            lowerIndex += -1
+
+        lowerHalfIndex = (
+            lowerIndex +
+            (
+                (halfMax - self.profile[lowerIndex]) /
+                (
+                    self.profile[lowerIndex + 1] -
+                    self.profile[lowerIndex]
+                )
+            )
+        )
+        lowerHalfIndex = lowerHalfIndex - len(self.profile)
+
+        FWHMIndex = upperHalfIndex - lowerHalfIndex
+
+        return FWHMIndex * self.pulsarPeriod / len(self.profile)
