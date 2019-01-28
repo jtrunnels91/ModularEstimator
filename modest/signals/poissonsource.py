@@ -9,10 +9,12 @@ class PoissonSource(signalsource.SignalSource):
     def __init__(
             self,
             flux,
-            startTime=0
+            startTime=0,
+            useTOAprobability=True
             ):
         signalsource.SignalSource.__init__(self)
         self.lastTime = startTime
+        self.useTOAprobability = useTOAprobability
         self.flux = flux
         return
 
@@ -23,18 +25,25 @@ class PoissonSource(signalsource.SignalSource):
             ):
         time = measurement['t']['value']
         dT = time - self.lastTime
-        # self.lastTime = time
-        # return np.exp(-self.flux * dT) * currentFlux
-        return currentFlux
+        if self.useTOAprobability:
+            probability = currentFlux
+        else:
+            probability = 1.0
+        return probability
 
 
 class StaticPoissonSource(PoissonSource):
     def __init__(
             self,
             flux,
-            startTime=0
+            startTime=0,
+            useTOAprobability=True
             ):
-        super().__init__(flux, startTime=startTime)
+        super().__init__(
+            flux,
+            startTime=startTime,
+            useTOAprobability=useTOAprobability
+        )
 
     def computeAssociationProbability(
             self,
@@ -88,10 +97,16 @@ class DynamicPoissonSource(PoissonSource):
             self,
             maxFlux,
             correlationStateName='correlation',
-            startTime=0
+            startTime=0,
+            useTOAprobability=True
     ):
         self.correlationStateName = correlationStateName
-        PoissonSource.__init__(self, maxFlux, startTime=startTime)
+        PoissonSource.__init__(
+            self,
+            maxFlux,
+            startTime=startTime,
+            useTOAprobability=useTOAprobability
+        )
         return
 
     @abstractmethod

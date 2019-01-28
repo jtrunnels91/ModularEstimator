@@ -32,7 +32,8 @@ class StaticXRayPointSource(
             name=None,
             startTime=0,
             extent=0,
-            useUnitVector=True
+            useUnitVector=True,
+            useTOAprobability=True
     ):
         if photonCountRate is None and photonEnergyFlux is None:
             raise ValueError(
@@ -53,7 +54,12 @@ class StaticXRayPointSource(
         pointsource.PointSource.__init__(
             self, RA, DEC, extent=extent, attitudeStateName=attitudeStateName, useUnitVector=useUnitVector
         )
-        poissonsource.StaticPoissonSource.__init__(self, photonCountRate, startTime=startTime)
+        poissonsource.StaticPoissonSource.__init__(
+            self,
+            photonCountRate,
+            startTime=startTime,
+            useTOAprobability=useTOAprobability
+        )
         self.peakPhotonFlux = photonCountRate
 
         if name is None:

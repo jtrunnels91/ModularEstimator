@@ -36,7 +36,8 @@ class PeriodicXRaySource(
             correlationStateName=None,
             useProfileColumn=None,
             startTime=0,
-            extent=0
+            extent=0,
+            useTOAprobability=True
     ):
         
         # Store the user-passed arguments first.  These take priority of
@@ -146,7 +147,8 @@ class PeriodicXRaySource(
             self,
             self.peakAmplitude,
             correlationStateName=correlationStateName,
-            startTime=startTime
+            startTime=startTime,
+            useTOAprobability=useTOAprobability
         )
         
         return

@@ -16,7 +16,8 @@ class UniformNoiseXRaySource(poissonsource.StaticPoissonSource):
             energyRangeKeV=[2,10],
             detectorFOV=180,
             detectorArea=1,
-            startTime=0
+            startTime=0,
+            useTOAprobability=True
     ):
         if photonFlux is not None:
             self.photonFlux = photonFlux
@@ -39,7 +40,11 @@ class UniformNoiseXRaySource(poissonsource.StaticPoissonSource):
         self.FOV_SolidAngle = xp.degreeFOVToSR(detectorFOV)
         self.detectorArea = detectorArea
             
-        super().__init__(self.photonFlux, startTime=startTime)
+        super().__init__(
+            self.photonFlux,
+            startTime=startTime,
+            useTOAprobability=useTOAprobability
+        )
         
         return
 
