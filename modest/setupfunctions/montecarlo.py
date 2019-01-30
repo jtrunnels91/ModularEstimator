@@ -1,6 +1,7 @@
 from . import UserData
 import numpy as np
 import pickle
+import multiprocessing as mp
 
 def findUniqueParameters(resultsDict, parameterString):
     parameterList = parameterString.split('.')
@@ -43,7 +44,8 @@ def executeSimulation(
         outputFileName,
         resultList,
         currentKeyValueDict,
-        totalExplorationParameters
+        totalExplorationParameters,
+        useMultiProcessing=False
 ):
     remainingParameters = dict(myExplorationParameters)
     key = next(iter(myExplorationParameters))
@@ -63,6 +65,10 @@ def executeSimulation(
                 totalExplorationParameters
             )
     else:
+        if useMultiProcessing:
+            output = mp.Queue()
+            myProcessList = []
+        
         for subval in value:
             currentKeyValueDict[key] = subval
             setParameters(myUserData, key, subval)
@@ -71,7 +77,7 @@ def executeSimulation(
             print()
             print("||=================================================||")
             print("  MONTE CARLO SIMULATION EXECUTOR ")
-            print("  Beginning run %i of %i " %(
+            print("  Initializing process for run %i of %i " %(
                 currentKeyValueDict['currentRun'], currentKeyValueDict['totalRuns']
             ))
             for currentValKey, currentVal in currentKeyValueDict.items():
@@ -79,23 +85,37 @@ def executeSimulation(
                     print("  %s = %s"  %(currentValKey, currentVal))
             print("||=================================================||")
 
-            try:
-                singleResult = myFunction(myUserData, currentKeyValueDict)
-            except:
-                singleResult = 'RUN FAILED'
-            resultList.append(
-                {
-                    'parameters': myUserData.toDict(),
-                    'results': singleResult
-                }
-            )
-            pickle.dump(
-                {
-                    'results':resultList,
-                    'explorationParameters': totalExplorationParameters
-                },
-                open( outputFileName, "wb" )
-            )
+            if useMultiProcessing:
+                myProcessList.append(
+                    mp.Process(target=myFunction, args=(myUserData, currentKeyValueDict, output))
+                )
+                               
+            else:
+                try:
+                    singleResult = myFunction(myUserData, currentKeyValueDict)
+                except:
+                    singleResult = 'RUN FAILED'
+                resultList.append(
+                    {
+                        'parameters': myUserData.toDict(),
+                        'results': singleResult
+                    }
+                )
+                with open( outputFileName, "wb" ) as myPickle:
+                    pickle.dump(
+                        {
+                            'results':resultList,
+                            'explorationParameters': totalExplorationParameters
+                        },
+                        myPickle
+                    )
+        if useMultiProcessing:
+            for p in myProcessList:
+                p.start()
+            for p in myProcessList:
+                p.join()
+            resultsList = resultList + [output.get() for p in myProcessList]
+            
     return resultList
 
     
@@ -120,7 +140,7 @@ def setParameters(myUserData, parameterString, newValue):
         #         subItem.value = newValue
     return myUserData
 
-def runSimulation(userData, function, outputFileName):
+def runSimulation(userData, function, outputFileName, useMultiProcessing = False):
     exploreParameters = findExplorationParameters(userData.exploreParameters)
     totalRuns = 1
     for key, value in exploreParameters.items():
@@ -136,7 +156,8 @@ def runSimulation(userData, function, outputFileName):
         outputFileName,
         [],
         currentStatusDict,
-        exploreParameters
+        exploreParameters,
+        useMultiProcessing=useMultiProcessing
     )
     return results
 
