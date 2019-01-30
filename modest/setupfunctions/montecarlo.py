@@ -45,7 +45,8 @@ def executeSimulation(
         resultList,
         currentKeyValueDict,
         totalExplorationParameters,
-        useMultiProcessing=False
+        useMultiProcessing=False,
+        runSafe=False
 ):
     remainingParameters = dict(myExplorationParameters)
     key = next(iter(myExplorationParameters))
@@ -91,10 +92,13 @@ def executeSimulation(
                 )
                                
             else:
-                try:
+                if runSafe:
+                    try:
+                        singleResult = myFunction(myUserData, currentKeyValueDict)
+                    except:
+                        singleResult = 'RUN FAILED'
+                else:
                     singleResult = myFunction(myUserData, currentKeyValueDict)
-                except:
-                    singleResult = 'RUN FAILED'
                 resultList.append(
                     {
                         'parameters': myUserData.toDict(),
@@ -140,7 +144,7 @@ def setParameters(myUserData, parameterString, newValue):
         #         subItem.value = newValue
     return myUserData
 
-def runSimulation(userData, function, outputFileName, useMultiProcessing = False):
+def runSimulation(userData, function, outputFileName, useMultiProcessing = False, runSafe=False):
     exploreParameters = findExplorationParameters(userData.exploreParameters)
     totalRuns = 1
     for key, value in exploreParameters.items():
@@ -157,7 +161,8 @@ def runSimulation(userData, function, outputFileName, useMultiProcessing = False
         [],
         currentStatusDict,
         exploreParameters,
-        useMultiProcessing=useMultiProcessing
+        useMultiProcessing=useMultiProcessing,
+        runSafe=runSafe
     )
     return results
 
