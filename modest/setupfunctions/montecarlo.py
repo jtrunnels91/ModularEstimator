@@ -2,7 +2,8 @@ from . import UserData
 import numpy as np
 import pickle
 import multiprocessing as mp
-
+import copy
+np.random.seed()
 def findUniqueParameters(resultsDict, parameterString):
     parameterList = parameterString.split('.')
     uniqueParameterValues = []
@@ -18,9 +19,9 @@ def findUniqueParameters(resultsDict, parameterString):
 def findExplorationParameters(myUserData):
     myExplorationParametersDict = {}
     for parameterName, parameter in myUserData.items():
-        if ('start' and
-            'stop' and
-            'number' and
+        if ('start'     in parameter and
+            'stop'      in parameter and
+            'number'    in parameter and
             'rangeType' in parameter
         ):
             if parameter.rangeType == 'linear':
@@ -36,12 +37,15 @@ def findExplorationParameters(myUserData):
         elif parameter.rangeType == 'randint':
             if 'upper' and 'lower' in parameter:
                 myExplorationParameters = np.random.randint(
-                    parameter.lower, parameter.upper, parameter.size
+                    parameter.start, parameter.stop, parameter.number
                 )
             else:
                 myExplorationParameters = np.random.randint(
-                    0, (2**32)-1, parameter.size
+                    0, (2**32)-1, parameter.number
                 )
+        else:
+            raise ValueError('Unrecougnized range type')
+
         myExplorationParametersDict[parameterName] = myExplorationParameters
     return myExplorationParametersDict
 
@@ -72,16 +76,18 @@ def executeSimulation(
                 outputFileName,
                 resultList,
                 currentKeyValueDict,
-                totalExplorationParameters
+                totalExplorationParameters,
+                useMultiProcessing=useMultiProcessing,
+                runSafe=runSafe
             )
     else:
         if useMultiProcessing:
-            output = mp.Queue()
-            myProcessList = []
+            myPool = mp.Pool(mp.cpu_count())
+            myParameterList = []
         
         for subval in value:
             currentKeyValueDict[key] = subval
-            setParameters(myUserData, key, subval)
+            currentUserData = copy.deepcopy(setParameters(myUserData, key, subval))
             currentKeyValueDict['currentRun'] += 1
             print()
             print()
@@ -93,24 +99,26 @@ def executeSimulation(
             for currentValKey, currentVal in currentKeyValueDict.items():
                 if currentValKey != 'currentRun' and currentValKey != 'totalRuns':
                     print("  %s = %s"  %(currentValKey, currentVal))
+            if useMultiProcessing:
+                print("  Running using multiprocessing")
             print("||=================================================||")
 
             if useMultiProcessing:
-                myProcessList.append(
-                    mp.Process(target=myFunction, args=(myUserData, currentKeyValueDict, output))
+                myParameterList.append(
+                    currentUserData
                 )
                                
             else:
                 if runSafe:
                     try:
-                        singleResult = myFunction(myUserData, currentKeyValueDict)
+                        singleResult = myFunction(currentUserData)
                     except:
                         singleResult = 'RUN FAILED'
                 else:
-                    singleResult = myFunction(myUserData, currentKeyValueDict)
+                    singleResult = myFunction(currentUserData)
                 resultList.append(
                     {
-                        'parameters': myUserData.toDict(),
+                        'parameters': currentUserData.toDict(),
                         'results': singleResult
                     }
                 )
@@ -123,11 +131,26 @@ def executeSimulation(
                         myPickle
                     )
         if useMultiProcessing:
-            for p in myProcessList:
-                p.start()
-            for p in myProcessList:
-                p.join()
-            resultsList = resultList + [output.get() for p in myProcessList]
+            newResults = myPool.map(myFunction, myParameterList)
+            newResults = [
+                {
+                    'parameters': parameter.toDict(),
+                    'results': result
+                }
+                for parameter, result in zip(myParameterList,newResults)
+            ]
+            resultList = resultList + newResults
+            
+            myPool.close()
+            myPool.join()
+            with open( outputFileName, "wb" ) as myPickle:
+                pickle.dump(
+                    {
+                        'results':resultList,
+                        'explorationParameters': totalExplorationParameters
+                    },
+                    myPickle
+                )
             
     return resultList
 
