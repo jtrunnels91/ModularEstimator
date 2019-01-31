@@ -33,6 +33,15 @@ def findExplorationParameters(myUserData):
                 raise ValueError('Unrecougnized range type')
         elif 'valueList' in parameter:
             myExplorationParameters = parameter.valueList
+        elif parameter.rangeType == 'randint':
+            if 'upper' and 'lower' in parameter:
+                myExplorationParameters = np.random.randint(
+                    parameter.lower, parameter.upper, parameter.size
+                )
+            else:
+                myExplorationParameters = np.random.randint(
+                    0, (2**32)-1, parameter.size
+                )
         myExplorationParametersDict[parameterName] = myExplorationParameters
     return myExplorationParametersDict
 
