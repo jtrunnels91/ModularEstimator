@@ -207,6 +207,7 @@ def buildAttitudeSubstate(
     attitudeCovariance[0, 0] = np.square(initialAttitudeStdDevRoll)
     attitudeCovariance[1, 1] = np.square(initialAttitudeStdDevDEC)
     attitudeCovariance[2, 2] = np.square(initialAttitudeStdDevRA)
+    print(attitudeCovariance)
 
     if traj.attitudeFilter.updateMeasMat.value == 'unitVec':
         useUnitVec=True

@@ -644,18 +644,18 @@ class Attitude(substate.SubState):
         #         [0, cosTheta, sinTheta]
         #     ]
         # )
-        H = np.array(
-            [
-                [-raDiff*sinTheta + decDiff*cosTheta, sinTheta, -cosTheta],
-                [-raDiff*cosTheta - decDiff*sinTheta, cosTheta, sinTheta]
-            ]
-        )
-        H = np.array(
-            [
-                [raDiff*sinTheta + decDiff*cosTheta, 0, -1],
-                [-raDiff*cosTheta - decDiff*sinTheta, 1, 0]
-            ]
-        )
+        # H = np.array(
+        #     [
+        #         [-raDiff*sinTheta + decDiff*cosTheta, sinTheta, -cosTheta],
+        #         [-raDiff*cosTheta - decDiff*sinTheta, cosTheta, sinTheta]
+        #     ]
+        # )
+        # H = np.array(
+        #     [
+        #         [raDiff*sinTheta + decDiff*cosTheta, 0, -1],
+        #         [-raDiff*cosTheta - decDiff*sinTheta, 1, 0]
+        #     ]
+        # )
         H = np.array(
             [
                 [decDiff, 0, -1],

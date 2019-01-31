@@ -55,7 +55,7 @@ class UniformNoiseXRaySource(poissonsource.StaticPoissonSource):
             validationThreshold=0):
 
         # anglePR = 1/(4 * np.pi)
-        anglePR = 1/(self.FOV_SolidAngle)
+        anglePR = 1.0/(self.FOV_SolidAngle)
 
         poisPR = super().computeAssociationProbability(measurement)
         # poisPR = 1
