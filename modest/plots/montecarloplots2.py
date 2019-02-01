@@ -61,9 +61,14 @@ def plotMCResults(
     abscissaList = [abscissa for abscissa, ordinate in abscissaOrdinateList]
     ordinateList = [ordinate for abscissa, ordinate in abscissaOrdinateList]
 
-
-    if plotType is 'line':
+    
+    if plotType == 'line':
         myLine = axis.plot(abscissaList, ordinateList)
+        myLabel = ordinateDict['label']
+    elif plotType == 'scatter':
+        for counter in range(len(abscissaList)):
+            abscissaList[counter] = np.ones(len(ordinateList[counter])) * abscissaList[counter]
+        myLine = axis.scatter(abscissaList, ordinateList)
         myLabel = ordinateDict['label']
 
     return {
