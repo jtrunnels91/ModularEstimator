@@ -7,33 +7,33 @@ import numpy as np
 # import matplotlib as mp
 import matplotlib.pyplot as plt
 
-## @class SubState
-# @brief This is an abstract base class for objects used as sub-states in
-# State.ModularFilter.
-#
-# @details SubState is an abstract base class that specifies the methods which
-# are required for an object to function as a sub-state of State.ModularFilter.
-#
-# Some of these methods are implemented and most likely do not need to be
-# reimplemented in a derived class implementation (for example the #dimension
-# and #covariance methods.
-#
-# Other methods may have a rudimentary implementation that may be suitable for
-# some derived classes, but not others, depending on the specific
-# functionality of the derived class (for instance #getStateVector and
-# #storeStateVector).
-#
-# Finally, some methods are specifically tagged as abstract methods and are
-# not implemented at all.  These methods must be implemented in the derived
-# class.  This is usually because there is no way to implement even a
-# rudimentary version of what the method is supposed to do without having some
-# knowledge of what kind of substate the derived class contains (for instance
-# #timeUpdate and #getMeasurementMatrices).
-#
-# In any case, the documentation for each method of SubState contains a
-# generalized description of what functionality the implementation should
-# provide in a derived class.
 class SubState():
+    """
+    This is an abstract base class for objects used as sub-states in
+    State.ModularFilter.
+
+    SubState is an abstract base class that specifies the methods which are required for an object to function as a sub-state of State.ModularFilter.
+
+    Some of these methods are implemented and most likely do not need to be
+    reimplemented in a derived class implementation (for example the #dimension
+    and #covariance methods.
+
+    Other methods may have a rudimentary implementation that may be suitable for
+    some derived classes, but not others, depending on the specific
+    functionality of the derived class (for instance #getStateVector and
+    #storeStateVector).
+
+    Finally, some methods are specifically tagged as abstract methods and are
+    not implemented at all.  These methods must be implemented in the derived
+    class.  This is usually because there is no way to implement even a
+    rudimentary version of what the method is supposed to do without having some
+    knowledge of what kind of substate the derived class contains (for instance
+    #timeUpdate and #getMeasurementMatrices).
+
+    In any case, the documentation for each method of SubState contains a
+    generalized description of what functionality the implementation should
+    provide in a derived class.
+    """
     __metaclass__ = ABCMeta
 
     ## @fun #__init__ initializes a SubState object

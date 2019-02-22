@@ -168,7 +168,9 @@ class Attitude(substate.SubState):
                     xPlus[1]/2.0,
                     xPlus[2]/2.0
                 ]))
-            qPlus = self.qHat * errorQ
+
+            # NOTE: The pyquaternion library uses backward notation from what is given in Markley and Crassidia.  So this is equivalent to q^+ = dq * qHat
+            qPlus = self.qHat * errorQ 
             qPlus = qPlus.normalised
 
             self.qHat = qPlus

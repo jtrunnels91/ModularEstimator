@@ -1,5 +1,14 @@
-## @package State
-# This package contains the ModularFilter class.
+"""
+# .. module::modularfilter
+# :synopsis: This package contains the ModularFilter class.
+
+.. moduleauthor:: Joel Runnels
+
+Note:
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <a href="http://www.gnu.org/licenses/">GNU GPL</a>.
+
+"""
+# 
 # @author Joel Runnels
 # @date 2018
 # @copyright GNU General Public License
@@ -12,6 +21,14 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see
 # <a href="http://www.gnu.org/licenses/">GNU GPL</a>.
+
+## @package modularfilter
+# This package contains the ModularFilter class.
+# @author Joel Runnels
+# @date 2018
+# @copyright GNU General Public License
+#
+# @note
 
 import numpy as np
 from scipy.linalg import block_diag, ldl
@@ -26,37 +43,58 @@ import os
 sys.path.append("/home/joel/Documents/astroSourceTracking/libraries")
 
 
-## @class ModularFilter
-# @details
-# This class is designed to facilitate a variety of estimation algorithms in a
-# modular way, i.e. in a way that allows maximum amount of flexibility with
-# minimum amount of code duplication.
-#
-# The idea behind this class is that all of the functions which are "generic"
-# to an estimation algorithm can be written just once, as a part of this class.
-# Then the code contained here can be implemented on a variety of different
-# estimation problems without having to duplicate code.
-#
-# The basic estimation model implemented here works as follows.  The overall
-# state, i.e. all of the quantities to be estimated, are represented by
-# SubStates.SubState objects. Measurements of these states are represented by
-# Signals.SignalSource objects.  The ModularFilter class is responsible for doing time-updates and measurement-updates on these states.
-# These objects are responsible for doing all
-# of the things that are particular to those states, and those signals,
-# respectively.  For instance, generation of time-update and measurement
-# update matrices is handled by the SubStates.SubState objects.
 class ModularFilter():
-    """ This is the ModularFilter Class """
+    """ 
+    This class is designed to facilitate a variety of estimation algorithms in
+    a modular way, i.e. in a way that allows maximum amount of flexibility with
+    minimum amount of code duplication.
+
+    The idea behind this class is that all of the functions which are "generic"
+    to an estimation algorithm can be written just once, as a part of this
+    class. Then the code contained here can be implemented on a variety of
+    different estimation problems without having to duplicate code.
+
+    The basic estimation model implemented here works as follows.  The overall
+    state, i.e. all of the quantities to be estimated, are represented by
+    :class:`~modest.substates.substate.SubState` objects. Measurements of
+    these states are represented by 
+    :class:`~modest.signals.signalsource.SignalSource` objects.  The
+    ModularFilter class is responsible for doing time-updates and
+    measurement-updates on these states. These objects are responsible for
+    doing all of the things that are particular to those states, and those
+    signals, respectively.  For instance, generation of time-update and
+    measurement update matrices is handled by the
+    :class:`~modest.substates.substate.SubState` objects.
+
+    Attributes
+    ----------
+       totalDimension (int):Dimension of joint state vector (sum of all substate dimensions)
+       covarianceMatrix(covarianceContainer): Object which stores covariance matrix
+       subStates(dict): Dictionary of all substate objects
+       signalSources(dict): Dictionary of all signal source objects
+       tCurrent(float): Current filter time
+       measurementValidationThreshold(float): Probability below which a signal source is rejected
+       measurementList(list): A list of measurements used by the filter
+       lastStateVectorID(int): A tag used to specify what the "last" state vector was
+       covarianceStroage(str): String specifying how state error covariance is to be stored
+       plotHandle: Handle for real-time state plotting
+    """
+    
     def __init__(
             self,
             measurementValidationThreshold=1e-3,
             time=0,
             covarianceStorage='covariance'
     ):
-        ## covarianceStorage determines how the filter stores and updates
-        # covariance, or more generally, uncertainty.
-        # The standard approach is to use the covariance matrix, as in the
-        # standard Kalman filter formulation.
+        """
+        __init__ does the house-keeping work to initialize a ModularFilter
+        
+        Args: 
+            time (float): The "starting time" of the filter (default=0)
+            covarianceStorage (str): Specify how covariance is to be stored, whether as the full covariance matrix ("covariance"), or as the square-root representation ("cholesky")
+            measurementValidationThreshold (float): This is a value that specifies the minimum probability an association must have in order to be included in a joint measurement update
+        """
+        
         self.covarianceStorage=covarianceStorage
         self.plotHandle=None
 
@@ -77,18 +115,19 @@ class ModularFilter():
         return
 
 
-    """
-    addStates is a utility function used to add a state to the joint estimator.
-    The following inputs are required:
-    -name: The name by which the state can be referenced (must be unique)
-    -stateObject: An object that contains the sub-state and is responsible for 
-    performing various tasks related to the substate.
-    """
     def addStates(
             self,
             name,
             stateObject
     ):
+        """
+        addStates is a utility function used to add a state to the ModularFilter.
+        
+        Args: 
+            name (str): The name by which the state can be referenced (must be unique)
+            stateObject (substate): An object that contains the sub-state and is responsible for performing various tasks related to the substate.
+        """
+
 
         # Check to see whether the name is unique
         if name in self.subStates:
@@ -124,21 +163,18 @@ class ModularFilter():
             }
         return
 
-    """
-    addSignalSource is a utility function used to add a signal source to the 
-    joint estimator.
-
-    The following inputs are required:
-    -name: The name by which the signal source can be referenced (must be 
-    unique)
-    -signalSourceObject: An object that contains the signal source and is
-    responsible for performing various tasks related to the substate.
-    """
     def addSignalSource(
             self,
             name,
             signalSourceObject
     ):
+        """
+        addSignalSource is a utility function used to add a signal source to the joint estimator.
+        
+        Args:
+         name (str): The name by which the signal source can be referenced (must be unique)
+         signalSourceObject (SignalSource): An object that contains the signal source and is responsible for performing various tasks related to the substate.
+        """
         # Check to see whether the name is unique
         if name in self.signalSources:
             raise ValueError(
@@ -158,6 +194,33 @@ class ModularFilter():
             dT,
             dynamics=None
             ):
+        """
+        Performs a standard extended Kalman filter time-update using information found in dynamcs, and over time-interval dT.
+
+        Following the general framework for the ModularFilter, this function only performs the tasks that are universal across all the substates.  It is up to the substates to process the dynamics infromation and build the appropriate time-update matrices ($F$ and $Q$).  This is done by calling :meth:`~modest.substates.substate.SubState.timeUpdate` for each substate.
+
+        Once the substate time update matrices are received, they are combined to form a single set of time-update matrices, and then the state vector and covariance are updated.  The updated states and covariances are then passed back to the substates for them to do any nescessary post-processing.
+
+        This function allows for a variable-length time update, so it is up to the user to determine what length of time is appropriate.  Often, the time-update will simply update the state to the next measurement time, if the time between measurements is short.  If the time between measurements is longer, then the length of time-update will most likely depend upon what time-regime the dynamics dictionary is valid over.  For example if the dynamics dict contains acceleration information, the user should specify a dT over which the acceleration is *approximately* constant.
+        
+        While values are returned containing the time-updated state vector and covariance, these are also automatically stored and dissimenated to the substates for additional processing, so the user does not *need* to do anything with these returned values.  They are returned merely for convenience and monitoring by the user as desired.
+
+        Args:
+         dT (float): The amount of time over which the time-update is occuring
+         dynamics (dict): A dictionary containing all information about the dynamics during the time update 
+        Returns:
+         numpy.array, covarianceContainer: The time-updated state vector and covariance
+        
+        Example: ::
+
+            myFilter.timeUpdateEKF(
+                0.01, 
+                dynamics={
+                'acceleration': {'value': [0, 0, -9.81], 'var' [0.01, 0.01, 0.01]}
+                }
+            )
+        This command would  pass the dynamics dict containing a three-dimensional acceleration vector and associated variances to the substates, and perform a time update from the current time to time pluse 0.01.  Note that it is up to the substates to decide what to do (if anything) with the dynamics information.
+        """
         
         F = np.zeros([self.totalDimension, self.totalDimension])
         Q = covarianceContainer(
@@ -225,23 +288,32 @@ class ModularFilter():
         
         return (xMinus, PMinus)
     
-    """
-    computeAssociationProbabilities is responsible for computing the
-    probability that a measurement originated from each of the signal sources
-    being tracked by the estimator.  The function assumes that each signal
-    source object has a member function which will compute the probability of
-    origination, given the measurement and the prior state values.
-    Additionally, it assumes that the objects take a validation threshold as
-    an optional argument.
-
-    The following inputs are required:
-    - measurement: The measurement for which the probability is to be computed.
-    Most likely will be a dict, with a time key and a value key.
-    """
     def computeAssociationProbabilities(
             self,
             measurement
     ):
+        """
+        computeAssociationProbabilities is responsible for computing the
+        probability that a measurement originated from each of the signal sources
+        being tracked by the estimator.
+
+        The function assumes that each signal source object has a member function which will compute the probability of origination, given the measurement and the prior state values, :meth:`~modest.signals.signalsource.SignalSource`. Additionally, it assumes that the objects take a validation threshold as an optional argument.
+        
+        It is up to each individual signal source to determine it's own probability of association given the current state vector.  For some signal sources the probability may be zero, particularly if the measurement does not contain anything that could have possibly originated from that signal source (e.g. a signal source that measures only velocity would have zero probability of association with a position measurement).
+
+        Args:
+         measurement (dict): The measurement for which the probability is to be computed.
+
+        Example: ::
+
+            myFilter.computeAssociationProbabilities(
+                {
+                'position': {'value': [0, 0, 100], 'var' [0.01, 0.01, 0.01]}
+                }
+            )
+
+    """
+        
 
         probabilityDict = {}
         probabilitySum = 0

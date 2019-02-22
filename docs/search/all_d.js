@@ -1,7 +1,0 @@
-var searchData=
-[
-  ['name',['name',['../classmodest_1_1signals_1_1periodicxraysource_1_1PeriodicXRaySource.html#aec42837776d331b803fe786647763be5',1,'modest.signals.periodicxraysource.PeriodicXRaySource.name()'],['../classmodest_1_1signals_1_1staticxraypointsource_1_1StaticXRayPointSource.html#adf18ce1f6cf286238d5ae52bd9d3978c',1,'modest.signals.staticxraypointsource.StaticXRayPointSource.name()'],['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#aac8308319d4f31067e1087660a15db03',1,'modest.signals.xraysource.PeriodicXRaySource.name()'],['../classmodest_1_1spacecraft_1_1chandra_1_1ChandraDetector.html#aace6412cc4c3b98b8c127364f434b196',1,'modest.spacecraft.chandra.ChandraDetector.Name()']]],
-  ['navstate',['navState',['../classmodest_1_1substates_1_1correlationvector_1_1CorrelationVector.html#a29c9276a6e6569fc4a48270f05138148',1,'modest::substates::correlationvector::CorrelationVector']]],
-  ['nextsignalid',['nextSignalID',['../classmodest_1_1signals_1_1signalsource_1_1SignalSource.html#a453eafb550b551adbec0903deb63dfce',1,'modest::signals::signalsource::SignalSource']]],
-  ['normalizeprofile',['normalizeProfile',['../classmodest_1_1signals_1_1periodicxraysource_1_1PeriodicXRaySource.html#a61df217b2685c2ccf9b0220044849a3c',1,'modest.signals.periodicxraysource.PeriodicXRaySource.normalizeProfile()'],['../classmodest_1_1signals_1_1xraysource_1_1PeriodicXRaySource.html#ac7490bebcc1d508b7813ea274cc36702',1,'modest.signals.xraysource.PeriodicXRaySource.normalizeProfile()']]]
-];
