@@ -1,10 +1,10 @@
 ## @file __init__.py Initialization file for the modest package.
 __all__ = [
-    'plots',
+    'ModularFilter',
     'substates',
     'signals',
     'utils',
-    'ModularFilter',
+    'plots',
     'spacecraft',
     'setupfunctions'
 ]

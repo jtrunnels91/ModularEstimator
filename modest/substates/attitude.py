@@ -11,50 +11,44 @@ from .. signals.pointsource import PointSource
 from . import substate
 from .. utils import covarianceContainer, spacegeometry, QuaternionHelperFunctions
 
-## @class Attitude
-# @brief Estimates the attitude of a vehicle in three dimensions, along with
-# three gyro bias states.
-#
-# @details
-# This class contains a six-state attitude estimator: three attitude states
-# and three gyro bias states.
-#
-# This class can function as a stand-alone class, or it can function as a
-# "SubState" of the State.ModularFilter class.  The functions required for use
-# as a SubState are defined first after __init__, then functions specific to
-# this class are defined next.
-#
-# The state uses quaternions to store attitude, which avoids issues of gimbal
-# lock and increases numerical stability over other approaches, such as Euler
-# angles.  The quaternion itself is not treated as a part of the state vector.
-# Rather, the state vector includes three attitude "error states," which are
-# updated at each measurement, then used to correct the attitude quaternion.
-# After each correction, the error states are set back to zero.
-#
-# The algorithms used for the state update mostly come from the book
-# "Fundamentals of Spacecraft Attitude Determination and Control" (FSADC) by
-# Markley and Crassidis.  Chapter, section and page numbers will be referenced
-# where appropriate.
 
 class Attitude(substate.SubState):
+    """
+    Estimates the attitude of a vehicle in three dimensions, along with
+    three gyro bias states.
 
-    ## @fun The #__init__ method initializes the 6DOF attitude estimator
-    #
-    # @details This function is responsible for initializing an instance of
-    # the Attitude class and storing all the variables as member
-    # variables.
-    #
-    # @param self The object pointer
-    # @param attitudeQuaternion A pyquaternion.Quaternion object containing
-    # the initial attitude estimate.  This variable gets stored as #qHat.
-    # @param attitudeErrorCovariance A 3x3 numpy array containing the
-    # covariance of the current attitude estimate.  This matrix is used to
-    # form the upper diagonal part of #PHat.
-    # @param gyroBias A 3 dimensional numpy array containing the estimate of
-    # gyro bias.  This array is stored as #bHat.
-    # @param gyroBiasCovariance A 3x3 numpy array containing the estimate of
-    # covariance of gyro bias.  This array is used to form the lower diagonal
-    # part of #PHat.
+    This class contains a six-state attitude estimator: three attitude states
+    and three gyro bias states.
+
+    This class can function as a stand-alone class, or it can function as a
+    :class:`~modest.substates.substate.SubState` of the 
+    :class:`modest.modularfilter.ModularFilter` class.  The functions required
+    for use as a SubState are defined first after __init__, then functions
+    specific to this class are defined next.
+
+    The state uses quaternions to store attitude, which avoids issues of gimbal
+    lock and increases numerical stability over other approaches, such as Euler
+    angles.  The quaternion itself is not treated as a part of the state vector.
+    Rather, the state vector includes three attitude "error states," which are
+    updated at each measurement, then used to correct the attitude quaternion.
+    After each correction, the error states are set back to zero.
+
+    The algorithms used for the state update mostly come from the book
+    "Fundamentals of Spacecraft Attitude Determination and Control" (FSADC) by
+    Markley and Crassidis.  Chapter, section and page numbers will be referenced
+    where appropriate.
+
+    Args:
+     attitudeQuaternion (pyquaternion.Quaternion): object containing the initial attitude estimate.  This variable gets stored as :attr:`qHat`.
+     attitudeErrorCovariance (numpy.ndarray): A 3x3 numpy array containing the covariance of the current attitude estimate.  This matrix is used to form the upper diagonal part of :attr:`PHat`.
+     gyroBias (numpy.ndarray): A 3 dimensional numpy array containing the estimate of gyro bias.  This array is stored as :attr:`bHat`.
+     gyroBiasCovariance (numpy.ndarray): A 3x3 numpy array containing the estimate of covariance of gyro bias.  This array is used to form the lower diagonal part of :attr:`PHat`.
+
+
+
+
+    """
+    
     def __init__(
             self,
             attitudeQuaternion=Quaternion([1,0,0,0]),
@@ -67,19 +61,22 @@ class Attitude(substate.SubState):
             ):
 
         self.useUnitVector = useUnitVector
-        ## @brief Current estimate of attitude, stored as a Quaternion object
-        # Mathematically generally referred to as \f$\mathbf{\hat{q}}^{-}_{k}\f$
-        # for the a priori value, or \f$\mathbf{\hat{q}}^{+}_{k}\f$ for the a
-        # posteriori 
+        """
+        (bool) Determines whether the unit vector is used for the measurement matrix, or the right ascension declination measurement model
+        """        
+        
         self.qHat = attitudeQuaternion
+        """
+        (pyquaternion.Quaternion): Current estimate of attitude, stored as a Quaternion object. 
 
-        ## @brief Current estimate of gyro bias
+        Mathematically generally referred to as :math:`\mathbf{\hat{q}}^{-}_{k}` for the *a priori* value, or :math:`\mathbf{\hat{q}}^{+}_{k}` for the *a posteriori*
+        """        
+
         self.bHat = gyroBias
+        """
+        (numpy.ndarray) Current estimate of gyro bias
+        """
 
-        ## @brief Current joint covariance matrix.
-        # @details Upper 3x3 diagonal contains covariance of the attitude
-        # estimate (related to #qHat), while lower 3x3 diagonal contains the
-        # covariance of the gyro bias #bHat.
         self.PHat = covarianceContainer(
             block_diag(
                 attitudeErrorCovariance,
@@ -87,17 +84,24 @@ class Attitude(substate.SubState):
             ),
             covarianceStorage
         )
+        """
+        (covarianceContainer)  Current joint covariance matrix. 
 
-        ## @brief Last measurement used to generate measurement matrices
+        Upper 3x3 diagonal contains covariance of the attitude estimate (related to :attr:`qHat`), while lower 3x3 diagonal contains the covariance of the gyro bias :attr:`bHat`.
+        """
+        
         self.lastMeasID = None
+        """ Last measurement used to generate measurement matrices
+        """
         
-        ## @brief Last signal used to generate measurement matrices
         self.lastSourceID = None
+        """ Last signal used to generate measurement matrices
+        """
         
-        ## @brief Last set of measurement matrices
-        # @details This allows class to avoid redundant computation of the
-        # same set of measurement matrices.
         self.lastMeasMat = None
+        """ Last set of measurement matrices
+        This allows class to avoid redundant computation of the same set of measurement matrices.
+        """
 
 
         super().__init__(
@@ -198,34 +202,37 @@ class Attitude(substate.SubState):
         return
     
 
-    ## @fun timeUpdate returns the time-update matrices, and handles the
-    # internal time update of the attitude estimate #qHat.
-    #
-    # @details This function generates the time-update matrices F and Q, to be
-    # used for a time update, either locally or jointly as part of a
-    # State.ModularFilter.
-    #
-    # This function looks for angular velocity (omega) and bias variance in
-    # the dynamics dict, and uses these to construct the time update matrices.
-    # If these are not included in the dynamics dict, then the function
-    # assumes these values to be zero.
-    #
-    # This function also updates the attitude quaternion internally.  It does
-    # not update the covariance matrix however; this must be done externally.
-    #
-    # @param self The object pointer
-    # @param dynamics: A dict containing information about the dynamics.
-    #
-    # @return A dict containing the state transition matrix ("F") and the
-    # process noise matrix ("Q")
-    #
-    # @sa SubStates.SubState.timeUpdate
     def timeUpdate(
             self,
             dT,
             dynamics=None
     ):
-
+        """
+        timeUpdate returns the time-update matrices, and handles the
+        internal time update of the attitude estimate #qHat.
+    
+        This function generates the time-update matrices F and Q, to be
+        used for a time update, either locally or jointly as part of a
+        State.ModularFilter.
+    
+        This function looks for angular velocity (omega) and bias variance in
+        the dynamics dict, and uses these to construct the time update matrices.
+        If these are not included in the dynamics dict, then the function
+        assumes these values to be zero.
+    
+        This function also updates the attitude quaternion internally.  It does
+        not update the covariance matrix however; this must be done externally.
+        
+        Args:
+         dynamics (dict): A dict containing information about the dynamics.
+    
+        Returns:
+         (dict) A dict containing the state transition matrix ("F") and the
+         process noise matrix ("Q")
+    
+        See Also: :meth:`~modest.substates.substate.SubStateg.timeUpdate`
+        """
+        
         # Check the dynamics dict for angular velocity
         if (
                 (dynamics is not None) and

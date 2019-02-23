@@ -1,11 +1,11 @@
 """
-# .. module::modularfilter
-# :synopsis: This package contains the ModularFilter class.
+.. module::modularfilter
+:synopsis: This package contains the ModularFilter class.
 
 .. moduleauthor:: Joel Runnels
 
 Note:
- This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see <a href="http://www.gnu.org/licenses/">GNU GPL</a>.
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program.  If not, see http://www.gnu.org/licenses/
 
 """
 # 
@@ -351,26 +351,46 @@ class ModularFilter():
         # print(probabilityDict)
         return (probabilityDict)
 
-    """
-    measurementUpdateEKF is a standard Extended Kalman Filter measurement
-    update.  This function only works when the signal source is known, which
-    may or may not be a realistic assumption, depending on the problem.
-    Al)ternatively, it can be used for comparison to other data association
-    methods.
 
-    The following inputs are required:
-    - measurement: A dict with all the relevant measurable quanties labeled in
-    a way that the substates and signal source objects understand.
-    - sourceName: A string that contains the name of the signal source from
-    which the measurement originated.  This must be the name of one of the
-    signal sources that have been added to the estimator.
-    """    
     def measurementUpdateEKF(
             self,
             measurement,
             sourceName
             ):
+        """
+        measurementUpdateEKF performs a standard Extended Kalman Filter measurement
+        update.  
 
+        This function only works when the signal source is known, which
+        may or may not be a realistic assumption, depending on the problem.
+        Alternatively, it can be used for comparison to other data association
+        methods.
+
+        As with other update methods, the updated state and covariance are returned.  However the function also stores and distributes the state and covariance to the substates, so the user does not need to do anything with the returned state and covariance.
+
+        Note that there is no time associated with the measurement; the filter
+        assumes that the measurement is occuring at the current time. 
+        Therefore it is the user's responsibility to time-update the state to
+        the current time before doing the measurement update.
+
+        Args:
+         measurement (dict): Dictionary containing all the relevant measurable quanties labeled in a way that the substates and signal source objects understand.
+         sourceName (str): A string that contains the name of the signal source from which the measurement originated.  This must be the name of one of the signal sources that have been added to the estimator.
+
+        Returns:
+         numpy.array, covarianceContainer: The measurement-updated state vector and covariance
+
+        Example: ::
+
+            myFilter.computeAssociationProbabilities(
+                {
+                'position': {'value': [0, 0, 100], 'var' [0.01, 0.01, 0.01]},
+                },
+                'range1'
+            )
+
+        """
+        
         if 'ID' not in measurement:
             if self.lastMeasurementID == None:
                 self.lastMeasurementID = -1
@@ -406,6 +426,39 @@ class ModularFilter():
             self,
             measurement
             ):
+        """
+        measurementUpdateML performs a maximum-likelhood measurement update
+
+        The first step is to assemble the global state vector from each sub-state vector.  This is performed using :meth:`getGlobalStateVector`.
+
+        This function first computes the probability of association of the measurement with each signal source using :meth:`computeAssociationProbabilities`.  Whichever signal is most likely is assumed to be the correct measurement source and is used to update the state (assuming the probability is above :attr:`measurementValidationThreshold`).
+
+        Finally, the updated state vector and covariance matrix is distributed to the substates using :meth:`storeGlobalStateVector`.
+
+        As with other update methods, the updated state and covariance are returned.  However the function also stores and distributes the state and covariance to the substates, so the user does not need to do anything with the returned state and covariance.
+
+        Note that there is no time associated with the measurement; the filter
+        assumes that the measurement is occuring at the current time. 
+        Therefore it is the user's responsibility to time-update the state to
+        the current time before doing the measurement update.
+
+        
+        Args:
+         measurement (dict): Dictionary containing all the relevant measurable quanties labeled in a way that the substates and signal source objects understand.
+
+        Returns:
+         measurement (dict): Dictionary containing all the relevant measurable quanties labeled in a way that the substates and signal source objects understand.
+
+        Example: ::
+
+            myFilter.computeAssociationProbabilities(
+                {
+                'position': {'value': [0, 0, 100], 'var' [0.01, 0.01, 0.01]},
+                }
+            )
+
+        """    
+
         signalAssociationProbability = (
             self.computeAssociationProbabilities(measurement)
             )
@@ -448,6 +501,38 @@ class ModularFilter():
             self,
             measurement
     ):
+        """
+        measurementUpdateJPDAF performs a measurement using the joint probabilistic data association framework.
+
+        The first step is to assemble the global state vector from each sub-state vector.  This is performed using :meth:`getGlobalStateVector`.
+
+        This function then computes the probability of association of the measurement with each signal source using :meth:`computeAssociationProbabilities`.  Associations with probabilities lower than :attr:`measurementValidationThreshold`.
+
+        Finally, the updated state vector and covariance matrix is distributed to the substates using :meth:`storeGlobalStateVector`.
+
+        As with other update methods, the updated state and covariance are returned.  However the function also stores and distributes the state and covariance to the substates, so the user does not need to do anything with the returned state and covariance.
+
+        Note that there is no time associated with the measurement; the filter
+        assumes that the measurement is occuring at the current time. 
+        Therefore it is the user's responsibility to time-update the state to
+        the current time before doing the measurement update.
+        
+        Args:
+         measurement (dict): Dictionary containing all the relevant measurable quanties labeled in a way that the substates and signal source objects understand.
+
+        Returns:
+         measurement (dict): Dictionary containing all the relevant measurable quanties labeled in a way that the substates and signal source objects understand.
+
+        Example: ::
+
+            myFilter.computeAssociationProbabilities(
+                {
+                'position': {'value': [0, 0, 100], 'var' [0.01, 0.01, 0.01]},
+                }
+            )
+
+        """    
+        
         
         signalAssociationProbability = (
             self.computeAssociationProbabilities(measurement)
@@ -620,6 +705,10 @@ class ModularFilter():
     def getGlobalStateVector(
             self
             ):
+        """
+        This function collects the substate vectors from each substate, and assembles the global state vector.
+
+        """
         globalStateVector = np.zeros(self.totalDimension)
         
         for stateName in self.subStates:

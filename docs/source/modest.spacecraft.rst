@@ -4,22 +4,10 @@ modest.spacecraft package
 Submodules
 ----------
 
-modest.spacecraft.chandra module
---------------------------------
+.. toctree::
 
-.. automodule:: modest.spacecraft.chandra
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-modest.spacecraft.simulation module
------------------------------------
-
-.. automodule:: modest.spacecraft.simulation
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   modest.spacecraft.chandra
+   modest.spacecraft.simulation
 
 Module contents
 ---------------
