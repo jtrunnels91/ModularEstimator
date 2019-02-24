@@ -44,9 +44,6 @@ class Attitude(substate.SubState):
      gyroBias (numpy.ndarray): A 3 dimensional numpy array containing the estimate of gyro bias.  This array is stored as :attr:`bHat`.
      gyroBiasCovariance (numpy.ndarray): A 3x3 numpy array containing the estimate of covariance of gyro bias.  This array is used to form the lower diagonal part of :attr:`PHat`.
 
-
-
-
     """
     
     def __init__(
@@ -133,28 +130,34 @@ class Attitude(substate.SubState):
     """
 
 
-    ## @fun storeStateVector is responsible for taking an updated version of
-    # the state vector, and storing it in the class variables.
-    #
-    # @details This function is designed to receive a time or measurement
-    # updated state vector and covariance, and store it.  This function is
-    # used by State.ModularFilter to store a jointly updated state.
-    #
-    # Depending on whether the state vector is the result of a time update
-    # (aPriori=True) or a measurement update (aPriori=False), the function
-    # may disregard the value of the attitude error state.  This is because
-    # this class handles the time-update of #qHat internally, so the updated
-    # attitude error state is only relevant after a measurement update.
-    #
-    # @param self The object pointer
-    # @param svDict A dictionary containing the current state vector information.
-    # state vector is "a priori" or "a posteriori."
-    #
-    # @sa SubStates.SubState.storeStateVector
     def storeStateVector(
             self,
             svDict
             ):
+        """
+        storeStateVector is responsible for taking an updated version of
+        the state vector, and storing it in the class variables.
+
+        This function is designed to receive a time or measurement
+        updated state vector and covariance, and store it.  This function is
+        used by :class:`~modest.modularfilter.ModularFilter~ to store a
+        jointly updated state.
+
+        Depending on whether the state vector is the result of a time update
+        (aPriori=True) or a measurement update (aPriori=False), the function
+        may disregard the value of the attitude error state.  This is because
+        this class handles the time-update of #qHat internally, so the updated
+        attitude error state is only relevant after a measurement update.
+
+        Args:
+         svDict (dict): A dictionary containing the current state vector information, including the state vector, the covariance, the time, and whether the state vector is "a priori" or "a posteriori."
+        See Also:
+         :meth:`SubState.storeStateVector`
+
+        Note:
+         This function is one of mandatory functions required for :class:`Attitude` to function as a sub-state of :class:`~modest.modularfilter.ModularFilter`.
+
+        """
         xPlus = svDict['stateVector']
         aPriori = svDict['aPriori']
         time = svDict['t']
@@ -230,7 +233,12 @@ class Attitude(substate.SubState):
          (dict) A dict containing the state transition matrix ("F") and the
          process noise matrix ("Q")
     
-        See Also: :meth:`~modest.substates.substate.SubStateg.timeUpdate`
+        See Also: 
+         :meth:`SubState.timeUpdate`
+
+        Note:
+         This function is one of mandatory functions required for :class:`Attitude` to function as a sub-state of :class:`~modest.modularfilter.ModularFilter`.
+
         """
         
         # Check the dynamics dict for angular velocity
@@ -276,31 +284,36 @@ class Attitude(substate.SubState):
 
         return timeUpdateDict
 
-    ## @fun getMeasurementMatrices computes and returns measurement update
-    # matrices
-    #
-    # @details This function receives a dictionary containing a measurement,
-    # along with an object that contains the source model of the measurement.
-    # If the source is a Signals.PointSource type signal, then it generates
-    # unit-vector attitude measurement type matrices.  Otherwise, the function
-    # returns dicts populated with None.
-    #
-    # @note This function is one of mandatory functions required for
-    # AttitudeS to function as a sub-state of State.ModularFilter.
-    #
-    # @param self The object pointer
-    # @param measurement A dictionary containing measurement information
-    # @param source The source object that produced the measurement
-    #
-    # @return A dictionary containing the measurement matrices H, R, and dY
-    #
-    # @sa SubStates.SubState.getMeasurementMatrices
     def getMeasurementMatrices(
             self,
             measurement,
             source=None,
             useUnitVector=None
     ):
+        """
+        getMeasurementMatrices computes and returns measurement update
+        matrices
+
+        This function receives a dictionary containing a measurement,
+        along with an object that contains the source model of the measurement.
+        If the source is a Signals.PointSource type signal, then it generates
+        unit-vector attitude measurement type matrices.  Otherwise, the function
+        returns dicts populated with None.
+
+        Args:
+         measurement (dict): A dictionary containing measurement information
+         source (`modest.modularfilter.signalsources.signalsource.SignalSource): The source object that produced the measurement
+
+        Returns: 
+         (dict) A dictionary containing the measurement matrices H, R, and dY
+
+        See Also:
+         :meth:`SubState.getMeasurementMatrices`
+
+        Note:
+         This function is one of mandatory functions required for :class:`Attitude` to function as a sub-state of :class:`~modest.modularfilter.ModularFilter`.
+
+        """
             
         if (
                 isinstance(source, PointSource)
@@ -349,65 +362,59 @@ class Attitude(substate.SubState):
     ###########################################################################
     """
 
-    ## @fun quaternionTimeUpdateMatrix produces a time-update matrix for the
-    # attitude quaternion
-    #
-    # @details This function produces a 4x4 matrix which, when multiplied by
-    # an attitude quaternion, rotates the quaternion by an amount
-    # corresponding to the angular velocity and time ellapsed.  The attitude
-    # quaternion is updated as follows:
-    #
-    # \f[
-    # \attVec[est=True,aPriori=True, t=k+1] \approx
-    # \bar{\Theta}(\omegaVec[est=True,aPriori=True, t=k], \Delta T)
-    # \attVec[est=True, aPriori=False, t=k]
-    # \f]
-    #
-    # where
-    #
-    # \f[
-    # \bar{\Theta}( \omegaVec[est=True,aPriori=True, t=k], \Delta T ) =
-    # \begin{bmatrix}
-    # \textrm{cos} \left(\frac{1}{2}
-    # ||\omegaVec[est=True,aPriori=True, t=k]|| \Delta t \right) I_3 -
-    # \left[\boldsymbol{\hat{\Psi}}_k^+ \times \right]
-    # & \left[\boldsymbol{\hat{\Psi}}_k^+ \times \right] \\
-    # - \left[\boldsymbol{\hat{\Psi}}_k^+ \times \right] &
-    # \textrm{cos} \left(\frac{1}{2} ||\mathbf{\hat{\omega}}_k^+|| \Delta t \right)
-    # \end{bmatrix}
-    # \f]
-    #
-    # and
-    #
-    # \f[
-    # \left[\boldsymbol{\hat{\Psi}}_k^+ \times \right] =
-    # \frac{
-    # \textrm{sin}\left(\frac{1}{2} || \omegaVec[est=True,aPriori=True, t=k] || \Delta t \right)
-    # \omegaVec[est=True,aPriori=True, t=k]
-    # }{
-    # || \omegaVec[est=True,aPriori=True, t=k] ||
-    # }
-    # \f]
-    #
-    # The matrix returned by this function is
-    # \f$\bar{\Theta}(\omegaVec[est=True,aPriori=True, t=k], \Delta T)\f$.
-    #
-    # See Fundamentals of Spacecraft Attitude Determination and Control,
-    # Section 6.2.2, page 251, equation 6.60 for more details.
-    #
-    # @param self The object pointer
-    # @param myOmega The angular velocity estimate used to update the attitude
-    # quaternion
-    # @param deltaT The amount of time elapsed for the time-update, used for
-    # numerical integration of kinematics equation.
-    #
-    # @return The quaternion time-update matrix
-    # \f$\bar{\Theta}(\omegaVec[est=True,aPriori=True, t=k], \Delta T)\f$
     def quaternionTimeUpdateMatrix(
             self,
             myOmega,
             deltaT
     ):
+        r"""
+        quaternionTimeUpdateMatrix produces a time-update matrix for the attitude quaternion
+    
+        This function produces a 4x4 matrix which, when multiplied by
+        an attitude quaternion, rotates the quaternion by an amount
+        corresponding to the angular velocity and time ellapsed.  The attitude
+        quaternion is updated as follows:
+    
+        .. math::
+            \hat{\mathbf{q}}_k^- \approx{} \bar{\Theta}(\hat{\boldsymbol{\omega}}_j^+, \Delta T) \hat{\boldsymbol{q}}_j^+`
+
+        where
+        
+        .. math::
+           \bar{\Theta}( \hat{\boldsymbol{\omega}}_j^+, \Delta T ) =
+           \begin{bmatrix}
+             \textrm{cos} \left(\frac{1}{2}
+             ||\hat{\boldsymbol{\omega}}_j^+|| \Delta t \right) I_3 -
+             \left[\boldsymbol{\hat{\Psi}}_k^+ \times \right]
+             & \left[\boldsymbol{\hat{\Psi}}_k^+ \times \right] \\
+             - \left[\boldsymbol{\hat{\Psi}}_k^+ \times \right] &
+             \textrm{cos} \left(\frac{1}{2} ||\mathbf{\hat{\omega}}_j^+|| \Delta t \right)
+           \end{bmatrix}
+
+        and
+
+        .. math::
+         \left[\boldsymbol{\hat{\Psi}}_k^+ \times \right] =
+         \frac{
+         \textrm{sin}\left(\frac{1}{2} || \mathbf{\hat{\omega}}_j^+ || \Delta t \right)
+         \mathbf{\hat{\omega}}_j^+
+         }{
+         || \mathbf{\hat{\omega}}_j^+ ||
+         }
+
+        The matrix returned by this function is
+        :math:`\bar{\Theta}(\mathbf{\hat{\omega}}_j^+, \Delta T)`.
+
+        See Fundamentals of Spacecraft Attitude Determination and Control,
+        Section 6.2.2, page 251, equation 6.60 for more details.
+
+        Args:
+         myOmega (numpy.ndarray): The angular velocity estimate used to update the attitude quaternion (:math:`\mathbf{\hat{\omega}}_k^-`)
+         deltaT (float): The amount of time elapsed for the time-update, used for numerical integration of kinematics equation (:math:`\Delta T`)
+
+        Returns:
+         (numpy.ndarray): The quaternion time-update matrix :math:`\bar{\Theta}(\mathbf{\hat{\omega}}_j^+, \Delta T)`
+        """
         omegaNorm = norm(myOmega)
         cosineTerm = cos(0.5 * omegaNorm * deltaT)
         if abs(omegaNorm) < 1e-100:
@@ -423,75 +430,70 @@ class Attitude(substate.SubState):
         theta[0, 0] = cosineTerm
         return theta
 
-    ## @fun errorStateTimeUpdateMatrix produces a time-update matrix for the
-    # attitude error state
-    #
-    # @details
-    # This function the discrete-time error-state transition matrix.  This is
-    # the matrix which propagates the attitude error state covariance and gyro
-    # bias covariance forward in time based on time ellapsed and angular
-    # velocity estimate.
-    #
-    # The error-state transition matrix is defined as follows:
-    #
-    # \f[
-    # \boldsymbol{\Phi} = \begin{bmatrix}
-    # \boldsymbol{\Phi}_{11} & \boldsymbol{\Phi}_{12} \\
-    # \boldsymbol{\Phi}_{21} & \boldsymbol{\Phi}_{22} \\
-    # \end{bmatrix}
-    # \f]
-    #
-    # where
-    #
-    # \f[
-    # \boldsymbol{\Phi}_{11} = \eye[3] -
-    # \left[\omegaVec[est=True,aPriori=True, t=k] \times \right]
-    # \frac
-    # {\textrm{sin}(||\omegaVec[est=True,aPriori=True, t=k]|| \Delta t)}
-    # {||\omegaVec[est=True,aPriori=True, t=k]||} +
-    # \left[\omegaVec[est=True,aPriori=True, t=k] \times \right]^2
-    # \frac
-    # {1 - \textrm{cos}(1 - ||\omegaVec[est=True,aPriori=True, t=k]|| \Delta t)}
-    # {||\omegaVec[est=True,aPriori=True, t=k]||^2}
-    # \f]
-    #
-    # \f[
-    # \boldsymbol{\Phi}_{12} = 
-    # \left[\omegaVec[est=True,aPriori=True, t=k] \times \right]
-    # \frac
-    # {1 - \textrm{cos}(1 - ||\omegaVec[est=True,aPriori=True, t=k]|| \Delta t)}
-    # {||\omegaVec[est=True,aPriori=True, t=k]||^2} -
-    # \eye[3]\Delta t -
-    # \left[\omegaVec[est=True,aPriori=True, t=k] \times \right]^2
-    # \frac
-    # {||\omegaVec[est=True,aPriori=True, t=k]|| \Delta t -
-    # \textrm{sin}(||\omegaVec[est=True,aPriori=True, t=k]|| \Delta t)}
-    # {||\omegaVec[est=True,aPriori=True, t=k]||^3}
-    # \f]
-    #
-    # \f[
-    # \boldsymbol{\Phi}_{21} = \mathbf{0}_{3 \times 3}
-    # \f]
-    #
-    # \f[
-    # \boldsymbol{\Phi}_{22} = \eye[3]
-    # \f]
-    #
-    # See Fundamentals of Spacecraft Attitude Determination and Control,
-    # Section 6.2.4, page 258, equation 6.83 for more details and derivation.
-    #
-    # @param self The object pointer
-    # @param myOmega The angular velocity estimate used to update the attitude
-    # quaternion
-    # @param deltaT The amount of time elapsed for the time-update, used for
-    # numerical integration of kinematics equation.
-    #
-    # @return Returns the error-state time update matrix, \f$\boldsymbol{\Phi}\f$
     def errorStateTimeUpdateMatrix(
             self,
             myOmega,
             deltaT
     ):
+        r"""
+        errorStateTimeUpdateMatrix produces a time-update matrix for the
+        attitude error state
+    
+        This function the discrete-time error-state transition matrix.  This is
+        the matrix which propagates the attitude error state covariance and gyro
+        bias covariance forward in time based on time ellapsed and angular
+        velocity estimate.
+    
+        The error-state transition matrix is defined as follows:
+    
+        .. math::
+           \boldsymbol{\Phi} = \begin{bmatrix}
+            \boldsymbol{\Phi}_{11} & \boldsymbol{\Phi}_{12} \\
+            \boldsymbol{\Phi}_{21} & \boldsymbol{\Phi}_{22} \\
+           \end{bmatrix}
+    
+        where
+    
+        .. math::
+          \boldsymbol{\Phi}_{11} = \mathbf{I}_{3 \times 3} -
+          \left[\mathbf{\hat{\omega}}_k^- \times \right]
+          \frac
+          {\textrm{sin}(||\mathbf{\hat{\omega}}_k^-]|| \Delta t)}
+          {||\mathbf{\hat{\omega}}_k^-||} +
+          \left[\mathbf{\hat{\omega}}_k^+ \times \right]^2
+          \frac
+          {1 - \textrm{cos}(1 - ||\mathbf{\hat{\omega}}_k^-|| \Delta t)}
+          {||\mathbf{\hat{\omega}}_k^-||^2}
+    
+        .. math::
+          \boldsymbol{\Phi}_{12} =
+          \left[\mathbf{\hat{\omega}}_k^- \times \right]
+          \frac
+          {1 - \textrm{cos}(1 - ||\mathbf{\hat{\omega}}_k^-|| \Delta t)}
+          {||\mathbf{\hat{\omega}}_k^-||^2} -
+          \mathbf{I}_{3\times 3}\Delta t -
+          \left[\mathbf{\hat{\omega}}_k^- \times \right]^2
+          \frac
+          {||\mathbf{\hat{\omega}}_k^-|| \Delta t -
+          \textrm{sin}(||\mathbf{\hat{\omega}}_k^-|| \Delta t)}
+          {||\mathbf{\hat{\omega}}_k^-||^3}
+        
+        .. math::
+          \boldsymbol{\Phi}_{21} = \mathbf{0}_{3 \times 3}
+        
+        .. math::
+          \boldsymbol{\Phi}_{22} = \mathbf{I}_{3\times3}
+        
+        See Fundamentals of Spacecraft Attitude Determination and Control,
+        Section 6.2.4, page 258, equation 6.83 for more details and derivation.
+    
+        Args:
+         myOmega (numpy.ndarray): The angular velocity estimate used to update the attitude quaternion (:math:`\mathbf{\hat{\omega}}_k^-`)
+         deltaT (float):  The amount of time elapsed for the time-update, used for numerical integration of kinematics equation (:math:`\Delta T`)
+
+        Returns:
+         (numpy.ndarray) The error-state time update matrix, :math:`\boldsymbol{\Phi}`
+        """        
         omegaNorm = norm(myOmega)
         omegaNormSquare = square(omegaNorm)
         omegaNormDT = omegaNorm * deltaT
@@ -527,41 +529,43 @@ class Attitude(substate.SubState):
                     
         return(phi)
 
-    ## @fun processNoiseMatrix generates a the process noise matrix
-    #
-    # @details
-    # This function generates the process noise matrix for time update of
-    # attitude error covariance and gyro bias covariance.  The process noise
-    # matrix is a function propagation time, angular velocity noise, and gyro
-    # bias noise.  It is defined as follows:
-    #
-    # \f[
-    # \mathbf{Q} = \begin{bmatrix}
-    # \left(\sigma_v^2 \Delta t + \frac{1}{3}\sigma_u^2 \Delta t^3\right) \eye[3] &
-    # -\left( \frac{1}{2} \sigma_u^2 \Delta t^2 \right) \eye[3] \\
-    # -\left( \frac{1}{2} \sigma_u^2 \Delta t^2 \right) \eye[3] &
-    # \left( \sigma_u^2 \Delta t \right) \eye[3]
-    # \end{bmatrix}
-    # \f]
-    #
-    # where \f$\sigma_v^2\f$ is the angular velocity noise (i.e. gyro
-    # measurement noise) and \f$ \sigma_u^2 \f$ is the gyro bias process noise.
-    #
-    # See Fundamentals of Spacecraft Attitude Determination and Control,
-    # Section 6.2.4, page 260, equation 6.93 for derivation and more details.
-    #
-    # @param self The object pointer
-    # @param deltaT The amount of time corresponding to the time update
-    # @param omegaVar The variance of the angular velocity (gyro) measurement
-    # @param biasVar The variance of the gias bias process noise (indicates
-    # how much the gyro bias changes over time)
-    # @return Returns the comibined 6x6 process noise matrix
     def processNoiseMatrix(
             self,
             deltaT,
             omegaVar,
             biasVar
             ):
+        r"""
+        processNoiseMatrix generates a the process noise matrix
+    
+        This function generates the process noise matrix for time update of
+        attitude error covariance and gyro bias covariance.  The process noise
+        matrix is a function propagation time, angular velocity noise, and gyro
+        bias noise.  It is defined as follows:
+
+        .. math::
+         \mathbf{Q} = \begin{bmatrix}
+         \left(\sigma_v^2 \Delta T + \frac{1}{3}\sigma_u^2 \Delta T^3\right) \mathbf{I}_{3\times 3} &
+         -\left( \frac{1}{2} \sigma_u^2 \Delta T^2 \right) \mathbf{I}_{3\times 3} \\
+         -\left( \frac{1}{2} \sigma_u^2 \Delta T^2 \right) \mathbf{I}_{3\times 3}&
+         \left( \sigma_u^2 \Delta T \right) \mathbf{I}_{3\times 3}
+         \end{bmatrix}
+    
+        where :math:`\sigma_v^2` is the angular velocity noise (i.e. gyro
+        measurement noise) and :math:`\sigma_u^2` is the gyro bias process noise.
+        
+        See Fundamentals of Spacecraft Attitude Determination and Control,
+        Section 6.2.4, page 260, equation 6.93 for derivation and more details.
+        
+        Args:
+         deltaT (float): The amount of time corresponding to the time update (:math:`\Delta T`)
+         omegaVar (float): The variance of the angular velocity (gyro) measurement (:math:`\sigma_v^2`)
+         biasVar (float): The variance of the gias bias process noise, indicates how much the gyro bias changes over time (:math:`\sigma_u^2`)
+
+        Returns:
+         (np.ndarray) The comibined 6x6 process noise matrix (:math:`\mathbf{Q}`)
+        """
+        
         deltaTSquared = power(deltaT, 2)
         Q11 = (
             (omegaVar * deltaT) +

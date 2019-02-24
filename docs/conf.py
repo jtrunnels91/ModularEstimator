@@ -166,7 +166,12 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'https://docs.python.org/': None,
-    'numpy': ('http://docs.scipy.org/doc/numpy/', None),
-    'pyquaternion': ('http://kieranwynn.github.io/pyquaternion/', None)
+    'numpy': ('http://docs.scipy.org/doc/numpy/', None)
 }
 autodoc_member_order = 'groupwise'
+
+import re
+
+mathjax_path="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+
+
