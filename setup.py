@@ -5,28 +5,22 @@ except ImportError:
 
 setup(
     name='modest',
-    version='0.0.18',
+    version='0.0.24',
     packages=find_packages(exclude=("tests",)),
-	install_requires=[
-            'scipy',
-            'numpy',
-            'math',
-            'matplotlib',
-            'abc',
-            'pyquaternion',
-            'requests',
-            'pandas',
-            'tempfile',
-            'os',
-            'subprocess',
-            'astropy',
-            'yaml',
-            'pypet',
-            'datetime',
-            'warnings'
-        ],
+    install_requires=[
+        'scipy',
+        'numpy',
+        'matplotlib',
+        'pyquaternion',
+        'requests',
+        'pandas',
+        'astropy',
+        'pyyaml',
+        'datetime',
+    ],
     description='A modular estimation library',
     long_description='A modular estimation library',
+    license='MIT',
     author='Joel Runnels',
     author_email='runne010@umn.edu'
 )
