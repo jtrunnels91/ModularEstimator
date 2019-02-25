@@ -10,9 +10,9 @@ Modular Estimator
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
    usage/installation
-   usage/quickstart
-	  
+   usage/quickstart	  
    source/modest
 	     
 Indices and tables

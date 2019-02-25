@@ -198,7 +198,7 @@ latex_elements = {
     'fncychap': '',
     'titleformat': '',
  }
-latex_docclass = {
-   'howto': 'mnthesis',
-   'manual': 'mnthesis',
-}
+# latex_docclass = {
+#    'howto': 'mnthesis',
+#    'manual': 'mnthesis',
+# }
