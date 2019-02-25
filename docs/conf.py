@@ -170,8 +170,35 @@ intersphinx_mapping = {
 }
 autodoc_member_order = 'groupwise'
 
-import re
+# import re
 
-mathjax_path="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+# mathjax_path="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
 
 
+latex_elements = {
+    'papersize': '',
+    'pointsize': '',
+    'sphinxsetup': '',
+    'fontpkg': '',
+    'fncychap': '',
+    'maketitle': '',
+    'pointsize': '',
+    'preamble': '',
+    'releasename': "",
+    'babel': '',
+    'printindex': '',
+    'fontenc': '',
+    'babel': '',
+    'inputenc': '',
+    'classoptions': '',
+    'utf8extra': '',
+    'fncychap': '',
+    'maketitle': '',
+    'tableofcontents': '',
+    'fncychap': '',
+    'titleformat': '',
+ }
+latex_docclass = {
+   'howto': 'mnthesis',
+   'manual': 'mnthesis',
+}
