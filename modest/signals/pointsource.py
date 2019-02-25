@@ -81,10 +81,12 @@ class PointSource(signalsource.SignalSource):
                     _np.linalg.det(residualVariance)
                 )
             )
+            # print(measurementMatrices)
+            # print(residualVariance)
 
             # maxProb = 1/_np.sqrt(_np.linalg.det(2 * _np.pi * residualVariance))
             if maxProb < uniformProbability:
-                print("using uniform probability")
+                # print("using uniform probability")
                 probability = uniformProbability
             else:
                 # if self.lastPDF:
@@ -101,7 +103,13 @@ class PointSource(signalsource.SignalSource):
                     probability = (
                         maxProb * _np.exp(expArg)
                     )
-                # probability = _mvn.pdf(dY, cov=residualVariance, allow_singular=True)
+                    # Altprobability = _mvn.pdf(dY, cov=residualVariance, allow_singular=True)
+                    # if _np.abs(Altprobability - probability) > 1:
+                    #     raise ValueError(
+                    #         'Got different probabilities: ' +
+                    #         '%s and %s'
+                    #         %(Altprobability, probability)
+                    #         )
             # print('AOA probability: %s' %probability)
             # print('max Prob: %s' %maxProb)
             # print('dY: %s' %dY)

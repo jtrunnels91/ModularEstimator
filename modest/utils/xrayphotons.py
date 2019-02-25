@@ -24,10 +24,10 @@ def xRayBackground(E):
 
 def singleXRayBackground(E):
     background = None
-    if E < 1:
+    if E < 1e-2:
         raise ValueError(
             'Photon energies less than 2 keV are below the regime of this equation')
-    elif (E >= 1 and E <= 60):
+    elif (E >= 1e-2 and E <= 60):
         background = (
             7.877 * np.power(E, -0.29) * np.exp(-E / 41.13)
         )
@@ -41,6 +41,29 @@ def singleXRayBackground(E):
     return background
 
 
+def backgroundCountRatePerSR(
+        lowerE,
+        upperE,
+        resolution=None
+):
+    energyBand = upperE - lowerE
+    if resolution is None:
+        nSteps = 100
+        resolution = energyBand / (nSteps - 1)
+    else:
+        nSteps = (energyBand / resolution) + 1
+
+    energySpectrum = np.linspace(lowerE, upperE, nSteps)
+
+    backgroundCountRate = 0
+    for i in range(len(energySpectrum)):
+        backgroundCountRate = (
+            backgroundCountRate +
+            xRayBackground(energySpectrum[i]) * resolution/energySpectrum[i]
+        )
+    return backgroundCountRate
+    
+
 # Perform an euler numerical integration to get the total background count
 # rates over an energy range
 def backgroundFluxPerSR(lowerE,
@@ -49,7 +72,7 @@ def backgroundFluxPerSR(lowerE,
 
     energyBand = upperE - lowerE
     if resolution is None:
-        nSteps = 100
+        nSteps = 1000
         resolution = energyBand / (nSteps - 1)
     else:
         nSteps = (energyBand / resolution) + 1
@@ -73,6 +96,12 @@ def degreeFOVToSR(degree):
     radian = degree * np.pi / (180)
     return radianFOVToSR(radian)
 
+# Returns counts per cm^2
+def backgroundCountRate(
+        lowerE,
+        upperE,
+        FOVDegrees):
+    return backgroundCountRatePerSR(lowerE, upperE) * degreeFOVToSR(FOVDegrees)
 
 def KEVbackgroundFlux(lowerE,
                       upperE,
@@ -86,3 +115,7 @@ def ERGbackgroundFlux(lowerE,
     return (1.60218e-9 *
             backgroundFluxPerSR(lowerE, upperE) *
             degreeFOVToSR(FOVDegrees))
+
+
+def chandraBackgroundERG(FOVDegrees):
+    return 3.8e-12 * np.square(FOVDegrees*2)

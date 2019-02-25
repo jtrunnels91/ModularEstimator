@@ -1,0 +1,89 @@
+
+macrosDef.tex,3273
+\newcommand{\exact}\exact11,250
+\newcommand{\socrates}\socrates12,284
+\newcommand{\suzaku}\suzaku13,324
+\newcommand{\swift}\swift15,394
+\newcommand{\chandra}\chandra16,428
+\newcommand{\speedOfLight}\speedOfLight46,881
+\newcommand{\constant}\constant57,1005
+\newcommand{\assocIT}\assocIT69,1168
+\newcommand{\sumIndex}\sumIndex79,1296
+\define@key{ine@key87,1476
+  \def\posTimeIndex{\posTimeIndex88,1507
+\define@key{ine@key90,1533
+  \def\frame{\frame91,1564
+\define@key{ine@key93,1583
+  \def\obj{\obj94,1616
+\define@key{ine@key96,1633
+  \def\source{\source97,1669
+\define@key{ine@key99,1689
+  \def\sub{\sub100,1722
+\define@boolkey+{ine@boolkey+103,1740
+\newcommand{\navFrame}\navFrame490,9439
+\newcommand{\bodyFrame}\bodyFrame491,9465
+\newcommand{\origin}\origin492,9492
+\define@key{ine@key498,9628
+\define@key{ine@key499,9668
+\define@key{ine@key500,9712
+\define@key{ine@key520,10093
+  \def\timeIndex{\timeIndex521,10133
+\define@key{ine@key523,10156
+  \def\signalSource{\signalSource524,10199
+\define@choicekey*{ine@choicekey*526,10225
+  \def\frameMacro{\frameMacro528,10307
+  \def\frameMacro{\frameMacro530,10342
+  \def\frameMacro{\frameMacro532,10378
+\newcommand{\fov}\fov578,11470
+\newcommand{\fovSolidAngle}\fovSolidAngle590,11620
+\newcommand{\area}\area603,11764
+\newcommand{\tObs}\tObs615,11940
+\newcommand{\pulsedFraction}\pulsedFraction627,12134
+\newcommand{\pulseWidth}\pulseWidth639,12328
+\define@key{ine@key642,12358
+  \def\cT{\cT643,12388
+\define@key{ine@key645,12404
+  \def\dT{\dT646,12434
+\define@key{ine@key648,12450
+  \def\source{\source649,12484
+\define@key{ine@key651,12504
+  \def\frame{\frame652,12533
+\define@boolkey+{ine@boolkey+655,12553
+\newcommand{\currentPhoton}\currentPhoton785,15535
+\newcommand{\tCurrent}\tCurrent797,15692
+\newcommand{\tPrior}\tPrior798,15718
+\newcommand{\ctCurrent}\ctCurrent810,15860
+\newcommand{\associationSpace}\associationSpace821,16006
+\newcommand{\deltaT}\deltaT871,16928
+\newcommand{\csOne}\csOne886,17192
+\newcommand{\csTwo}\csTwo887,17215
+\newcommand{\obsVol}\obsVol889,17239
+\newcommand{\background}\background902,17397
+\newcommand{\signalIndex}\signalIndex914,17572
+\newcommand{\signalCount}\signalCount926,17734
+\newcommand{\svDim}\svDim1012,19455
+\define@key{ine@key1014,19511
+  \def\timeIndex{\timeIndex1015,19538
+\define@key{ine@key1017,19561
+  \def\timeIndex{\timeIndex1018,19596
+\define@key{ine@key1021,19620
+  \def\given{\given1022,19651
+\define@key{ine@key1024,19670
+  \def\sub{\sub1025,19699
+\define@boolkey+{ine@boolkey+1027,19716
+    \def\aPrioriSup{\aPrioriSup1029,19783
+  \def\aPrioriSup{\aPrioriSup1031,19815
+  \def\aPrioriSup{\aPrioriSup1034,19847
+\define@boolkey+{ine@boolkey+1037,19876
+\define@boolkey+{ine@boolkey+1046,20004
+\newcommand{\corrVectorDim}\corrVectorDim1393,25607
+\newcommand{\filtTS}\filtTS1394,25638
+\newcommand{\filterTap}\filterTap1395,25688
+\define@key{ine@key1397,25716
+  \def\signalA{\signalA1398,25753
+\define@key{ine@key1400,25774
+  \def\signalB{\signalB1401,25811
+\define@key{ine@key1403,25832
+  \def\time{\time1404,25866
+\define@boolkey+{ine@boolkey+1407,25885
+\define@boolkey+{ine@boolkey+1416,26052

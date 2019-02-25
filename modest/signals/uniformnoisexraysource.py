@@ -16,24 +16,35 @@ class UniformNoiseXRaySource(poissonsource.StaticPoissonSource):
             energyRangeKeV=[2,10],
             detectorFOV=180,
             detectorArea=1,
-            startTime=0
+            startTime=0,
+            useTOAprobability=True
     ):
         if photonFlux is not None:
             self.photonFlux = photonFlux
             # self.FOV = None
             # self.detectorArea = None
         else:
-            photonsPerSqCm = xp.ERGbackgroundFlux(
+            # photonsPerSqCm = xp.ERGbackgroundFlux(
+            #     energyRangeKeV[0],
+            #     energyRangeKeV[1],
+            #     detectorFOV # function expects FOV in degrees
+            # ) * pc.electronVoltPerErg/(np.mean(energyRangeKeV)*1e3)
+            photonsPerSqCm = xp.backgroundCountRate(
                 energyRangeKeV[0],
                 energyRangeKeV[1],
-                detectorFOV # function expects FOV in degrees
-            ) * pc.electronVoltPerErg/pc.electronVoltPerPhoton
+                detectorFOV
+            )
+            
             self.photonFlux = photonsPerSqCm * detectorArea
         self.FOV = detectorFOV
         self.FOV_SolidAngle = xp.degreeFOVToSR(detectorFOV)
         self.detectorArea = detectorArea
             
-        super().__init__(self.photonFlux, startTime=startTime)
+        super().__init__(
+            self.photonFlux,
+            startTime=startTime,
+            useTOAprobability=useTOAprobability
+        )
         
         return
 
@@ -44,14 +55,18 @@ class UniformNoiseXRaySource(poissonsource.StaticPoissonSource):
             validationThreshold=0):
 
         # anglePR = 1/(4 * np.pi)
-        anglePR = 1/(self.FOV_SolidAngle)
+        anglePR = 1.0/(self.FOV_SolidAngle)
 
         poisPR = super().computeAssociationProbability(measurement)
         # poisPR = 1
         totalPR = anglePR * poisPR * self.photonFlux
+        # print('BG probability components')
+        # print('angle pr %s' %anglePR)
+        # print('poisPR pr %s' %poisPR)
+        # print('flux PR pr %s' %self.photonFlux)
 
-        # return totalPR
-        return anglePR * self.photonFlux
+        return totalPR
+        #return anglePR * self.photonFlux
 
     def generatePhotonArrivals(
             self,

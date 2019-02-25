@@ -6,7 +6,8 @@ from collections import namedtuple
 
 from . QuaternionHelperFunctions import euler2quaternion, quaternion2euler, eulerAngleDiff
 from . accessPSC import chandraPSC_coneSearch, xamin_coneSearch
-from . buildtraj import buildEnvironment, addParameterGroup
+# from . buildtraj import buildEnvironment, addParameterGroup, buildPulsarCorrelationSubstate
+# from . import buildtraj
 from . loadPulsarData import loadPulsarData
 from . covarianceUtils import covarianceContainer
 __all__ = [
@@ -14,9 +15,6 @@ __all__ = [
     "quaternion2euler",
     "eulerAngleDiff",
     "accessPSC",
-    "buildTraj",
-    "buildEnvironment",
-    "addParameterGroup",
     "loadPulsarData",
     "covarianceContainer"
 ]
