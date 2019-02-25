@@ -130,7 +130,8 @@ class CorrelationVector(substate.SubState):
             tdoaStdDevThreshold=None,
             velStdDevThreshold=None,
             tdoaNoiseScaleFactor=None,
-            velocityNoiseScaleFactor=None
+            velocityNoiseScaleFactor=None,
+            storeLastStateVectors=0
             ):
         print('updated correlation filter')
         self.peakLockThreshold = peakLockThreshold
@@ -246,7 +247,8 @@ class CorrelationVector(substate.SubState):
                 'TDOAVar': TDOAVar,
                 'xAxis': self.xAxis,
                 'stateVectorID': -1
-            }
+            },
+            storeLastStateVectors=storeLastStateVectors
         )
 
         self.internalNavFilter = internalNavFilter

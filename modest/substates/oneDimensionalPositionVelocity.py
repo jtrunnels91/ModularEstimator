@@ -13,7 +13,8 @@ class oneDPositionVelocity(substate.SubState):
             artificialBiasMeas=True,
             biasStateTimeConstant=0.9,
             biasStateProcessNoiseVar=1e-3,
-            biasMeasVar=1
+            biasMeasVar=1,
+            storeLastStateVectors=0,
     ):
         
         if not isinstance(stateVectorHistory['covariance'], covarianceContainer):
@@ -22,9 +23,9 @@ class oneDPositionVelocity(substate.SubState):
             )
         self.biasState = biasState
         if biasState:
-            super().__init__(stateDimension=3, stateVectorHistory=stateVectorHistory)
+            super().__init__(stateDimension=3, stateVectorHistory=stateVectorHistory, storeLastStateVectors=storeLastStateVectors)
         else:
-            super().__init__(stateDimension=2, stateVectorHistory=stateVectorHistory)
+            super().__init__(stateDimension=2, stateVectorHistory=stateVectorHistory,storeLastStateVectors=storeLastStateVectors)
         self.stateVector = stateVectorHistory['stateVector']
         self.objectID = objectID
         self.velocityVar = (

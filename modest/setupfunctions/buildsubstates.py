@@ -102,7 +102,8 @@ def buildPulsarCorrelationSubstate(
             artificialBiasMeas=traj.internalNavFilter.artificialBiasMeas.value,
             biasStateTimeConstant=biasStateTimeConstant,
             biasMeasVar=biasMeasVar,
-            biasStateProcessNoiseVar=biasStateProcessNoiseVar
+            biasStateProcessNoiseVar=biasStateProcessNoiseVar,
+            storeLastStateVectors=traj.internalNavFilter.storeLastStateVectors.value
         )
 
         internalNavFilter.addStates(
@@ -155,7 +156,8 @@ def buildPulsarCorrelationSubstate(
         tdoaStdDevThreshold=tdoaStdDevThreshold,
         velStdDevThreshold=velStdDevThreshold,
         tdoaNoiseScaleFactor=tdoaNoiseScaleFactor,
-        velocityNoiseScaleFactor=velocityNoiseScaleFactor
+        velocityNoiseScaleFactor=velocityNoiseScaleFactor,
+        storeLastStateVectors=traj.correlationFilter.storeLastStateVectors.value
     )
 
     return correlationSubstate, vInitial_C
@@ -219,7 +221,8 @@ def buildAttitudeSubstate(
         attitudeQuaternion=initialAttitudeEstimate,
         attitudeErrorCovariance=attitudeCovariance,
         gyroBiasCovariance=np.eye(3)*np.square(gyroBiasStdDev),
-        useUnitVector=useUnitVec
+        useUnitVector=useUnitVec,
+        storeLastStateVectors=traj.attitudeFilter.storeLastStateVectors.value        
     )
 
     return myAttitude

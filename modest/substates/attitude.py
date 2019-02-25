@@ -54,7 +54,8 @@ class Attitude(substate.SubState):
             gyroBiasCovariance=np.eye(3),
             t=0,
             covarianceStorage='covariance',
-            useUnitVector=True
+            useUnitVector=True,
+            storeLastStateVectors=0,
             ):
 
         self.useUnitVector = useUnitVector
@@ -112,7 +113,8 @@ class Attitude(substate.SubState):
                 'eulerAngles': self.eulerAngles(),
                 'eulerSTD': self.eulerSTD(),
                 'stateVectorID': -1
-            }
+            },
+            storeLastStateVectors=storeLastStateVectors
         )
 
         return

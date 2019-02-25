@@ -61,35 +61,64 @@ class ChandraDetector():
         self.photonXKey = userData.detector.photonCoords.x.value
         self.photonYKey = userData.detector.photonCoords.y.value
 
+        self.photonEnergyKey = userData.detector.energy.key
+        self.binsPerEnergy = (
+            userData.detector.energy.binPerEnergy.value *
+            ureg(userData.detector.energy.binPerEnergy.unit)
+        ).to(ureg('kiloelectron_volt')).magnitude
+        self.energyIntercept = (userData.detector.energy.intercept)
+        
+
+        self.photonEnergyVar = np.square(self.binsPerEnergy)/12.0
+        """
+        Stores the expected variance of the photon energy measurement.  
+        Since photon energy measurements are truncated to integers we use the uniform distribution
+        """
 
         # Extract and store units from header file
         self.photonXUnits = utils.accessPSC.getHeaderInfo(
             self.photonXKey,
             self.photonEventsHeader
         )['unit']
+        """
+        Units of photon x angle of arrival measurements
+        """
         
         self.photonYUnits = utils.accessPSC.getHeaderInfo(
             self.photonXKey,
             self.photonEventsHeader
         )['unit']
+        """
+        Units of photon y angle of arrival measurements
+        """
         
         self.timeOfArrivalUnits = ureg(utils.accessPSC.getHeaderInfo(
             'time',
             self.photonEvents.header
         )['unit'])
+        """
+        Photon time-of-arrival units
+        """
 
-        # Factor to multiply arrival times by to get correct values in units
-        # of seconds
         self.timeConversionFactor = self.timeOfArrivalUnits.to('s').magnitude
+        """
+        Factor to multiply arrival times by to get correct values in units
+        of seconds
+        """
         
-        # Determine the resolution and standard deviation of arrival times
         self.timeResolution = (
             userData.detector.timeResolution.value *
             ureg(userData.detector.timeResolution.unit)
         ).to(ureg('s')).magnitude
-
+        """
+        Photon time of arrival resolution
+        """
+        
         if userData.detector.TOAstdev.distribution == 'uniform':
             self.TOA_StdDev = self.timeResolution/np.sqrt(12)
+            """
+            Standard deviation of arrival time measurements.  Depending on user input, this can be modeled as a uniform distribution (over the time resolution of the detector) or as a normal distribution with standard deviation specified by user.
+            """
         elif userData.detector.TOAstdev.distribution == 'normal':
             self.TOA_StdDev = (
                 userData.detector.TOAstdev.value *
@@ -102,19 +131,31 @@ class ChandraDetector():
             userData.detector.pixelResolution.value *
             ureg(userData.detector.pixelResolution.unit)
         ).to(ureg('rad')/ ureg(self.photonXUnits)).magnitude
+        """
+        Pixel resolution of the detector's x angle of arrival measurements
+        """
         self.pixelResolutionY = (
             userData.detector.pixelResolution.value *
             ureg(userData.detector.pixelResolution.unit)
         ).to(ureg('rad')/ ureg(self.photonYUnits)).magnitude
+        """
+        Pixel resolution of the detector's y angle of arrival measurements
+        """
         
         self.FOV = (
             userData.detector.FOV.value *
             ureg(userData.detector.FOV.unit)
         ).to(ureg('deg')).magnitude
+        """
+        Detector field of view in degrees (half-cone angle)
+        """
         self.area = (
             userData.detector.area.value *
             ureg(userData.detector.area.unit)
         ).to(ureg.cm ** 2).magnitude
+        """
+        Detector effective area in square centimeters
+        """
 
         
         # Use pixel resolution to determine the standard deviation of
@@ -155,6 +196,7 @@ class ChandraDetector():
         self.extractedPhotonEvents = {
             self.photonXKey: self.photonEvents.data[self.photonXKey],
             self.photonYKey: self.photonEvents.data[self.photonYKey],
+            self.photonEnergyKey: self.photonEvents.data[self.photonEnergyKey],
             'Time': self.photonEvents.data['Time']
             }
 
@@ -176,7 +218,11 @@ class ChandraDetector():
             (self.extractedPhotonEvents[self.photonYKey][index] - self.detectorOffsetY)
             * self.pixelResolutionY
         )
-        
+        myEnergy = (
+            (self.extractedPhotonEvents[self.photonEnergyKey][index] - self.energyIntercept)
+            * self.binsPerEnergy
+        )
+
         photonMeasurementDict = {
             't': {
                 'value': self.extractedPhotonEvents['Time'][index],
@@ -189,6 +235,10 @@ class ChandraDetector():
             'DEC': {
                 'value': myDec,
                 'var': self.AOA_yVar
+            },
+            'energy': {
+                'value': myEnergy,
+                'var': self.photonEnergyVar
             }
         }
         return photonMeasurementDict

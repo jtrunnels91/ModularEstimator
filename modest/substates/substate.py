@@ -56,7 +56,8 @@ class SubState():
     def __init__(
             self,
             stateDimension=None,
-            stateVectorHistory=None
+            stateVectorHistory=None,
+            storeLastStateVectors=0,
     ):
         if stateDimension is None:
             raise ValueError(
@@ -103,6 +104,11 @@ class SubState():
         self.THPlotHandle = None
 
         self.RTPlotData = None
+
+        self.storeLastStateVectors = storeLastStateVectors
+        """ 
+        (int) Determines how far back the state vector history may go.  If zero, then the entire state vector history is stored
+        """
 
         return
 
@@ -163,6 +169,14 @@ class SubState():
          svDict (dict):  A dictionary containing the current state estimate.
         """
         self.stateVectorHistory.append(svDict)
+
+        # Check to see if state vector history is too long; if so truncate to
+        # the last storeLastStateVectors values
+        if self.storeLastStateVectors > 0:
+            if len(self.stateVectorHistory) > self.storeLastStateVectors:
+                self.stateVectorHistory = self.stateVectorHistory[
+                    len(self.stateVectorHistory)-self.storeLastStateVectors:
+                ]
         self.timeList.append(svDict['t'])
         return
     
