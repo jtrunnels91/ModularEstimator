@@ -545,8 +545,9 @@ class CorrelationVector(substate.SubState):
                 (dynamics is not None and 'velocity' in dynamics) or
                 (
                     self.internalNavFilter and
-                    ((np.sqrt(self.navState.velocityVar) < self.velStdDevThreshold) or
-                     self.velStdDevThreshold == 0
+                    (
+                        (np.sqrt(self.navState.velocityVar) < self.velStdDevThreshold) or
+                        self.velStdDevThreshold == 0
                     )
                 )
         ):
