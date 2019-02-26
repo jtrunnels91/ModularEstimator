@@ -203,3 +203,9 @@ latex_elements = {
 #    'manual': 'mnthesis',
 # }
 html_theme="classic"
+
+import mock
+ 
+MOCK_MODULES = ['pypet']
+for mod_name in MOCK_MODULES:
+    sys.modules[mod_name] = mock.Mock()
