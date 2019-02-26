@@ -7,6 +7,9 @@ Modular Estimator
 =============================================
 
 
+Welcome to the documentation for the modest package; a modular estimation library for Python.  The goal of modest is to make it as easy as possible to implement estimation algorithms with minimum amounts of re-written boiler plate material.
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:

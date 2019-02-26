@@ -202,3 +202,4 @@ latex_elements = {
 #    'howto': 'mnthesis',
 #    'manual': 'mnthesis',
 # }
+html_theme="classic"
