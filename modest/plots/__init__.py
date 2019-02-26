@@ -1,5 +1,4 @@
 ## @file __init__.py Initialization file for the plotting submodule
-from . import montecarloplots
 from . import montecarloplots2
 from . import photonscatterplot
 
