@@ -44,7 +44,7 @@ For a general estimation problem, we may have many sources of measurement for a 
 
 Signals and substates are related to each other: the substate needs to have a measurement model for each possible signal source.  On the other hand, signal sources are responsible for being able to compute their probability of association.  We can add a signal to myFilter as follows.
 
->>> myRangeSignal1 = md.signals.oneDObjectMeasurement('object1')
+>>> myRangeSignal1 = md.signals.oneDObjectMeasurement()
 >>> myFilter.addSignalSource(myRangeSignal1, 'rangeSignal1')
 
 Again, we did two things.  We first created a signal source, ``myRangeSignal1``.  We then added that signal source to myFilter.

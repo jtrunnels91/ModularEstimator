@@ -1,0 +1,51 @@
+Advanced Measurement Updates
+=============================================
+
+As noted in :ref:`Quickstart`, if all you want to do is implement a basic Kalman filter, ``modest`` might not be the best package for you, since it does introduce a fair amount of complication for a task that really only requires a few lines of code.  If, however, you're doing something more complicated, the ``modest`` framework can help you implement a more advanced estimation scheme using the individual pieces (substates and signal sources).
+
+One of the big advantages of this framework is that it allows you to put together the individual pieces of your estimator, and test them to make sure they work in the simple, "ideal" scenario (like the example that was shown in :ref:`Quickstart`).  Once we verify that the sub-components work individualy, then we can use them in more complex estimation algorithms.
+
+Here, we'll continue our example from :ref:`Quickstart` to show some of the capabilities of the ``modest`` package.
+
+=================
+One object, two signal sources
+=================
+
+Suppose we have a scenario similar to that in :ref:`Quickstart`, with a single object moving in one dimension, and we want to estimate its position.  We initialize our filter the same way:
+
+>>> import modest as md
+>>> myFilter = md.ModularFilter()
+>>> positionSubstate1 = md.substates.oneDimensionalPositionandVelocity()
+>>> myFilter.addStates('object1', positionSubstate1)
+
+Now, suppose that we have two possible sources of range measurements.  We can add two signal sources as follows.
+
+>>> myRangeSignal1 = md.signals.oneDObjectMeasurement(position=0)
+>>> myRangeSignal2 = md.signals.oneDObjectMeasurement(position=100)
+>>> myFilter.addSignalSource(myRangeSignal1, 'rangeSignal1')
+>>> myFilter.addSignalSource(myRangeSignal2, 'rangeSignal2')
+
+We can perform time updates just as before.
+
+>>> myDynamics = {
+>>>   'acceleration':
+>>>     {'value': -9.81, 'var': 0.01},
+>>> }
+>>> myFilter.timeUpdateEKF(1.0, dynamics=myDynamics)
+
+Now, suppose we have a range measurement, but we don't know from which signal source it originated.
+
+>>> myMeasurement = {
+>>>   'position':
+>>>     {'value': -4.904, 'var': 0.1},
+>>> }
+
+We can't use :meth:`~modest.modularfilter.ModularFilter.measurementUpdateEKF`, because this method needs to be told what signal source the measurement originates from.  However, ``modest`` includes other measurement update techniques.  One option would be a maximum likelihood (ML) estimator.  We can perform n ML measurement without any extra work: all of the nescessary framework is already implemented.
+
+>>> myFilter.measurementUpdateML(myMeasurement)
+
+
+
+
+
+
