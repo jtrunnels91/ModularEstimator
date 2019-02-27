@@ -154,7 +154,7 @@ class Attitude(substate.SubState):
         Args:
          svDict (dict): A dictionary containing the current state vector information, including the state vector, the covariance, the time, and whether the state vector is "a priori" or "a posteriori."
         See Also:
-         :meth:`SubState.storeStateVector`
+         :meth:`~modest.substates.substate.SubState.storeStateVector`
 
         Note:
          This function is one of mandatory functions required for :class:`Attitude` to function as a sub-state of :class:`~modest.modularfilter.ModularFilter`.
@@ -236,7 +236,7 @@ class Attitude(substate.SubState):
          process noise matrix ("Q")
     
         See Also: 
-         :meth:`SubState.timeUpdate`
+         :meth:`~modest.substates.substate.SubState.timeUpdate`
 
         Note:
          This function is one of mandatory functions required for :class:`Attitude` to function as a sub-state of :class:`~modest.modularfilter.ModularFilter`.
@@ -310,7 +310,7 @@ class Attitude(substate.SubState):
          (dict): A dictionary containing the measurement matrices H, R, and dY
 
         See Also:
-         :meth:`SubState.getMeasurementMatrices`
+         :meth:`~modest.substates.substate.SubState.getMeasurementMatrices`
 
         Note:
          This function is one of mandatory functions required for :class:`Attitude` to function as a sub-state of :class:`~modest.modularfilter.ModularFilter`.
@@ -889,7 +889,7 @@ class Attitude(substate.SubState):
          for more details.
         
         See Also:
-         :meth:`~modest.substates.attitude.attitude.eulerSTD`
+         :meth:`~modest.substates.attitude.Attitude.eulerSTD`
         Args:
          t (float): Optional, get euler angles at a specific time (not yet implemented)
         
@@ -1000,7 +1000,7 @@ class Attitude(substate.SubState):
          for more details.
         
         See Also:
-         :meth:`~modest.substates.attitude.attitude.eulerAngles`
+         :meth:`~modest.substates.attitude.Attitude.eulerAngles`
         
         Returns:
          (list): A list containing the three angle standard deviations

@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class SubState():
-    """
+    r"""
     This is an abstract base class for objects used as sub-states in
     State.ModularFilter.
 
@@ -119,7 +119,7 @@ class SubState():
     # @{
     
     def getStateVector(self, t=None):
-        """
+        r"""
         getStateVector returns the most recent value of the state vector
     
         The getStateVector method is responsible for returning a dictionary object containing, at minimim, the following items:
@@ -147,7 +147,7 @@ class SubState():
         return(stateVector)
 
     def storeStateVector(self, svDict):
-        """
+        r"""
         storeStateVector stores the most recent value of the state vector.
     
         The storeStateVector method is responsible for storing a dictionary
@@ -181,7 +181,7 @@ class SubState():
         return
     
     def covariance(self):
-        """
+        r"""
         :meth:`covariance` returns the SubState covariance matrix
     
         The covariance method returns the covariance of the estimate of the
@@ -201,7 +201,7 @@ class SubState():
     def dimension(
             self
             ):
-        """
+        r"""
         dimension returns the dimension of the sub-state vector
 
         The dimension method returns the dimension of the sub-state
@@ -226,7 +226,7 @@ class SubState():
 
     @abstractmethod
     def timeUpdate(self, dT, dynamics=None):
-        """
+        r"""
         timeUpdate returns time-update matrices
 
         The :meth:`timeUpdate` method is responsible for returning the EKF
@@ -269,7 +269,7 @@ class SubState():
 
     @abstractmethod
     def getMeasurementMatrices(self, measurement, source=None):
-        """
+        r"""
         getMeasurementMatrices returns matrices needed to perform a measurement update
 
         The :meth:`getMeasurementMatrices` method is responsible for returning
@@ -285,7 +285,7 @@ class SubState():
 
         .. math::
 
-            \mathbf{H}_k^-= \frac{h}{ \mathbf{x}}
+            \mathbf{H}_k^-= \frac{\partial h}{ \partial \mathbf{x}}
 
         .. math::
 

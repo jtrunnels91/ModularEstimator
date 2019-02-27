@@ -5,21 +5,24 @@ except ImportError:
 
 setup(
     name='modest',
-    version='0.0.25',
+    version='0.1.a01',
     packages=find_packages(exclude=("tests",)),
     install_requires=[
-        'scipy',
+        'Pint',
         'numpy',
         'matplotlib',
+        'skyfield',
+        'scipy',
         'pyquaternion',
         'requests',
         'pandas',
         'astropy',
-        'pyyaml',
+        'PyYAML',
         'datetime',
     ],
     description='A modular estimation library',
     long_description='A modular estimation library',
+    url='https://modular-estimator.readthedocs.io/en/latest/index.html',
     license='MIT',
     author='Joel Runnels',
     author_email='runne010@umn.edu'
