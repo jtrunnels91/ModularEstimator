@@ -40,7 +40,7 @@ Now, suppose we have a range measurement, but we don't know from which signal so
 >>>     {'value': -4.904, 'var': 0.1},
 >>> }
 
-We can't use :meth:`~modest.modularfilter.ModularFilter.measurementUpdateEKF`, because this method needs to be told what signal source the measurement originates from.  However, ``modest`` includes other measurement update techniques.  One option would be a maximum likelihood (ML) estimator.  We can perform n ML measurement without any extra work: all of the nescessary framework is already implemented.
+We can't use :meth:`~modest.modularfilter.ModularFilter.measurementUpdateEKF`, because this method needs to be told what signal source the measurement originates from.  However, ``modest`` includes other measurement update techniques.  One option would be a maximum likelihood (ML) estimator.  We can perform an ML measurement without any extra work: all of the nescessary framework is already implemented.
 
 >>> myFilter.measurementUpdateML(myMeasurement)
 

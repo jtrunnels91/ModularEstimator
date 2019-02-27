@@ -9,3 +9,4 @@ pandas>=0.20.3
 astropy>=3.0.3
 setuptools==40.8.0
 PyYAML>=4.2b1
+mock>=2.0.0

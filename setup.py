@@ -5,7 +5,7 @@ except ImportError:
 
 setup(
     name='modest',
-    version='0.0.24',
+    version='0.0.25',
     packages=find_packages(exclude=("tests",)),
     install_requires=[
         'scipy',
