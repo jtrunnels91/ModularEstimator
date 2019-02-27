@@ -232,7 +232,7 @@ class Attitude(substate.SubState):
          dynamics (dict): A dict containing information about the dynamics.
     
         Returns:
-         (dict) A dict containing the state transition matrix ("F") and the
+         (dict): A dict containing the state transition matrix ("F") and the
          process noise matrix ("Q")
     
         See Also: 
@@ -307,7 +307,7 @@ class Attitude(substate.SubState):
          source (`modest.modularfilter.signalsources.signalsource.SignalSource): The source object that produced the measurement
 
         Returns: 
-         (dict) A dictionary containing the measurement matrices H, R, and dY
+         (dict): A dictionary containing the measurement matrices H, R, and dY
 
         See Also:
          :meth:`SubState.getMeasurementMatrices`
@@ -494,7 +494,7 @@ class Attitude(substate.SubState):
          deltaT (float):  The amount of time elapsed for the time-update, used for numerical integration of kinematics equation (:math:`\Delta T`)
 
         Returns:
-         (numpy.ndarray) The error-state time update matrix, :math:`\boldsymbol{\Phi}`
+         (numpy.ndarray): The error-state time update matrix, :math:`\boldsymbol{\Phi}`
         """        
         omegaNorm = norm(myOmega)
         omegaNormSquare = square(omegaNorm)
@@ -565,7 +565,7 @@ class Attitude(substate.SubState):
          biasVar (float): The variance of the gias bias process noise, indicates how much the gyro bias changes over time (:math:`\sigma_u^2`)
 
         Returns:
-         (np.ndarray) The comibined 6x6 process noise matrix (:math:`\mathbf{Q}`)
+         (numpy.ndarray): The comibined 6x6 process noise matrix (:math:`\mathbf{Q}`)
         """
         
         deltaTSquared = power(deltaT, 2)
@@ -595,6 +595,47 @@ class Attitude(substate.SubState):
             source,
             measurement
     ):
+        r"""
+        RaDecMeasurementMatrices computes measurement update matrices based which relate the state vector directly to measured angle of arrivals.
+
+        There are multiple ways to relate an angle measurement to the attitude state vector.  This function computes measurement matricies which relate the attitude state vector directly to the measured angles of arrival, or bearing angles of the measured signal.  This measurement matrix is particularly well suited to cases in which the measured quantity is two bearing angles (for instance an azimuth and elevation), while the unit vector measurement update is well suited to vector measurements (for instance tri-axis magnetometer measurements).
+
+        The measurement matricies computed by this method are described by the following equations. Given the following measurement vector of azimuth and elevation (:math:`\alpha` and :math:`\beta`):
+
+        .. math::
+           \mathbf{y} = \begin{bmatrix} 
+           \alpha \\
+           \beta
+           \end{bmatrix}
+
+        The measurement matrices are given by:
+
+        .. math::
+           \mathbf{H} = \begin{bmatrix} 
+           \hat{\alpha} & 0 & 1 & 0 & 0 & 0 \\
+           -\hat{\beta} & 1 & 0 & 0 & 0 & 0
+           \end{bmatrix}
+
+        .. math::
+           \boldsymbol{\delta}\mathbf{y} = \begin{bmatrix}
+           \alpha\\
+           \beta
+           \end{bmatrix} - \mathbf{H} \mathbf{\hat{x}}^{-} 
+
+        .. math::
+           \boldsymbol{R} = \begin{bmatrix}
+           \sigma_\alpha^2 & 0 \\
+           0 & \sigma_\beta^2 \\
+           \end{bmatrix}
+
+        Args:
+           source: The signal source object associated with the measurement.  The measurement may be of any class, but it is generally expected to behave something like a :class:`~modest.signals.pointsource.PointSource` type object.  Specifically, it is expected to have a :meth:`~modest.signals.pointsource.PointSource.RaDec` method which returns the right ascension and declination (i.e. bearing angles) to the source.
+           measurement (dict): A dict containing the measurements in the standard measurement format.  This function assumes that the dict will contain measurements of bearing angle.
+
+        Returns:
+           (dict): A dictionary containing the measurement matrix, :math:`\mathbf{H}`, the measurement residual vector, :math:`\boldsymbol{\delta}\mathbf{y}`, and the measurement residual variance matrix, :math:`\mathbf{S}` 
+
+        """
         
         raDecRoll = self.RaDecRoll()
         raEst = raDecRoll[0]
@@ -707,65 +748,64 @@ class Attitude(substate.SubState):
         return(measMatrices)
     
     
-    ## @fun unitVectorMeasurmentMatrices generates measurement matrices for a angle
-    # measurement of a point source.
-    #
-    # @details
-    # This function generates the set of measurement matrices
-    # \f$ \mathbf{H} \f$, \f$ \mathbf{dY} \f$, and \f$ \mathbf{R} \f$
-    # corresponding to an inferred unit vector measurement from a set of two
-    # angle measurments (local right ascension and declination of a point
-    # source).
-    #
-    # The measurement matrices are a function of the measurement itself, the
-    # source from which the measurement originated, and the current estimate
-    # of attitude, #qHat. They are defined as follows:
-    #
-    # \f[
-    # \mathbf{H}_k[\sv[aPriori=True,timeIndex=k]] =
-    # A(\attVec[est=True,aPriori=True,t=k])
-    # \unitVec[signalSource=S, frame=nav] \times
-    # \f]
-    #
-    # \f[
-    # \mathbf{dY} =
-    # \measurementVec[S](\RADEC) -
-    # A(\attVec[est=True,aPriori=True,t=k])
-    # \unitVec[signalSource=S, frame=nav]
-    # \f]
-    #
-    # \f[
-    # \mathbf{R} =  \eye[3] \sigma^2_{\RADEC}
-    # \f]
-    #
-    # The measured unit vector is a unit vector computed from the measured
-    # angles, using #sidUnitVec.
-    #
-    # See Fundamentals of Spacecraft Attitude Determination and Control,
-    # Section 6.2.4, page 257, Table 6.3 for more details and derivation.
-    #
-    # @note Currently, the measurement noise matrix is an identity matrix
-    # mutiplied by the angle measurement error.  This is my interpretation of
-    # Section 6.2.3 in FSADC.  However, if we derive the measurement noise
-    # matrix using the usual EKF method, we get a different result which
-    # results in an unstable estimator.  I'm not convinced I understand why
-    # this method is right, or why the EKF method is unstable, but it works, so
-    # we're using it for now.
-    #
-    # @param self The object pointer
-    # @param source A Signals.PointSource object from which the measurement
-    # was generated.
-    # @param measurement A dictionary containing the right ascension and
-    # declination measurements as sub-dictionaries, each with their own value
-    # and variance.
-    #
-    # @returns A dictionary containing the measurement matrices H, R, and dY
     def unitVectorMeasurmentMatrices(
             self,
             source,
             measurement
             ):
+        r"""
+        unitVectorMeasurmentMatrices generates measurement matrices for a angle
+        measurement of a point source.
+    
+        This function generates the set of measurement matrices
+        :math:`\mathbf{H}`, :math:`\mathbf{dY}`, and :math:`\mathbf{R}`
+        corresponding to an inferred unit vector measurement from a set of two
+        angle measurments (local right ascension and declination of a point
+        source).
+    
+        The measurement matrices are a function of the measurement itself, the
+        source from which the measurement originated, and the current estimate
+        of attitude, :attr:`qHat`. They are defined as follows:
+        
+        .. math::
+           \mathbf{H}_k[\mathbf{\hat{x}}^{-}_k] = 
+           A(\mathbf{\hat{q}}_k^- ) =
+           \mathbf{u}^{(s)}_{N} \times
+        
+        .. math::
+           \mathbf{dY} =
+           \mathbf{y}_{\mathbf{\alpha}} -
+           A(\mathbf{\hat{q}}_k^- )
+           \mathbf{u}^{(s)}_{N}
+        
+        .. math::
+           \mathbf{R} =  \mathbf{I}_{3\times 3} \sigma^2_{\mathbf{\alpha}}
+    
+        The measured unit vector is a unit vector computed from the measured
+        angles, using :meth:`~modest.substates.attitude.Attitude.sidUnitVec`.
+        
+        See Fundamentals of Spacecraft Attitude Determination and Control,
+        Section 6.2.4, page 257, Table 6.3 for more details and derivation.
+    
+        Note:
+           Currently, the measurement noise matrix is an identity matrix
+           mutiplied by the angle measurement error.  This is my interpretation of
+           Section 6.2.3 in FSADC.  However, if we derive the measurement noise
+           matrix using the usual EKF method, we get a different result which
+           results in an unstable estimator.  I'm not convinced I understand why
+           this method is right, or why the EKF method is unstable, but it works, so
+           we're using it for now.
 
+        Args:
+           source: The signal source object associated with the measurement.  The measurement may be of any class, but it is generally expected to behave something like a :class:`~modest.signals.pointsource.PointSource` type object.  Specifically, it is expected to have a :meth:`~modest.signals.pointsource.PointSource.RaDec` method which returns the right ascension and declination (i.e. bearing angles) to the source.
+           measurement (dict): A dict containing the measurements in the standard measurement format.  This function assumes that the dict will contain measurements of bearing angle.
+
+        Returns:
+           (dict): A dictionary containing the measurement matrix, :math:`\mathbf{H}`, the measurement residual vector, :math:`\boldsymbol{\delta}\mathbf{y}`, and the measurement residual variance matrix, :math:`\mathbf{S}` 
+
+        .. automethod::
+        """
+        
         # RaDecTrue = source.RaDec()
         uTrue = source.unitVec()
         # uTrue = self.sidUnitVec(RaDecTrue)
@@ -834,21 +874,28 @@ class Attitude(substate.SubState):
         # print(measMatrices)
         return(measMatrices)
 
-    ## @fun eulerAngles computes the Euler angles (roll, pitch and yaw) based
-    # on the current attitude.
-    #
-    # @details This function computes the Euler angles (or, technically the
-    # "Tait-Bryan angles"), i.e. roll, pitch and yaw from the current attitude
-    # quaternion #qHat.
-    #
-    # @note See Wikipedia's article on the
-    # <a href="https://en.wikipedia.org/wiki/Euler_angles">
-    # equatorial coordinate system</a> for more details.
-    #
-    # @param self The object pointer
-    #
-    # @returns A list containing the three angles
     def eulerAngles(self, t=None):
+        """
+        eulerAngles computes the Euler angles (roll, pitch and yaw) based
+        on the current attitude.
+        
+        This function computes the Euler angles (or, technically the
+        "Tait-Bryan angles"), i.e. roll, pitch and yaw from the current attitude
+        quaternion #qHat.
+
+        Note:
+         See Wikipedia's article on the
+         `equatorial coordinate system <a href="https://en.wikipedia.org/wiki/Euler_angles">`_
+         for more details.
+        
+        See Also:
+         :meth:`~modest.substates.attitude.attitude.eulerSTD`
+        Args:
+         t (float): Optional, get euler angles at a specific time (not yet implemented)
+        
+        Returns:
+         (list): A list containing the three angles
+        """
         if t is None:
             q = self.qHat
             phi = arctan2(2*(q[0]*q[1] + q[2]*q[3]), 1 - 2*(square(q[1]) + square(q[2])))
@@ -857,42 +904,47 @@ class Attitude(substate.SubState):
 
         return [phi, theta, psi]
 
-    ## @fun RaDecRoll returns the current attitude in terms of right ascension,
-    # declination, and roll
-    #
-    # @details This function essentially computes the euler angles (1-2-3)
-    # from the current attitude quaternion #qHat and returns them in reverse
-    # order (3-2-1).  This is helpful because the attitude of spacecraft is
-    # commonly expressed in terms of RA-Dec-Roll, rather than roll-pitch-yaw
-    # which is more standard in other aerospace applications.
-    #
-    # @note See Wikipedia's article on the
-    # <a href="https://en.wikipedia.org/wiki/Equatorial_coordinate_system">
-    # equatorial coordinate system</a> for more details.
-    #
-    # @param self The object pointer
-    #
-    # @returns A list containing the three angles
     def RaDecRoll(self):
+        """
+        RaDecRoll returns the current attitude in terms of right ascension,
+        declination, and roll
+        
+        This function essentially computes the euler angles (1-2-3)
+        from the current attitude quaternion #qHat and returns them in reverse
+        order (3-2-1).  This is helpful because the attitude of spacecraft is
+        commonly expressed in terms of RA-Dec-Roll, rather than roll-pitch-yaw
+        which is more standard in other aerospace applications.
+        
+        Note:
+         See Wikipedia's article on the
+         `equatorial coordinate system <a href="https://en.wikipedia.org/wiki/Euler_angles">`_
+         for more details.
+
+        Returns:
+         (list): A list containing the three angles
+        """
         eulerAngles = self.eulerAngles()
 
         return([eulerAngles[2], -eulerAngles[1], eulerAngles[0]])
 
-    ## @fun sidUnitVec generates a unit vector from two angles
-    #
-    # @details
-    # This function computes the unit vector in siderial coordinates from a
-    # measurement of right ascension and declination. This is a "helper"
-    # function; it doesn't really need to be included in the class and could
-    # be moved to a seperate library probably.
-    #
-    # @param self Object pointer
-    # @param RaDec A dictionary containing the two angles, in radians
-    #
-    # @returns A unit vector generated from the angles given
     def sidUnitVec(
             self,
             RaDec):
+        """
+        sidUnitVec generates a unit vector from two angles
+        
+        This function computes the unit vector in siderial coordinates from a
+        measurement of right ascension and declination. This is a "helper"
+        function; it doesn't really need to be included in the class and could
+        be moved to a seperate library probably.
+        
+        Args:
+         RaDec (dict): A dictionary containing the two angles, labeled "RA" and "DEC", in radians
+        
+        Returns:
+         (numpy.ndarray): A unit vector generated from the angles given
+        """
+        
         if isinstance(RaDec['DEC'], dict) and isinstance(RaDec['RA'], dict):
             cosD = np.cos(RaDec['DEC']['value'])
             sinD = np.sin(RaDec['DEC']['value'])
@@ -908,21 +960,23 @@ class Attitude(substate.SubState):
         myUV = myUV / np.linalg.norm(myUV)
         return myUV
     
-    ## @fun skewSymmetric generates a skew-symmetric matrix from a 3x1 vector
-    #
-    # @details
-    # This function generates a skew symmetric matrix from a 3x1 vector.  It
-    # is a "helper" function and doesn't actually need to be a member function.
-    # It could (should?) be moved to its own library.
-    #
-    # @param self Object pointer
-    # @param vector The vector
-    #
-    # @returns The skew symmetric matrix
     def skewSymmetric(
             self,
             vector
     ):
+        """
+        skewSymmetric generates a skew-symmetric matrix from a 3x1 vector
+        
+        This function generates a skew symmetric matrix from a 3x1 vector.  It
+        is a "helper" function and doesn't actually need to be a member function.
+        It could (should?) be moved to its own library.
+        
+        Args:
+         vector (list): The vector
+        
+        Returns:
+         (numpy.ndarray): The skew symmetric matrix
+        """
         matrix = np.zeros([3, 3])
 
         matrix[0, 1] = -vector[2]
@@ -937,13 +991,22 @@ class Attitude(substate.SubState):
         return(matrix)
 
     def eulerSTD(self):
+        """
+        eulerSTD computes the Euler angle (roll, pitch and yaw) standard deviation based on the current covariance matrix.
+        
+        Note:
+         See Wikipedia's article on the
+         `equatorial coordinate system <a href="https://en.wikipedia.org/wiki/Euler_angles">`_
+         for more details.
+        
+        See Also:
+         :meth:`~modest.substates.attitude.attitude.eulerAngles`
+        
+        Returns:
+         (list): A list containing the three angle standard deviations
+        """
         
         newCov = self.PHat.convertCovariance('covariance').value[0:3,0:3]
-        # newCov = (
-        #     self.qHat.rotation_matrix.transpose().dot(
-        #         newCov
-        #     ).dot(self.qHat.rotation_matrix)
-        # )
 
         eulerSTD = np.sqrt(newCov.diagonal()[0:3])
         return eulerSTD
