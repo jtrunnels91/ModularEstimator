@@ -116,7 +116,7 @@ class CorrelationVector(substate.SubState):
             t=0,
             correlationVector=None,
             correlationVectorCovariance=None,
-            signalTDOA=0,
+            signalTDOA=0, 
             TDOAVar=0,
             aPriori=True,
             centerPeak=True,
@@ -581,8 +581,8 @@ class CorrelationVector(substate.SubState):
 
                 peakShift = self.navState.currentVelocity * indexDiff
                 velocityTDOA = self.navState.currentVelocity * deltaT
-                Q = self.navState.velocityVar * np.square(indexDiff)
-                tdoaQ = self.navState.velocityVar * np.square(deltaT)
+                Q = self.navState.velocityVar * np.square(indexDiff) * self.velocityNoiseScaleFactor
+                tdoaQ = self.navState.velocityVar * np.square(deltaT) * self.velocityNoiseScaleFactor
 
         else:
             velocityTDOA = 0
