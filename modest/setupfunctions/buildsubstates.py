@@ -139,6 +139,10 @@ def buildPulsarCorrelationSubstate(
         traj.correlationFilter.peakLockThreshold.value
     )
 
+    if 'peakFitPoints' in traj.correlationFilter:
+        peakFitPoints = traj.correlationFilter.peakFitPoints.value
+    else:
+        peakFitPoints = 1
     # Now initialize the correlation substate
     correlationSubstate = substates.CorrelationVector(
         pulsarObject,
@@ -157,7 +161,8 @@ def buildPulsarCorrelationSubstate(
         velStdDevThreshold=velStdDevThreshold,
         tdoaNoiseScaleFactor=tdoaNoiseScaleFactor,
         velocityNoiseScaleFactor=velocityNoiseScaleFactor,
-        storeLastStateVectors=traj.correlationFilter.storeLastStateVectors.value
+        storeLastStateVectors=traj.correlationFilter.storeLastStateVectors.value,
+        peakFitPoints=peakFitPoints,
     )
 
     return correlationSubstate, vInitial_C
