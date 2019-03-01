@@ -132,7 +132,7 @@ class PointSource(signalsource.SignalSource):
                 #     )
             # print('')
         else:
-            probability=0
+            probability=1
 
         return(probability)
 
