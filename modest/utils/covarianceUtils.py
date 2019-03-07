@@ -23,10 +23,21 @@ class covarianceContainer():
 
         elif newForm == 'cholesky':
             if self.form == 'covariance':
-                newCov = covarianceContainer(
-                    np.linalg.cholesky(self.value),
-                    form=newForm
-                )
+                try:
+                    if not np.any(self.value):
+                        newCov = covarianceContainer(
+                            self.value,
+                            form=newForm
+                    )
+                    else:
+                        newCov = covarianceContainer(
+                            np.linalg.cholesky(self.value),
+                            form=newForm
+                        )
+                except:
+                    print(self)
+                    print("error converting covariance!")
+                    raise ValueError("error converting covariances")
             else:
                 raise ValueError('Unrecougnized covariance form %s' %self.form)
         return newCov
@@ -60,6 +71,7 @@ class covarianceContainer():
         repString = 'covarianceContainer (form=%s, value=\n' %self.form
         repString += '%s)' %self.value
         return repString
+
     def mahalanobisDistance(self, dX):
         if self.form == 'covariance':
             MSquared = dX.transpose().dot(
@@ -70,3 +82,7 @@ class covarianceContainer():
             MSquared = V.dot(V)
         M = np.sqrt(MSquared)
         return(M)
+
+    @property
+    def shape(self):
+        return self.value.shape

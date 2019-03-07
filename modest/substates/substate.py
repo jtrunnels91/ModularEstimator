@@ -60,9 +60,8 @@ class SubState():
             storeLastStateVectors=0,
     ):
         if stateDimension is None:
-            raise ValueError(
-                "Must pass a state dimension."
-                )
+            stateDimension = len(stateVectorHistory['stateVector'])
+        
         
         ## @brief Stores the length of the state vector as seen by
         # the ModularFilter.  See the #dimension function for details on
@@ -92,6 +91,18 @@ class SubState():
             raise ValueError(
                 "State vector history must contain state vector id key, labeled \"stateVectorID\""
                 )
+        
+        if len(stateVectorHistory['stateVector']) != self.__dimension__:
+            raise ValueError(
+                "\"stateVector\" in stateVectorHistory must be of same length as state dimension"
+                )
+        
+        if (
+                not all([dim==self.__dimension__ for dim in stateVectorHistory['covariance'].shape])
+        ) or len(stateVectorHistory['covariance'].shape)!=2:
+            raise ValueError(
+                "\"covariance\" must be a %i x %i matrix" %(self.__dimension__, self.__dimension__)
+            )
             
         
         ## @brief Stores the time-history of the sub-state state vector.

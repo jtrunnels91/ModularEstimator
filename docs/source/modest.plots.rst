@@ -4,11 +4,22 @@ modest.plots package
 Submodules
 ----------
 
-.. toctree::
+modest.plots.montecarloplots2 module
+------------------------------------
 
-   modest.plots.montecarloplots
-   modest.plots.montecarloplots2
-   modest.plots.photonscatterplot
+.. automodule:: modest.plots.montecarloplots2
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+modest.plots.photonscatterplot module
+-------------------------------------
+
+.. automodule:: modest.plots.photonscatterplot
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

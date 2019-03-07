@@ -21,7 +21,7 @@ sys.path.append("/home/joel/Documents/astroSourceTracking/libraries")
 
 
 class ModularFilter():
-    """ 
+    r""" 
     This class is designed to facilitate a variety of estimation algorithms in
     a modular way, i.e. in a way that allows maximum amount of flexibility with
     minimum amount of code duplication.
@@ -63,7 +63,7 @@ class ModularFilter():
             time=0,
             covarianceStorage='covariance'
     ):
-        """
+        r"""
         __init__ does the house-keeping work to initialize a ModularFilter
         
         Args: 
@@ -97,7 +97,7 @@ class ModularFilter():
             name,
             stateObject
     ):
-        """
+        r"""
         addStates is a utility function used to add a state to the ModularFilter.
         
         Args: 
@@ -200,8 +200,11 @@ class ModularFilter():
         """
         
         F = np.zeros([self.totalDimension, self.totalDimension])
+        # Q = covarianceContainer(
+        #     np.zeros([self.totalDimension, self.totalDimension]), 'covariance'#self.covarianceMatrix.form
+        # )
         Q = covarianceContainer(
-            np.zeros([self.totalDimension, self.totalDimension]), 'covariance'#self.covarianceMatrix.form
+            np.zeros([self.totalDimension, self.totalDimension]), self.covarianceMatrix.form
         )
 
         # Assemble time-update matrix and process noise matrix based on

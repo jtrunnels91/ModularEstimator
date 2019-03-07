@@ -3,9 +3,15 @@ import numpy as np
 # around the SSB
 from skyfield.api import load
 import warnings
-planets = load('de421.bsp')
-timeObj = load.timescale()
-earthObj = planets['earth']
+import sys
+if 'sphinx' in sys.modules:
+    planets = None
+    timeObj = None
+    earthObj = None
+else:
+    planets = load('de421.bsp')
+    timeObj = load.timescale()
+    earthObj = planets['earth']
 
 def phaseError(estDelay, trueDelay, period):
     if hasattr(estDelay, '__len__'):
@@ -64,6 +70,52 @@ def hms2rad(h=None, m=None, s=None, hms=None):
     
     return 2.0 * np.pi * hours / 24.0
 
+def rad2hms(rad):
+    """
+    This function converts radians to hours, minutes and seconds
+    
+    Args:
+      rad (float): radians to be converted.  Will be made positive if less than zero (by adding 2 pi)
+
+    Returns:
+      (dict): A dict containing "hours", "minutes" and "seconds" key-value pairs
+    """
+    while rad < 0:
+        rad = rad + (np.pi*2)
+    hours = rad * 12.0/np.pi
+    hoursRemainder = hours % 1
+    hours = hours - hoursRemainder
+
+    minutes = hoursRemainder * 60.0
+    minutesRemainder = minutes % 1
+    minutes = minutes - minutesRemainder
+
+    seconds = minutesRemainder * 60.0
+
+    return {'hours': hours, 'minutes': minutes, 'seconds': seconds}
+
+def rad2dms(rad):
+    """
+    This function converts radians to degrees, minutes and seconds
+
+    Args:
+      rad (float): radians to be converted.  
+
+    Returns:
+      (dict): A dict containing "degrees", "minutes" and "seconds" key-value pairs
+    
+    """
+    degrees = rad * 180.0/np.pi
+    degreesRemainder = np.abs(degrees) % 1
+    degrees =  (np.abs(degrees) - degreesRemainder) * np.sign(degrees)
+
+    minutes = degreesRemainder * 60.0
+    minutesRemainder = minutes % 1
+    minutes = minutes - minutesRemainder
+
+    seconds = minutesRemainder * 60.0
+
+    return {'degrees': degrees, 'minutes': minutes, 'seconds': seconds}
 
 def dms2rad(d=None, m=None, s=None, dms=None):
     if dms is not None:

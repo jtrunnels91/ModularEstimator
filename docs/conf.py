@@ -135,7 +135,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'ModularEstimator.tex', 'Modular Estimator Documentation',
-     'Joel Runnels', 'manual'),
+     'Joel Runnels', 'article'),
 ]
 
 
@@ -204,8 +204,12 @@ latex_elements = {
 # }
 html_theme="classic"
 
-import mock
- 
-MOCK_MODULES = ['pypet']
-for mod_name in MOCK_MODULES:
-    sys.modules[mod_name] = mock.Mock()
+# import mock
+autodoc_mock_imports =  ["pypet", "skyfield.api"]
+# MOCK_MODULES = ['pypet']
+# # for mod_name in MOCK_MODULES:
+# #     sys.modules[mod_name] = mock.Mock()
+
+# from unittest.mock import patch
+# @patch('pypet')
+# @patch('skyfield.api')

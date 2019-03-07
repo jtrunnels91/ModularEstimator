@@ -7,10 +7,6 @@ One of the big advantages of this framework is that it allows you to put togethe
 
 Here, we'll continue our example from :ref:`Quickstart` to show some of the capabilities of the ``modest`` package.
 
-=================
-One object, two signal sources
-=================
-
 Suppose we have a scenario similar to that in :ref:`Quickstart`, with a single object moving in one dimension, and we want to estimate its position.  We initialize our filter the same way:
 
 >>> import modest as md
@@ -44,7 +40,11 @@ We can't use :meth:`~modest.modularfilter.ModularFilter.measurementUpdateEKF`, b
 
 >>> myFilter.measurementUpdateML(myMeasurement)
 
+This command tells the filter to compute the conditional probability of association for both signal sources, then update the state estimate using the associaton with the highest probability.
 
+At this point, a lot is happening "under the hood" that we don't see.  The substate objects are computing update matrices, the signal objects are computing association probabilities, and the :class:`~modest.modularfilter.ModularFilter` object is perfoming the global state update.  All of this happens with relatively little input from the user, because these functionalities have been built into these objects.
+
+If the functionalities you want happen to be included in the modest package, then your job is done.  However, most likely you will want to do state estimation with different states, different signal sources, and different filtering algorithms.  The modest package is designed to make it as easy as possible to include whatever custom functionality you want to include with as little boiler-plate code as possible.  In the next section we'll show a simple example of building signal and substate objects from scratch.
 
 
 

@@ -19,6 +19,7 @@ Please note that this package is very much in an "alpha" development status: the
    usage/installation
    usage/quickstart	  
    usage/advancedMeasurementUpdates
+   usage/customStatesAndSignals
    source/modest
 	     
 

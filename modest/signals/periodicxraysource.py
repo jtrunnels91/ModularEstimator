@@ -1,3 +1,4 @@
+
 ## @file periodicxraysource.py
 # @brief This file contains the PeriodicXRaySource class
 
@@ -88,6 +89,7 @@ class PeriodicXRaySource(
         # Process the PAR file, if received.  Give priority to parameters
         # passed directly as init arguments.
         if PARFile is not None:
+            self.PARFile = PARFile
             PAR_RA, PAR_Dec = self.processPARFile(PARFile)
             if (RA is None):
                 RA = PAR_RA
@@ -130,6 +132,7 @@ class PeriodicXRaySource(
             self.TZeroDiff = (self.PEPOCH - self.observatoryMJDREF)*24*60*60
         else:
             self.TZeroDiff = 0
+
 
         if correlationStateName is None:
             correlationStateName = self.name
@@ -573,12 +576,14 @@ class PeriodicXRaySource(
             MJD
     ):
         return (MJD - self.PEPOCH) * (24.0 * 60.0 * 60.0)
+        # return (MJD - self.TZRMJD) * (24.0 * 60.0 * 60.0)
 
     def seconds2MJD(
             self,
             seconds
     ):
         return self.PEPOCH + (seconds/(24.0 * 60.0 * 60.0))
+        # return self.TZRMJD + (seconds/(24.0 * 60.0 * 60.0))
     
     def computeAssociationProbability(
             self,

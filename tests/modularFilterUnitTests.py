@@ -24,6 +24,7 @@ class TestModularFilters(unittest.TestCase):
                 super().__init__(stateDimension=2, stateVectorHistory=stateVectorHistory)
                 self.stateVector = stateVectorHistory['stateVector']
                 self.objectID = objectID
+                self.covarianceStorage = covarianceStorage
 
             def storeStateVector(self, svDict):
                 xPlus = svDict['stateVector']
@@ -58,7 +59,6 @@ class TestModularFilters(unittest.TestCase):
                     Q = md.utils.covarianceContainer(Q * np.sqrt(accVar), 'cholesky')
                 else:
                     raise ValueError('unrecougnized covariance')
-
                 return {'F': F, 'Q': Q}
 
             def getMeasurementMatrices(self, measurement, source=None):
@@ -342,7 +342,6 @@ class TestModularFilters(unittest.TestCase):
         cov2 = positionObj2.covariance().convertCovariance('covariance').value
         x1 = positionObj1.stateVector
         x2 = positionObj2.stateVector
-        
         myFilter.timeUpdateEKF(1, dynamics=dynamics)
 
         Q = np.array([[1/4, 1/2],[1/2, 1]])
@@ -407,7 +406,6 @@ class TestModularFilters(unittest.TestCase):
             covarianceStorage='cholesky'
         )
         myFilterChol.addStates('object1', positionObj1Chol)
-
         signalSource1 = self.oneDObjectMeasurement('object1')
         myFilter.addSignalSource('object1', signalSource1)
         
@@ -439,6 +437,7 @@ class TestModularFilters(unittest.TestCase):
             covarianceStorage='cholesky'
         )
         myFilterChol.addStates('object2', positionObj2Chol)
+        
         myFilterChol.addSignalSource('object2', signalSource2)
 
         self.assertEqual(myFilterChol.covarianceMatrix.form, 'cholesky')
@@ -612,6 +611,7 @@ class TestModularFilters(unittest.TestCase):
         )
         myFilterChol.addStates('object1', positionObj1Chol)
 
+
         signalSource1 = self.oneDObjectMeasurement('object1')
         myFilter.addSignalSource('object1', signalSource1)
         
@@ -725,8 +725,8 @@ class TestModularFilters(unittest.TestCase):
         
         position2 = np.random.normal(pos2(0), 1)
         velocity2 = np.random.normal(vel2(0), 1)
-        cov2 = np.eye(2)*np.abs(np.random.normal(2))
-        cov2[1,0] = np.random.normal(0)
+        cov2 = np.eye(2)*np.abs(np.random.uniform(1,2))
+        cov2[1,0] = np.random.uniform(0,1)
         cov2[0,1] = cov2[1,0]
         x2 = np.array([position2, velocity2])
         positionObj2 = self.oneDPositionVelocity(
@@ -740,7 +740,6 @@ class TestModularFilters(unittest.TestCase):
         myFilter.addStates('object2', positionObj2)
         signalSource2 = self.oneDObjectMeasurement('object2')
         myFilter.addSignalSource('object2', signalSource2)
-
         positionObj2Chol = self.oneDPositionVelocity(
             'object2',
             {'t': 0,
@@ -771,11 +770,11 @@ class TestModularFilters(unittest.TestCase):
             a2meas = np.random.normal(acc2(time), sigmaA1)
             dynamics={
                 'object1acceleration': {
-                    'value':a1meas,
+                    'value': a1meas,
                     'var': np.square(sigmaA1)
                 },
                 'object2acceleration': {
-                    'value':a2meas,
+                    'value': a2meas,
                     'var': np.square(sigmaA2)
                 }
             }

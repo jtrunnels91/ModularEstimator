@@ -16,9 +16,14 @@ Subpackages
 Submodules
 ----------
 
-.. toctree::
+modest.modularfilter module
+---------------------------
 
-   modest.modularfilter
+.. automodule:: modest.modularfilter
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------
