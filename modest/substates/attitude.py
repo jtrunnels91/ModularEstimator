@@ -693,10 +693,18 @@ class Attitude(substate.SubState):
             measurement['DEC']['value'] - predictedDec
         ])
 
-        R = block_diag(
-            measurement['RA']['var'] + np.square(source.extent),
-            measurement['DEC']['var'] + np.square(source.extent)
-        )
+        R = np.array([
+            [measurement['RA']['var'], 0],
+            [0, measurement['DEC']['var']]
+        ])
+        if np.isscalar(source.extent):
+            R = R + np.eye(2) * np.square(source.extent)
+        else:
+            RTransform = np.array([
+                [ np.cos(rollEst), -np.sin(rollEst)],
+                [ np.sin(rollEst), np.cos(rollEst)]
+            ])
+            R = R + RTransform.dot(source.extent).dot(RTransform.transpose())
         
         measMatrices = {
             'H': H,

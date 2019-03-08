@@ -37,7 +37,7 @@ def buildPulsarModel(
     else:
         myPulsarObject.useUnitVector = False
         
-    if myPulsarObject.extent == 0:
+    if not np.any(myPulsarObject.extent):
         myPulsarObject.extent = (
             1*ureg('pixel') * extentConversionFactor
         ).to(ureg('rad')).magnitude

@@ -9,7 +9,7 @@ class PointSource(signalsource.SignalSource):
             self,
             RA,
             DEC,
-            extent=0,
+            extent=None,
             attitudeStateName='attitude',
             useUnitVector=True
     ):

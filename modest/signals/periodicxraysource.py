@@ -37,28 +37,34 @@ class PeriodicXRaySource(
             correlationStateName=None,
             useProfileColumn=None,
             startTime=0,
-            extent=0,
+            extent=None,
             useTOAprobability=True
     ):
         
         # Store the user-passed arguments first.  These take priority of
         # parameters received in the PAR file.
 
-        ## @brief Stores the derivatives of phase with respect to time
-        # @detail #phaseDerivatives is a dict which contains the derivatives
-        # of phase with respect to time.  The 0th derivative of phase is
-        # simply a constant phase offset (zero by default).  The 1st
-        # derivative of phase is frequency.  Higher order derivatives reflect
-        # the change in frequency with respect to time.
-        #
-        # The dict keys should be integers which indicate the order of the
-        # derivative. e.g.
-        # \code
-        # phaseDerivatives = {0: 0, 1: 29.7417, 2: -3.7184e-19, 3: 1.1949e-20}
-        # \endcode
-        # (Phase derivatives shown for Crab Nebula pulsar)
+        self.extent=None
+        """
+        Specifies the spatial extent of the pulsar
+        """
         self.phaseDerivatives = phaseDerivatives
+        """
+        Stores the derivatives of phase with respect to time
+        
+        phaseDerivatives is a dict which contains the derivatives
+        of phase with respect to time.  The 0th derivative of phase is
+        simply a constant phase offset (zero by default).  The 1st
+        derivative of phase is frequency.  Higher order derivatives reflect
+        the change in frequency with respect to time.
+        
+        The dict keys should be integers which indicate the order of the
+        derivative. e.g.
 
+        >>> phaseDerivatives = {0: 0, 1: 29.7417, 2: -3.7184e-19, 3: 1.1949e-20}
+
+        (Phase derivatives shown for Crab Nebula pulsar)
+        """
 
         ## @brief #TZRMJD stores the Modified Julian Date (MJD) corresponding
         # to t=0 seconds (for the purpose of computing the pulsar phase)
@@ -85,6 +91,20 @@ class PeriodicXRaySource(
         # constant/background
         self.pulsedFraction = pulsedFraction
 
+        self.covRA = None
+        """
+        Spatial covariance of source in right-ascension
+        """
+        
+        self.covDEC = None
+        """
+        Spatial covariance of source in declination
+        """
+        
+        self.covX = None
+        """
+        Cross-correlation of spatial covariance terms
+        """
         
         # Process the PAR file, if received.  Give priority to parameters
         # passed directly as init arguments.
@@ -96,10 +116,15 @@ class PeriodicXRaySource(
             if (DEC is None):
                 DEC = PAR_Dec
 
-
+        if np.all([self.covRA, self.covDEC, self.covX]):
+            self.extent = np.array([
+                [self.covRA, self.covX],
+                [self.covX, self.covDEC]
+            ])
+            
         # Initialize PointSource with Right ascension and declination values
         pointsource.PointSource.__init__(
-            self, RA, DEC, attitudeStateName=attitudeStateName, extent=extent
+            self, RA, DEC, attitudeStateName=attitudeStateName, extent=self.extent
         )
 
         # Check to make sure that we received either a phaseDerivatives dict
@@ -221,7 +246,6 @@ class PeriodicXRaySource(
 
             # If the line contains relevant information, store it.
             if len(splitLine) > 0:
-
                 # FREQUENCY
                 # If line contains frequency information, the first string
                 # should be of the format "F<i>" where i is an integer.
@@ -275,6 +299,28 @@ class PeriodicXRaySource(
                     PAR_PEPOCH = float(splitLine[1])
                     if (self.PEPOCH is None) or (replaceCurrentValues is True):
                         self.PEPOCH = PAR_PEPOCH
+                        
+                # Spatial covariance matrix, right ascension
+                elif (splitLine[0] == 'COV_RA'):
+                    covRA = float(splitLine[1])
+                    if (not self.covRA) or (replaceCurrentValues):
+                        self.covRA = covRA
+                        print('found cov ra')
+                        
+                # Spatial covariance matrix, declination
+                elif (splitLine[0] == 'COV_DEC'):
+                    covDEC = float(splitLine[1])
+                    if (not self.covDEC) or (replaceCurrentValues):
+                        self.covDEC = covDEC
+                        print('found cov dec')
+                        
+                        
+                # Spatial covariance matrix, cross correlation
+                elif (splitLine[0] == 'COV_X'):
+                    covX = float(splitLine[1])
+                    if (not self.covX) or (replaceCurrentValues):
+                        self.covX = covX
+                        print('found cov x')
 
                 # Pulsar Name
                 elif ((splitLine[0] == 'PSRJ')
