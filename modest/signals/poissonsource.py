@@ -95,15 +95,21 @@ class DynamicPoissonSource(PoissonSource):
 
     def __init__(
             self,
-            maxFlux,
+            averageFlux,
+            maxFlux=None,
             correlationStateName='correlation',
             startTime=0,
             useTOAprobability=True
     ):
+        if maxFlux == None:
+            maxFlux = averageFlux
+            
+        self.maxFlux = maxFlux
+        
         self.correlationStateName = correlationStateName
         PoissonSource.__init__(
             self,
-            maxFlux,
+            averageFlux,
             startTime=startTime,
             useTOAprobability=useTOAprobability
         )

@@ -229,7 +229,8 @@ class PeriodicXRaySource(
         
         poissonsource.DynamicPoissonSource.__init__(
             self,
-            self.peakAmplitude,
+            self.avgPhotonFlux*detectorArea,
+            maxFlux=self.peakAmplitude,
             correlationStateName=correlationStateName,
             startTime=startTime,
             useTOAprobability=useTOAprobability
