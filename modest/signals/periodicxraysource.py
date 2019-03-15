@@ -11,15 +11,21 @@ from . import poissonsource
 from .. utils import spacegeometry as sg
 
 
-## @class PeriodicPoissonSource is a class which models the signal from a
-# periodic poisson source, e.g. a pulsar.
 class PeriodicXRaySource(
         poissonsource.DynamicPoissonSource,
         pointsource.PointSource
 ):
+    """
+    PeriodicPoissonSource is a class which models the signal from a
+    periodic poisson source, e.g. a pulsar.
+    
+    This class accepts a large number of initialization inputs required to
+    model such a source.  Alternatively, the user can pass a PAR file, and the
+    object will initialize based on that.
+    """
     def __init__(
             self,
-            profile,
+            profile=None,
             avgPhotonFlux=None,
             pulsedFraction=None,
             PARFile=None,
@@ -121,7 +127,7 @@ class PeriodicXRaySource(
         self.pulsedFraction = pulsedFraction
         """
         pulsedFraction is a value from 0 to 1 which indicates what
-        percentage of the #avgPhotonFlux is "pulsed" and what percentage is
+        percentage of the avgPhotonFlux is "pulsed" and what percentage is
         constant/background
         """
         
@@ -141,7 +147,17 @@ class PeriodicXRaySource(
         """
 
         self.fluxERG = None
+        """
+        Energy flux in ergs per unit area
+        """
+        
         self.fluxKEV=None
+        """
+        Energy flux in KEV per unit area
+        """
+
+        self.profile=None
+        
         # Process the PAR file, if received.  Give priority to parameters
         # passed directly as init arguments.
         if PARFile is not None:
@@ -192,7 +208,8 @@ class PeriodicXRaySource(
         """
         
         # Process whatever was passed as the profile
-        self.processProfile(profile, normalizeProfile, movePeakToZero, useProfileColumn)
+        if profile is not None:
+            self.processProfile(profile, normalizeProfile, movePeakToZero, useProfileColumn)
 
         self.TZeroDiff = 0
         """
@@ -245,6 +262,15 @@ class PeriodicXRaySource(
             movePeakToZero=True,
             useProfileColumn=None
     ):
+        """
+        processProfile reads in a series of data points representing the pulsar's pulse profile, and processes it for use in generating signals.
+
+        Args:
+         profle: Either a string pointing to a file, or a list of values representing the profile
+         normalizeProfile (bool): Determines whether to normalize the profile to be between zero and one.
+         movePeakToZero (bool): Determines whether the max value of the profile will be shifted to zero.  This is fairly standard convention.
+         useProfileColumn (int): Optionally, determine which column of the profile file is contains the profile information. Different profile files have various numbers of columns.  By default, method will use the last column.
+        """
         # If a string is received, assume this points to a file and try to
         # open it and import the data.
         if type(profile) is str:
@@ -272,24 +298,47 @@ class PeriodicXRaySource(
 
         profile = np.append(profile, profile[0])
 
-        ## @brief #profile is a numpy array containing the numerical value of
-        # flux over a single period of the signal.
-        #
-        # @detail The #profile array contains the signal profile of the pulsar
-        # (or periodic source) being modeled.  If the user selected to
-        # normalize the profle, then the profile will be normalized from zero
-        # to one, and then scaled based on the average flux value.  If the
-        # profile is not normalized, then the raw values will be used for
-        # computing the signal.  If the profile is normalized but no average
-        # flux value is received, a warning will be issued.
         self.profile = profile
+        """
+        profile is a numpy array containing the numerical value of
+        flux over a single period of the signal.
+        
+        The profile array contains the signal profile of the pulsar
+        (or periodic source) being modeled.  If the user selected to
+        normalize the profle, then the profile will be normalized from zero
+        to one, and then scaled based on the average flux value.  If the
+        profile is not normalized, then the raw values will be used for
+        computing the signal.  If the profile is normalized but no average
+        flux value is received, a warning will be issued.
+        """
+        
         self.profileIndex = np.linspace(0, 1, len(self.profile))
+
+        return
+    
 
     def processPARFile(
             self,
             PARFile,
             replaceCurrentValues=False
     ):
+        """
+        Read a PAR file passed by the user and change/initialize object attributes accordingly.
+
+        `PAR files <http://www.jb.man.ac.uk/~pulsar/Resources/tempo_usage.txt>`_
+        are a semi-standardized way to store information about pulsars.  Most PAR files contain, at a minimum, the name of the pulsar, the sky coordinates of the pulsar (i.e. right ascension and declination) and frequency information about the pulsar.  They may also contain other helpful information such as reported glitches, pulsar binary model information, etc.  Rather than force the user to enter all this information manually, the object can initialize from a PAR file and gather the relevant information on its own.
+
+        In order to further simplify the pulsar object initialization pipeline, this method also processes additional information found in the PAR file which isn't part of the standard PAR file format.  This includes information like source extent (i.e. how big is the object in the sky), source flux (photons per second per unit area, energy per second per unit area), pulsed fraction, and pulse profile.  This information is not normally included in a PAR file.  However, it is relatively easy to add it manually, and this simplifies workflow by keeping all the relevant information about the pulsar in one file.
+        
+        Args:
+         PARFile (str): Path to PAR file to be read
+         replaceCurrentValues (bool):  Determines whether previously stored values will be overwritten by values found in the PAR file
+        
+        Returns:
+         (float, float): Tuple containing the right ascension and declination of the source found in the PAR file
+        """
+
+        
         # Read PAR file, and split into lines
         parTextFile = open(PARFile, "r")
         lines = parTextFile.read().split('\n')
@@ -297,6 +346,7 @@ class PeriodicXRaySource(
         PARPhaseDerivatives = {0: 0}
         PARFittedPhaseDerivatives = None
 
+        newProfile = []
         for line in lines:
             # Split the line into a list of strings, and strip the
             # whitespace
@@ -422,7 +472,13 @@ class PeriodicXRaySource(
                 elif (splitLine[0] == 'P_FRAC'):
                     if (self.pulsedFraction is None) or (replaceCurrentValues is True):
                         self.pulsedFraction = float(splitLine[1])
+
+                # Profile (assumed to be in order
+                elif (splitLine[0] == 'PROFILE'):
+                    newProfile.append(float(splitLine[1]))
+                    print(float(splitLine[1]))
                     
+                        
             if (
                     (self.phaseDerivatives is None) or
                     (replaceCurrentValues is True)
@@ -434,17 +490,29 @@ class PeriodicXRaySource(
                     (replaceCurrentValues is True)
             ):
                 self.fittedPhaseDerivatives = PARFittedPhaseDerivatives
+
+        if len(newProfile) > 0:
+            print(self.profile)
+            if replaceCurrentValues or (not np.any(self.profile)): 
+                self.processProfile(newProfile)
                 
         return(PAR_RA, PAR_Dec)
 
     def computeSinglePeriodIntegral(
             self
             ):
-        # Compute the integral as a function of time of the pulsar flux.  This
-        # will be used later to compute expected value of flux in the case
-        # where time is uncertain.
-        self.singlePeriodIntegral = np.zeros(len(self.profile))
+        """
+        Compute the integral as a function of time of the pulsar flux.  
 
+        This will be used later to compute expected value of flux in the case
+        where time is uncertain.  Generally this function only needs to be called once at initialization; once the integral is computed it is stored as an attribute and can be accessed on demand.  Integral is computed using trapezoidal integration.
+        """
+        
+        self.singlePeriodIntegral = np.zeros(len(self.profile))
+        """
+        An array containing the numerically integrated flux over a single period
+        """
+        
         singlePeriodTimeArray = np.linspace(
             0, self.pulsarPeriod, len(self.profile)
         )
@@ -466,24 +534,35 @@ class PeriodicXRaySource(
         # average flux was given)
         if self.avgPhotonFlux is not None:
 
-            # Compute number of photons for a given pulsar period
             self.photonsPerPeriod = (
                 self.avgPhotonFlux * self.pulsarPeriod * self.detectorArea
             )
+            """
+            Expected number of photons for a given pulsar period
+            """
 
-            # Scale the peak amplitude so that a single integrated pulse will
-            # result in the expected number of photons
             self.peakAmplitude = self.photonsPerPeriod / fluxIntegral
-
+            """
+            Maximum amplitude of the pulsar signal.  Scaled so that the average flux is equal to the value given in initialization
+            """
+            
             # If some of the flux is unpulsed, scale the peak amplitude
             # accordingly and compute a background rate to account for the
             # unpulsed portion
             if self.pulsedFraction is not None:
                 self.scaleFactor = self.peakAmplitude * self.pulsedFraction
+                """
+                Amount by which the signal is to be multiplied to get the correct flux values
+                """
+                
                 self.backgroundCountRate = (
                     self.avgPhotonFlux * self.detectorArea *
                     (1 - self.pulsedFraction)
                 )
+                """
+                Flux of the unpulsed portion of the signal.  Not to be confused with other background sources.
+                """
+                
             else:
                 self.backgroundCountRate = 0
                 self.scaleFactor = self.peakAmplitude
@@ -494,11 +573,24 @@ class PeriodicXRaySource(
             self.backgroundCountRate = 0
 
         return
+    
 
     def getPhase(
             self,
             observatoryTime
     ):
+        """
+        Compute the current phase of the pulsar signal.  
+
+        This method uses all available frequency/phase information including derivatives.  However, it does not check for validity of the time passed.  Some PAR files are valid over only a specific region of time, and this function will not verify that the time given is within that time window.  
+It is up to the user to verify the validity of the results.
+        
+        Args:
+         observatoryTime (float): Local time at which flux is to be computed.
+
+        Returns:
+          (float): Current pulsar phase
+        """
         phase = 0
         shiftedObservatoryTime = observatoryTime - self.TZeroDiff
         
@@ -522,6 +614,21 @@ class PeriodicXRaySource(
             self,
             observatoryTime
     ):
+        """
+        Compute the current frequency of the pulsar signal
+
+        This function uses all available frequency information including derivatives to compute the current frequency of the pulsar signal at the given time.  However it does not check for time validity.  Some PAR files are valid over only a specified time frame; it is up to the user to verify whether the time given is within that region.
+        
+        See Also:
+         :meth:`getPeriod`
+
+        Args:
+         observatoryTime (float): Time for which frequency is to be computed
+        
+        Returns:
+         (float): Computed frequency in Hz
+        """
+        
         frequency = 0
         shiftedObservatoryTime = observatoryTime - self.TZeroDiff
         
@@ -545,63 +652,87 @@ class PeriodicXRaySource(
             self,
             observatoryTime
     ):
+        """
+        Compute the current period of the pulsar signal
+
+        This function uses all available frequency information including derivatives to compute the current period of the pulsar signal at the given time.  However it does not check for time validity.  Some PAR files are valid over only a specified time frame; it is up to the user to verify whether the time given is within that region.
+        
+        See Also:
+         :meth:`getFrequency`
+
+        Args:
+         observatoryTime (float): Time for which period is to be computed
+        
+        Returns:
+         (float): Computed period in seconds
+        """
+        
         return 1/self.getFrequency(observatoryTime)
     
-    ## @fun #getSignalMJD is a wrapper function that returns the photon flux
-    # at a given Modified Julian Date
-    #
-    # @param self The object pointer
-    # @param MJD The Modified Jullian Date for which flux is to be returned
-    #
-    # @returns The signal at the requested date
     def getSignalMJD(
             self,
             MJD
     ):
+        """
+        getSignalMJD is a wrapper function that returns the photon flux
+        at a given Modified Julian Date
+        
+        See Also:
+         :meth:`getSignal`
+
+        Args:
+         MJD (float): The Modified Jullian Date for which flux is to be returned
+    
+        Returns:
+         (float): The signal at the requested date
+        """
         observatoryTime = self.MJD2seconds(MJD)
         
         return (self.getSignal(observatoryTime))
 
-    ## @fun #getSignal is responsible for returning the photon flux from the
-    # pulsar at a given time
-    #
-    # @details The #getSignal method is the method which is responsible for
-    # returning the current value of flux from the signal source at a given
-    # time.  If there is uncertainty in the time, then the expected value of
-    # the signal is returned.  Uncertainty in time is indicated by the
-    # optional tVar argument.
-    #
-    # In every case, the method calls the #getPhase method to determine the
-    # current signal source phase.  If no uncertainty in time is passed, then
-    # the #getPulseFromPhase method is called to lookup/interpolate the
-    # current flux based on the phase and the signal #profile.
-    #
-    # If a value is passed for tVar, then the process is more complicated.
-    # Rather than simply look up the signal value from the phase, the function
-    # returns an approximation of the expected value of the signal, given the
-    # mean and variance of time.
-    #
-    # Normally, the expected value would be computed by integrating the
-    # product of the true distribution of time (probably a normal distribution)
-    # with the flux as a function of time.  However, due to the non-analytical
-    # nature of the flux function, the direct computation of this integral is
-    # intractable.  To overcome this limitation, the time distributuion is
-    # approximated as a moment-matched uniform distribution.  Using this
-    # approximation, the approximate integral may be directly computed simply
-    # by looking up the start and end values of #singlePeriodIntegral, and
-    # dividing by the appropriate scaling factor.
-    #
-    # @param self The object pointer
-    # @param observatoryTime The time for which to compute the signal
-    # @param tVar (optional) The variance of the time estimate
-    #
-    # @return The signal at the requested time
     def getSignal(
             self,
             observatoryTime,
             tVar=None,
             #state=None
     ):
+        """
+        getSignal is responsible for returning the photon flux from the
+        pulsar at a given time
+
+        The getSignal method is the method which is responsible for
+        returning the current value of flux from the signal source at a given
+        time.  If there is uncertainty in the time, then the expected value of
+        the signal is returned.  Uncertainty in time is indicated by the
+        optional tVar argument.
+
+        In every case, the method calls the getPhase method to determine the
+        current signal source phase.  If no uncertainty in time is passed, then
+        the getPulseFromPhase method is called to lookup/interpolate the
+        current flux based on the phase and the signal :attr:`profile`.
+
+        If a value is passed for tVar, then the process is more complicated.
+        Rather than simply look up the signal value from the phase, the function
+        returns an approximation of the expected value of the signal, given the
+        mean and variance of time.
+
+        Normally, the expected value would be computed by integrating the
+        product of the true distribution of time (probably a normal distribution)
+        with the flux as a function of time.  However, due to the non-analytical
+        nature of the flux function, the direct computation of this integral is
+        intractable.  To overcome this limitation, the time distributuion is
+        approximated as a moment-matched uniform distribution.  Using this
+        approximation, the approximate integral may be directly computed simply
+        by looking up the start and end values of :attr:`singlePeriodIntegral`, and
+        dividing by the appropriate scaling factor.
+
+        Args:
+         observatoryTime (float): The time for which to compute the signal
+         tVar (float): The variance of the time estimate (optional) 
+
+        Returns:
+         (float): The signal at the requested time, in photons/second
+        """
         # if state is not None:
         #     if 'signalDelay' in state:
         #         delay = state['signalDelay']
