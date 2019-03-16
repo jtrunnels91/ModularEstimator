@@ -157,6 +157,18 @@ class PeriodicXRaySource(
         """
 
         self.profile=None
+        """
+        profile is a numpy array containing the numerical value of
+        flux over a single period of the signal.
+        
+        The profile array contains the signal profile of the pulsar
+        (or periodic source) being modeled.  If the user selected to
+        normalize the profle, then the profile will be normalized from zero
+        to one, and then scaled based on the average flux value.  If the
+        profile is not normalized, then the raw values will be used for
+        computing the signal.  If the profile is normalized but no average
+        flux value is received, a warning will be issued.
+        """
         
         # Process the PAR file, if received.  Give priority to parameters
         # passed directly as init arguments.
@@ -262,7 +274,7 @@ class PeriodicXRaySource(
             movePeakToZero=True,
             useProfileColumn=None
     ):
-        """
+        r"""
         processProfile reads in a series of data points representing the pulsar's pulse profile, and processes it for use in generating signals.
 
         Args:
@@ -299,18 +311,6 @@ class PeriodicXRaySource(
         profile = np.append(profile, profile[0])
 
         self.profile = profile
-        """
-        profile is a numpy array containing the numerical value of
-        flux over a single period of the signal.
-        
-        The profile array contains the signal profile of the pulsar
-        (or periodic source) being modeled.  If the user selected to
-        normalize the profle, then the profile will be normalized from zero
-        to one, and then scaled based on the average flux value.  If the
-        profile is not normalized, then the raw values will be used for
-        computing the signal.  If the profile is normalized but no average
-        flux value is received, a warning will be issued.
-        """
         
         self.profileIndex = np.linspace(0, 1, len(self.profile))
 
@@ -322,7 +322,7 @@ class PeriodicXRaySource(
             PARFile,
             replaceCurrentValues=False
     ):
-        """
+        r"""
         Read a PAR file passed by the user and change/initialize object attributes accordingly.
 
         `PAR files <http://www.jb.man.ac.uk/~pulsar/Resources/tempo_usage.txt>`_
@@ -479,20 +479,23 @@ class PeriodicXRaySource(
                     print(float(splitLine[1]))
                     
                         
-            if (
-                    (self.phaseDerivatives is None) or
-                    (replaceCurrentValues is True)
-            ):
-                self.phaseDerivatives = PARPhaseDerivatives
-                
-            if (
-                    (self.fittedPhaseDerivatives is None) or
-                    (replaceCurrentValues is True)
-            ):
-                self.fittedPhaseDerivatives = PARFittedPhaseDerivatives
+        if (
+                (self.phaseDerivatives is None) or
+                (replaceCurrentValues is True)
+        ):
+            self.phaseDerivatives = PARPhaseDerivatives
+
+        if (
+                (self.fittedPhaseDerivatives is None) or
+                (replaceCurrentValues is True)
+        ):
+            self.fittedPhaseDerivatives = PARFittedPhaseDerivatives
 
         if len(newProfile) > 0:
-            print(self.profile)
+            # plt.figure()
+            # plt.plot(newProfile)
+            # plt.show(block=False)
+            # print(self.profile)
             if replaceCurrentValues or (not np.any(self.profile)): 
                 self.processProfile(newProfile)
                 
@@ -501,7 +504,7 @@ class PeriodicXRaySource(
     def computeSinglePeriodIntegral(
             self
             ):
-        """
+        r"""
         Compute the integral as a function of time of the pulsar flux.  
 
         This will be used later to compute expected value of flux in the case
@@ -579,7 +582,7 @@ class PeriodicXRaySource(
             self,
             observatoryTime
     ):
-        """
+        r"""
         Compute the current phase of the pulsar signal.  
 
         This method uses all available frequency/phase information including derivatives.  However, it does not check for validity of the time passed.  Some PAR files are valid over only a specific region of time, and this function will not verify that the time given is within that time window.  
@@ -614,7 +617,7 @@ It is up to the user to verify the validity of the results.
             self,
             observatoryTime
     ):
-        """
+        r"""
         Compute the current frequency of the pulsar signal
 
         This function uses all available frequency information including derivatives to compute the current frequency of the pulsar signal at the given time.  However it does not check for time validity.  Some PAR files are valid over only a specified time frame; it is up to the user to verify whether the time given is within that region.
@@ -652,7 +655,7 @@ It is up to the user to verify the validity of the results.
             self,
             observatoryTime
     ):
-        """
+        r"""
         Compute the current period of the pulsar signal
 
         This function uses all available frequency information including derivatives to compute the current period of the pulsar signal at the given time.  However it does not check for time validity.  Some PAR files are valid over only a specified time frame; it is up to the user to verify whether the time given is within that region.
@@ -673,7 +676,7 @@ It is up to the user to verify the validity of the results.
             self,
             MJD
     ):
-        """
+        r"""
         getSignalMJD is a wrapper function that returns the photon flux
         at a given Modified Julian Date
         
@@ -696,7 +699,7 @@ It is up to the user to verify the validity of the results.
             tVar=None,
             #state=None
     ):
-        """
+        r"""
         getSignal is responsible for returning the photon flux from the
         pulsar at a given time
 
@@ -808,7 +811,35 @@ It is up to the user to verify the validity of the results.
             tStart,
             tStop,
             state=None
-            ): 
+            ):
+        r"""
+        Computes the definite integral of the signal over a given time interval.
+
+        This function computes the definite integral of flux over the specified time interval.  Mathematically:
+
+        .. math::
+            \Lambda(t_0, T) = \int_{t_0}^T \lambda(t) dT 
+        
+        The function uses the periodic nature of the signal in conjuction with the previously computed :attr:`singlePeriodIntegral` to simplify the computation.  Specifically, the integral needs to be computed only once.
+
+        This is a precise expression for the number of photons expected during that time interval.  For relatively small time intervals, the integral may be reasonably approximated by
+
+        .. math::
+            \Lambda(T, T+\Delta T) = \int_{T}^{T+\Delta T} \lambda(t) dT \approx \lambda(t) \Delta T
+ 
+        In that case, this function is not ideal, as it increases computational expense without much added benefit.  However in the case of large time intervals, this function will give more accurate results.
+
+        
+
+        Args:
+         tStart (float): Start time of the definite integralTStart
+         tStop (float): Stop time of the definite integral
+         state: Optionally, a state object which contains a signal delay
+
+        Returns:
+         (float): The definite integral of the signal.
+
+        """
         if state is not None:
             if 'signalDelay' in state:
                 delay = state['signalDelay']
@@ -851,9 +882,20 @@ It is up to the user to verify the validity of the results.
                 )
        
         return signalIntegral
-    
+
     def getPulseFromPhase(self,
                           phase):
+        r"""
+        Returns the value of the signal given the signal phase
+
+        This function uses the signal :attr:`profile` to compute the value of the signal given the signal phase.  It uses simple linear interpolation to find the value.
+
+        Args:
+         phase (float): The phase number of the signal.  Phase can be any numerical value; the fractional phase will be computed by taking remainder of the value divided by 1.
+
+        Returns:
+         (float): The value of the signal at the given phase
+        """
         pFrac = np.mod(phase, 1.0)
         signal = np.interp(pFrac, self.profileIndex, self.profile)
         signal = signal * self.scaleFactor
@@ -863,6 +905,18 @@ It is up to the user to verify the validity of the results.
             self,
             MJD
     ):
+        r"""
+        A simple utility function to convert modified Julian date to pulsar time
+
+        See Also:
+         :meth:`seconds2MJD`
+
+        Args:
+         MJD (float): Modified Julian Date
+
+        Returns:
+         (float): Time in seconds
+        """
         return (MJD - self.PEPOCH) * (24.0 * 60.0 * 60.0)
         # return (MJD - self.TZRMJD) * (24.0 * 60.0 * 60.0)
 
@@ -870,15 +924,60 @@ It is up to the user to verify the validity of the results.
             self,
             seconds
     ):
+        r"""
+        A simple utility function to convert seconds to Modified Julian Date
+
+        See Also:
+         :meth:`MJD2seconds`
+
+        Args:
+         seconds (float): Time in seconds
+
+        Returns:
+         (float): Time in Modified Julian Date
+        """
         return self.PEPOCH + (seconds/(24.0 * 60.0 * 60.0))
         # return self.TZRMJD + (seconds/(24.0 * 60.0 * 60.0))
-    
+
+        
     def computeAssociationProbability(
             self,
             measurement,
             stateDict,
             validationThreshold=0
     ):
+        r"""
+        Computes the probability of association
+
+        This method computes the probability of association of a signal given the measurement and prior state.  This is a conditional probability based on Bayes rule.  Bayes rule is given by
+
+        .. math::
+            \textrm{Pr}\left[A_p | \mathbf{y}\right] = \frac{\textrm{Pr}\left[\mathbf{y}|A_p\right] \textrm{Pr}\left[A_p\right]}{\textrm{Pr}\left[\mathbf{y}\right]}
+
+
+        Generally, the denominator is not directly computed and will be divided out.
+
+        For a periodic point source, there are two possible measurements: angle of arrival and time of arrival.  If both of these measurements are included in the measurement dictionary, the probability will be computed as 
+
+        .. math::
+            \textrm{Pr}\left[A_p | (\alpha, t)\right] = \mathcal{N}\left[\alpha, \mathbf{S}_\alpha \right] \lambda(t) \bar{\lambda}
+
+        These sub-components of the probability are not computed here; rather they are computed by the :class:`~modest.signals.poissonsource.PoissonSource` and :class:`~modest.signals.pointsource.PointSource` parent classes from which this class inherits.  So, if something needs to be changed about the computation of association probability, it is likely that it needs to be changed in the parent classes.
+
+        If either of these measurements is not included in the measurement dict, then that component of the probability will be set to 1.
+
+        Note:
+         The probability computed here is not an "absolute" probability. It *only* has meaning in relation to other probabilities.  In order for this number to be meaningful, it should be normalized with all other possible association probabilities so that their sum is 1.  Also note that the probability returns contains :math:`\delta \alpha` and :math:`\delta t` differential terms.  These differential terms are divided out in the normalization process. *All the other probabilities must contain these same terms for the comparison to be meaningful and the normalization to be valid.*
+
+        Args:
+         measurement (dict): A dictionary containing the measured values and their variances
+         stateDict (dict): A dictionary containing the substates and their values
+         validationThreshold (float): Unused
+
+        Returns:
+         (float): The probability of association
+
+        """
         anglePR = pointsource.PointSource.computeAssociationProbability(
             self,
             measurement,
@@ -899,13 +998,8 @@ It is up to the user to verify the validity of the results.
                 'Computed NaN probability.  Components: AOA %s, TOA %s, Flux %s'
                 %(anglePR, poisPR, self.peakAmplitude)
             )
-        # print('Pulsar probability components')
-        # print('angle pr %s' %anglePR)
-        # print('poisPR pr %s' %poisPR)
-        # print('flux PR pr %s' %self.flux)
         
         return myPr
-        #return anglePR * self.flux
     
     def plot(self,
              nPeriods=1,
@@ -913,6 +1007,17 @@ It is up to the user to verify the validity of the results.
              figureHandle=None,
              nPoints=1000
     ):
+        """
+        Plots the pulsar profile
+
+        This is a simple visualization function that generates a plot of the pulsar profile over a specified number of pulsar periods.  Optionally, you can also specify a time uncertainty to see how the *effective* profile changes with time uncertainty.
+
+        Args:
+         nPeriods (float): Number of periods to plot
+         tVar (float): Variance of time uncertainty.  If set to None then no uncertainty is included.
+         figureHandle: Optional handle to an existing figure
+         nPoints (int): Number of points to plot
+        """
         if figureHandle is None:
             plt.figure()
             
