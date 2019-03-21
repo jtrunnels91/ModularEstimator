@@ -34,6 +34,7 @@ def outputPlots(
 
     estimatedPos = resultsDict['estimatedPos']['value']
     estimatedPosStdDev = resultsDict['estimatedPosStdDev']['value']
+    estimatedPosStdDev_calc = resultsDict['estimatedPosStdDev_calc']['value']
 
     if useINF:
         navPos = resultsDict['navPos']['value']
@@ -58,11 +59,13 @@ def outputPlots(
     )
     plt.plot(
         estimatedT-estimatedT[0],
-        -rollSigma
+        -rollSigma,
+        color=stdDevColor
     )
     plt.plot(
         estimatedT-estimatedT[0],
-        rollSigma
+        rollSigma,
+        color=stdDevColor
     )
     plt.ylabel('deg')
 
@@ -121,7 +124,7 @@ def outputPlots(
         truePos - estimatedPos,
         label=(
             'unfiltered delay error ($\sigma=%s$)'
-            %np.std(truePos-estimatedPos)
+            %estimatedPosStdDev_calc
             )
     )
     plt.plot(estimatedT, estimatedPosStdDev, ls='-.', color=[0.5,0.5,0.5], label = 'unfiltered standard deviation')
@@ -295,7 +298,7 @@ def createResultsDict(
         navPosErrorStdDev = np.std(navPos - truePos)
         navVelErrorStdDev = np.std(navVel - trueVel)
 
-    estimatedPositionStdDev = np.std(
+    estimatedPosStdDev_calc = np.std(
         [tP - eP for tP, eP, pL in zip(truePos, estimatedPos, peakLock) if pL]
     )
     
@@ -371,6 +374,11 @@ def createResultsDict(
     resultsDict['estimatedPosStdDev'] = {
         'value': estimatedPosStdDev,
         'comment': 'Standard deviation of estimated spacecraft range (unfiltered)',
+        'unit': 'km'
+    }
+    resultsDict['estimatedPosStdDev_calc'] = {
+        'value': estimatedPosStdDev_calc,
+        'comment': 'Standard deviation of estimated range (true)',
         'unit': 'km'
     }
 
