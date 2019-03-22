@@ -92,13 +92,14 @@ def buildStaticSources(
             myRow[myFluxKey]['value'] * ureg(myRow[myFluxKey]['unit'])
         ).to(ureg('erg/s/cm^2')).magnitude
         myExtent = myRow[myExtentKey]['value']
+        print("Extent = %i" %myExtent)
         if myExtent == 0:
             myExtent = 1
-            myExtent = myExtent * ureg(myRow[myExtentKey]['unit'].replace('ima_pix','pixel'))
-            myExtent = (
-                myExtent * extentConversionFactor
-            ).to(ureg('rad')).magnitude
-
+        myExtent = myExtent * ureg(myRow[myExtentKey]['unit'].replace('ima_pix','pixel'))
+        myExtent = (
+            myExtent * extentConversionFactor
+        ).to(ureg('rad')).magnitude
+            
         # Check to make sure that the flux is in a valid range
         if myFlux > 1e-15 and myFlux < 1e10:  # flux validation
             print('Initializing static point source %s.' %myName)
@@ -111,7 +112,7 @@ def buildStaticSources(
                 signals.StaticXRayPointSource(
                     myRa,
                     myDec,
-                    photonEnergyFlux=myFlux*1e-2,
+                    photonEnergyFlux=myFlux,
                     detectorArea=mySpacecraft.detector.area,
                     name=myName,
                     startTime=mySpacecraft.tStart,

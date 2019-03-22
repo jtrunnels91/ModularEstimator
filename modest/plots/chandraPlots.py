@@ -32,6 +32,14 @@ def outputPlots(
     pitchError = resultsDict['attitudeError_DEG']['value'][1]
     yawError = resultsDict['attitudeError_DEG']['value'][2]
 
+    if 'attitudeError_DEG_PO' in resultsDict:
+        attPO = True
+        rollError_PO = resultsDict['attitudeError_DEG_PO']['value'][0]
+        pitchError_PO = resultsDict['attitudeError_DEG_PO']['value'][1]
+        yawError_PO = resultsDict['attitudeError_DEG_PO']['value'][2]
+    else:
+        attPO = False
+        
     estimatedPos = resultsDict['estimatedPos']['value']
     estimatedPosStdDev = resultsDict['estimatedPosStdDev']['value']
     estimatedPosStdDev_calc = resultsDict['estimatedPosStdDev_calc']['value']
@@ -43,6 +51,7 @@ def outputPlots(
 
         navBiasState = resultsDict['navBiasState']['value']
         navPosStd = resultsDict['navPosStd']['value']
+        navPosErrorStdDev = resultsDict['navPosErrorStdDev']['value']
 
     truePos = resultsDict['truePos']['value']
     trueVel = resultsDict['trueVel']['value']
@@ -57,6 +66,11 @@ def outputPlots(
         estimatedT - estimatedT[0],
         rollError
     )
+    if attPO:
+        plt.plot(
+            estimatedT - estimatedT[0],
+            rollError_PO
+        )
     plt.plot(
         estimatedT-estimatedT[0],
         -rollSigma,
@@ -76,6 +90,12 @@ def outputPlots(
         estimatedT-estimatedT[0],
         pitchError
     )
+    if attPO:
+        plt.plot(
+            estimatedT - estimatedT[0],
+            pitchError_PO
+        )
+    
     plt.plot(
         estimatedT-estimatedT[0],
         pitchSigma,
@@ -94,6 +114,12 @@ def outputPlots(
         estimatedT-estimatedT[0],
         yawError
     )
+    if attPO:
+        plt.plot(
+            estimatedT - estimatedT[0],
+            yawError_PO
+        )
+    
     plt.plot(
         estimatedT-estimatedT[0],
         yawSigma,
@@ -137,7 +163,7 @@ def outputPlots(
             truePos - navPos,
             label=(
                 'nav filter delay error, ($\sigma = %s$)'
-                %np.std(truePos - navPos)
+                %navPosErrorStdDev
             )
         )
         plt.plot(
@@ -213,6 +239,9 @@ def createResultsDict(
         pitchSigma,
         yawSigma,
         velocityOnlyRange,
+        roll_PO=None,
+        pitch_PO=None,
+        yaw_PO=None,
         useINF=False,
         navBiasState=None,
         navTDOA=None,
@@ -242,6 +271,8 @@ def createResultsDict(
         estimatedPitch*rad2deg,
         estimatedYaw*rad2deg
     ]
+
+    
     estimatedAttitudeSigma_DEG = [
         rollSigma*rad2deg,
         pitchSigma*rad2deg,
@@ -254,7 +285,25 @@ def createResultsDict(
 
     attitudeError_DEG = [rollError_DEG, pitchError_DEG, yawError_DEG]
 
+    if roll_PO is not None:
+        roll_PO = np.array(roll_PO)
+        pitch_PO = np.array(pitch_PO)
+        yaw_PO = np.array(yaw_PO)
+        
+        estimateAttitude_DEG_PO = [
+            roll_PO*rad2deg,
+            pitch_PO*rad2deg,
+            yaw_PO*rad2deg
+        ]
 
+        rollError_DEG_PO = np.array(utils.eulerAngleDiff(roll_PO, trueAtt[:,0])) * rad2deg
+        pitchError_DEG_PO = np.array(utils.eulerAngleDiff(pitch_PO, trueAtt[:,1])) * rad2deg
+        yawError_DEG_PO = np.array(utils.eulerAngleDiff(yaw_PO, trueAtt[:,2])) * rad2deg
+
+        attitudeError_DEG_PO = [rollError_DEG_PO, pitchError_DEG_PO, yawError_DEG_PO]
+    else:
+        attitudeError_DEG_PO = None
+        
     estimatedTDOA = np.array(estimatedTDOA)
     estimatedTDOAVar = np.array(estimatedTDOAVar)
 
@@ -286,16 +335,26 @@ def createResultsDict(
 
     if useINF:
         navPos = (navTDOA * ureg.seconds * ureg.speed_of_light).to(ureg('km')).magnitude
-        meanNavDiff = np.mean(navPos - truePos)
+        navPosStd = (navTDOAStd * ureg.speed_of_light * ureg.seconds).to(ureg('km')).magnitude
+        finalPosStd = navPosStd[-1]
+        
+        meanNavDiff = np.mean(
+            [nP-tP for tP, nP, pS in zip(truePos, navPos, navPosStd) if pS < finalPosStd*2]
+        )
+        
+        # meanNavDiff = np.mean(navPos - truePos)
         navPos = navPos - meanNavDiff
 
-        navPosStd = (navTDOAStd * ureg.speed_of_light * ureg.seconds).to(ureg('km')).magnitude
         navVel = (navVel * ureg.speed_of_light).to(ureg('km/s')).magnitude
         navVelStd = (navVelStd * ureg.speed_of_light).to(ureg('km/s')).magnitude
 
         navBiasState = (navBiasState * ureg.seconds * ureg.speed_of_light).to(ureg('km')).magnitude
 
         navPosErrorStdDev = np.std(navPos - truePos)
+        navPosErrorStdDev = np.std(
+            [nP-tP for tP, nP, pS in zip(truePos, navPos, navPosStd) if pS < finalPosStd*2]
+        )
+        
         navVelErrorStdDev = np.std(navVel - trueVel)
 
     estimatedPosStdDev_calc = np.std(
@@ -398,6 +457,13 @@ def createResultsDict(
         'unit': 'degrees'
     }
 
+    if attitudeError_DEG_PO is not None:
+        resultsDict['attitudeError_DEG_PO'] = {
+            'value': attitudeError_DEG_PO,
+            'comment': 'Attitude estimate error from propagation only',
+            'unit': 'degrees'
+        }
+    
     resultsDict['estimatedAttitudeSigma_DEG'] = {
         'value': estimatedAttitudeSigma_DEG,
         'comment': 'Attitude estimate standard deviation',
