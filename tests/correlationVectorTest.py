@@ -4,10 +4,12 @@ import numpy as np
 np.random.seed(1)
 plt.close('all')
 
+
+
 orbitPeriod = 100/(2*np.pi)
 orbitAmplitude = 1000*0
 
-tFinal = 1000
+tFinal = 10000
 
 vVar = np.square(1e-100)
 nTaps = 7
@@ -34,6 +36,7 @@ myPulsar = md.signals.PeriodicXRaySource(
     # pulsedFraction=myPulseFraction
 )
 
+speedOfLight = myPulsar.speedOfLight()
 myUnitVec = myPulsar.unitVec()
 constantOffset = myUnitVec * myPulsar.speedOfLight() * myPulsar.pulsarPeriod * 0.5
 
@@ -69,11 +72,15 @@ myCorrelation = md.substates.CorrelationVector(
     signalTDOA=0,
     TDOAVar=0,
     measurementNoiseScaleFactor=1,
-    processNoise=1e-15,
+    processNoise=1e-100,
     centerPeak=True,
-    peakLockThreshold=3,
+    peakLockThreshold=0.5,
     velocityNoiseScaleFactor=1,
-    defaultOneDAccelerationVar=1e-10
+    defaultOneDAccelerationGradVar=np.square(1e-10 / speedOfLight),
+    internalNavFilter='deep',
+    aInitial={'value':0, 'var':np.square(0.0001/speedOfLight)},
+    vInitial={'value':0, 'var':np.square(0.03/speedOfLight)},
+    # defaul=1e-1000
     )
 
 myFilter = md.ModularFilter()
@@ -103,9 +110,10 @@ for photonMeas in photonMeasurements:
     timeUpdateOnlyT.append(arrivalT)
     timeUpdateOnlyT.append(arrivalT)
     
-    dynamics = {
-            'velocity': {'value': vMeas, 'var': np.eye(3)*vVar}
-            }
+    # dynamics = {
+    #         'velocity': {'value': vMeas, 'var': np.eye(3)*vVar}
+    #         }
+    dynamics=None
     
     myFilter.timeUpdateEKF(arrivalT-lastT, dynamics=dynamics)
     # myFilter.timeUpdateEKF(arrivalT-lastT, dynamics=None)
@@ -115,12 +123,14 @@ for photonMeas in photonMeasurements:
     
     myFilter.measurementUpdateEKF(photonMeas, myPulsar.name)
 
-    if (arrivalT-lastUpdateTime) > 5:
+    if (arrivalT-lastUpdateTime) > 50:
         myCorrelation.realTimePlot()
         lastUpdateTime = int(arrivalT)
         print('time: %f' % arrivalT)
         print('True TDOA: %f' %(position(arrivalT).dot(myUnitVec)/myPulsar.speedOfLight()))
         print('Peak offset: %f' %(myCorrelation.peakCenteringDT))
+        print(myCorrelation.stateVector[myCorrelation.__filterOrder__]*speedOfLight)
+        print(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps,nTaps].value)*speedOfLight)
     lastT = arrivalT
 timeUpdateOnlyTDOA.append(TUOTDOA)
 timeUpdateOnlyT.append(arrivalT)

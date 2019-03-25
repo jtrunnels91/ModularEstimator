@@ -374,13 +374,16 @@ class SubState():
         
     def realTimePlot(
             self,
-            normalized=True
+            normalized=True,
+            substateRange=None
     ):
         if self.RTPlotHandle is None:
             self.initializeRealTimePlot()
 
         stateDict = self.getStateVector()
         yAxis = stateDict['stateVector']
+        if substateRange:
+            yAxis = yAxis[substateRange]
 
         if normalized is True:
             self.RTPaxisHandle.set_ylim([0, 1.1])
