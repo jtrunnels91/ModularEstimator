@@ -92,8 +92,8 @@ def buildStaticSources(
             myRow[myFluxKey]['value'] * ureg(myRow[myFluxKey]['unit'])
         ).to(ureg('erg/s/cm^2')).magnitude
         myExtent = myRow[myExtentKey]['value']
-        print("Extent = %i" %myExtent)
-        if myExtent == 0:
+        print("Extent = %s" %myExtent)
+        if myExtent == 0 or np.isnan(myExtent):
             myExtent = 1
         myExtent = myExtent * ureg(myRow[myExtentKey]['unit'].replace('ima_pix','pixel'))
         myExtent = (
