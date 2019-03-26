@@ -144,6 +144,28 @@ def buildPulsarCorrelationSubstate(
     else:
         peakFitPoints = 1
     # Now initialize the correlation substate
+    # correlationSubstate = substates.CorrelationVector(
+    #     pulsarObject,
+    #     nFilterTaps,
+    #     myPulsarPeriod/(nFilterTaps+1),
+    #     signalTDOA=0,
+    #     TDOAVar=myPulsarPeriod/12,
+    #     measurementNoiseScaleFactor=measurementNoiseScaleFactor,
+    #     processNoise=processNoise,
+    #     centerPeak=True,
+    #     peakLockThreshold=peakLockThreshold,
+    #     t=mySpacecraft.tStart,
+    #     internalNavFilter=internalNavFilter,
+    #     defaultOneDAccelerationVar=np.square(defaultOneDAccelerationStdDev),
+    #     tdoaStdDevThreshold=tdoaStdDevThreshold,
+    #     velStdDevThreshold=velStdDevThreshold,
+    #     tdoaNoiseScaleFactor=tdoaNoiseScaleFactor,
+    #     velocityNoiseScaleFactor=velocityNoiseScaleFactor,
+    #     storeLastStateVectors=traj.correlationFilter.storeLastStateVectors.value,
+    #     peakFitPoints=peakFitPoints,
+    # )
+    speedOfLight = ureg('speed_of_light').to(ureg('km/s')).magnitude
+    
     correlationSubstate = substates.CorrelationVector(
         pulsarObject,
         nFilterTaps,
@@ -155,16 +177,20 @@ def buildPulsarCorrelationSubstate(
         centerPeak=True,
         peakLockThreshold=peakLockThreshold,
         t=mySpacecraft.tStart,
-        internalNavFilter=internalNavFilter,
-        defaultOneDAccelerationVar=np.square(defaultOneDAccelerationStdDev),
+        internalNavFilter='deep',
+        defaultOneDAccelerationVar=np.square(1e-50 / speedOfLight),
         tdoaStdDevThreshold=tdoaStdDevThreshold,
         velStdDevThreshold=velStdDevThreshold,
         tdoaNoiseScaleFactor=tdoaNoiseScaleFactor,
         velocityNoiseScaleFactor=velocityNoiseScaleFactor,
         storeLastStateVectors=traj.correlationFilter.storeLastStateVectors.value,
         peakFitPoints=peakFitPoints,
+        defaultOneDAccelerationGradVar=np.square(1e-3 / speedOfLight),    
+        vInitial={'value':vInitial_C, 'var':np.square(initialVelocityStdDev)},
+        # aInitial={'value':0, 'var':np.square(0.3/speedOfLight)},
+        # gradInitial={'value':np.random.normal(0,0.001/speedOfLight), 'var':np.square(0.001/speedOfLight)},
     )
-
+    
     return correlationSubstate, vInitial_C
 
 

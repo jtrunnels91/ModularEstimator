@@ -5,6 +5,19 @@ from scipy.interpolate import interp1d
 
 from .. import utils
 
+planetaryMasses = {
+    'Sun': 1.98855e30,
+    'Mercury': 3.301e23,
+    'Venus': 4.867e24,
+    'Earth': 5.972e24,
+    'Moon': 7.346e22,
+    'Mars': 6.417e23,
+    'Jupiter Barycenter': 1.899e27,
+    'Saturn Barycenter': 5.685e26,
+    'Uranus Barycenter': 8.682e25,
+    'Neptune Barycenter': 1.024e26
+}
+
 class Chandra():
     def __init__(
             self,
@@ -254,6 +267,17 @@ class ChandraDynamics():
             ureg,
             tStart
     ):
+        self.planetList = ['Sun',
+                           'Mercury',
+                           'Venus',
+                           'Earth',
+                           'Moon',
+                           'Mars',
+                           'Jupiter Barycenter',
+                           'Saturn Barycenter',
+                           'Uranus Barycenter',
+                           'Neptune Barycenter']
+        
         self.tStart=tStart
         # Import data
         aspecthdulist = fits.open(aspectFile)
@@ -422,3 +446,36 @@ class ChandraDynamics():
         omegaY = self.chandraOmegaY(t) * self.gyroConversionFactor
         omegaZ = self.chandraOmegaZ(t) * self.gyroConversionFactor
         return [omegaX, omegaY, omegaZ]
+
+    def acceleration(
+            self,
+            t
+    ):
+        G = 6.67408e-11
+        position = self.position(t)
+        timeObject = self.chandraTimeToTimeScaleObj(t)
+        acceleration = np.zeros(3)
+        for planetName in self.planetList:
+
+            # Get the current position of the planet
+            planetPosition = (
+                utils.spacegeometry.planets[planetName].at(timeObject).position.km
+            )
+
+            # Compute the distance between spacecraft and planet, and convert
+            # to meters
+            relativePosition = (planetPosition - position) * 1000.0
+            relativeRange = np.linalg.norm(relativePosition)
+
+            # Compute these ahead of time to save computation
+            rangePowerMinus3 = np.power(relativeRange, -3)
+
+            # Compute the acceleration due to gravity contributed by the
+            # current planet, and add it to the overall acceleration vector
+            acceleration = (
+                acceleration +
+                (G * planetaryMasses[planetName] *
+                 rangePowerMinus3) * relativePosition / 1000.0
+            )
+        return acceleration
+

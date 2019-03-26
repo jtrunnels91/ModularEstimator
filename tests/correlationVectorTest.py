@@ -6,10 +6,10 @@ plt.close('all')
 
 
 
-orbitPeriod = 100/(2*np.pi)
-orbitAmplitude = 1000*0
+orbitPeriod = 10000/(2*np.pi)
+orbitAmplitude = 1000
 
-tFinal = 20000
+tFinal = 10000
 
 vVar = np.square(1e-100)
 nTaps = 7
@@ -76,10 +76,11 @@ myCorrelation = md.substates.CorrelationVector(
     centerPeak=True,
     peakLockThreshold=0.5,
     velocityNoiseScaleFactor=1,
-    defaultOneDAccelerationGradVar=np.square(1e-15 / speedOfLight),
+    defaultOneDAccelerationGradVar=np.square(1e-10 / speedOfLight),
     internalNavFilter='deep',
-    aInitial={'value':np.random.normal(0,0.01/speedOfLight), 'var':np.square(0.01/speedOfLight)},
-    vInitial={'value':np.random.normal(0,0.01/speedOfLight), 'var':np.square(0.01/speedOfLight)},
+    vInitial={'value':np.random.normal(0,10/speedOfLight), 'var':np.square(10/speedOfLight)},
+    aInitial={'value':np.random.normal(0,0.3/speedOfLight), 'var':np.square(0.3/speedOfLight)},
+    # gradInitial={'value':np.random.normal(0,0.001/speedOfLight), 'var':np.square(0.001/speedOfLight)},
     # defaul=1e-1000
     )
 
@@ -117,6 +118,7 @@ for photonMeas in photonMeasurements:
     vStdVec.append(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps,nTaps].value)*speedOfLight)
     aVec.append(myCorrelation.stateVector[nTaps+1]*speedOfLight)
     aStdVec.append(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps+1,nTaps+1].value)*speedOfLight)
+
     # dynamics = {
     #         'velocity': {'value': vMeas, 'var': np.eye(3)*vVar}
     #         }
@@ -140,7 +142,7 @@ for photonMeas in photonMeasurements:
         print('time: %f' % arrivalT)
         print('True TDOA: %f' %(position(arrivalT).dot(myUnitVec)/myPulsar.speedOfLight()))
         print('Peak offset: %f' %(myCorrelation.peakCenteringDT))
-        print(myCorrelation.stateVector[myCorrelation.__filterOrder__]*speedOfLight)
+        print(myCorrelation.stateVector[myCorrelation.__filterOrder__]*speedOfLight - velocity(arrivalT).dot(myUnitVec))
         print(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps,nTaps].value)*speedOfLight)
     lastT = arrivalT
 timeUpdateOnlyTDOA.append(TUOTDOA)
@@ -180,7 +182,7 @@ plt.plot(
     -tdoaSTD
 )
 plt.figure()
-plt.plot(tVec,vVec,label='velocity')
+plt.plot(tVec,np.array(vVec) - np.array([velocity(t).dot(myUnitVec) for t in tVec]),label='velocity')
 plt.plot(tVec,vStdVec,label='velocity std dev')
 plt.plot(tVec,-np.array(vStdVec))
 # navPos = np.array([sv['stateVector'][0] for sv in myCorrelation.internalNavFilter.subStates['oneDPositionVelocity']['stateObject'].stateVectorHistory])

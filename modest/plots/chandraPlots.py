@@ -45,13 +45,13 @@ def outputPlots(
     estimatedPosStdDev_calc = resultsDict['estimatedPosStdDev_calc']['value']
 
     if useINF:
-        navPos = resultsDict['navPos']['value']
+        # navPos = resultsDict['navPos']['value']
         navVel = resultsDict['navVel']['value']
         navVelStd = resultsDict['navVelStd']['value']
 
-        navBiasState = resultsDict['navBiasState']['value']
-        navPosStd = resultsDict['navPosStd']['value']
-        navPosErrorStdDev = resultsDict['navPosErrorStdDev']['value']
+        # navBiasState = resultsDict['navBiasState']['value']
+        # navPosStd = resultsDict['navPosStd']['value']
+        # navPosErrorStdDev = resultsDict['navPosErrorStdDev']['value']
 
     truePos = resultsDict['truePos']['value']
     trueVel = resultsDict['trueVel']['value']
@@ -157,22 +157,22 @@ def outputPlots(
     plt.plot(estimatedT, -estimatedPosStdDev, ls='-.', color=[0.5,0.5,0.5])
 
 
-    if useINF:
-        plt.plot(
-            estimatedT,
-            truePos - navPos,
-            label=(
-                'nav filter delay error, ($\sigma = %s$)'
-                %navPosErrorStdDev
-            )
-        )
-        plt.plot(
-            estimatedT,
-            navBiasState,
-            label='bias state'
-        )
-        plt.plot(estimatedT, navPosStd, color=[0.9,0.9,0.9], label='nav filter standard deviation')
-        plt.plot(estimatedT, -navPosStd, color=[0.9,0.9,0.9])
+    # if useINF:
+        # plt.plot(
+        #     estimatedT,
+        #     truePos - navPos,
+        #     label=(
+        #         'nav filter delay error, ($\sigma = %s$)'
+        #         %navPosErrorStdDev
+        #     )
+        # )
+        # plt.plot(
+        #     estimatedT,
+        #     navBiasState,
+        #     label='bias state'
+        # )
+        # plt.plot(estimatedT, navPosStd, color=[0.9,0.9,0.9], label='nav filter standard deviation')
+        # plt.plot(estimatedT, -navPosStd, color=[0.9,0.9,0.9])
 
     plt.legend()
     plt.xlabel('time (s)')
@@ -243,9 +243,9 @@ def createResultsDict(
         pitch_PO=None,
         yaw_PO=None,
         useINF=False,
-        navBiasState=None,
-        navTDOA=None,
-        navTDOAStd=None,
+        # navBiasState=None,
+        # navTDOA=None,
+        # navTDOAStd=None,
         navVel=None,
         navVelStd=None,
         navVelErrorStdDev=None,
@@ -308,12 +308,12 @@ def createResultsDict(
     estimatedTDOAVar = np.array(estimatedTDOAVar)
 
     if useINF:
-        navTDOA = np.array(navTDOA)
+        # navTDOA = np.array(navTDOA)
         navVel = np.array(navVel)
         navVelStd = np.array(navVelStd)
 
-        navBiasState = np.array(navBiasState)
-        navTDOAStd = np.array(navTDOAStd)
+        # navBiasState = np.array(navBiasState)
+        # navTDOAStd = np.array(navTDOAStd)
 
     trueTDOA = np.array(trueTDOA)
     trueVel = np.array(trueVel)
@@ -334,26 +334,26 @@ def createResultsDict(
     ).to(ureg.km).magnitude
 
     if useINF:
-        navPos = (navTDOA * ureg.seconds * ureg.speed_of_light).to(ureg('km')).magnitude
-        navPosStd = (navTDOAStd * ureg.speed_of_light * ureg.seconds).to(ureg('km')).magnitude
-        finalPosStd = navPosStd[-1]
+        # navPos = (navTDOA * ureg.seconds * ureg.speed_of_light).to(ureg('km')).magnitude
+        # navPosStd = (navTDOAStd * ureg.speed_of_light * ureg.seconds).to(ureg('km')).magnitude
+        # finalPosStd = navPosStd[-1]
         
-        meanNavDiff = np.mean(
-            [nP-tP for tP, nP, pS in zip(truePos, navPos, navPosStd) if pS < finalPosStd*2]
-        )
+        # meanNavDiff = np.mean(
+        #     [nP-tP for tP, nP, pS in zip(truePos, navPos, navPosStd) if pS < finalPosStd*2]
+        # )
         
-        # meanNavDiff = np.mean(navPos - truePos)
-        navPos = navPos - meanNavDiff
+        # # meanNavDiff = np.mean(navPos - truePos)
+        # navPos = navPos - meanNavDiff
 
         navVel = (navVel * ureg.speed_of_light).to(ureg('km/s')).magnitude
         navVelStd = (navVelStd * ureg.speed_of_light).to(ureg('km/s')).magnitude
 
-        navBiasState = (navBiasState * ureg.seconds * ureg.speed_of_light).to(ureg('km')).magnitude
+        # navBiasState = (navBiasState * ureg.seconds * ureg.speed_of_light).to(ureg('km')).magnitude
 
-        navPosErrorStdDev = np.std(navPos - truePos)
-        navPosErrorStdDev = np.std(
-            [nP-tP for tP, nP, pS in zip(truePos, navPos, navPosStd) if pS < finalPosStd*2]
-        )
+        # navPosErrorStdDev = np.std(navPos - truePos)
+        # navPosErrorStdDev = np.std(
+        #     [nP-tP for tP, nP, pS in zip(truePos, navPos, navPosStd) if pS < finalPosStd*2]
+        # )
         
         navVelErrorStdDev = np.std(navVel - trueVel)
 
@@ -365,28 +365,28 @@ def createResultsDict(
     resultsDict = {}
 
     if useINF:
-        resultsDict['navBiasState'] = {
-            'value': navBiasState,
-            'comment': 'Navigation filter measurement bias state estimate',
-            'unit': 'km'
-        }
-        resultsDict['navPos'] = {
-            'value': navPos,
-            'comment': 'Spacecraft range estimated by internal nav filter',
-            'unit': 'km'
-        }
+        # resultsDict['navBiasState'] = {
+        #     'value': navBiasState,
+        #     'comment': 'Navigation filter measurement bias state estimate',
+        #     'unit': 'km'
+        # }
+        # resultsDict['navPos'] = {
+        #     'value': navPos,
+        #     'comment': 'Spacecraft range estimated by internal nav filter',
+        #     'unit': 'km'
+        # }
 
-        resultsDict['navPosStd'] = {
-            'value': navPosStd,
-            'comment': 'Spacecraft range standard deviation estimated by internal nav filter',
-            'unit': 'km'
-    }
+    #     resultsDict['navPosStd'] = {
+    #         'value': navPosStd,
+    #         'comment': 'Spacecraft range standard deviation estimated by internal nav filter',
+    #         'unit': 'km'
+    # }
 
-        resultsDict['navPosErrorStdDev'] = {
-            'value': navPosErrorStdDev,
-            'comment': 'Standard deviation of spacecraft range estimate error',
-            'unit': 'km'
-        }
+    #     resultsDict['navPosErrorStdDev'] = {
+    #         'value': navPosErrorStdDev,
+    #         'comment': 'Standard deviation of spacecraft range estimate error',
+    #         'unit': 'km'
+    #     }
 
 
         resultsDict['navVel'] = {

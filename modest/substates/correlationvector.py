@@ -10,6 +10,7 @@ from . oneDimensionalPositionVelocity import oneDPositionVelocity
 from .. signals.oneDimensionalObject import oneDObjectMeasurement
 from .. utils import covarianceContainer
 from scipy.linalg import block_diag
+from scipy.special import factorial
 from math import isnan
 
 ## @class CorrelationVector
@@ -252,14 +253,38 @@ class CorrelationVector(substate.SubState):
         svCovariance = correlationVectorCovariance
         
         if self.INF_type == 'deep':
-            navVector = np.zeros(2)
-            navVector[0] = vInitial['value']
-            navVector[1] = aInitial['value']
+            if not vInitial:
+                raise ValueError('In order to use the deep internal navigation filter, you must initialize.  Filter expects to receive at least vInitial, but received None')
 
-            navVar = np.zeros([2,2])
-            navVar[0,0] = vInitial['var']
-            navVar[1,1] = aInitial['var']
+            if not aInitial:
+                self.navVectorLength = 1
+                navVector = np.zeros(1)
+                navVector[0] = vInitial['value']
 
+                navVar = np.zeros([1,1])
+                navVar[0,0] = vInitial['var']
+                
+            elif not gradInitial:
+                self.navVectorLength = 2
+                navVector = np.zeros(2)
+                navVector[0] = vInitial['value']
+                navVector[1] = aInitial['value']
+
+                navVar = np.zeros([2,2])
+                navVar[0,0] = vInitial['var']
+                navVar[1,1] = aInitial['var']
+            else:
+                self.navVectorLength = 3
+                navVector = np.zeros(3)
+                navVector[0] = vInitial['value']
+                navVector[1] = aInitial['value']
+                navVector[2] = gradInitial['value']
+
+                navVar = np.zeros([3,3])
+                navVar[0,0] = vInitial['var']
+                navVar[1,1] = aInitial['var']
+                navVar[2,2] = aInitial['var']
+                
             stateVector = np.append(stateVector,navVector)
             svCovariance = block_diag(svCovariance, navVar)
 
@@ -420,7 +445,34 @@ class CorrelationVector(substate.SubState):
                 )
                 self.peakLock = False
                 self.peakOffsetFromCenter = 0
-            
+
+        if self.INF_type == 'deep':
+            fO = self.__filterOrder__
+            currentV = self.stateVector[fO]
+            currentVStdDev = np.sqrt(self.correlationVectorCovariance[fO,fO].value)
+            self.velocity = currentV
+            self.velocityStdDev = currentVStdDev
+            svDict['velocity'] = {'value':currentV, 'stddev': currentVStdDev}
+            if self.navVectorLength == 2:
+                currentA = self.stateVector[fO+1]
+                currentAStdDev = np.sqrt(self.correlationVectorCovariance[fO+1,fO+1].value)
+                svDict['acceleration'] = {'value':currentA, 'stddev': currentAStdDev}
+
+                self.acceleration = currentA
+                self.accelerationStdDev = currentAStdDev
+            elif self.navVectorLength == 3:
+                currentA = self.stateVector[fO+1]
+                currentAStdDev = np.sqrt(self.correlationVectorCovariance[fO+1,fO+1].value)
+                svDict['acceleration'] = {'value':currentA, 'stddev': currentAStdDev}
+                self.acceleration = currentA
+                self.accelerationStdDev = currentAStdDev
+                
+                currentGrad = self.stateVector[fO+2]
+                currentGradStdDev = np.sqrt(self.correlationVectorCovariance[fO+2,fO+2].value)
+                svDict['aGradient'] = {'value':currentGrad, 'stddev': currentGradStdDev}
+                self.aGrad = currentGrad
+                self.aGradStdDev = currentGradStdDev
+                
         super().storeStateVector(svDict)
         return
 
@@ -512,7 +564,7 @@ class CorrelationVector(substate.SubState):
             Qmat = (
                 np.outer(L, L)*oneDAccelerationGradVar + (
                     (
-                        block_diag(np.eye(self.__filterOrder__),np.zeros([2,2])) * 
+                        block_diag(np.eye(self.__filterOrder__),np.zeros([self.navVectorLength,self.navVectorLength])) * 
                         self.processNoise * dT * 
                         np.square(self.__trueSignal__.avgPhotonFlux * self.__dT__)
                     )
@@ -527,7 +579,7 @@ class CorrelationVector(substate.SubState):
         filterOrder = self.__filterOrder__
         
         # Initialize empty matricies
-        F = np.zeros([filterOrder+2,filterOrder+2])
+        F = np.zeros([filterOrder + self.navVectorLength, filterOrder+self.navVectorLength])
         
         halfLength = self.__halfLength__
 
@@ -572,16 +624,49 @@ class CorrelationVector(substate.SubState):
             currentDiff = np.roll(diffBase, i).dot(h)
             F[i,0:filterOrder] = np.roll(sincBase, i)
             F[i,filterOrder] = currentDiff * dT/self.__dT__
-            F[i,filterOrder+1] = currentDiff * np.power(dT/self.__dT__,2)/2
             
+            if self.navVectorLength > 1:
+                F[i,filterOrder+1] = currentDiff * np.power(dT/self.__dT__,2)/2
+                if self.navVectorLength > 2:
+                    F[i,filterOrder+2] = (
+                        currentDiff *
+                        self.stateVector[filterOrder] *
+                        np.power(dT/self.__dT__,3)/6
+                    )
 
-        # F[0:filterOrder,filterOrder] = L
-        F[filterOrder,filterOrder] = 1
-        F[filterOrder,filterOrder+1] = dT
-        F[filterOrder+1,filterOrder+1] = 1
-
+        L = np.zeros(filterOrder+self.navVectorLength)
         
-        L = np.zeros(filterOrder+2)
+        if self.navVectorLength == 1:
+            F[filterOrder,filterOrder] = 1
+            L[filterOrder] = dT
+            
+        elif self.navVectorLength == 2:
+            F[filterOrder,filterOrder] = 1
+            F[filterOrder,filterOrder+1] = dT
+            F[filterOrder+1,filterOrder+1] = 1
+            
+            L[filterOrder] = dT*dT/2
+            L[filterOrder + 1] = dT
+            
+        elif self.navVectorLength == 3:
+            vCurrent = self.stateVector[filterOrder]
+            aCurrent = self.stateVector[filterOrder + 1]
+            gradCurrent = self.stateVector[filterOrder + 2]
+            
+            F[filterOrder,filterOrder] = 1
+            F[filterOrder,filterOrder+1] = dT
+            F[filterOrder,filterOrder+2] = vCurrent * np.power(dT,2)/2
+            
+            F[filterOrder+1,filterOrder+1] = 1
+            F[filterOrder+1,filterOrder+2] = vCurrent * dT
+            
+            F[filterOrder+2,filterOrder+2] = 1
+
+            L[filterOrder] = vCurrent * np.power(dT,3)/6
+            L[filterOrder + 1] = vCurrent * np.power(dT,2)/2
+            L[filterOrder + 2] = dT
+            
+        
         
         diffBase = np.zeros_like(sincBase)
 
@@ -591,11 +676,12 @@ class CorrelationVector(substate.SubState):
         diffBase = np.roll(diffBase, 1 - int(halfLength))
         
         for i in range(len(baseVec)):
-            L[i] = np.roll(diffBase, i).dot(h)
+            L[i] = (
+                np.roll(diffBase, i).dot(h) *
+                np.power(dT/self.__dT__,self.navVectorLength)/factorial(self.navVectorLength)
+            )
 
-            
-        L[filterOrder] = dT*dT/2
-        L[filterOrder + 1] = dT
+        
 
         return({'F':F, 'L':L})
         
@@ -861,7 +947,7 @@ class CorrelationVector(substate.SubState):
         H = np.eye(self.__filterOrder__)
 
         if self.INF_type == 'deep':
-            H = np.append(H, np.zeros([self.__filterOrder__, 2]), axis=1)
+            H = np.append(H, np.zeros([self.__filterOrder__, self.navVectorLength]), axis=1)
         timeVector = np.linspace(
             0,
             (self.__filterOrder__ - 1),
