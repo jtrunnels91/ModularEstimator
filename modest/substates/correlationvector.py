@@ -135,7 +135,8 @@ class CorrelationVector(substate.SubState):
             velocityNoiseScaleFactor=None,
             storeLastStateVectors=0,
             vInitial=None,
-            aInitial=None
+            aInitial=None,
+            gradInitial=None
             ):
         print('updated correlation filter')
         self.peakLockThreshold = peakLockThreshold
@@ -568,8 +569,11 @@ class CorrelationVector(substate.SubState):
         diffBase = np.roll(diffBase, 1 - int(halfLength))
 
         for i in range(len(sincBase)):
+            currentDiff = np.roll(diffBase, i).dot(h)
             F[i,0:filterOrder] = np.roll(sincBase, i)
-            F[i,filterOrder] = np.roll(diffBase, i).dot(h)
+            F[i,filterOrder] = currentDiff * dT/self.__dT__
+            F[i,filterOrder+1] = currentDiff * np.power(dT/self.__dT__,2)/2
+            
 
         # F[0:filterOrder,filterOrder] = L
         F[filterOrder,filterOrder] = 1
