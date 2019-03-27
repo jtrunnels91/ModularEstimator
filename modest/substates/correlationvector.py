@@ -419,7 +419,11 @@ class CorrelationVector(substate.SubState):
             #     )
             #     self.correlationVector = FLDict['F'].dot(self.correlationVector)
             #     self.peakOffsetFromCenter = 0
-            self.correlationVector = svDict['stateVector'][0:self.__filterOrder__]
+            
+            # self.correlationVector = svDict['stateVector'][0:self.__filterOrder__]
+            self.correlationVector = self.mostRecentF.dot(self.correlationVector)
+            svDict['stateVector'][0:self.__filterOrder__] = self.correlationVector
+            self.stateVector = svDict['stateVector']
             self.correlationVectorCovariance = svDict['covariance']
             svDict['signalTDOA'] = self.signalTDOA
             svDict['TDOAVar'] = self.TDOAVar
@@ -562,15 +566,15 @@ class CorrelationVector(substate.SubState):
             
             L = timeUpdateMatrices['L']
             Qmat = (
-                np.outer(L, L)*oneDAccelerationGradVar + (
+                np.outer(L, L)*oneDAccelerationGradVar  + (
                     (
                         block_diag(np.eye(self.__filterOrder__),np.zeros([self.navVectorLength,self.navVectorLength])) * 
                         self.processNoise * dT * 
-                        np.square(self.__trueSignal__.avgPhotonFlux * self.__dT__)
+                        np.square(self.__trueSignal__.flux * self.__dT__)
                     )
                 )
             )
-
+        self.mostRecentF = timeUpdateMatrices['F'][0:self.__filterOrder__, 0:self.__filterOrder__]
         return {'F': timeUpdateMatrices['F'], 'Q': Qmat}
 
     def buildDeepTimeUpdateMatrices(self,dT, dynamics, h):
@@ -582,13 +586,31 @@ class CorrelationVector(substate.SubState):
         F = np.zeros([filterOrder + self.navVectorLength, filterOrder+self.navVectorLength])
         
         halfLength = self.__halfLength__
+        indexDiff = dT/self.__dT__
+        peakShift = self.stateVector[self.__filterOrder__] * indexDiff
 
-        peakShift = self.stateVector[self.__filterOrder__] * dT/self.__dT__
-        
+        # Velocity term
         self.peakCenteringDT = (
-            self.peakCenteringDT + self.stateVector[self.__filterOrder__] * dT + 
-            (self.peakOffsetFromCenter*self.__dT__)
+            self.peakCenteringDT + self.stateVector[self.__filterOrder__] * dT 
         )
+        
+        if self.navVectorLength > 1:
+            # Acceleration term (if acceleration is being estimated)
+            self.peakCenteringDT = (
+                self.peakCenteringDT +
+                self.stateVector[self.__filterOrder__ + 1] * np.power(dT,2)/2
+            )
+            
+        if self.navVectorLength > 2:
+            # Acceleration gradient term
+            self.peakCenteringDT = (
+                self.peakCenteringDT +
+                self.stateVector[self.__filterOrder__] *
+                self.stateVector[self.__filterOrder__ + 2] *
+                np.power(dT,3)/6
+            )
+            
+        self.peakCenteringDT = self.peakCenteringDT + (self.peakOffsetFromCenter*self.__dT__)
         
         # Build arrays of indicies from which to form the sinc function
 
@@ -623,15 +645,15 @@ class CorrelationVector(substate.SubState):
         for i in range(len(sincBase)):
             currentDiff = np.roll(diffBase, i).dot(h)
             F[i,0:filterOrder] = np.roll(sincBase, i)
-            F[i,filterOrder] = currentDiff * dT/self.__dT__
+            F[i,filterOrder] = currentDiff * indexDiff #/np.pi
             
             if self.navVectorLength > 1:
-                F[i,filterOrder+1] = currentDiff * np.power(dT/self.__dT__,2)/2
+                F[i,filterOrder+1] = currentDiff * np.power(indexDiff,2)/2
                 if self.navVectorLength > 2:
                     F[i,filterOrder+2] = (
                         currentDiff *
                         self.stateVector[filterOrder] *
-                        np.power(dT/self.__dT__,3)/6
+                        np.power(indexDiff,3)/6
                     )
 
         L = np.zeros(filterOrder+self.navVectorLength)
@@ -645,7 +667,7 @@ class CorrelationVector(substate.SubState):
             F[filterOrder,filterOrder+1] = dT
             F[filterOrder+1,filterOrder+1] = 1
             
-            L[filterOrder] = dT*dT/2
+            L[filterOrder] = np.power(dT,2)/2
             L[filterOrder + 1] = dT
             
         elif self.navVectorLength == 3:
@@ -678,10 +700,11 @@ class CorrelationVector(substate.SubState):
         for i in range(len(baseVec)):
             L[i] = (
                 np.roll(diffBase, i).dot(h) *
-                np.power(dT/self.__dT__,self.navVectorLength)/factorial(self.navVectorLength)
+                np.power(indexDiff,self.navVectorLength+1)/factorial(self.navVectorLength+1)
             )
 
-        
+        # Setting L to zero for test purposes only
+        L = np.zeros(filterOrder+self.navVectorLength)
 
         return({'F':F, 'L':L})
         
@@ -1184,12 +1207,14 @@ class CorrelationVector(substate.SubState):
             myDiff = 0.0
 
         else:
-            myDiff = np.pi * (
-                (((np.pi * x) * np.cos(x * np.pi)) - np.sin(x * np.pi))
-                /
-                np.square(x * np.pi)
-            )
-
+            piX = np.pi*x
+            # myDiff = np.pi * (
+            #     (((np.pi * x) * np.cos(x * np.pi)) - np.sin(x * np.pi))
+            #     /
+            #     np.square(x * np.pi)
+            # )
+            myDiff = (piX*np.cos(piX) - np.sin(piX))/(np.pi * np.power(x,2))
+            # myDiff
         return myDiff
 
 

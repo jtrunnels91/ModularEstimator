@@ -7,9 +7,12 @@ plt.close('all')
 
 
 orbitPeriod = 10000/(2*np.pi)
-orbitAmplitude = 1000
+orbitAmplitude = 0
 
-tFinal = 10000
+constantVelocity = 4
+constantAcceleration = 0.0001
+
+tFinal = 20000
 
 vVar = np.square(1e-100)
 nTaps = 7
@@ -47,7 +50,7 @@ def position(t):
             (orbitAmplitude * np.cos(t/orbitPeriod) * myUnitVec[1]) + constantOffset[1],
             (orbitAmplitude * np.cos(t/orbitPeriod) * myUnitVec[2]) + constantOffset[2]
             ]
-        )
+        ) + (constantVelocity*t + constantAcceleration*np.power(t,2)/2)*myUnitVec
     )
 
 
@@ -59,7 +62,7 @@ def velocity(t):
             -np.sin(t/orbitPeriod) * myUnitVec[1],
             -np.sin(t/orbitPeriod) * myUnitVec[2]
             ]
-        )
+        )  + (constantVelocity + constantAcceleration*t)*myUnitVec
     )
 
 photonMeasurements = myPulsar.generatePhotonArrivals(tFinal, position=position,TOA_StdDev=1e-9)
@@ -76,7 +79,7 @@ myCorrelation = md.substates.CorrelationVector(
     centerPeak=True,
     peakLockThreshold=0.5,
     velocityNoiseScaleFactor=1,
-    defaultOneDAccelerationGradVar=np.square(1e-10 / speedOfLight),
+    defaultOneDAccelerationGradVar=np.square(0 / speedOfLight),
     internalNavFilter='deep',
     vInitial={'value':np.random.normal(0,10/speedOfLight), 'var':np.square(10/speedOfLight)},
     aInitial={'value':np.random.normal(0,0.3/speedOfLight), 'var':np.square(0.3/speedOfLight)},
@@ -116,8 +119,9 @@ for photonMeas in photonMeasurements:
 
     vVec.append(myCorrelation.stateVector[nTaps]*speedOfLight)
     vStdVec.append(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps,nTaps].value)*speedOfLight)
-    aVec.append(myCorrelation.stateVector[nTaps+1]*speedOfLight)
-    aStdVec.append(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps+1,nTaps+1].value)*speedOfLight)
+    if hasattr(myCorrelation, 'acceleration'):
+        aVec.append(myCorrelation.stateVector[nTaps+1]*speedOfLight)
+        aStdVec.append(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps+1,nTaps+1].value)*speedOfLight)
 
     # dynamics = {
     #         'velocity': {'value': vMeas, 'var': np.eye(3)*vVar}
@@ -133,8 +137,10 @@ for photonMeas in photonMeasurements:
     myFilter.measurementUpdateEKF(photonMeas, myPulsar.name)
     vVec.append(myCorrelation.stateVector[nTaps]*speedOfLight)
     vStdVec.append(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps,nTaps].value)*speedOfLight)
-    aVec.append(myCorrelation.stateVector[nTaps+1]*speedOfLight)
-    aStdVec.append(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps+1,nTaps+1].value)*speedOfLight)
+    if hasattr(myCorrelation, 'acceleration'):
+
+        aVec.append(myCorrelation.stateVector[nTaps+1]*speedOfLight)
+        aStdVec.append(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps+1,nTaps+1].value)*speedOfLight)
 
     if (arrivalT-lastUpdateTime) > 50:
         myCorrelation.realTimePlot()
@@ -142,8 +148,8 @@ for photonMeas in photonMeasurements:
         print('time: %f' % arrivalT)
         print('True TDOA: %f' %(position(arrivalT).dot(myUnitVec)/myPulsar.speedOfLight()))
         print('Peak offset: %f' %(myCorrelation.peakCenteringDT))
-        print(myCorrelation.stateVector[myCorrelation.__filterOrder__]*speedOfLight - velocity(arrivalT).dot(myUnitVec))
-        print(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps,nTaps].value)*speedOfLight)
+        print(myCorrelation.stateVector[myCorrelation.__filterOrder__]*speedOfLight / velocity(arrivalT).dot(myUnitVec))
+        # print(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps,nTaps].value)*speedOfLight)
     lastT = arrivalT
 timeUpdateOnlyTDOA.append(TUOTDOA)
 timeUpdateOnlyT.append(arrivalT)
@@ -152,8 +158,11 @@ timeUpdateOnlyT.append(arrivalT)
 tVec = [sv['t'] for sv in myCorrelation.stateVectorHistory]
 vVec.append(myCorrelation.stateVector[nTaps]*speedOfLight)
 vStdVec.append(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps,nTaps].value)*speedOfLight)
-aVec.append(myCorrelation.stateVector[nTaps+1]*speedOfLight)
-aStdVec.append(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps+1,nTaps+1].value)*speedOfLight)
+
+if hasattr(myCorrelation, 'acceleration'):
+
+    aVec.append(myCorrelation.stateVector[nTaps+1]*speedOfLight)
+    aStdVec.append(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps+1,nTaps+1].value)*speedOfLight)
 
 trueTDOA = np.array([
     (position(t).transpose().dot(myPulsar.unitVec())/myPulsar.speedOfLight())
@@ -185,6 +194,14 @@ plt.figure()
 plt.plot(tVec,np.array(vVec) - np.array([velocity(t).dot(myUnitVec) for t in tVec]),label='velocity')
 plt.plot(tVec,vStdVec,label='velocity std dev')
 plt.plot(tVec,-np.array(vStdVec))
+plt.legend()
+plt.show(block=False)
+
+plt.figure()
+plt.plot(tVec,np.array(vVec),label='velocity estimated')
+plt.plot(tVec,np.array([velocity(t).dot(myUnitVec) for t in tVec]),label='velocity true')
+plt.legend()
+plt.show(block=False)
 # navPos = np.array([sv['stateVector'][0] for sv in myCorrelation.internalNavFilter.subStates['oneDPositionVelocity']['stateObject'].stateVectorHistory])
 # navPosStd = np.sqrt(np.array([sv['covariance'].value[0,0] for sv in myCorrelation.internalNavFilter.subStates['oneDPositionVelocity']['stateObject'].stateVectorHistory]))
 
@@ -204,15 +221,15 @@ plt.plot(tVec,-np.array(vStdVec))
 #     -navPosStd,
 # )
 
-plt.legend()
-plt.show(block=False)
 
-plt.figure()
-plt.plot(tVec,aVec,label='acceleration')
-plt.plot(tVec,aStdVec,label='acceleration std dev')
-plt.plot(tVec,-np.array(aStdVec))
-plt.legend()
-plt.show(block=False)
+if hasattr(myCorrelation, 'acceleration'):
+
+    plt.figure()
+    plt.plot(tVec,aVec,label='acceleration')
+    plt.plot(tVec,aStdVec,label='acceleration std dev')
+    plt.plot(tVec,-np.array(aStdVec))
+    plt.legend()
+    plt.show(block=False)
 
 # plt.figure()
 # plt.plot(
@@ -231,3 +248,12 @@ plt.show(block=False)
 
 # plt.legend()
 # plt.show(block=False)
+myX=np.linspace(-20,20,200000)
+mydiff=[myCorrelation.sincDiff(num) for num in myX]
+myInt = [0]
+myDX = np.diff(myX)[0]
+for diff in mydiff:
+    myInt.append(myInt[-1] + diff*myDX)
+plt.plot(myX, myInt[0:-1])
+plt.plot(myX,np.sinc(myX))
+plt.show(block=False)
