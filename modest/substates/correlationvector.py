@@ -603,6 +603,7 @@ class CorrelationVector(substate.SubState):
         
         halfLength = self.__halfLength__
         indexDiff = dT/self.__dT__
+        
         peakShift = self.stateVector[self.__filterOrder__] * indexDiff
 
         # Velocity term
@@ -616,6 +617,9 @@ class CorrelationVector(substate.SubState):
                 self.peakCenteringDT +
                 self.stateVector[self.__filterOrder__ + 1] * np.power(dT,2)/2
             )
+            peakShift = (
+                peakShift + self.stateVector[self.__filterOrder__ + 1]*np.power(indexDiff,2)/2
+            )
             
         if self.navVectorLength > 2:
             # Acceleration gradient term
@@ -625,6 +629,13 @@ class CorrelationVector(substate.SubState):
                 self.stateVector[self.__filterOrder__ + 2] *
                 np.power(dT,3)/6
             )
+            peakShift = (
+                peakShift +
+                self.stateVector[self.__filterOrder__] *
+                self.stateVector[self.__filterOrder__ + 2] *
+                np.power(indexDiff,3)/6
+            )
+            
             
         self.peakCenteringDT = self.peakCenteringDT + (self.peakOffsetFromCenter*self.__dT__)
         

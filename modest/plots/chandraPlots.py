@@ -227,41 +227,24 @@ def createResultsDict(
         mySpacecraft,
         ureg,
         estimatedT,
-        peakLock,
-        trueTDOA,
-        trueVel,
-        estimatedTDOA,
-        estimatedTDOAVar,
-        estimatedRoll,
-        estimatedPitch,
-        estimatedYaw,
-        rollSigma,
-        pitchSigma,
-        yawSigma,
-        velocityOnlyRange,
-        roll_PO=None,
-        pitch_PO=None,
-        yaw_PO=None,
+        tdoa,
+        attitude,
+        velocityOnlyRangeTruncated,
+        attitudePO=None,
         useINF=False,
-        # navBiasState=None,
-        # navTDOA=None,
-        # navTDOAStd=None,
-        navVel=None,
-        navVelStd=None,
-        navVelErrorStdDev=None,
         saveOutput=True,
         outputDir=None
 ):
     rad2deg = 180/np.pi
-    estimatedRoll = np.array(estimatedRoll)
-    estimatedPitch = np.array(estimatedPitch)
-    estimatedYaw = np.array(estimatedYaw)
-    rollSigma = np.array(rollSigma)
-    pitchSigma = np.array(pitchSigma)
-    yawSigma = np.array(yawSigma)
+    estimatedRoll = np.array(attitude['roll'])
+    estimatedPitch = np.array(attitude['pitch'])
+    estimatedYaw = np.array(attitude['yaw'])
+    rollSigma = np.array(attitude['rollSigma'])
+    pitchSigma = np.array(attitude['pitchSigma'])
+    yawSigma = np.array(attitude['yawSigma'])
 
     trueAtt = np.array(mySpacecraft.dynamics.attitude(
-        estimatedT+mySpacecraft.tStart,returnQ=False)
+        estimatedT+mySpacecraft.tStart, returnQ=False)
     )
 
     trueAtt_DEG = trueAtt * rad2deg
@@ -285,10 +268,10 @@ def createResultsDict(
 
     attitudeError_DEG = [rollError_DEG, pitchError_DEG, yawError_DEG]
 
-    if roll_PO is not None:
-        roll_PO = np.array(roll_PO)
-        pitch_PO = np.array(pitch_PO)
-        yaw_PO = np.array(yaw_PO)
+    if attitudePO is not None:
+        roll_PO = np.array(attitudePO['roll'])
+        pitch_PO = np.array(attitudePO['pitch'])
+        yaw_PO = np.array(attitudePO['yaw'])
         
         estimateAttitude_DEG_PO = [
             roll_PO*rad2deg,
@@ -304,33 +287,39 @@ def createResultsDict(
     else:
         attitudeError_DEG_PO = None
         
-    estimatedTDOA = np.array(estimatedTDOA)
-    estimatedTDOAVar = np.array(estimatedTDOAVar)
+    estimatedTDOA = np.array(tdoa['TDOA'])
+    estimatedTDOAStd = np.array(tdoa['TDOAStd'])
 
-    if useINF:
+    if len(tdoa['vel'])>0:
         # navTDOA = np.array(navTDOA)
-        navVel = np.array(navVel)
-        navVelStd = np.array(navVelStd)
+        navVel = np.array(tdoa['vel'])
+        navVelStd = np.array(tdoa['velStd'])
+    if len(tdoa['acc'])>0:
+        navAcc = np.array(tdoa['acc'])
+        navAccStd = np.array(tdoa['accStd'])
 
-        # navBiasState = np.array(navBiasState)
-        # navTDOAStd = np.array(navTDOAStd)
-
-    trueTDOA = np.array(trueTDOA)
-    trueVel = np.array(trueVel)
+    trueTDOA = np.array([
+        mySpacecraft.position(t).dot(tdoa['unitVec']) for t in estimatedT
+    ])
+    trueVel = np.array([
+        mySpacecraft.velocity(t).dot(tdoa['unitVec']) for t in estimatedT
+    ])
+    trueAcc = np.array([
+        mySpacecraft.acceleration(t).dot(tdoa['unitVec']) for t in estimatedT
+    ])
 
     truePos = trueTDOA - trueTDOA[0]
     estimatedPos = (estimatedTDOA * ureg.seconds * ureg.speed_of_light).to(ureg('km')).magnitude
-    if not np.any(peakLock):
+    if not np.any(tdoa['peakLock']):
         meanDiff = np.mean(estimatedPos - truePos)
     else:
         meanDiff = np.mean(
             [eP-tP for tP, eP, pL in zip(truePos, estimatedPos, peakLock) if pL]
         )
-    print("Mean DIFF:")
-    print(meanDiff)
+        
     estimatedPos = estimatedPos - meanDiff
     estimatedPosStdDev = (
-        np.sqrt(estimatedTDOAVar) * ureg.seconds * ureg.speed_of_light
+        estimatedTDOAStd * ureg.seconds * ureg.speed_of_light
     ).to(ureg.km).magnitude
 
     if useINF:
