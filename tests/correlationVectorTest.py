@@ -12,7 +12,7 @@ orbitAmplitude = 0
 constantVelocity = 4
 constantAcceleration = 0.0001
 
-tFinal = 20000
+tFinal = 5000
 
 vVar = np.square(1e-100)
 nTaps = 7
@@ -248,12 +248,12 @@ if hasattr(myCorrelation, 'acceleration'):
 
 # plt.legend()
 # plt.show(block=False)
-myX=np.linspace(-20,20,200000)
-mydiff=[myCorrelation.sincDiff(num) for num in myX]
-myInt = [0]
-myDX = np.diff(myX)[0]
-for diff in mydiff:
-    myInt.append(myInt[-1] + diff*myDX)
-plt.plot(myX, myInt[0:-1])
-plt.plot(myX,np.sinc(myX))
-plt.show(block=False)
+# myX=np.linspace(-20,20,200000)
+# mydiff=[myCorrelation.sincDiff(num) for num in myX]
+# myInt = [0]
+# myDX = np.diff(myX)[0]
+# for diff in mydiff:
+#     myInt.append(myInt[-1] + diff*myDX)
+# plt.plot(myX, myInt[0:-1])
+# plt.plot(myX,np.sinc(myX))
+# plt.show(block=False)

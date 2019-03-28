@@ -137,7 +137,8 @@ class CorrelationVector(substate.SubState):
             storeLastStateVectors=0,
             vInitial=None,
             aInitial=None,
-            gradInitial=None
+            gradInitial=None,
+            peakEstimator='EK'
             ):
         print('updated correlation filter')
         self.peakLockThreshold = peakLockThreshold
@@ -228,6 +229,12 @@ class CorrelationVector(substate.SubState):
         # measurement noise matrix.  The default value is 1 (no scaling).
         self.measurementNoiseScaleFactor = measurementNoiseScaleFactor
 
+        
+        self.peakEstimator = peakEstimator
+        """
+        String that determines which algorithm is used to estimate peak.  Use either EK (extended Kalman Filter) or UK (Unscented)
+        """
+        
         self.__halfLength__ = int(np.ceil(self.__filterOrder__ / 2))
         self.__halfLengthSeconds__ = self.__halfLength__ * self.__dT__
 
@@ -348,10 +355,19 @@ class CorrelationVector(substate.SubState):
             self.correlationVector = svDict['stateVector'][0:self.__filterOrder__]
             self.correlationVectorCovariance = svDict['covariance']
             self.stateVector = svDict['stateVector']
-            tdoaDict = self.estimateSignalTDOA_UT(
-                self.correlationVector,
-                self.correlationVectorCovariance
-            )
+            if self.peakEstimator == 'UK':
+                tdoaDict = self.estimateSignalTDOA_UT(
+                    self.correlationVector,
+                    self.correlationVectorCovariance
+                )
+
+            elif self.peakEstimator == 'EK':
+                tdoaDict = self.estimateSignalTDOA_EK(
+                    self.correlationVector,
+                    self.correlationVectorCovariance
+                )
+            else:
+                raise ValueError('Unrecougnized peak finding algorithm %s' %self.peakEstimator)
 
             newTDOA = (
                 (
@@ -378,7 +394,7 @@ class CorrelationVector(substate.SubState):
 
             svDict['signalTDOA'] = self.signalTDOA
             svDict['TDOAVar'] = self.TDOAVar
-            self.sigmaPoints = tdoaDict['sigmaPoints']
+            # self.sigmaPoints = tdoaDict['sigmaPoints']
             # xAxis = np.linspace(0, self.__filterOrder__-1, self.__filterOrder__)
             # xAxis = (xAxis * self.__dT__) - self.peakCenteringDT
 
@@ -1059,33 +1075,6 @@ class CorrelationVector(substate.SubState):
 
         # Next, we "roll" the correlation vector so that the values being
         # fitted quadratically are the first 2 * peakFitPoints + 1 values
-#        rollFactor = self.peakFitPoints - peakLocation
-#
-#        if rollFactor != 0:
-#            slicedC = np.roll(
-#                c,
-#                rollFactor
-#            )
-#            slicedP = (
-#                np.roll(
-#                    np.roll(P,
-#                            rollFactor,
-#                            axis=0),
-#                    rollFactor,
-#                    axis=1
-#                )
-#            )
-#        else:
-#            slicedC = c
-#            slicedP = P
-
-
-        # Extract the portion of the correlation vector used for fitting
-        # quadratic
-#        mySlice = slice(0, self.peakFitPoints * 2 + 1)
-#
-#        slicedC = slicedC[mySlice]
-#        slicedP = slicedP[mySlice, mySlice]
 
         lowerBound = peakLocation - self.peakFitPoints
         upperBound = lowerBound + (self.peakFitPoints * 2) + 1
@@ -1098,11 +1087,6 @@ class CorrelationVector(substate.SubState):
             slicedC = c[mySlice]
             slicedP = P[mySlice, mySlice]
 
-        # np.polyfit assumes that the weights will be the inverse standard
-        # deviation
-        # weightVector = np.diag(slicedP)
-        # weightVector = 1 / np.sqrt(weightVector)
-
         # xVec is the vector of "x" values corresponding the "y" values to
         # which the quadratic is being fit.
         xVec = self.__xVec__
@@ -1112,11 +1096,14 @@ class CorrelationVector(substate.SubState):
         # Get the quadratic function that fits the peak and surrounding values,
         # and use it to estimate the location of the max
         # print(slicedC)
-        quadraticVec = self.quadraticFit(xVec, slicedC)
-        try:
-            TDOA = (-quadraticVec[1] / (2 * quadraticVec[0]))
-        except:
-            TDOA = xVec[peakLocation]
+        if len(xVec) == 3:
+            TDOA = self.peakFinder(xVec, slicedC)
+        else:
+            quadraticVec = self.quadraticFit(xVec, slicedC)
+            try:
+                TDOA = (-quadraticVec[1] / (2 * quadraticVec[0]))
+            except:
+                TDOA = xVec[peakLocation]
 
         return TDOA
 
@@ -1194,6 +1181,45 @@ class CorrelationVector(substate.SubState):
         varTDOA = np.var(sigmaPointResults)
 
         return {'meanTDOA': meanTDOA, 'varTDOA': varTDOA, 'sigmaPoints': sigmaPointResults}
+
+    def estimateSignalTDOA_EK(self, h, P):
+
+        if P.form == 'covariance':
+            P = P.value[0:self.__filterOrder__, 0:self.__filterOrder__]
+
+        elif P.form == 'cholesky':
+            P = P.convertCovariance('covariance').value[0:self.__filterOrder__, 0:self.__filterOrder__]
+        
+        # First estimate of peak location is the location of the max value
+        peakLocation = np.argmax(h)
+
+        # Next, we "roll" the correlation vector so that the values being
+        # fitted quadratically are the first 3 values
+
+        lowerBound = peakLocation - 1
+        upperBound = lowerBound + (1 * 2) + 1
+        if (lowerBound < 0) or (upperBound > self.__filterOrder__):
+            mySlice = range(lowerBound, upperBound)
+            slicedC = h.take(mySlice, mode='wrap')
+            slicedP = P.take(mySlice, axis=0, mode='wrap').take(mySlice, axis=1, mode='wrap')
+        else:
+            mySlice = slice(lowerBound, upperBound)
+            slicedC = h[mySlice]
+            slicedP = P[mySlice, mySlice]
+
+        # xVec is the vector of "x" values corresponding the "y" values to
+        # which the quadratic is being fit.
+        xVec = self.__xVec__
+        xVec = xVec + lowerBound
+
+        # Get the quadratic function that fits the peak and surrounding values,
+        # and use it to estimate the location of the max
+        TDOA = self.peakFinder(xVec, slicedC)
+        jacobian = self.peakFinderJacobian(xVec, slicedC)
+
+        variance = jacobian.dot(slicedP).dot(jacobian.transpose())
+        
+        return {'meanTDOA': TDOA, 'varTDOA': variance}
 
     
     def speedOfLight(
@@ -1277,3 +1303,59 @@ class CorrelationVector(substate.SubState):
         super().realTimePlot(normalized, substateRange = slice(0,self.__filterOrder__))
         return
 
+    @staticmethod
+    def peakFinder(x,y):
+        x1 = x[0]
+        x2 = x[1]
+        x3 = x[2]
+        
+        y1 = y[0]
+        y2 = y[1]
+        y3 = y[2]
+        
+        x0 = (
+            -(y1*(np.square(x3) - np.square(x2)) + y2*(np.square(x1) - np.square(x3)) + y3*(np.square(x2) - np.square(x1)))
+            /
+            (2*(y1*(x2-x3) + y2*(x3-x1) + y3*(x1-x2)))
+        )
+        return(x0)
+
+    @staticmethod
+    def peakFinderJacobian(x,y):
+        x1 = x[0]
+        x2 = x[1]
+        x3 = x[2]
+        
+        y1 = y[0]
+        y2 = y[1]
+        y3 = y[2]
+
+        A = np.square(x2) - np.square(x3)
+        B = np.square(x1) - np.square(x3)
+        C = np.square(x1) - np.square(x2)
+
+        D = x2-x3
+        E = x1-x2
+        F = x1-x2
+        
+        denom = (2*np.power(D*y1 - E*y2 + F*y3,2))
+
+        dT_dy1 = (
+            ((B*D - A*E)*y2 + (A*F - C*D)*y3)
+            /
+            denom
+        )
+        
+        dT_dy2 = (
+            ((B*D - A*E)*y1 + (B*F - C*E)*y3)
+            /
+            denom
+        )
+        
+        dT_dy3 = (
+            ((C*D - A*F)*y1 + (B*F - C*E)*y2)
+            /
+            denom
+        )
+
+        return np.array([dT_dy1, dT_dy2, dT_dy3])

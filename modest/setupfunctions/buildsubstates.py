@@ -185,10 +185,10 @@ def buildPulsarCorrelationSubstate(
         velocityNoiseScaleFactor=velocityNoiseScaleFactor,
         storeLastStateVectors=traj.correlationFilter.storeLastStateVectors.value,
         peakFitPoints=peakFitPoints,
-        defaultOneDAccelerationGradVar=np.square(1e-10 / speedOfLight),    
+        defaultOneDAccelerationGradVar=np.square(1e-7),    
         vInitial={'value':vInitial_C, 'var':np.square(initialVelocityStdDev)},
         aInitial={'value':0, 'var':np.square(0.3/speedOfLight)},
-        # gradInitial={'value':np.random.normal(0,0.001/speedOfLight), 'var':np.square(0.001/speedOfLight)},
+        # gradInitial={'value':np.random.normal(0,0.0001/speedOfLight), 'var':np.square(0.001/speedOfLight)},
     )
     
     return correlationSubstate, vInitial_C
