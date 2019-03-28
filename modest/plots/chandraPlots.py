@@ -290,14 +290,6 @@ def createResultsDict(
     estimatedTDOA = np.array(tdoa['TDOA'])
     estimatedTDOAStd = np.array(tdoa['TDOAStd'])
 
-    if len(tdoa['vel'])>0:
-        # navTDOA = np.array(navTDOA)
-        navVel = np.array(tdoa['vel'])
-        navVelStd = np.array(tdoa['velStd'])
-    if len(tdoa['acc'])>0:
-        navAcc = np.array(tdoa['acc'])
-        navAccStd = np.array(tdoa['accStd'])
-
     trueTDOA = np.array([
         mySpacecraft.position(t).dot(tdoa['unitVec']) for t in estimatedT
     ])
@@ -309,6 +301,17 @@ def createResultsDict(
     ])
 
     truePos = trueTDOA - trueTDOA[0]
+    
+
+    if len(tdoa['vel'])>0:
+        navVel = np.array(tdoa['vel']) * ureg.speed_of_light.to(ureg('km/s')).magnitude
+        navVelStd = np.array(tdoa['velStd']) * ureg.speed_of_light.to(ureg('km/s')).magnitude
+        navVelErrorStdDev = np.std(navVel - trueVel)
+        
+    if len(tdoa['acc'])>0:
+        navAcc = np.array(tdoa['acc']) * ureg.speed_of_light.to(ureg('km/s')).magnitude
+        navAccStd = np.array(tdoa['accStd']) * ureg.speed_of_light.to(ureg('km/s')).magnitude
+
     estimatedPos = (estimatedTDOA * ureg.seconds * ureg.speed_of_light).to(ureg('km')).magnitude
     if not np.any(tdoa['peakLock']):
         meanDiff = np.mean(estimatedPos - truePos)
@@ -322,32 +325,9 @@ def createResultsDict(
         estimatedTDOAStd * ureg.seconds * ureg.speed_of_light
     ).to(ureg.km).magnitude
 
-    if useINF:
-        # navPos = (navTDOA * ureg.seconds * ureg.speed_of_light).to(ureg('km')).magnitude
-        # navPosStd = (navTDOAStd * ureg.speed_of_light * ureg.seconds).to(ureg('km')).magnitude
-        # finalPosStd = navPosStd[-1]
-        
-        # meanNavDiff = np.mean(
-        #     [nP-tP for tP, nP, pS in zip(truePos, navPos, navPosStd) if pS < finalPosStd*2]
-        # )
-        
-        # # meanNavDiff = np.mean(navPos - truePos)
-        # navPos = navPos - meanNavDiff
-
-        navVel = (navVel * ureg.speed_of_light).to(ureg('km/s')).magnitude
-        navVelStd = (navVelStd * ureg.speed_of_light).to(ureg('km/s')).magnitude
-
-        # navBiasState = (navBiasState * ureg.seconds * ureg.speed_of_light).to(ureg('km')).magnitude
-
-        # navPosErrorStdDev = np.std(navPos - truePos)
-        # navPosErrorStdDev = np.std(
-        #     [nP-tP for tP, nP, pS in zip(truePos, navPos, navPosStd) if pS < finalPosStd*2]
-        # )
-        
-        navVelErrorStdDev = np.std(navVel - trueVel)
 
     estimatedPosStdDev_calc = np.std(
-        [tP - eP for tP, eP, pL in zip(truePos, estimatedPos, peakLock) if pL]
+        [tP - eP for tP, eP, pL in zip(truePos, estimatedPos, tdoa['peakLock']) if pL]
     )
     
     
