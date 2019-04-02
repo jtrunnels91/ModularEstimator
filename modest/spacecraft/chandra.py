@@ -27,7 +27,7 @@ class Chandra():
             gyroFile,
             userData,
             ureg,
-            tStartOffset=-0.1
+            tStartOffset=0
     ):
         self.detector = ChandraDetector(
             eventsFile,

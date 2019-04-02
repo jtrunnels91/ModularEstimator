@@ -128,8 +128,7 @@ class CorrelationVector(substate.SubState):
             peakLockThreshold=1,
             covarianceStorage='covariance',
             internalNavFilter=None,
-            defaultOneDAccelerationVar=1,
-            defaultOneDAccelerationGradVar=1,
+            navProcessNoise=1,
             tdoaStdDevThreshold=None,
             velStdDevThreshold=None,
             tdoaNoiseScaleFactor=None,
@@ -146,7 +145,10 @@ class CorrelationVector(substate.SubState):
         
         self.peakOffsetFromCenter = 0
 
-        self.defaultOneDAccelerationGradVar = defaultOneDAccelerationGradVar
+        self.navProcessNoise = navProcessNoise
+        """
+        This is the default process noise that is injected into the navigation states as noise in the derivative of the highest order state.
+        """
         
         ## @brief #__unitVecToSignal__ is a unit vector which points to the signal
         # source
@@ -171,7 +173,6 @@ class CorrelationVector(substate.SubState):
         # result of a time update (#aPriori = True) or a measurement update
         # (#aPriori = False)
         self.aPriori = aPriori
-
 
         if correlationVector is None:
             correlationVector = (
@@ -248,13 +249,17 @@ class CorrelationVector(substate.SubState):
                 )
 
         self.internalNavFilter = internalNavFilter
+        print(internalNavFilter)
         if self.internalNavFilter == 'none':
             self.internalNavFilter = None
-        self.INF_type = 'none'
-        if self.internalNavFilter == 'deep':
+            self.INF_type = 'none'
+        elif self.internalNavFilter == 'deep':
             self.INF_type = 'deep'
         elif self.internalNavFilter:
             self.INF_type = 'external'
+        else:
+            self.internalNavFilter = None
+            self.INF_type = 'none'
 
         stateVector = correlationVector
         svCovariance = correlationVectorCovariance
@@ -263,6 +268,8 @@ class CorrelationVector(substate.SubState):
             if not vInitial:
                 raise ValueError('In order to use the deep internal navigation filter, you must initialize.  Filter expects to receive at least vInitial, but received None')
 
+            self.velocity = vInitial['value']
+            self.velocityStdDev = np.sqrt(vInitial['var'])
             if not aInitial:
                 self.navVectorLength = 1
                 navVector = np.zeros(1)
@@ -272,6 +279,9 @@ class CorrelationVector(substate.SubState):
                 navVar[0,0] = vInitial['var']
                 
             elif not gradInitial:
+                self.acceleration = aInitial['value']
+                self.accelerationStdDev = np.sqrt(aInitial['var'])
+                
                 self.navVectorLength = 2
                 navVector = np.zeros(2)
                 navVector[0] = vInitial['value']
@@ -281,6 +291,9 @@ class CorrelationVector(substate.SubState):
                 navVar[0,0] = vInitial['var']
                 navVar[1,1] = aInitial['var']
             else:
+                self.acceleration = aInitial['value']
+                self.accelerationStdDev = np.sqrt(aInitial['var'])
+                
                 self.navVectorLength = 3
                 navVector = np.zeros(3)
                 navVector[0] = vInitial['value']
@@ -300,6 +313,7 @@ class CorrelationVector(substate.SubState):
             covarianceStorage
         )
 
+        self.mostRecentF = np.eye(self.__filterOrder__)
         self.stateVector = stateVector
         super().__init__(
             stateDimension=len(stateVector),
@@ -315,9 +329,6 @@ class CorrelationVector(substate.SubState):
             },
             storeLastStateVectors=storeLastStateVectors
         )
-
-        self.defaultOneDAccelerationVar = defaultOneDAccelerationVar
-        #self.defaultOneDAccelerationVar = np.square(0.01/self.speedOfLight())
 
         self.tdoaStdDevThreshold = tdoaStdDevThreshold
         self.velStdDevThreshold = velStdDevThreshold
@@ -355,6 +366,7 @@ class CorrelationVector(substate.SubState):
             self.correlationVector = svDict['stateVector'][0:self.__filterOrder__]
             self.correlationVectorCovariance = svDict['covariance']
             self.stateVector = svDict['stateVector']
+
             if self.peakEstimator == 'UK':
                 tdoaDict = self.estimateSignalTDOA_UT(
                     self.correlationVector,
@@ -368,7 +380,7 @@ class CorrelationVector(substate.SubState):
                 )
             else:
                 raise ValueError('Unrecougnized peak finding algorithm %s' %self.peakEstimator)
-
+            
             newTDOA = (
                 (
                     tdoaDict['meanTDOA'] 
@@ -423,6 +435,7 @@ class CorrelationVector(substate.SubState):
                 self.peakOffsetFromCenter = 0
 
         else:
+            
 #            if self.peakLock is True and self.centerPeak is True:
 #                svDict['stateVector'] = self.correlationVector
 #            else:
@@ -441,6 +454,32 @@ class CorrelationVector(substate.SubState):
             svDict['stateVector'][0:self.__filterOrder__] = self.correlationVector
             self.stateVector = svDict['stateVector']
             self.correlationVectorCovariance = svDict['covariance']
+
+            if self.peakEstimator == 'UK':
+                tdoaDict = self.estimateSignalTDOA_UT(
+                    self.correlationVector,
+                    self.correlationVectorCovariance
+                )
+
+            elif self.peakEstimator == 'EK':
+                tdoaDict = self.estimateSignalTDOA_EK(
+                    self.correlationVector,
+                    self.correlationVectorCovariance
+                )
+            else:
+                raise ValueError('Unrecougnized peak finding algorithm %s' %self.peakEstimator)
+            # newTDOA = (
+            #     (
+            #         tdoaDict['meanTDOA'] 
+            #     ) *
+            #     self.__dT__
+            # ) + self.peakCenteringDT
+            
+            newTDOAVar = tdoaDict['varTDOA'] * np.square(self.__dT__)
+
+            # self.signalTDOA = newTDOA
+            self.TDOAVar = newTDOAVar
+            
             svDict['signalTDOA'] = self.signalTDOA
             svDict['TDOAVar'] = self.TDOAVar
             self.peakOffsetFromCenter = 0
@@ -493,6 +532,10 @@ class CorrelationVector(substate.SubState):
                 self.aGrad = currentGrad
                 self.aGradStdDev = currentGradStdDev
                 
+        elif self.INF_type == 'external':
+            self.velocity = self.navState.currentVelocity
+            self.velocityStdDev = np.sqrt(self.navState.velocityVar)
+                
         super().storeStateVector(svDict)
         return
 
@@ -529,7 +572,7 @@ class CorrelationVector(substate.SubState):
                 (
                         np.eye(self.__filterOrder__) * 
                               self.processNoise * dT * 
-                              np.square(self.__trueSignal__.avgPhotonFlux * self.__dT__)
+                              np.square(self.__trueSignal__.flux * self.__dT__)
                 )
             )
 
@@ -548,7 +591,7 @@ class CorrelationVector(substate.SubState):
                 )
             else:
                 oneDAcceleration = 0
-                oneDAccelerationVar = self.defaultOneDAccelerationVar
+                oneDAccelerationVar = self.navProcessNoise
 
             if self.INF_type == 'external':
                 self.internalNavFilter.timeUpdateEKF(
@@ -563,26 +606,24 @@ class CorrelationVector(substate.SubState):
 
         else:
             timeUpdateMatrices = self.buildDeepTimeUpdateMatrices(dT, dynamics, self.correlationVector)
-            if dynamics is not None and 'accelerationGrad' in dynamics:
-                oneDAccelerationGrad = (
-                    dynamics['accelerationGrad']['value'].dot(self.__unitVecToSignal__) /
-                    self.speedOfLight()
-                )
+            # if dynamics is not None and 'accelerationGrad' in dynamics:
+            #     navProcessNoise = (
+            #         dynamics['accelerationGrad']['value'].dot(self.__unitVecToSignal__) /
+            #         self.speedOfLight()
+            #     )
 
-                oneDAccelerationGradVar = (
-                    self.__unitVecToSignal__.dot(
-                        dynamics['accelerationGrad']['value'].dot(
-                            self.__unitVecToSignal__.transpose()
-                        )
-                    ) / np.square(self.speedOfLight())
-                )
-            else:
-                oneDAccelerationGrad = 0
-                oneDAccelerationGradVar = self.defaultOneDAccelerationGradVar
+            #     oneDAccelerationGradVar = (
+            #         self.__unitVecToSignal__.dot(
+            #             dynamics['accelerationGrad']['value'].dot(
+            #                 self.__unitVecToSignal__.transpose()
+            #             )
+            #         ) / np.square(self.speedOfLight())
+            #     )
+            # else:
             
             L = timeUpdateMatrices['L']
             Qmat = (
-                np.outer(L, L)*oneDAccelerationGradVar  + (
+                np.outer(L, L) * self.navProcessNoise  + (
                     (
                         block_diag(np.eye(self.__filterOrder__),np.zeros([self.navVectorLength,self.navVectorLength])) * 
                         self.processNoise * dT * 
@@ -594,7 +635,8 @@ class CorrelationVector(substate.SubState):
         return {'F': timeUpdateMatrices['F'], 'Q': Qmat}
 
     def buildDeepTimeUpdateMatrices(self,dT, dynamics, h):
-        FMatrixShift = -self.peakOffsetFromCenter # - peakShift
+        
+        FMatrixShift = -self.peakOffsetFromCenter
 
         filterOrder = self.__filterOrder__
         
@@ -686,15 +728,15 @@ class CorrelationVector(substate.SubState):
         L = np.zeros(filterOrder+self.navVectorLength)
         
         if self.navVectorLength == 1:
-            F[filterOrder,filterOrder] = 1
+            F[filterOrder, filterOrder] = 1
             L[filterOrder] = dT
             
         elif self.navVectorLength == 2:
-            F[filterOrder,filterOrder] = 1
-            F[filterOrder,filterOrder+1] = dT
-            F[filterOrder+1,filterOrder+1] = 1
+            F[filterOrder, filterOrder] = 1.0
+            F[filterOrder, filterOrder+1] = dT
+            F[filterOrder+1, filterOrder+1] = 1.0
             
-            L[filterOrder] = np.power(dT,2)/2
+            L[filterOrder] = np.power(dT, 2)/2
             L[filterOrder + 1] = dT
             
         elif self.navVectorLength == 3:
@@ -729,9 +771,9 @@ class CorrelationVector(substate.SubState):
                 np.roll(diffBase, i).dot(h) *
                 np.power(indexDiff,self.navVectorLength+1)/factorial(self.navVectorLength+1)
             )
-
-        # Setting L to zero for test purposes only
-        L = np.zeros(filterOrder+self.navVectorLength)
+        
+        # # Setting L to zero for test purposes only
+        # L = np.zeros(filterOrder+self.navVectorLength)
 
         return({'F':F, 'L':L})
         
@@ -864,9 +906,9 @@ class CorrelationVector(substate.SubState):
         else:
             velocityTDOA = 0
             peakShift = 0
-            Q = self.defaultOneDAccelerationVar * np.power(indexDiff,4)/4
+            Q = self.navProcessNoise * np.power(indexDiff,4)/4
             
-            tdoaQ = self.defaultOneDAccelerationVar * np.power(deltaT,4)/4
+            tdoaQ = self.navProcessNoise * np.power(deltaT,4)/4
 
         FMatrixShift = -self.peakOffsetFromCenter # - peakShift
         self.signalTDOA = (
@@ -1035,6 +1077,7 @@ class CorrelationVector(substate.SubState):
 
         R = (
             np.eye(self.__filterOrder__) *
+            #self.__trueSignal__.flux *
             self.__trueSignal__.peakAmplitude *
             self.__dT__ *
             np.dot(corrVec, corrVec) *
@@ -1329,6 +1372,15 @@ class CorrelationVector(substate.SubState):
             /
             (2*(y1*(x2-x3) + y2*(x3-x1) + y3*(x1-x2)))
         )
+        x0 = (
+            (
+                y1*(np.square(x2)-np.square(x3)) +
+                y2*(np.square(x3)-np.square(x1)) +
+                y3*(np.square(x1)-np.square(x2))
+            )
+            /
+            (2*(y1*(x2-x3) + y2*(x3-x1) + y3*(x1-x2)))
+        )
         return(x0)
 
     @staticmethod
@@ -1342,29 +1394,38 @@ class CorrelationVector(substate.SubState):
         y3 = y[2]
 
         A = np.square(x2) - np.square(x3)
-        B = np.square(x1) - np.square(x3)
+        B = np.square(x3) - np.square(x1)
         C = np.square(x1) - np.square(x2)
 
         D = x2-x3
-        E = x1-x2
+        E = x3-x1
+        # E = x1-x2
         F = x1-x2
+
+        AE = A*E
+        AF = A*F
         
-        denom = (2*np.power(D*y1 - E*y2 + F*y3,2))
+        BD = B*D
+        BF = B*F
+
+        CD = C*D
+        CE = C*E
+        denom = 2*np.power(((D*y1) + (E*y2) + (F*y3)),2)
 
         dT_dy1 = (
-            ((B*D - A*E)*y2 + (A*F - C*D)*y3)
+            ((AE - BD)*y2 + (AF - CD)*y3)
             /
             denom
         )
         
         dT_dy2 = (
-            ((B*D - A*E)*y1 + (B*F - C*E)*y3)
+            ((BD - AE)*y1 + (BF - CE)*y3)
             /
             denom
         )
         
         dT_dy3 = (
-            ((C*D - A*F)*y1 + (B*F - C*E)*y2)
+            ((CD - AF)*y1 + (CE - BF)*y2)
             /
             denom
         )

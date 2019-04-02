@@ -1,7 +1,7 @@
 from context import modest as md
 import matplotlib.pyplot as plt
 import numpy as np
-np.random.seed(1)
+#np.random.seed(1)
 plt.close('all')
 
 
@@ -9,18 +9,25 @@ plt.close('all')
 orbitPeriod = 10000/(2*np.pi)
 orbitAmplitude = 0
 
-constantVelocity = 4
-constantAcceleration = 0.0001
+constantVelocity = 1
+constantAcceleration = 0.001
 
 tFinal = 5000
-
-vVar = np.square(1e-100)
-nTaps = 7
+speedOfLight=299792
+velocityStdDev = 10/speedOfLight
+vVar = np.square(velocityStdDev)
+nTaps = 5
+aStdDev = 0.001/speedOfLight
 
 myProfile = './pulsarData/profiles/J0534+2200_profile.txt'
 myPARFile = '/home/joel/Documents/pythonDev/research/pulsarJPDAF/Data/2019_03_15_22h02m05s_chandraPhaseFrequency/ephem_B1509-58_chandra5515.par'
 
-detectorArea = 1000  # cm^2
+myPARFile = '/home/joel/Documents/pythonDev/research/pulsarJPDAF/Data/2019_03_25_10h08m33s_chandraPhaseFrequency/ephem_B0540-6919_chandra1735.par'
+myProfile = './pulsarData/profiles/sinProfile.txt'
+
+
+
+detectorArea = 250  # cm^2
 electronVoltPerPhoton = 6e3  # Electron-Volt x 10^3
 electronVoltPerErg = 6.242e11
 ergsPerElectronVolt = 1 / electronVoltPerErg
@@ -75,16 +82,16 @@ myCorrelation = md.substates.CorrelationVector(
     signalTDOA=0,
     TDOAVar=0,
     measurementNoiseScaleFactor=1,
-    processNoise=1e-100,
+    processNoise=0,
     centerPeak=True,
     peakLockThreshold=0.5,
     velocityNoiseScaleFactor=1,
-    defaultOneDAccelerationGradVar=np.square(0 / speedOfLight),
+    navProcessNoise=np.square(1e-12),
     internalNavFilter='deep',
-    vInitial={'value':np.random.normal(0,10/speedOfLight), 'var':np.square(10/speedOfLight)},
-    aInitial={'value':np.random.normal(0,0.3/speedOfLight), 'var':np.square(0.3/speedOfLight)},
-    # gradInitial={'value':np.random.normal(0,0.001/speedOfLight), 'var':np.square(0.001/speedOfLight)},
-    # defaul=1e-1000
+    vInitial={'value':np.random.normal(constantVelocity/speedOfLight,velocityStdDev), 'var':np.square(velocityStdDev)},
+    aInitial={'value':np.random.normal(constantAcceleration/speedOfLight,aStdDev), 'var':np.square(aStdDev)},
+    gradInitial={'value':np.random.normal(0,0.001/speedOfLight), 'var':np.square(0.001/speedOfLight)},
+    peakEstimator='EK'
     )
 
 myFilter = md.ModularFilter()
@@ -148,7 +155,7 @@ for photonMeas in photonMeasurements:
         print('time: %f' % arrivalT)
         print('True TDOA: %f' %(position(arrivalT).dot(myUnitVec)/myPulsar.speedOfLight()))
         print('Peak offset: %f' %(myCorrelation.peakCenteringDT))
-        print(myCorrelation.stateVector[myCorrelation.__filterOrder__]*speedOfLight / velocity(arrivalT).dot(myUnitVec))
+        print((myCorrelation.stateVector[myCorrelation.__filterOrder__]*speedOfLight - velocity(arrivalT).dot(myUnitVec))/ velocity(arrivalT).dot(myUnitVec))
         # print(np.sqrt(myCorrelation.correlationVectorCovariance[nTaps,nTaps].value)*speedOfLight)
     lastT = arrivalT
 timeUpdateOnlyTDOA.append(TUOTDOA)
@@ -176,11 +183,11 @@ plt.plot(
     trueTDOA-estTDOA,
     label='estimate error'
 )
-plt.plot(
-    timeUpdateOnlyT,
-    trueTDOA - timeUpdateOnlyTDOA,
-    label='Time update only'
-)
+# plt.plot(
+#     timeUpdateOnlyT,
+#     trueTDOA - timeUpdateOnlyTDOA,
+#     label='Time update only'
+# )
 tdoaSTD = np.array([np.sqrt(sv['TDOAVar']) for sv in myCorrelation.stateVectorHistory])
 plt.plot(
     tVec,
@@ -190,6 +197,8 @@ plt.plot(
     tVec,
     -tdoaSTD
 )
+plt.legend()
+plt.show(block=False)
 plt.figure()
 plt.plot(tVec,np.array(vVec) - np.array([velocity(t).dot(myUnitVec) for t in tVec]),label='velocity')
 plt.plot(tVec,vStdVec,label='velocity std dev')
@@ -225,7 +234,7 @@ plt.show(block=False)
 if hasattr(myCorrelation, 'acceleration'):
 
     plt.figure()
-    plt.plot(tVec,aVec,label='acceleration')
+    plt.plot(tVec,np.array(aVec) - constantAcceleration,label='acceleration')
     plt.plot(tVec,aStdVec,label='acceleration std dev')
     plt.plot(tVec,-np.array(aStdVec))
     plt.legend()

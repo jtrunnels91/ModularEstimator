@@ -18,39 +18,74 @@ def buildPulsarCorrelationSubstate(
     tdoaNoiseScaleFactor = None
     tStart = mySpacecraft.tStart
     myPulsarPeriod = pulsarObject.getPeriod(tStart)
-    internalNavFilter = None
+    internalNavFilter = traj.correlationFilter.internalNavFilter.INF_Type.value
 
     initialVelocityStdDev = (
-        traj.internalNavFilter.initialVelocityStdDev.value *
-        ureg(traj.internalNavFilter.initialVelocityStdDev.unit)
+        traj.correlationFilter.internalNavFilter.initialVelocityStdDev.value *
+        ureg(traj.correlationFilter.internalNavFilter.initialVelocityStdDev.unit)
     ).to(ureg.speed_of_light).magnitude
     vInitial = (
         mySpacecraft.dynamics.velocity(mySpacecraft.tStart).dot(pulsarObject.unitVec()) *
         ureg.km/ureg.seconds
     ).to(ureg.speed_of_light).magnitude
-    vInitial_C = np.random.normal(vInitial, initialVelocityStdDev)
 
-    velocityNoiseScaleFactor = traj.internalNavFilter.velocityNoiseScaleFactor.value
-    
-    if traj.internalNavFilter.useINF.value:
+    velocityNoiseScaleFactor = traj.correlationFilter.internalNavFilter.velocityNoiseScaleFactor.value
+
+
+    # Import navigation process noise, and convert it to units of speed of light per time to the appropriate power
+    navProcessNoise = (
+        traj.correlationFilter.internalNavFilter.defaultNavProcessNoise.value *
+        ureg(traj.correlationFilter.internalNavFilter.defaultNavProcessNoise.unit)
+    )
+    navProcessNoiseUnits = (
+        ureg.speed_of_light *
+        (ureg.seconds ** (navProcessNoise.dimensionality['[time]']+1))
+    )
+    navProcessNoise = navProcessNoise.to(navProcessNoiseUnits).magnitude
+
+    if 'initialVelocityStdDev' in traj.correlationFilter.internalNavFilter:
+        vStdDev = (
+            traj.correlationFilter.internalNavFilter.initialVelocityStdDev.value *
+            ureg(traj.correlationFilter.internalNavFilter.initialVelocityStdDev.unit)
+        ).to(ureg.speed_of_light).magnitude
+        
+        vInitial = {
+            'value': np.random.normal(
+                (mySpacecraft.dynamics.velocity(mySpacecraft.tStart).dot(pulsarObject.unitVec()) *
+                 ureg.km/ureg.seconds).to(ureg.speed_of_light).magnitude,
+                vStdDev),
+            'var': np.square(vStdDev)
+        }
+    else:
+        vInitial=None
+
+    if 'initialAccelerationStdDev' in traj.correlationFilter.internalNavFilter:
+        aStdDev = (
+            traj.correlationFilter.internalNavFilter.initialAccelerationStdDev.value *
+            ureg(traj.correlationFilter.internalNavFilter.initialAccelerationStdDev.unit)
+        ).to(ureg.speed_of_light/ureg.second).magnitude
+        
+        aInitial = {
+            'value': np.random.normal(
+                (mySpacecraft.dynamics.acceleration(mySpacecraft.tStart).dot(pulsarObject.unitVec()) * ureg.km/ureg.second**2).to(ureg.speed_of_light/ureg.second).magnitude,
+                aStdDev),
+            'var': np.square(aStdDev)
+        }
+        
+    else:
+        aInitial=None
+        
+    if traj.correlationFilter.internalNavFilter.INF_Type.value == 'external':
         internalNavFilter = ModularFilter()
-        # internalNavFilter = None
-        artificialBiasMeasStdDev = None
-        if traj.internalNavFilter.useBiasState.value:
+        if traj.correlationFilter.internalNavFilter.biasState.useBiasState.value:
             navCov = np.eye(3)
             navCov[2,2] = myPulsarPeriod/12
-            # navCov[2,2] = myPulsarObject.getPeriod(tStart)/12
             navX0 = np.array([0.0,0.0,0.0])
-            biasStateTimeConstant = traj.internalNavFilter.biasStateTimeConstant.value
+            biasStateTimeConstant = traj.correlationFilter.internalNavFilter.biasState.timeConstant.value
             biasStateProcessNoiseStdDev = (
-                traj.internalNavFilter.biasStateProcessNoiseStdDev.value *
-                ureg(traj.internalNavFilter.biasStateProcessNoiseStdDev.unit)
+                traj.correlationFilter.internalNavFilter.biasState.processNoiseStdDev.value *
+                ureg(traj.correlationFilter.internalNavFilter.biasState.processNoiseStdDev.unit)
             ).to(ureg.speed_of_light).magnitude
-            if traj.internalNavFilter.artificialBiasMeas:
-                artificialBiasMeasStdDev = (
-                    traj.internalNavFilter.artificialBiasMeas.noiseStdDev.value *
-                    ureg(traj.internalNavFilter.artificialBiasMeas.noiseStdDev.unit)
-                ).to(ureg.speed_of_light * ureg.seconds).magnitude
         else:
             navCov = np.eye(2)
             navX0 = np.array([0.0,0.0])
@@ -58,26 +93,21 @@ def buildPulsarCorrelationSubstate(
             biasStateProcessNoiseVar = None
 
         tdoaStdDevThreshold = (
-            traj.internalNavFilter.tdoaUpdateStdDevThreshold.value *
-            ureg(traj.internalNavFilter.tdoaUpdateStdDevThreshold.unit)
+            traj.correlationFilter.internalNavFilter.tdoaUpdateStdDevThreshold.value *
+            ureg(traj.correlationFilter.internalNavFilter.tdoaUpdateStdDevThreshold.unit)
         ).to(ureg.speed_of_light * ureg.seconds).magnitude
 
         velStdDevThreshold = (
-            traj.internalNavFilter.useVelocityStdDevThreshold.value *
-            ureg(traj.internalNavFilter.useVelocityStdDevThreshold.unit)
+            traj.correlationFilter.internalNavFilter.useVelocityStdDevThreshold.value *
+            ureg(traj.correlationFilter.internalNavFilter.useVelocityStdDevThreshold.unit)
         ).to(ureg.speed_of_light).magnitude
 
-        tdoaNoiseScaleFactor = traj.internalNavFilter.tdoaNoiseScaleFactor.value
+        tdoaNoiseScaleFactor = traj.correlationFilter.internalNavFilter.tdoaNoiseScaleFactor.value
 
-        navCov[1,1] = np.square(initialVelocityStdDev)
-        # navCov[0,0] = myPulsarObject.getPeriod(tStart)/12
+        navCov[1,1] = vInitial['var']
         navCov[0,0] = myPulsarPeriod/12
 
-        navX0[1] = vInitial_C
-        if artificialBiasMeasStdDev:
-            biasMeasVar = np.square(artificialBiasMeasStdDev)
-        else:
-            biasMeasVar = None
+        navX0[1] = vInitial['value']
 
         if biasStateProcessNoiseStdDev:
             biasStateProcessNoiseVar = np.square(biasStateProcessNoiseStdDev)
@@ -98,12 +128,10 @@ def buildPulsarCorrelationSubstate(
                 'aPriori': True,
                 'stateVectorID': -1
             },
-            biasState=traj.internalNavFilter.useBiasState.value,
-            artificialBiasMeas=traj.internalNavFilter.artificialBiasMeas.value,
+            biasState=traj.correlationFilter.internalNavFilter.biasState.useBiasState.value,
             biasStateTimeConstant=biasStateTimeConstant,
-            biasMeasVar=biasMeasVar,
             biasStateProcessNoiseVar=biasStateProcessNoiseVar,
-            storeLastStateVectors=traj.internalNavFilter.storeLastStateVectors.value
+            storeLastStateVectors=traj.correlationFilter.storeLastStateVectors.value,
         )
 
         internalNavFilter.addStates(
@@ -117,14 +145,13 @@ def buildPulsarCorrelationSubstate(
         internalNavFilter.addSignalSource(
             '',
             None
-        )
+        )        
 
-
-    defaultOneDAccelerationStdDev = (
-        traj.internalNavFilter.defaultAccelerationStdDev.value *
-        ureg(traj.internalNavFilter.defaultAccelerationStdDev.unit)
-    ).to(ureg.speed_of_light).magnitude
-
+    print("|||||||||||||||||||||||||||||||")
+    print("inititalizine INF with type:")
+    print(internalNavFilter)
+    print(traj.correlationFilter.internalNavFilter.INF_Type.value)
+    print("|||||||||||||||||||||||||||||||")
 
     # Import and initialize values for correlation filter
     processNoise = (
@@ -143,28 +170,11 @@ def buildPulsarCorrelationSubstate(
         peakFitPoints = traj.correlationFilter.peakFitPoints.value
     else:
         peakFitPoints = 1
-    # Now initialize the correlation substate
-    # correlationSubstate = substates.CorrelationVector(
-    #     pulsarObject,
-    #     nFilterTaps,
-    #     myPulsarPeriod/(nFilterTaps+1),
-    #     signalTDOA=0,
-    #     TDOAVar=myPulsarPeriod/12,
-    #     measurementNoiseScaleFactor=measurementNoiseScaleFactor,
-    #     processNoise=processNoise,
-    #     centerPeak=True,
-    #     peakLockThreshold=peakLockThreshold,
-    #     t=mySpacecraft.tStart,
-    #     internalNavFilter=internalNavFilter,
-    #     defaultOneDAccelerationVar=np.square(defaultOneDAccelerationStdDev),
-    #     tdoaStdDevThreshold=tdoaStdDevThreshold,
-    #     velStdDevThreshold=velStdDevThreshold,
-    #     tdoaNoiseScaleFactor=tdoaNoiseScaleFactor,
-    #     velocityNoiseScaleFactor=velocityNoiseScaleFactor,
-    #     storeLastStateVectors=traj.correlationFilter.storeLastStateVectors.value,
-    #     peakFitPoints=peakFitPoints,
-    # )
-    speedOfLight = ureg('speed_of_light').to(ureg('km/s')).magnitude
+    
+    if 'peakEstimator' in traj.correlationFilter:
+        peakEstimator = traj.correlationFilter.peakEstimator.value
+    else:
+        peakEstimator = 'EK'
     
     correlationSubstate = substates.CorrelationVector(
         pulsarObject,
@@ -177,21 +187,20 @@ def buildPulsarCorrelationSubstate(
         centerPeak=True,
         peakLockThreshold=peakLockThreshold,
         t=mySpacecraft.tStart,
-        internalNavFilter='deep',
-        defaultOneDAccelerationVar=np.square(1e-50 / speedOfLight),
+        internalNavFilter=internalNavFilter,
         tdoaStdDevThreshold=tdoaStdDevThreshold,
         velStdDevThreshold=velStdDevThreshold,
         tdoaNoiseScaleFactor=tdoaNoiseScaleFactor,
         velocityNoiseScaleFactor=velocityNoiseScaleFactor,
         storeLastStateVectors=traj.correlationFilter.storeLastStateVectors.value,
         peakFitPoints=peakFitPoints,
-        defaultOneDAccelerationGradVar=np.square(1e-7),    
-        vInitial={'value':vInitial_C, 'var':np.square(initialVelocityStdDev)},
-        aInitial={'value':0, 'var':np.square(0.3/speedOfLight)},
-        # gradInitial={'value':np.random.normal(0,0.0001/speedOfLight), 'var':np.square(0.001/speedOfLight)},
+        navProcessNoise=np.square(navProcessNoise),
+        vInitial=vInitial,
+        aInitial=aInitial,
+        peakEstimator=peakEstimator
     )
     
-    return correlationSubstate, vInitial_C
+    return correlationSubstate, vInitial['value']
 
 
 ## @fun buildPulsarCorrelationSubstate builds an correlation substate based on imported Traj

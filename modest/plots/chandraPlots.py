@@ -291,33 +291,33 @@ def createResultsDict(
     estimatedTDOAStd = np.array(tdoa['TDOAStd'])
 
     trueTDOA = np.array([
-        mySpacecraft.position(t).dot(tdoa['unitVec']) for t in estimatedT
+        mySpacecraft.dynamics.position(t + mySpacecraft.tStart).dot(tdoa['unitVec']) for t in estimatedT
     ])
     trueVel = np.array([
-        mySpacecraft.velocity(t).dot(tdoa['unitVec']) for t in estimatedT
+        mySpacecraft.dynamics.velocity(t + mySpacecraft.tStart).dot(tdoa['unitVec']) for t in estimatedT
     ])
     trueAcc = np.array([
-        mySpacecraft.acceleration(t).dot(tdoa['unitVec']) for t in estimatedT
+        mySpacecraft.dynamics.acceleration(t + mySpacecraft.tStart).dot(tdoa['unitVec']) for t in estimatedT
     ])
 
     truePos = trueTDOA - trueTDOA[0]
     
 
     if len(tdoa['vel'])>0:
-        navVel = np.array(tdoa['vel']) * ureg.speed_of_light.to(ureg('km/s')).magnitude
-        navVelStd = np.array(tdoa['velStd']) * ureg.speed_of_light.to(ureg('km/s')).magnitude
+        navVel = np.array(tdoa['vel'])
+        navVelStd = np.array(tdoa['velStd'])
         navVelErrorStdDev = np.std(navVel - trueVel)
         
     if len(tdoa['acc'])>0:
-        navAcc = np.array(tdoa['acc']) * ureg.speed_of_light.to(ureg('km/s')).magnitude
-        navAccStd = np.array(tdoa['accStd']) * ureg.speed_of_light.to(ureg('km/s')).magnitude
+        navAcc = np.array(tdoa['acc'])
+        navAccStd = np.array(tdoa['accStd'])
 
     estimatedPos = (estimatedTDOA * ureg.seconds * ureg.speed_of_light).to(ureg('km')).magnitude
     if not np.any(tdoa['peakLock']):
         meanDiff = np.mean(estimatedPos - truePos)
     else:
         meanDiff = np.mean(
-            [eP-tP for tP, eP, pL in zip(truePos, estimatedPos, peakLock) if pL]
+            [eP-tP for tP, eP, pL in zip(truePos, estimatedPos, tdoa['peakLock']) if pL]
         )
         
     estimatedPos = estimatedPos - meanDiff
@@ -376,11 +376,11 @@ def createResultsDict(
             'unit':'km/s'
         }
         
-        resultsDict['velocityOnlyRange'] = {
-            'value': velocityOnlyRange,
-            'comment':'Range from velocity propagation',
-            'unit':'km'
-        }
+    resultsDict['velocityOnlyRange'] = {
+        'value': velocityOnlyRangeTruncated,
+        'comment':'Range from velocity propagation',
+        'unit':'km'
+    }
 
 
 
@@ -440,7 +440,7 @@ def createResultsDict(
     }
 
     resultsDict['peakLock'] = {
-        'value': peakLock,
+        'value': tdoa['peakLock'],
         'comment': 'Indication of peak lock',
         'unit': ''
     }
