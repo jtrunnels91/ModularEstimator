@@ -361,7 +361,6 @@ class CorrelationVector(substate.SubState):
 
         # Compute new estimate of delay based on new state vector, store in
         # svDict and local attributes
-        #if False is False:
         if not svDict['aPriori']:
             self.correlationVector = svDict['stateVector'][0:self.__filterOrder__]
             self.correlationVectorCovariance = svDict['covariance']
@@ -390,25 +389,11 @@ class CorrelationVector(substate.SubState):
             
             newTDOAVar = tdoaDict['varTDOA'] * np.square(self.__dT__)
             if not isnan(newTDOA) and not isnan(newTDOAVar):
-                # if self.peakLock:
-                #     TDOAResidual = newTDOA - self.signalTDOA
-                #     TDOAResidualVar = newTDOAVar + self.TDOAVar
-                #     TDOA_gain = self.TDOAVar/TDOAResidualVar
-                #     self.signalTDOA = self.signalTDOA + TDOA_gain*TDOAResidual
-                #     IMinusKH = 1.0 - TDOA_gain
-                #     self.TDOAVar = (
-                #         np.square(IMinusKH)*self.TDOAVar +
-                #         np.square(TDOA_gain)*newTDOAVar
-                #     )
-                # else:
                 self.signalTDOA = newTDOA
                 self.TDOAVar = newTDOAVar
 
             svDict['signalTDOA'] = self.signalTDOA
             svDict['TDOAVar'] = self.TDOAVar
-            # self.sigmaPoints = tdoaDict['sigmaPoints']
-            # xAxis = np.linspace(0, self.__filterOrder__-1, self.__filterOrder__)
-            # xAxis = (xAxis * self.__dT__) - self.peakCenteringDT
 
             if self.INF_type == 'external':
                 if (
@@ -713,16 +698,16 @@ class CorrelationVector(substate.SubState):
 
         for i in range(len(sincBase)):
             currentDiff = np.roll(diffBase, i).dot(h)
-            F[i,0:filterOrder] = np.roll(sincBase, i)
-            F[i,filterOrder] = currentDiff * indexDiff #/np.pi
+            F[i, 0:filterOrder] = np.roll(sincBase, i)
+            F[i, filterOrder] = currentDiff * indexDiff
             
             if self.navVectorLength > 1:
-                F[i,filterOrder+1] = currentDiff * np.power(indexDiff,2)/2
+                F[i, filterOrder+1] = currentDiff * np.power(indexDiff, 2)/2
                 if self.navVectorLength > 2:
-                    F[i,filterOrder+2] = (
+                    F[i, filterOrder+2] = (
                         currentDiff *
                         self.stateVector[filterOrder] *
-                        np.power(indexDiff,3)/6
+                        np.power(indexDiff, 3)/6
                     )
 
         L = np.zeros(filterOrder+self.navVectorLength)
@@ -744,7 +729,7 @@ class CorrelationVector(substate.SubState):
             aCurrent = self.stateVector[filterOrder + 1]
             gradCurrent = self.stateVector[filterOrder + 2]
             
-            F[filterOrder,filterOrder] = 1
+            F[filterOrder,filterOrder] = 1 + (gradCurrent * np.power(dT,2)/2)
             F[filterOrder,filterOrder+1] = dT
             F[filterOrder,filterOrder+2] = vCurrent * np.power(dT,2)/2
             

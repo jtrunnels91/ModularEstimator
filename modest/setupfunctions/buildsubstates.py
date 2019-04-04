@@ -75,6 +75,22 @@ def buildPulsarCorrelationSubstate(
     else:
         aInitial=None
         
+    if ('initialGradientStdDev' in traj.correlationFilter.internalNavFilter) and aInitial:
+        lightSecond = ureg.speed_of_light * ureg.second
+        
+        gStdDev = (
+            traj.correlationFilter.internalNavFilter.initialGradientStdDev.value *
+            ureg(traj.correlationFilter.internalNavFilter.initialGradientStdDev.unit)
+        ).to(ureg.speed_of_light/(ureg.second * lightSecond)).magnitude
+        
+        gInitial = {
+            'value': 0,
+            'var': np.square(gStdDev)
+        }
+    else:
+        gInitial=None
+
+        
     if traj.correlationFilter.internalNavFilter.INF_Type.value == 'external':
         internalNavFilter = ModularFilter()
         if traj.correlationFilter.internalNavFilter.biasState.useBiasState.value:
@@ -197,6 +213,7 @@ def buildPulsarCorrelationSubstate(
         navProcessNoise=np.square(navProcessNoise),
         vInitial=vInitial,
         aInitial=aInitial,
+        gradInitial=gInitial,
         peakEstimator=peakEstimator
     )
     
