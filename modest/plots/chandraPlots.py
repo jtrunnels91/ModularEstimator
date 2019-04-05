@@ -44,17 +44,21 @@ def outputPlots(
     estimatedPosStdDev = resultsDict['estimatedPosStdDev']['value']
     estimatedPosStdDev_calc = resultsDict['estimatedPosStdDev_calc']['value']
 
-    if useINF:
-        # navPos = resultsDict['navPos']['value']
+    if 'navVel' in resultsDict:
         navVel = resultsDict['navVel']['value']
         navVelStd = resultsDict['navVelStd']['value']
+    else:
+        navVel = None
+    if 'navAcc' in resultsDict:
+        navAcc = resultsDict['navAcc']['value']
+        navAccStd = resultsDict['navAccStd']['value']
+    else:
+        navAcc=None
 
-        # navBiasState = resultsDict['navBiasState']['value']
-        # navPosStd = resultsDict['navPosStd']['value']
-        # navPosErrorStdDev = resultsDict['navPosErrorStdDev']['value']
 
     truePos = resultsDict['truePos']['value']
     trueVel = resultsDict['trueVel']['value']
+    trueAcc = resultsDict['trueAcc']['value']
 
     velocityOnlyRange = resultsDict['velocityOnlyRange']['value']
                                      
@@ -188,10 +192,15 @@ def outputPlots(
         mpld3.save_html(tdoaFigure, outputDir + '/tdoa.html')
         # plt.close(tdoaFigure)
     plt.show(block=False)
-        
+    
+    figureDict = {
+        'tdoaFigure': tdoaFigure,
+        'attFigure': attFig
+    }
+    
     velocityFigure = None
-    if useINF:
-        if figureDict is None:
+    if not np.any(navVel==None):
+        if figureDict is None or 'velocityFigure' not in figureDict:
             velocityFigure = plt.figure(4, figsize=(16,9))
         else:
             velocityFigure = figureDict['velocityFigure']
@@ -215,11 +224,42 @@ def outputPlots(
             # plt.close(velocityFigure)
         # else:
         plt.show(block=False)
-        figureDict = {
-        'tdoaFigure': tdoaFigure,
-        'velocityFigure': velocityFigure,
-        'attFigure': attFig
-    }
+        figureDict['velocityFigure'] = velocityFigure
+        
+    if not np.any(navAcc==None):
+        if figureDict is None or 'accelerationFigure' not in figureDict:
+            accelerationFigure = plt.figure(5, figsize=(16,9))
+        else:
+            accelerationFigure = figureDict['accelerationFigure']
+        accelerationFigure.clear()
+        plt.figure(5)
+        
+        plt.plot(
+            estimatedT,
+            trueAcc - navAcc,
+            label=(
+                'acceleration error ($\sigma = %s$)'
+                %np.std(trueAcc - navAcc)
+            )
+        )
+        plt.plot(estimatedT, navAccStd, color=[0.5,0.5,0.5], label='acceleration std dev')
+        plt.plot(estimatedT, -navAccStd, color=[0.5,0.5,0.5])
+        plt.legend()
+
+        if saveOutput:
+            mpld3.save_html(velocityFigure, outputDir + '/acceleration.html')
+            # plt.close(velocityFigure)
+        # else:
+        plt.show(block=False)
+        figureDict['accelerationFigure'] = accelerationFigure
+        
+        # figureDict = {
+        #     'tdoaFigure': tdoaFigure,
+        #     'velocityFigure': velocityFigure,
+        #     'attFigure': attFig,
+        #     'accelerationFigure': accelerationFigure
+        # }
+
     return(figureDict)
 
 
@@ -296,6 +336,7 @@ def createResultsDict(
     trueVel = np.array([
         mySpacecraft.dynamics.velocity(t + mySpacecraft.tStart).dot(tdoa['unitVec']) for t in estimatedT
     ])
+    
     trueAcc = np.array([
         mySpacecraft.dynamics.acceleration(t + mySpacecraft.tStart).dot(tdoa['unitVec']) for t in estimatedT
     ])
@@ -333,34 +374,10 @@ def createResultsDict(
     
     resultsDict = {}
 
-    if useINF:
-        # resultsDict['navBiasState'] = {
-        #     'value': navBiasState,
-        #     'comment': 'Navigation filter measurement bias state estimate',
-        #     'unit': 'km'
-        # }
-        # resultsDict['navPos'] = {
-        #     'value': navPos,
-        #     'comment': 'Spacecraft range estimated by internal nav filter',
-        #     'unit': 'km'
-        # }
-
-    #     resultsDict['navPosStd'] = {
-    #         'value': navPosStd,
-    #         'comment': 'Spacecraft range standard deviation estimated by internal nav filter',
-    #         'unit': 'km'
-    # }
-
-    #     resultsDict['navPosErrorStdDev'] = {
-    #         'value': navPosErrorStdDev,
-    #         'comment': 'Standard deviation of spacecraft range estimate error',
-    #         'unit': 'km'
-    #     }
-
-
+    if len(navVel) > 0:
         resultsDict['navVel'] = {
             'value': navVel,
-            'comment': 'Spacecraft range as estimated by internal nav filter',
+            'comment': 'Spacecraft velocity as estimated by internal nav filter',
             'unit': 'km/s'
         }
 
@@ -376,6 +393,18 @@ def createResultsDict(
             'unit':'km/s'
         }
         
+    if len(navAcc) > 0:
+        resultsDict['navAcc'] = {
+            'value': navAcc,
+            'comment': 'Spacecraft acceleration as estimated by internal nav filter',
+            'unit': 'km/s^2'
+        }
+
+        resultsDict['navAccStd'] = {
+            'value': navAccStd,
+            'comment': 'Spacecraft acceleration standard deviation estimated by internal nav filter',
+            'unit': 'km/s^2'
+        }
     resultsDict['velocityOnlyRange'] = {
         'value': velocityOnlyRangeTruncated,
         'comment':'Range from velocity propagation',
@@ -393,6 +422,11 @@ def createResultsDict(
         'value': trueVel,
         'comment': 'True Spacecraft velocity',
         'unit': 'km/s'
+    }
+    resultsDict['trueAcc'] = {
+        'value': trueAcc,
+        'comment': 'True Spacecraft acceleration',
+        'unit': 'km/s^2'
     }
     resultsDict['estimatedPos'] = {
         'value': estimatedPos,
