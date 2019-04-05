@@ -247,7 +247,7 @@ def outputPlots(
         plt.legend()
 
         if saveOutput:
-            mpld3.save_html(velocityFigure, outputDir + '/acceleration.html')
+            mpld3.save_html(accelerationFigure, outputDir + '/acceleration.html')
             # plt.close(velocityFigure)
         # else:
         plt.show(block=False)
