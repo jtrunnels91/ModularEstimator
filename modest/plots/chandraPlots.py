@@ -1,28 +1,84 @@
 import numpy as np
+import matplotlib as mp
 import matplotlib.pyplot as plt, mpld3
+import matplotlib.ticker as ticker
+
 import pickle
 from .. import utils
+
+umnPrimaryColors = [[122 / 225, 0 / 225, 25 / 225],
+                    [255 / 255, 204 / 225, 51 / 255]]
+
+umnSecondaryDark = [[0 / 255, 61 / 255, 76 / 255],
+                    [202 / 255, 119 / 255, 0 / 255],
+                    [114 / 255, 110 / 255, 32 / 255],
+                    [97 / 255, 99 / 255, 101 / 255],
+                    [145 / 255, 120 / 255, 91 / 255],
+                    [91 / 255, 0 / 255, 19 / 255],
+                    [255 / 255, 183 / 255, 30 / 255]]
+
+
+umnSecondaryLight = [[0 / 255, 185 / 255, 228 / 255],
+                     [233 / 255, 131 / 255, 0 / 255],
+                     [190 / 255, 214 / 255, 0 / 255],
+                     [204 / 255, 204 / 255, 204 / 255],
+                     [226 / 255, 211 / 255, 164 / 255],
+                     [144 / 255, 0 / 255, 33 / 255],
+                     [255 / 255, 222 / 255, 122 / 255]]
+
 
 def outputPlots(
         useINF,
         resultsDict,
         saveOutput=True,
         outputDir=None,
-        figureDict=None
+        axisDict=None,
+        plotPropagationError=False,
+        scaleByStdDev=None,
+        lineWeight=2,
+        legendFont=14,
+        legendLineLength=10,
+        legendBorderPad=2,
+        outputFormat='HTML',
+        clearOldPlot=True,
+        placeLegend=True,
+        colorCounter=0
 ):
     print()
     print("||=================================================||")    
     print("Plotting current results and saving output")
     print("||=================================================||")    
     print()
+    legendDict = {}
 
-    if figureDict is None:
-        attFig = plt.figure(2, figsize=(16,9))
+    if saveOutput and outputFormat == 'SVG':
+        mp.rcParams['svg.fonttype'] = 'none'
+        mp.rcParams['axes.unicode_minus'] = False
+        plt.rc('text', usetex=False)
+
+    if axisDict is None or 'attAxis' not in axisDict:
+        plt.figure(figsize=(16,9))
+        print("generating new attitude figure")
+        if placeLegend:
+            rollAxis = plt.subplot2grid((3,4), (0,0),colspan=3)
+            pitchAxis = plt.subplot2grid((3,4), (1,0),colspan=3)
+            yawAxis = plt.subplot2grid((3,4), (2,0),colspan=3)
+        else:
+            rollAxis = plt.subplot2grid((3,1), (0,0))
+            pitchAxis = plt.subplot2grid((3,1), (1,0))
+            yawAxis = plt.subplot2grid((3,1), (2,0))
     else:
-        attFig = figureDict['attFigure']
-    attFig.clear()
-    plt.figure(2)
-    
+        rollAxis = axisDict['attAxis']['roll']
+        pitchAxis = axisDict['attAxis']['pitch']
+        yawAxis = axisDict['attAxis']['yaw']
+        
+        # plt.sca(attAxis)
+
+    if clearOldPlot:
+        rollAxis.clear()
+        pitchAxis.clear()
+        yawAxis.clear()
+        
     estimatedT = resultsDict['estimatedT']['value']
     rollSigma = resultsDict['estimatedAttitudeSigma_DEG']['value'][0]
     pitchSigma = resultsDict['estimatedAttitudeSigma_DEG']['value'][1]
@@ -64,101 +120,212 @@ def outputPlots(
                                      
     
     stdDevColor = [0.5, 0.5, 0.5]
-    plt.subplot2grid((3,1), (0,0))
-    plt.title('Roll error, standard dev')
-    plt.plot(
+    legendLabelList = []
+    legendLineList = []
+        
+    rollAxis.set_title('Roll error, standard dev')
+    estLine, = rollAxis.plot(
         estimatedT - estimatedT[0],
-        rollError
+        rollError,
+        color=umnSecondaryDark[0 + colorCounter],
+        lw=lineWeight
     )
-    if attPO:
-        plt.plot(
+    legendLineList.append(estLine)
+    legendLabelList.append('attitude estimate error')
+    if attPO and plotPropagationError:
+        propLine,=rollAxis.plot(
             estimatedT - estimatedT[0],
-            rollError_PO
+            rollError_PO,
+            color=umnSecondaryDark[1 + colorCounter],
+            ls='dashdot',
+            lw=lineWeight
         )
-    plt.plot(
+        legendLineList.append(propLine)
+        legendLabelList.append('inertial propagation error')
+        
+    sigmaLine,=rollAxis.plot(
         estimatedT-estimatedT[0],
         -rollSigma,
-        color=stdDevColor
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight
     )
-    plt.plot(
+    legendLineList.append(sigmaLine)
+    legendLabelList.append(r'\$\pm 1 \sigma\$')
+        
+    
+    rollAxis.plot(
         estimatedT-estimatedT[0],
         rollSigma,
-        color=stdDevColor
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight
     )
-    plt.ylabel('deg')
+    rollAxis.set_ylabel('deg')
+    rollAxis.grid()
 
-    plt.subplot2grid((3,1), (1,0))
-    plt.title('Pitch error, standard dev')
+    if scaleByStdDev:
+        myStdDev = np.std(rollError)
+        myMean = np.mean(rollError)
+        rollAxis.set_ylim([-scaleByStdDev*myStdDev + myMean, scaleByStdDev*myStdDev + myMean])
+    
+    
+    # if placeLegend:
+    #     pitchAxis=plt.subplot2grid((3,4), (1,0),colspan=3)
+    # else:
+    #     pitchAxis=plt.subplot2grid((3,1), (1,0))
+        
+    pitchAxis.set_title('Pitch error, standard dev')
 
-    plt.plot(
+    pitchAxis.plot(
         estimatedT-estimatedT[0],
-        pitchError
+        pitchError,
+        color=umnSecondaryDark[0+colorCounter],
+        lw=lineWeight
     )
-    if attPO:
-        plt.plot(
+    if attPO and plotPropagationError:
+        pitchAxis.plot(
             estimatedT - estimatedT[0],
-            pitchError_PO
+            pitchError_PO,
+            color=umnSecondaryDark[1+ colorCounter],
+            lw=lineWeight,
+            ls='dashdot'
         )
     
-    plt.plot(
+    pitchAxis.plot(
         estimatedT-estimatedT[0],
         pitchSigma,
-        color=stdDevColor
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight
     )
-    plt.plot(
+    pitchAxis.plot(
         estimatedT-estimatedT[0],
         -pitchSigma,
-        color=stdDevColor
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight
     )
-    plt.ylabel('deg')
+    pitchAxis.set_ylabel('deg')
 
-    plt.subplot2grid((3,1), (2,0))
-    plt.title('Yaw error, standard dev')
-    plt.plot(
+    if scaleByStdDev:
+        myStdDev = np.std(pitchError)
+        myMean = np.mean(pitchError)
+        pitchAxis.set_ylim([-scaleByStdDev*myStdDev + myMean, scaleByStdDev*myStdDev + myMean])
+    
+    pitchAxis.grid()
+    
+    # if placeLegend:
+    #     yawAxis=plt.subplot2grid((3,4), (2,0),colspan=3)
+    # else:
+    #     yawAxis=plt.subplot2grid((3,1), (2,0))
+        
+    yawAxis.set_title('Yaw error, standard dev')
+    yawAxis.plot(
         estimatedT-estimatedT[0],
-        yawError
+        yawError,
+        color=umnSecondaryDark[0 + colorCounter],
+        lw=lineWeight        
     )
-    if attPO:
-        plt.plot(
+    if attPO and plotPropagationError:
+        yawAxis.plot(
             estimatedT - estimatedT[0],
-            yawError_PO
+            yawError_PO,
+            color=umnSecondaryDark[1 + colorCounter],
+            lw=lineWeight,
+            ls='dashdot'            
         )
     
-    plt.plot(
+    yawAxis.plot(
         estimatedT-estimatedT[0],
         yawSigma,
-        color=stdDevColor
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight
     )
-    plt.plot(
+    yawAxis.plot(
         estimatedT-estimatedT[0],
         -yawSigma,
-        color=stdDevColor
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight    
     )
-    plt.ylabel('deg')
-    plt.xlabel('time (s)')
-    plt.subplots_adjust(hspace=.5)
+    yawAxis.grid()
+    yawAxis.set_ylabel('deg')
+    yawAxis.set_xlabel('time (s)')
+    if scaleByStdDev:
+        myStdDev = np.std(yawError)
+        myMean = np.mean(yawError)
+        yawAxis.set_ylim([-scaleByStdDev*myStdDev + myMean, scaleByStdDev*myStdDev + myMean])
+    # plt.subplots_adjust(hspace=.5)
+    rollAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%0.0e'))
+    pitchAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%0.0e'))
+    yawAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%0.0e'))
+    plt.tight_layout()
 
+    if placeLegend:
+        # plt.subplot2grid((3,4), (3,0),colspan=3) 
+        legendPlot = plt.subplot2grid((3,4), (0,3),rowspan=3)
+        legendPlot.axis('off')
+        myLegend=legendPlot.legend(
+            legendLineList,
+            legendLabelList,
+            bbox_to_anchor=(1, 1),
+            fancybox=True,
+            shadow=True,
+            handlelength=legendLineLength,
+            borderpad=legendBorderPad,
+        )
+        plt.setp(myLegend.get_texts(), fontsize=legendFont)
+        
+    else:
+        legendDict['attitude'] = {'lines': legendLineList, 'labels': legendLabelList}
+    
     if saveOutput:
-        mpld3.save_html(attFig, outputDir + '/attitude.html')
+        if outputFormat == 'HTML':
+            mpld3.save_html(plt.gcf(), outputDir + '/attitude.html')
+        elif outputFormat == 'SVG':
+            plt.savefig(outputDir + '/acceleration.svg')
+            
     plt.show(block=False)
     
-    if figureDict is None:
-        tdoaFigure = plt.figure(3, figsize=(16,9))
+    if axisDict is None or 'tdoaAxis' not in axisDict:
+        plt.figure(figsize=(16,9))
+        tdoaAxis = plt.gca()
     else:
-        tdoaFigure = figureDict['tdoaFigure']
-    tdoaFigure.clear()
-    plt.figure(3)
+        tdoaAxis = axisDict['tdoaAxis']
+    legendLineList = []
+    legendLabelList = []
     
-    plt.plot(
+    if clearOldPlot:
+        tdoaAxis.clear()
+    
+    tdoaLine, = tdoaAxis.plot(
         estimatedT,
         truePos - estimatedPos,
-        label=(
-            'unfiltered delay error ($\sigma=%s$)'
-            %estimatedPosStdDev_calc
-            )
+        color=umnSecondaryDark[0+colorCounter],        
+        lw=lineWeight
     )
-    plt.plot(estimatedT, estimatedPosStdDev, ls='-.', color=[0.5,0.5,0.5], label = 'unfiltered standard deviation')
-    plt.plot(estimatedT, -estimatedPosStdDev, ls='-.', color=[0.5,0.5,0.5])
+    legendLineList.append(tdoaLine)
+    legendLabelList.append(r'range error (\$\sigma=%s\$)'%estimatedPosStdDev_calc)
+
+    sigmaLine, = tdoaAxis.plot(
+        estimatedT,
+        estimatedPosStdDev,
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight        
+    )
+    legendLineList.append(sigmaLine)
+    legendLabelList.append(r'estimated standard deviation (\$1\sigma\$)')
+    
+    tdoaAxis.plot(
+        estimatedT,
+        -estimatedPosStdDev,
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight        
+    )
 
 
     # if useINF:
@@ -178,80 +345,128 @@ def outputPlots(
         # plt.plot(estimatedT, navPosStd, color=[0.9,0.9,0.9], label='nav filter standard deviation')
         # plt.plot(estimatedT, -navPosStd, color=[0.9,0.9,0.9])
 
-    plt.legend()
-    plt.xlabel('time (s)')
-    plt.ylabel('(km)')
-    plt.plot(
-        estimatedT,
-        truePos -
-        (velocityOnlyRange)
-        - truePos[0],
-        label='initial velocity error propagation'
-    )
+    tdoaAxis.set_xlabel('time (s)')
+    tdoaAxis.set_ylabel('(km)')
+    if plotPropagationError:
+        tdoaPropOnlyLine, = tdoaAxis.plot(
+            estimatedT,
+            truePos -
+            (velocityOnlyRange)
+            - truePos[0],
+            color=umnSecondaryDark[1 + colorCounter],
+            ls='dashdot',
+            lw=lineWeight
+        )
+        legendLineList.append(tdoaPropOnlyLine)
+        legendLabelList.append('initial velocity error propagation')
+
+    if scaleByStdDev:
+        myStdDev = np.std(truePos-estimatedPos)
+        myMean = np.mean(truePos-estimatedPos)
+        tdoaAxis.set_ylim([-scaleByStdDev*myStdDev + myMean, scaleByStdDev*myStdDev + myMean])
+
+    if placeLegend:
+        tdoaAxis.legend(
+            legendLineList,
+            legendLabelList,
+            bbox_to_anchor=(1, 1),
+            fancybox=True,
+            shadow=True,
+            handlelength=legendLineLength,
+            borderpad=legendBorderPad,
+        )
+    legendDict['tdoa'] = {'lines': legendLineList, 'labels': legendLabelList}
+    
+    tdoaAxis.grid()
     if saveOutput:
-        mpld3.save_html(tdoaFigure, outputDir + '/tdoa.html')
+        if outputFormat == 'HTML':
+            mpld3.save_html(plt.gcf(), outputDir + '/tdoa.html')
+        elif outputFormat == 'SVG':
+            plt.savefig(outputDir + '/tdoa.svg')
         # plt.close(tdoaFigure)
     plt.show(block=False)
     
-    figureDict = {
-        'tdoaFigure': tdoaFigure,
-        'attFigure': attFig
+    axisDict = {
+        'tdoaAxis': tdoaAxis,
+        'attAxis': {'roll': rollAxis, 'pitch': pitchAxis, 'yaw': yawAxis}
     }
     
     velocityFigure = None
     if not np.any(navVel==None):
-        if figureDict is None or 'velocityFigure' not in figureDict:
-            velocityFigure = plt.figure(4, figsize=(16,9))
+        if axisDict is None or 'velocityAxis' not in axisDict:
+            plt.figure(figsize=(16,9))
+            velocityAxis = plt.gca()
         else:
-            velocityFigure = figureDict['velocityFigure']
-        velocityFigure.clear()
-        plt.figure(4)
+            velocityAxis = axisDict['velocityAxis']
+        if clearOldPlot:
+            velocityAxis.clear()
         
-        plt.plot(
+        velocityAxis.plot(
             estimatedT,
             trueVel - navVel,
             label=(
-                'velocity error ($\sigma = %s$)'
-                %np.std(trueVel - navVel)
-            )
+                r'velocity error (\$\sigma = %s\$)'
+                %np.std(trueVel - navVel)                
+            ),
+            color=umnSecondaryDark[0 + colorCounter],
+            lw=lineWeight
         )
-        plt.plot(estimatedT, navVelStd, color=[0.5,0.5,0.5], label='velocity std dev')
-        plt.plot(estimatedT, -navVelStd, color=[0.5,0.5,0.5])
-        plt.legend()
+        velocityAxis.plot(estimatedT, navVelStd,ls='dotted', lw=lineWeight, color=[0.5,0.5,0.5], label='velocity std dev')
+        velocityAxis.plot(estimatedT, -navVelStd, color=[0.5,0.5,0.5],ls='dotted', lw=lineWeight,)
+        if scaleByStdDev:
+            myStdDev = np.std(trueVel-navVel)
+            myMean = np.mean(trueVel-navVel)
+            velocityAxis.set_ylim([-scaleByStdDev*myStdDev + myMean, scaleByStdDev*myStdDev + myMean])
+        
+        velocityAxis.legend()
 
         if saveOutput:
-            mpld3.save_html(velocityFigure, outputDir + '/velocity.html')
+            if outputFormat == 'HTML':
+                mpld3.save_html(plt.gcf(), outputDir + '/velocity.html')
+            elif outputFormat == 'SVG':
+                plt.savefig(outputDir + '/velocity.svg')
             # plt.close(velocityFigure)
         # else:
+        velocityAxis.grid()
         plt.show(block=False)
-        figureDict['velocityFigure'] = velocityFigure
+        axisDict['velocityAxis'] = velocityAxis
         
     if not np.any(navAcc==None):
-        if figureDict is None or 'accelerationFigure' not in figureDict:
-            accelerationFigure = plt.figure(5, figsize=(16,9))
+        if axisDict is None or 'accelerationAxis' not in axisDict:
+            plt.figure(figsize=(16,9))
+            accelerationAxis = plt.gca()
         else:
-            accelerationFigure = figureDict['accelerationFigure']
-        accelerationFigure.clear()
-        plt.figure(5)
+            accelerationAxis = axisDict['accelerationAxis']
+        if clearOldPlot:
+            accelerationAxis.clear()
         
-        plt.plot(
+        accelerationAxis.plot(
             estimatedT,
             trueAcc - navAcc,
             label=(
-                'acceleration error ($\sigma = %s$)'
+                r'acceleration error (\$\sigma = %s\$)'
                 %np.std(trueAcc - navAcc)
-            )
+            ),
+            color=umnSecondaryDark[0 + colorCounter],
+            lw=lineWeight            
         )
-        plt.plot(estimatedT, navAccStd, color=[0.5,0.5,0.5], label='acceleration std dev')
-        plt.plot(estimatedT, -navAccStd, color=[0.5,0.5,0.5])
-        plt.legend()
-
+        accelerationAxis.plot(estimatedT, navAccStd, color=[0.5,0.5,0.5], label='acceleration std dev',ls='dotted', lw=lineWeight,)
+        accelerationAxis.plot(estimatedT, -navAccStd, color=[0.5,0.5,0.5],ls='dotted', lw=lineWeight,)
+        accelerationAxis.legend()
+        if scaleByStdDev:
+            myStdDev = np.std(trueAcc-navAcc)
+            myMean = np.mean(trueAcc-navAcc)
+            accelerationAxis.set_ylim([-scaleByStdDev*myStdDev + myMean, scaleByStdDev*myStdDev + myMean])
+        plt.grid()
         if saveOutput:
-            mpld3.save_html(accelerationFigure, outputDir + '/acceleration.html')
+            if outputFormat == 'HTML':
+                mpld3.save_html(plt.gcf(), outputDir + '/acceleration.html')
+            elif outputFormat == 'SVG':
+                plt.savefig(outputDir + '/acceleration.svg')
             # plt.close(velocityFigure)
         # else:
         plt.show(block=False)
-        figureDict['accelerationFigure'] = accelerationFigure
+        axisDict['accelerationAxis'] = accelerationAxis
         
         # figureDict = {
         #     'tdoaFigure': tdoaFigure,
@@ -260,7 +475,54 @@ def outputPlots(
         #     'accelerationFigure': accelerationFigure
         # }
 
-    return(figureDict)
+    return(axisDict,legendDict)
+
+def createResultsHeader(
+        resultsDict
+):
+    myTableString = (
+        r'\begin{tabular}{%' + '\n' +
+        r'>{\raggedright}p{0.15\columnwidth}%' + '\n' +
+        r'>{\raggedright}p{0.25\columnwidth}%' + '\n' +
+        r'>{\raggedright}p{0.15\columnwidth}%' + '\n' +
+        r'>{\raggedright}p{0.2\columnwidth}%' + '\n' +
+        r'p{0.15\columnwidth}}%' + '\n'
+    )
+
+    myTableString += r'\multirow{2}{*}{Target object} & '
+    
+    myTableString += (
+        r'\multirow{2}{0.25\columnwidth}{' +
+        r'Range estimate error standard deviation (' +
+        resultsDict['estimatedPosStdDev_calc']['unit'] +
+        ')} & '
+    )
+
+    myTableString += r'\multicolumn{3}{c}{Attitude estimate error standard deviation (' + resultsDict['estimatedAttitudeSigma_DEG']['unit'] + r')} \\' + '\n'
+
+    myTableString += r'\cmidrule(l){3-5}' + '\n'
+    myTableString += r'& &  roll & pitch & yaw\\' + '\n'
+    myTableString += r'\midrule\\' + '\n'
+    return (myTableString)
+
+def addResultsToTable(
+        resultsDict, inputs, header
+):
+    
+    if 'pulsarName' in resultsDict:
+        header += resultsDict['pulsarName'] + r' & '
+    else:  
+        header += inputs['parameters']['filesAndDirs']['targetObject']['value'] + r' & '
+      
+    header += r'\multirow{2}{*}{%.2e} &' %resultsDict['estimatedPosStdDev_calc']['value']
+    header += r'\multirow{2}{*}{%.2e} &' %(np.std(resultsDict['attitudeError_DEG']['value'][0]) + np.abs(np.mean(resultsDict['attitudeError_DEG']['value'][0])))
+    header += r'\multirow{2}{*}{%.2e} &' %(np.std(resultsDict['attitudeError_DEG']['value'][1]) + np.abs(np.mean(resultsDict['attitudeError_DEG']['value'][1])))
+    header += r'\multirow{2}{*}{%.2e}' %(np.std(resultsDict['attitudeError_DEG']['value'][2]) + np.abs(np.mean(resultsDict['attitudeError_DEG']['value'][2])))
+    header += r'\\'
+    header += '\n'
+    header += r' (Obs. ID %i)& & & &\\' %inputs['parameters']['filesAndDirs']['observationID']['value']
+    header += '\n'
+    return header
 
 
 def createResultsDict(
@@ -270,6 +532,7 @@ def createResultsDict(
         tdoa,
         attitude,
         velocityOnlyRangeTruncated,
+        pulsarName,
         attitudePO=None,
         useINF=False,
         saveOutput=True,
@@ -483,6 +746,7 @@ def createResultsDict(
         'comment': 'Time',
         'unit': 's'
     }
+    resultsDict['pulsarName'] = pulsarName
     
     if saveOutput:
         pickle.dump( resultsDict, open( outputDir + "/data.p", "wb" ) )

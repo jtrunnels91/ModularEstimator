@@ -256,8 +256,8 @@ def buildAttitudeSubstate(
         np.array(
             [
                 np.random.normal(0, scale=initialAttitudeStdDevRoll),
-                np.random.normal(0, scale=initialAttitudeStdDevRA),
-                np.random.normal(0, scale=initialAttitudeStdDevDEC)
+                np.random.normal(0, scale=initialAttitudeStdDevDEC),
+                np.random.normal(0, scale=initialAttitudeStdDevRA)
             ]
         ) 
     )
