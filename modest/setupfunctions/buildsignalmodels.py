@@ -62,7 +62,7 @@ def buildStaticSources(
     pointSources = utils.accessPSC.localCatalog_coneSearch(
         RA={'value': startingRA, 'unit': 'rad'},
         DEC={'value': startingDEC, 'unit': 'rad'},
-        FOV={'value': mySpacecraft.detector.FOV*2, 'unit': 'degrees'},
+        FOV={'value': mySpacecraft.detector.FOV, 'unit': 'degrees'},
         catalogName=traj.filesAndDirs.pointSourceCatalog.value,
         removeNaNs=False,
         fluxKey=myFluxKey,

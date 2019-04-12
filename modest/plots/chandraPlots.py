@@ -41,7 +41,7 @@ def outputPlots(
         legendBorderPad=2,
         outputFormat='HTML',
         clearOldPlot=True,
-        placeLegend=True,
+        placeLegend=False,
         colorCounter=0
 ):
     print()
@@ -51,13 +51,16 @@ def outputPlots(
     print()
     legendDict = {}
 
+    if axisDict == None:
+        axisDict = {}
+
     if saveOutput and outputFormat == 'SVG':
         mp.rcParams['svg.fonttype'] = 'none'
         mp.rcParams['axes.unicode_minus'] = False
         plt.rc('text', usetex=False)
 
     if axisDict is None or 'attAxis' not in axisDict:
-        plt.figure(figsize=(16,9))
+        attitudeFigure=plt.figure(figsize=(16,9))
         print("generating new attitude figure")
         if placeLegend:
             rollAxis = plt.subplot2grid((3,4), (0,0),colspan=3)
@@ -290,7 +293,7 @@ def outputPlots(
     plt.show(block=False)
     
     if axisDict is None or 'tdoaAxis' not in axisDict:
-        plt.figure(figsize=(16,9))
+        tdoaFigure=plt.figure(figsize=(16,9))
         tdoaAxis = plt.gca()
     else:
         tdoaAxis = axisDict['tdoaAxis']
@@ -386,15 +389,14 @@ def outputPlots(
         # plt.close(tdoaFigure)
     plt.show(block=False)
     
-    axisDict = {
-        'tdoaAxis': tdoaAxis,
-        'attAxis': {'roll': rollAxis, 'pitch': pitchAxis, 'yaw': yawAxis}
-    }
+    axisDict['tdoaAxis'] = tdoaAxis
+    axisDict['attAxis'] = {'roll': rollAxis, 'pitch': pitchAxis, 'yaw': yawAxis}
+
     
     velocityFigure = None
     if not np.any(navVel==None):
         if axisDict is None or 'velocityAxis' not in axisDict:
-            plt.figure(figsize=(16,9))
+            velocityFigure=plt.figure(figsize=(16,9))
             velocityAxis = plt.gca()
         else:
             velocityAxis = axisDict['velocityAxis']
@@ -433,7 +435,7 @@ def outputPlots(
         
     if not np.any(navAcc==None):
         if axisDict is None or 'accelerationAxis' not in axisDict:
-            plt.figure(figsize=(16,9))
+            accelerationFigure=plt.figure(figsize=(16,9))
             accelerationAxis = plt.gca()
         else:
             accelerationAxis = axisDict['accelerationAxis']
@@ -457,7 +459,7 @@ def outputPlots(
             myStdDev = np.std(trueAcc-navAcc)
             myMean = np.mean(trueAcc-navAcc)
             accelerationAxis.set_ylim([-scaleByStdDev*myStdDev + myMean, scaleByStdDev*myStdDev + myMean])
-        plt.grid()
+        accelerationAxis.grid()
         if saveOutput:
             if outputFormat == 'HTML':
                 mpld3.save_html(plt.gcf(), outputDir + '/acceleration.html')

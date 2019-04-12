@@ -180,6 +180,7 @@ class Attitude(substate.SubState):
 
             # NOTE: The pyquaternion library uses backward notation from what is given in Markley and Crassidia.  So this is equivalent to q^+ = dq * qHat
             qPlus = self.qHat * errorQ 
+            #qPlus = errorQ  * self.qHat
             qPlus = qPlus.normalised
 
             self.qHat = qPlus
@@ -638,7 +639,6 @@ class Attitude(substate.SubState):
         # while np.abs(decDiff) > np.pi/2:
         #     decDiff = decDiff - np.pi*np.sign(decDiff)/2
 
-        
         raDiff = sourceRaLocal
         decDiff = sourceDecLocal
         
@@ -677,6 +677,18 @@ class Attitude(substate.SubState):
                 [-raDiff, 1, 0]
             ]
         )
+        H = np.array(
+            [
+                [predictedDec, 0, -1],
+                [-predictedRa, 1, 0]
+            ]
+        )
+        # H = np.array(
+        #     [
+        #         [-decDiff, 0, 1],
+        #         [raDiff, 1, 0]
+        #     ]
+        # )
         # print(H)
         
 
