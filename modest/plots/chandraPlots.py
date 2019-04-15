@@ -522,7 +522,19 @@ def addResultsToTable(
     header += r'\multirow{2}{*}{%.2e}' %(np.std(resultsDict['attitudeError_DEG']['value'][2]) + np.abs(np.mean(resultsDict['attitudeError_DEG']['value'][2])))
     header += r'\\'
     header += '\n'
-    header += r' (Obs. ID %i)& & & &\\' %inputs['parameters']['filesAndDirs']['observationID']['value']
+    if isinstance(inputs['parameters']['filesAndDirs']['observationID']['value'], list):
+        header += r' (Obs. ID '
+        firstObs = True
+        for obsID in inputs['parameters']['filesAndDirs']['observationID']['value']:
+            if not firstObs:
+                header+=', '
+                firstObs = False
+            header+= r'%i' %obsID
+            
+        header += r')& & & &\\'
+        
+    else:
+        header += r' (Obs. ID %i)& & & &\\' %inputs['parameters']['filesAndDirs']['observationID']['value']
     header += '\n'
     return header
 

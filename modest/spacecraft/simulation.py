@@ -181,3 +181,18 @@ class SimulatedDynamics():
                 ]
             )
         )
+
+    def acceleration(
+            self,
+            t
+    ):
+        return(
+            np.power(self.orbitAmplitude/self.orbitPeriod, 2) *
+            np.array([
+                np.sin(t/self.orbitPeriod),
+                -np.cos(t/self.orbitPeriod),
+                0 * t
+                ]
+            )
+        )
+        

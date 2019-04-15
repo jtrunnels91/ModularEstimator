@@ -2,7 +2,8 @@ from astropy.io import fits
 from pint import UnitRegistry
 import numpy as np
 from scipy.interpolate import interp1d
-
+import os
+import fnmatch
 from .. import utils
 
 planetaryMasses = {
@@ -21,35 +22,81 @@ planetaryMasses = {
 class Chandra():
     def __init__(
             self,
-            eventsFile,
-            ephemerisFile,
-            aspectFile,
-            gyroFile,
+            # eventsFile,
+            # ephemerisFile,
+            # aspectFile,
+            # gyroFile,
             userData,
             ureg,
             tStartOffset=0
     ):
+
+        ##########################################################
+        #
+        # Load file names
+        #
+        ##########################################################
+        
+        obsIDList = userData.filesAndDirs.observationID.value
+
+        if not isinstance(obsIDList, list):
+            obsIDList = [obsIDList]
+
+        ephemFileList = []
+        eventsFileList = []
+        aspectFileList = []
+        gyroFileList = []
+        
+        for obsID in obsIDList:
+            
+            FITSDirectory = (
+                userData.filesAndDirs.baseDirectory.value +
+                userData.filesAndDirs.chandraDirectory.value +
+                ('%05d/' % obsID)
+            )
+
+            for file in (
+                    os.listdir(FITSDirectory + 'primary/') +
+                    os.listdir(FITSDirectory + 'supporting/')
+            ):
+                if fnmatch.fnmatch(file, '*eph1.fits'):
+                    if file not in [ephemFile.split('/')[-1] for ephemFile in ephemFileList]:
+                        ephemFileList.append(FITSDirectory + 'primary/' + file)
+                elif fnmatch.fnmatch(file, '*evt2.fits'):
+                    if file not in [eventFile.split('/')[-1] for eventFile in eventsFileList]:
+                        eventsFileList.append(FITSDirectory + 'primary/' + file)
+                        
+                elif fnmatch.fnmatch(file, '*asol1.fits'):
+                    if file not in [aspectFile.split('/')[-1] for aspectFile in aspectFileList]:
+                        aspectFileList.append(FITSDirectory + 'primary/' + file)
+                        
+                elif fnmatch.fnmatch(file, '*gdat1.fits'):
+                    if file not in [gyroFile.split('/')[-1] for gyroFile in gyroFileList]:
+                        gyroFileList.append(FITSDirectory + 'supporting/' + file)
+                        
+        
         self.detector = ChandraDetector(
-            eventsFile,
+            eventsFileList,
             userData,
             ureg
         )
         
-        aspecthdulist = fits.open(aspectFile)
-        self.aspectData = aspecthdulist[1]
+        # aspecthdulist = fits.open(aspectFileList[0])
+        # self.aspectData = aspecthdulist[1]
 
-        gyrohdulist = fits.open(gyroFile)
-        self.gyroData = gyrohdulist[1]
+        # gyrohdulist = fits.open(gyroFileList[0])
+        # self.gyroData = gyrohdulist[1]
 
-        ephemhdulist = fits.open(ephemerisFile)
-        self.ephemData = ephemhdulist[1]
+        # ephemhdulist = fits.open(ephemFileList[0])
+        # self.ephemData = ephemhdulist[1]
 
         self.tStart = self.detector.getPhotonMeasurement(0)['t']['value'] + tStartOffset
-
+        self.tStart = self.detector.extractedPhotonEvents['Time'][0] + tStartOffset
+        
         self.dynamics = ChandraDynamics(
-            ephemerisFile,
-            aspectFile,
-            gyroFile,
+            ephemFileList,
+            aspectFileList,
+            gyroFileList,
             userData,
             ureg,
             self.tStart
@@ -60,14 +107,15 @@ class Chandra():
 class ChandraDetector():
     def __init__(
             self,
-            eventsFile,
+            eventsFileList,
             userData,
             ureg
     ):
+        self.eventsList = []
+        self.photonEventsHeader = None
         # Import Detector Information
-        photonHDUList = fits.open(eventsFile)
-        self.photonEvents = photonHDUList[1]
-        self.photonEventsHeader = photonHDUList[1].header
+        with fits.open(eventsFileList[0]) as photonHDUList: 
+            self.photonEventsHeader = photonHDUList[1].header
         
         self.Name = self.photonEventsHeader['detnam']
         
@@ -107,7 +155,7 @@ class ChandraDetector():
         
         self.timeOfArrivalUnits = ureg(utils.accessPSC.getHeaderInfo(
             'time',
-            self.photonEvents.header
+            self.photonEventsHeader
         )['unit'])
         """
         Photon time-of-arrival units
@@ -207,15 +255,39 @@ class ChandraDetector():
         self.TOA_var = np.square(self.TOA_StdDev)
 
         self.extractedPhotonEvents = {
-            self.photonXKey: self.photonEvents.data[self.photonXKey],
-            self.photonYKey: self.photonEvents.data[self.photonYKey],
-            self.photonEnergyKey: self.photonEvents.data[self.photonEnergyKey],
-            'Time': self.photonEvents.data['Time']
-            }
+            self.photonXKey: [],
+            self.photonYKey: [],
+            self.photonEnergyKey: [],
+            'Time': []
+        }
+
+        for eventsFile in eventsFileList:
+            with fits.open(eventsFile) as photonHDUList: 
+                photonEvents = photonHDUList[1]
+
+                self.extractedPhotonEvents[self.photonXKey] = np.append(
+                    self.extractedPhotonEvents[self.photonXKey],
+                    photonEvents.data[self.photonXKey]
+                )
+
+                self.extractedPhotonEvents[self.photonYKey] = np.append(
+                    self.extractedPhotonEvents[self.photonYKey],
+                    photonEvents.data[self.photonYKey]
+                )
+
+                self.extractedPhotonEvents[self.photonEnergyKey] = np.append(
+                    self.extractedPhotonEvents[self.photonEnergyKey],
+                    photonEvents.data[self.photonEnergyKey]
+                )
+
+                self.extractedPhotonEvents['Time'] = np.append(
+                    self.extractedPhotonEvents['Time'],
+                    photonEvents.data['Time']
+                )
 
         self.photonEventCount = len(self.extractedPhotonEvents['Time'])
         self.targetObject = self.photonEventsHeader['OBJECT']
-        photonHDUList.close()
+        # photonHDUList.close()
 
         return
     
@@ -260,9 +332,9 @@ class ChandraDetector():
 class ChandraDynamics():
     def __init__(
             self,
-            ephemFile,
-            aspectFile,
-            gyroFile,
+            ephemFileList,
+            aspectFileList,
+            gyroFileList,
             userData,
             ureg,
             tStart
@@ -279,15 +351,16 @@ class ChandraDynamics():
                            'Neptune Barycenter']
         
         self.tStart=tStart
-        # Import data
-        aspecthdulist = fits.open(aspectFile)
-        aspectData = aspecthdulist[1]
+        
+        # Import data, starting with first file
+        with fits.open(aspectFileList[0]) as aspecthdulist:
+            aspectData = aspecthdulist[1]
 
-        gyrohdulist = fits.open(gyroFile)
-        gyroData = gyrohdulist[1]
+        with fits.open(gyroFileList[0]) as gyrohdulist:
+            gyroData = gyrohdulist[1]
 
-        ephemhdulist = fits.open(ephemFile)
-        ephemData = ephemhdulist[1]
+        with fits.open(ephemFileList[0]) as ephemhdulist:
+            ephemData = ephemhdulist[1]
 
         # Import units from header files for aspect and gyro data, create conversion factors
         self.recordedRAUnits = ureg(
@@ -342,22 +415,76 @@ class ChandraDynamics():
         )
         self.eventTimeConversionFactor = self.ephemTimeUnits.to(ureg('day')).magnitude
 
+        aspectTime = []
+        aspectRoll = []
+        aspectDEC = []
+        aspectRA = []
+        
+        for aspectFile in aspectFileList:
+            with fits.open(aspectFile) as aspecthdulist:
+                aspectData = aspecthdulist[1].data
+            
+                aspectTime = np.append(aspectTime, aspectData['time'])
+            
+                aspectRoll = np.append(aspectRoll, aspectData['roll'])
+                aspectDEC = np.append(aspectDEC, aspectData['dec'])
+                aspectRA = np.append(aspectRA, aspectData['ra'])
 
+        gyroTime = []
+        gyroX = []
+        gyroY = []
+        gyroZ = []
+        for gyroFile in gyroFileList:
+            with fits.open(gyroFile) as gyrohdulist:
+                gyroData = gyrohdulist[1].data
+            
+                gyroTime = np.append(gyroTime, gyroData['time'])
+
+                gyroX = np.append(gyroX, gyroData['scratcor'][:,0])
+                gyroY = np.append(gyroY, gyroData['scratcor'][:,1])
+                gyroZ = np.append(gyroZ, gyroData['scratcor'][:,2])
+            
+        ephemTime = []
+        ephemX = []
+        ephemY = []
+        ephemZ = []
+
+        ephemVX = []
+        ephemVY = []
+        ephemVZ = []
+
+        for ephemFile in ephemFileList:
+            with fits.open(ephemFile) as ephemhdulist:
+                ephemData = ephemhdulist[1].data
+
+                ephemTime = np.append(ephemTime, ephemData['time'])
+                
+                ephemX = np.append(ephemX, ephemData['X'])
+                ephemY = np.append(ephemY, ephemData['Y'])
+                ephemZ = np.append(ephemZ, ephemData['Z'])
+
+                ephemVX = np.append(ephemVX, ephemData['VX'])
+                ephemVY = np.append(ephemVY, ephemData['VY'])
+                ephemVZ = np.append(ephemVZ, ephemData['VZ'])
+                
         # Define a series of interpolation functions to access position,
         # velocity, angles and angular velocity
-        self.chandraX = interp1d(ephemData.data['time'],ephemData.data['X'])
-        self.chandraY = interp1d(ephemData.data['time'],ephemData.data['Y'])
-        self.chandraZ = interp1d(ephemData.data['time'],ephemData.data['Z'])
-        self.chandraVX = interp1d(ephemData.data['time'],ephemData.data['vX'])
-        self.chandraVY = interp1d(ephemData.data['time'],ephemData.data['vY'])
-        self.chandraVZ = interp1d(ephemData.data['time'],ephemData.data['vZ'])
+        self.chandraX = interp1d(ephemTime,ephemX)
+        self.chandraY = interp1d(ephemTime,ephemY)
+        self.chandraZ = interp1d(ephemTime,ephemZ)
+        
+        self.chandraVX = interp1d(ephemTime,ephemVX)
+        self.chandraVY = interp1d(ephemTime,ephemVY)
+        self.chandraVZ = interp1d(ephemTime,ephemVZ)
 
-        self.chandraRoll = interp1d(aspectData.data['time'],aspectData.data['roll'])
-        self.chandraDEC = interp1d(aspectData.data['time'],aspectData.data['dec'])
-        self.chandraRA = interp1d(aspectData.data['time'],aspectData.data['ra'])
-        self.chandraOmegaX = interp1d(gyroData.data['time'],gyroData.data['scratcor'][:,0])
-        self.chandraOmegaY = interp1d(gyroData.data['time'],gyroData.data['scratcor'][:,1])
-        self.chandraOmegaZ = interp1d(gyroData.data['time'],gyroData.data['scratcor'][:,2])
+        self.chandraRoll = interp1d(aspectTime, aspectRoll)
+        self.chandraDEC = interp1d(aspectTime, aspectDEC)
+        self.chandraRA = interp1d(aspectTime, aspectRA)
+
+    
+        self.chandraOmegaX = interp1d(gyroTime,gyroX)
+        self.chandraOmegaY = interp1d(gyroTime,gyroY)
+        self.chandraOmegaZ = interp1d(gyroTime,gyroZ)
 
         self.timeObjType = type(self.chandraTimeToTimeScaleObj(self.tStart))
         return
