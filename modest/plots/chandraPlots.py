@@ -286,7 +286,7 @@ def outputPlots(
     
     if saveOutput:
         if outputFormat == 'HTML':
-            mpld3.save_html(plt.gcf(), outputDir + '/attitude.html')
+            mpld3.save_html(rollAxis.get_figure(), outputDir + '/attitude.html')
         elif outputFormat == 'SVG':
             plt.savefig(outputDir + '/acceleration.svg')
             
@@ -383,7 +383,7 @@ def outputPlots(
     tdoaAxis.grid()
     if saveOutput:
         if outputFormat == 'HTML':
-            mpld3.save_html(plt.gcf(), outputDir + '/tdoa.html')
+            mpld3.save_html(tdoaAxis.get_figure(), outputDir + '/tdoa.html')
         elif outputFormat == 'SVG':
             plt.savefig(outputDir + '/tdoa.svg')
         # plt.close(tdoaFigure)
@@ -424,7 +424,7 @@ def outputPlots(
 
         if saveOutput:
             if outputFormat == 'HTML':
-                mpld3.save_html(plt.gcf(), outputDir + '/velocity.html')
+                mpld3.save_html(velocityAxis.get_figure(), outputDir + '/velocity.html')
             elif outputFormat == 'SVG':
                 plt.savefig(outputDir + '/velocity.svg')
             # plt.close(velocityFigure)
@@ -462,7 +462,7 @@ def outputPlots(
         accelerationAxis.grid()
         if saveOutput:
             if outputFormat == 'HTML':
-                mpld3.save_html(plt.gcf(), outputDir + '/acceleration.html')
+                mpld3.save_html(accelerationAxis.get_figure(), outputDir + '/acceleration.html')
             elif outputFormat == 'SVG':
                 plt.savefig(outputDir + '/acceleration.svg')
             # plt.close(velocityFigure)
