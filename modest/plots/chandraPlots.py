@@ -261,9 +261,15 @@ def outputPlots(
         myMean = np.mean(yawError)
         yawAxis.set_ylim([-scaleByStdDev*myStdDev + myMean, scaleByStdDev*myStdDev + myMean])
     # plt.subplots_adjust(hspace=.5)
-    rollAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%0.0e'))
-    pitchAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%0.0e'))
-    yawAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%0.0e'))
+
+
+    rollAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%0.e'))
+    pitchAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%0.e'))
+    yawAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%0.e'))
+
+    rollAxis.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0.e'))
+    pitchAxis.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0.e'))
+    yawAxis.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0.e'))
     plt.tight_layout()
 
     if placeLegend:
@@ -310,7 +316,7 @@ def outputPlots(
         lw=lineWeight
     )
     legendLineList.append(tdoaLine)
-    legendLabelList.append(r'range error (\$\sigma=%s\$)'%estimatedPosStdDev_calc)
+    legendLabelList.append(r'range error (\$\sigma=%.2f\$)'%estimatedPosStdDev_calc)
 
     sigmaLine, = tdoaAxis.plot(
         estimatedT,
@@ -329,6 +335,8 @@ def outputPlots(
         ls='dotted',
         lw=lineWeight        
     )
+    tdoaAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%0.e'))
+    tdoaAxis.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0.e'))
 
 
     # if useINF:
