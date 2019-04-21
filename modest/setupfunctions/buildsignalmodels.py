@@ -24,14 +24,20 @@ def buildPulsarModel(
     )
 
     try:
-        myPulsarObject = pulsarObjectDict[
-            mySpacecraft.detector.targetObject.strip('PSR').strip(' ')
-        ]
+        try:
+            myPulsarObject = pulsarObjectDict[
+                mySpacecraft.detector.targetObject.strip('PSR').strip(' ')
+            ]
+        except:
+            myPulsarObject = pulsarObjectDict[
+                traj.filesAndDirs.tarjetObject.value
+            ]
     except:
         myPulsarObject = pulsarObjectDict[
-            traj.filesAndDirs.targetObject.value
-        ]    
-        myPulsarObject.lastTime = mySpacecraft.tStart
+            traj.simulation.pulsarName.value
+        ]
+    
+    myPulsarObject.lastTime = mySpacecraft.tStart
     if traj.attitudeFilter.probabilityMeasMat.value == 'unitVec':
         myPulsarObject.useUnitVector = True
     else:

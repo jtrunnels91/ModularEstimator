@@ -487,6 +487,80 @@ def outputPlots(
 
     return(axisDict,legendDict)
 
+def createStdDevHeader(
+        inputRecord,
+):
+    
+    myTableString = (
+        r'\begin{tabular}{%' + '\n' +
+        r'>{\raggedright}p{0.15\textwidth}%' + '\n' +
+        r'>{\raggedright}p{0.2\textwidth}%' + '\n' +
+        r'>{\raggedright}p{0.2\textwidth}%' + '\n' +
+        r'>{\raggedright}p{0.1\textwidth}%' + '\n' +
+        r'>{\raggedright}p{0.1\textwidth}%' + '\n' +
+        r'p{0.1\textwidth}}%' + '\n'
+    )
+    
+    myTableString += r'\multirow{2}{*}{Target object} & '
+    
+    myTableString += (
+        r'\multirow{2}{0.2\textwidth}{' +
+        r'Initial velocity error  (' +
+        inputRecord.parameters['parameters']['correlationFilter']['internalNavFilter']['initialVelocityStdDev']['unit'] +
+        ')} & '
+    )
+
+    myTableString += (
+        r'\multirow{2}{0.2\textwidth}{' +
+        r'Angular velocity error (' +
+        inputRecord.parameters['parameters']['dynamicsModel']['omegaStdDev']['unit'] +
+        ')} & '
+    )
+    
+    myTableString += r'\multicolumn{3}{c}{Initial attitude (' + inputRecord.parameters['parameters']['dynamicsModel']['initialAttitudeStdDev']['DEC']['unit'] + r')} \\' + '\n'
+
+    myTableString += r'\cmidrule(l){4-6}' + '\n'
+    myTableString += r'& & & roll & pitch & yaw\\' + '\n'
+    myTableString += r'\midrule\\' + '\n'
+    return (myTableString)
+
+def addInputToTable(
+        resultsDict,        
+        inputRecord,
+        header
+): 
+    if 'pulsarName' in resultsDict:
+        header += resultsDict['pulsarName'] + r' & '
+    else:  
+        header += inputRecord['parameters']['filesAndDirs']['targetObject']['value'] + r' & '
+      
+    header += r'\multirow{2}{*}{%.2e} &' %inputRecord['parameters']['correlationFilter']['internalNavFilter']['initialVelocityStdDev']['value']
+    
+    header += r'\multirow{2}{*}{%.2e} &' %inputRecord['parameters']['dynamicsModel']['omegaStdDev']['value']
+    
+    header += r'\multirow{2}{*}{%.2e} &' %(inputRecord['parameters']['dynamicsModel']['initialAttitudeStdDev']['roll']['value'])
+    header += r'\multirow{2}{*}{%.2e} &' %(inputRecord['parameters']['dynamicsModel']['initialAttitudeStdDev']['DEC']['value'])
+    header += r'\multirow{2}{*}{%.2e}' %(inputRecord['parameters']['dynamicsModel']['initialAttitudeStdDev']['RA']['value'])
+    
+    header += r'\\'
+    header += '\n'
+    if isinstance(inputRecord['parameters']['filesAndDirs']['observationID']['value'], list):
+        header += r' (Obs. ID '
+        firstObs = True
+        for obsID in inputRecord['parameters']['filesAndDirs']['observationID']['value']:
+            if not firstObs:
+                header+=', '
+            firstObs = False
+            header+= r'%i' %obsID
+            
+        header += r')& & & & &\\'
+        
+    else:
+        header += r' (Obs. ID %i)& & & & &\\' %inputRecord['parameters']['filesAndDirs']['observationID']['value']
+    header += '\n'
+    return header
+   
+
 def createResultsHeader(
         resultsDict
 ):
@@ -536,7 +610,7 @@ def addResultsToTable(
         for obsID in inputs['parameters']['filesAndDirs']['observationID']['value']:
             if not firstObs:
                 header+=', '
-                firstObs = False
+            firstObs = False
             header+= r'%i' %obsID
             
         header += r')& & & &\\'

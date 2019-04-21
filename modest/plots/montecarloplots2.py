@@ -8,7 +8,10 @@ def plotMCResults(
         ordinateDict,
         plotType='line',
         axis=None,
-        includeOnly=None
+        includeOnly=None,
+        color=None,
+        lineStyle='-',
+        marker='o'
 ):
 
     if axis is None:
@@ -53,7 +56,13 @@ def plotMCResults(
                 ordinateUnits = ordinateValue['unit']
     if 'function' in ordinateDict:
         for abscissa, ordinate in abscissaOrdinateValues.items():
-            ordinate = getattr(np,ordinateDict['function'])(ordinate)
+            if ordinateDict['function'] == 'std + mean':
+                # print(np.std(ordinate))
+                ordinate = np.std(ordinate) + np.abs(np.mean(ordinate))
+                # print(ordinate)                
+                
+            else:
+                ordinate = getattr(np,ordinateDict['function'])(ordinate)
             abscissaOrdinateValues[abscissa] = ordinate
     abscissaOrdinateList = [(abscissa, ordinate) for abscissa, ordinate in abscissaOrdinateValues.items()]
 
@@ -61,14 +70,21 @@ def plotMCResults(
     abscissaList = [abscissa for abscissa, ordinate in abscissaOrdinateList]
     ordinateList = [ordinate for abscissa, ordinate in abscissaOrdinateList]
 
-    
+        
     if plotType == 'line':
-        myLine = axis.plot(abscissaList, ordinateList)
+        if color:
+            myLine = axis.plot(abscissaList, ordinateList, color=color,lw=4, ls=lineStyle, marker=marker)
+        else:
+            myLine = axis.plot(abscissaList, ordinateList)
         myLabel = ordinateDict['label']
     elif plotType == 'scatter':
         for counter in range(len(abscissaList)):
             abscissaList[counter] = np.ones(len(ordinateList[counter])) * abscissaList[counter]
-        myLine = axis.scatter(abscissaList, ordinateList)
+        print(len(abscissaList))
+        if color:
+            myLine = axis.scatter(abscissaList, ordinateList, color=color)
+        else:
+            myLine = axis.scatter(abscissaList, ordinateList, color=color)
         myLabel = ordinateDict['label']
 
     return {

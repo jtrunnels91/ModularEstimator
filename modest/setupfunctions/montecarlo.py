@@ -82,7 +82,7 @@ def executeSimulation(
             )
     else:
         if useMultiProcessing:
-            myPool = mp.Pool(mp.cpu_count())
+            myCPUCount = mp.cpu_count()
             myParameterList = []
         
         for subval in value:
@@ -131,26 +131,34 @@ def executeSimulation(
                         myPickle
                     )
         if useMultiProcessing:
-            newResults = myPool.map(myFunction, myParameterList)
-            newResults = [
-                {
-                    'parameters': parameter.toDict(),
-                    'results': result
-                }
-                for parameter, result in zip(myParameterList,newResults)
-            ]
-            resultList = resultList + newResults
-            
-            myPool.close()
-            myPool.join()
-            with open( outputFileName, "wb" ) as myPickle:
-                pickle.dump(
+            currentRunNumber = 0
+            while myParameterList:
+                print("Starting sub runs %i through %i" %(currentRunNumber,currentRunNumber + myCPUCount-1))
+                myPool = mp.Pool(mp.cpu_count())
+                
+                currentRunNumber += myCPUCount
+                currentParameterList = myParameterList[:myCPUCount]
+                myParameterList = myParameterList[myCPUCount:]
+                newResults = myPool.map(myFunction, currentParameterList)
+                newResults = [
                     {
-                        'results':resultList,
-                        'explorationParameters': totalExplorationParameters
-                    },
-                    myPickle
-                )
+                        'parameters': parameter.toDict(),
+                        'results': result
+                    }
+                    for parameter, result in zip(currentParameterList,newResults)
+                ]
+                resultList = resultList + newResults
+            
+                myPool.close()
+                myPool.join()
+                with open( outputFileName, "wb" ) as myPickle:
+                    pickle.dump(
+                        {
+                            'results':resultList,
+                            'explorationParameters': totalExplorationParameters
+                        },
+                        myPickle
+                    )
             
     return resultList
 

@@ -97,6 +97,7 @@ class SimulatedDynamics():
             userData,
             ureg
             ):
+        self.MJDREF = 58591.50694
         self.__initialAttitudeRotationMatrix__ = None
         # Define a series of functions which describe the dynamics of the spacecraft
         self.angularVelocity = (
