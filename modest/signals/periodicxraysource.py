@@ -1113,7 +1113,9 @@ It is up to the user to verify the validity of the results.
 
                 if attitude is not None:
                     measurementDict.update(
-                        self.generateArrivalVector(attitude(newPhotonArrivalTime), AOA_StdDev)
+                        self.generateArrivalVector(
+                            attitude(newPhotonArrivalTime),
+                            AOA_StdDev=AOA_StdDev)
                     )
                     # measurementDict = {
                     #     't': {'value': newPhotonArrivalTime},

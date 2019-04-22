@@ -709,6 +709,7 @@ class Attitude(substate.SubState):
             [measurement['RA']['var'], 0],
             [0, measurement['DEC']['var']]
         ])
+        
         if np.isscalar(source.extent):
             R = R + np.eye(2) * np.square(source.extent)
         else:
@@ -717,7 +718,6 @@ class Attitude(substate.SubState):
                 [ np.sin(rollEst), np.cos(rollEst)]
             ])
             R = R + RTransform.dot(source.extent).dot(RTransform.transpose())
-        
         measMatrices = {
             'H': H,
             'R': R,

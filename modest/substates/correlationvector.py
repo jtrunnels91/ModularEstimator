@@ -557,7 +557,7 @@ class CorrelationVector(substate.SubState):
                 (
                         np.eye(self.__filterOrder__) * 
                               self.processNoise * dT * 
-                              np.square(self.__trueSignal__.flux * self.__dT__)
+                              np.square(self.__trueSignal__.peakAmplitude * self.__dT__)
                 )
             )
 

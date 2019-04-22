@@ -11,7 +11,8 @@ def plotMCResults(
         includeOnly=None,
         color=None,
         lineStyle='-',
-        marker='o'
+        marker='o',
+        markerSize=2
 ):
 
     if axis is None:
@@ -73,7 +74,7 @@ def plotMCResults(
         
     if plotType == 'line':
         if color:
-            myLine = axis.plot(abscissaList, ordinateList, color=color,lw=4, ls=lineStyle, marker=marker)
+            myLine = axis.plot(abscissaList, ordinateList, color=color,lw=4, ls=lineStyle, marker=marker, ms=markerSize)
         else:
             myLine = axis.plot(abscissaList, ordinateList)
         myLabel = ordinateDict['label']
