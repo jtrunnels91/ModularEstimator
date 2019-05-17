@@ -20,22 +20,23 @@ def buildPulsarModel(
         pulsarCatalogFileName=traj.filesAndDirs.pulsarDataFile.value,
         PARDir=traj.filesAndDirs.ParFileDirectory.value,
         profileDir=traj.filesAndDirs.profileDirectory.value,
-        observatoryMJDREF=mySpacecraft.dynamics.MJDREF
+        observatoryMJDREF=mySpacecraft.dynamics.MJDREF,
+        energyRange=mySpacecraft.detector.energyRange
     )
 
     try:
-        try:
-            myPulsarObject = pulsarObjectDict[
-                mySpacecraft.detector.targetObject.strip('PSR').strip(' ')
-            ]
-        except:
-            myPulsarObject = pulsarObjectDict[
-                traj.filesAndDirs.tarjetObject.value
-            ]
-    except:
         myPulsarObject = pulsarObjectDict[
-            traj.simulation.pulsarName.value
+            mySpacecraft.detector.targetObject.strip('PSR').strip(' ')
         ]
+    except:
+        if 'targetObject' in traj.filesAndDirs:
+            myPulsarObject = pulsarObjectDict[
+                traj.filesAndDirs.targetObject.value
+            ]
+        else:
+            myPulsarObject = pulsarObjectDict[
+                traj.simulation.pulsarName.value
+            ]
     
     myPulsarObject.lastTime = mySpacecraft.tStart
     if traj.attitudeFilter.probabilityMeasMat.value == 'unitVec':

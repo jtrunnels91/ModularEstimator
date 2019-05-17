@@ -10,15 +10,15 @@ orbitPeriod = 10000/(2*np.pi)
 orbitAmplitude = 0
 
 constantVelocity = 1
-constantAcceleration = 0.001
+constantAcceleration = 0.001 * 0
 
 tFinal = 5000
 speedOfLight=299792
-velocityStdDev = 10/speedOfLight
+velocityStdDev = 1/speedOfLight
 vVar = np.square(velocityStdDev)
 nTaps = 5
 aStdDev = 0.001/speedOfLight
-
+aStdDev = 0
 myProfile = './pulsarData/profiles/J0534+2200_profile.txt'
 myPARFile = '/home/joel/Documents/pythonDev/research/pulsarJPDAF/Data/2019_03_15_22h02m05s_chandraPhaseFrequency/ephem_B1509-58_chandra5515.par'
 

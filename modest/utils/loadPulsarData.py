@@ -12,11 +12,15 @@ def loadPulsarData(
         pulsarCatalogFileName='pulsarCatalog.xls',
         PARDir='PAR_files/',
         profileDir='profiles/',
-        observatoryMJDREF=None
+        observatoryMJDREF=None,
+        energyRange=None #Should be in KEV for now
 ):
     if pulsarDir is None:
         pulsarDir = os.path.abspath(os.path.join(os.path.dirname(__file__), '.')) + '/'
-    electronVoltPerPhoton = 6e3  # Electron-Volt x 10^3
+    if energyRange is None:
+        electronVoltPerPhoton = 6e3  # Electron-Volt x 10^3
+    else:
+        electronVoltPerPhoton = 1e3 * (energyRange[1] + energyRange[0])/2
     electronVoltPerErg = 6.242e11
     ergsPerElectronVolt = 1 / electronVoltPerErg
     

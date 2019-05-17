@@ -13,6 +13,38 @@ else:
     timeObj = load.timescale()
     earthObj = planets['earth']
 
+planetaryMasses = { # in kg
+    'Sun': 1.98855e30,
+    'Mercury': 3.301e23,
+    'Venus': 4.867e24,
+    'Earth': 5.972e24,
+    'Moon': 7.346e22,
+    'Mars': 6.417e23,
+    'Jupiter Barycenter': 1.899e27,
+    'Saturn Barycenter': 5.685e26,
+    'Uranus Barycenter': 8.682e25,
+    'Neptune Barycenter': 1.024e26,
+    'Pluto Barycenter': 1.309e22
+}
+
+planetaryRadius = { # in KM
+    'Sun': 695510,
+    'Mercury': 2439,
+    'Venus': 6051,
+    'Earth': 6378,
+    'Moon': 1738,
+    'Mars': 3396,
+    'Jupiter Barycenter': 71492,
+    'Saturn Barycenter': 60268,
+    'Uranus Barycenter': 25559,
+    'Neptune Barycenter': 24764,
+    'Pluto Barycenter': 1195
+}
+
+
+G = 6.67408e-11
+
+    
 def phaseError(estDelay, trueDelay, period):
     if hasattr(estDelay, '__len__'):
         error = np.zeros(len(estDelay))
@@ -312,3 +344,83 @@ def sigmaDeltaT_Theoretical(period,
     # )
 
     return pulseWidth / (2 * SNR)
+
+    
+
+def acceleration(position, tCurrent=None):
+    if not tCurrent:
+        tCurrent = timeObj.now()
+    acceleration = np.zeros(3)
+    for planetName in planetaryMasses.keys():
+        # Get the current position of the planet
+        planetPosition = (
+            planets[planetName].at(tCurrent).position.km
+        )
+
+        # Compute the distance between spacecraft and planet, and convert
+        # to meters
+        relativePosition = (planetPosition - position) * 1000.0
+        relativeRange = np.linalg.norm(relativePosition)
+        
+        # Compute these ahead of time to save computation
+        rangePowerMinus3 = np.power(relativeRange, -3)
+        
+        # Compute the acceleration due to gravity contributed by the
+        # current planet, and add it to the overall acceleration vector
+        acceleration = (
+            acceleration +
+            (G * planetaryMasses[planetName] *
+             rangePowerMinus3) * relativePosition / 1000.0
+        )
+    
+    return acceleration
+
+
+def accelerationGradient(position, tCurrent=None):
+    if tCurrent == None:
+        tCurrent = timeObj.now()
+    aGrad = np.zeros([3,3])
+    
+    for planetName in planetaryMasses.keys():
+        GMCurrent = planetaryMasses[planetName] * G
+        # Get the current position of the planet
+        planetPosition = (
+            planets[planetName].at(tCurrent).position.km
+        )
+
+        # Compute the distance between spacecraft and planet, and convert
+        # to meters
+        relativePosition = (position - planetPosition) * 1000.0
+        relativeRange = np.linalg.norm(relativePosition)
+
+        # Compute these ahead of time to save computation
+        rangePowerMinus3 = np.power(relativeRange, -3)
+        rangePowerMinus5 = np.power(relativeRange, -5)
+
+        aGrad[0, 0] += (
+            (3 * np.square(relativePosition[0]) * rangePowerMinus5) - rangePowerMinus3
+        ) * GMCurrent
+        aGrad[0, 1] += (
+            3 * relativePosition[0]*relativePosition[1] * rangePowerMinus5
+        ) * GMCurrent
+        aGrad[0, 2] += (
+            3 * relativePosition[0]*relativePosition[2] * rangePowerMinus5
+        ) * GMCurrent
+
+        aGrad[1, 1] += (
+            (3 * np.square(relativePosition[1]) * rangePowerMinus5) - rangePowerMinus3
+        ) * GMCurrent
+        aGrad[1, 2] += (
+            (3 * relativePosition[1]*relativePosition[2] * rangePowerMinus5)
+        ) * GMCurrent
+
+        aGrad[2, 2] += (
+            (3 * np.square(relativePosition[2]) * rangePowerMinus5) - rangePowerMinus3
+        ) * GMCurrent
+
+    aGrad[1, 0] = aGrad[0, 1]
+    aGrad[2, 0] = aGrad[0, 2]
+    aGrad[2, 1] = aGrad[1, 2]
+
+    aGrad = aGrad/1000
+    return aGrad

@@ -126,7 +126,7 @@ def outputPlots(
     legendLabelList = []
     legendLineList = []
         
-    rollAxis.set_title('Roll error, standard dev')
+    rollAxis.set_title(r'Roll error, \$\pm 1 \sigma\$ bounds')
     estLine, = rollAxis.plot(
         estimatedT - estimatedT[0],
         rollError,
@@ -178,7 +178,7 @@ def outputPlots(
     # else:
     #     pitchAxis=plt.subplot2grid((3,1), (1,0))
         
-    pitchAxis.set_title('Pitch error, standard dev')
+    pitchAxis.set_title(r'Pitch error, \$\pm 1 \sigma\$ bounds')
 
     pitchAxis.plot(
         estimatedT-estimatedT[0],
@@ -223,7 +223,7 @@ def outputPlots(
     # else:
     #     yawAxis=plt.subplot2grid((3,1), (2,0))
         
-    yawAxis.set_title('Yaw error, standard dev')
+    yawAxis.set_title(r'Yaw error, \$\pm 1 \sigma\$ bounds')
     yawAxis.plot(
         estimatedT-estimatedT[0],
         yawError,

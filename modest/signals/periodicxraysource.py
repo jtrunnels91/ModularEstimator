@@ -1146,7 +1146,7 @@ It is up to the user to verify the validity of the results.
     def speedOfLight(
             self
     ):
-        return (299792)
+        return (299792.458)
 
     def FWHM(self):
         maxValue = self.profile[0]

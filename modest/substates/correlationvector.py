@@ -622,7 +622,6 @@ class CorrelationVector(substate.SubState):
     def buildDeepTimeUpdateMatrices(self,dT, dynamics, h):
         
         FMatrixShift = -self.peakOffsetFromCenter
-
         filterOrder = self.__filterOrder__
         
         # Initialize empty matricies
@@ -638,30 +637,30 @@ class CorrelationVector(substate.SubState):
             self.peakCenteringDT + self.stateVector[self.__filterOrder__] * dT 
         )
         
-        if self.navVectorLength > 1:
-            # Acceleration term (if acceleration is being estimated)
-            self.peakCenteringDT = (
-                self.peakCenteringDT +
-                self.stateVector[self.__filterOrder__ + 1] * np.power(dT,2)/2
-            )
-            peakShift = (
-                peakShift + self.stateVector[self.__filterOrder__ + 1]*np.power(indexDiff,2)/2
-            )
+        # if self.navVectorLength > 1:
+        #     # Acceleration term (if acceleration is being estimated)
+        #     self.peakCenteringDT = (
+        #         self.peakCenteringDT +
+        #         self.stateVector[self.__filterOrder__ + 1] * np.power(dT,2)/2
+        #     )
+        #     peakShift = (
+        #         peakShift + self.stateVector[self.__filterOrder__ + 1]*np.power(indexDiff,2)/2
+        #     )
             
-        if self.navVectorLength > 2:
-            # Acceleration gradient term
-            self.peakCenteringDT = (
-                self.peakCenteringDT +
-                self.stateVector[self.__filterOrder__] *
-                self.stateVector[self.__filterOrder__ + 2] *
-                np.power(dT,3)/6
-            )
-            peakShift = (
-                peakShift +
-                self.stateVector[self.__filterOrder__] *
-                self.stateVector[self.__filterOrder__ + 2] *
-                np.power(indexDiff,3)/6
-            )
+        # if self.navVectorLength > 2:
+        #     # Acceleration gradient term
+        #     self.peakCenteringDT = (
+        #         self.peakCenteringDT +
+        #         self.stateVector[self.__filterOrder__] *
+        #         self.stateVector[self.__filterOrder__ + 2] *
+        #         np.power(dT,3)/6
+        #     )
+        #     peakShift = (
+        #         peakShift +
+        #         self.stateVector[self.__filterOrder__] *
+        #         self.stateVector[self.__filterOrder__ + 2] *
+        #         np.power(indexDiff,3)/6
+        #     )
             
             
         self.peakCenteringDT = self.peakCenteringDT + (self.peakOffsetFromCenter*self.__dT__)

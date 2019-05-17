@@ -90,6 +90,7 @@ class SimulatedDetector():
             ureg(userData.detector.energyRange.upper.unit)
         ).to(ureg.kiloelectron_volt).magnitude
         self.energyRange = [self.lowerEnergy, self.upperEnergy]
+        self.energyRangeKeV = [self.lowerEnergy, self.upperEnergy]
 
 class SimulatedDynamics():
     def __init__(

@@ -253,6 +253,16 @@ class ChandraDetector():
         self.AOA_xVar = np.square(self.AOA_xStdDev)
         self.AOA_yVar = np.square(self.AOA_yStdDev)
         self.TOA_var = np.square(self.TOA_StdDev)
+        self.lowerEnergy = (
+            userData.detector.energyRange.lower.value *
+            ureg(userData.detector.energyRange.lower.unit)
+        ).to(ureg.kiloelectron_volt).magnitude
+        self.upperEnergy = (
+            userData.detector.energyRange.upper.value *
+            ureg(userData.detector.energyRange.upper.unit)
+        ).to(ureg.kiloelectron_volt).magnitude
+        self.energyRange = [self.lowerEnergy, self.upperEnergy]
+        self.energyRangeKeV = [self.lowerEnergy, self.upperEnergy]
 
         self.extractedPhotonEvents = {
             self.photonXKey: [],
