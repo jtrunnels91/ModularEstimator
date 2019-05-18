@@ -33,24 +33,38 @@ def loadPulsarData(
         pulsarName = pulsarRow['Name']
 
         if (loadPulsarNames is None) or (pulsarName in loadPulsarNames):
-            
-            photonFlux = (
-                pulsarRow['Flux (erg/cm^2/s)'] *
-                electronVoltPerErg / electronVoltPerPhoton
-                ) * detectorArea
-
+            if not np.isnan(pulsarRow['Flux (erg/cm^2/s)']):
+                photonFlux = (
+                    pulsarRow['Flux (erg/cm^2/s)'] *
+                    electronVoltPerErg / electronVoltPerPhoton
+                ) 
+            else:
+                photonFlux = None
+                
             if np.isnan(pulsarRow['useColumn']):
                 useColumn=None
             else:
                 useColumn = pulsarRow['useColumn']
+
+            if not np.isnan(pulsarRow['Pulsed fraction']):
+                pulsedFraction = pulsarRow['Pulsed fraction']/100
+            else:
+                pulsedFraction = None
+            # print("Template string:")
+            # print(pulsarRow['Template'])
+            if isinstance(pulsarRow['Template'], str) or not np.isnan(pulsarRow['Template']):
+                template = pulsarDir + profileDir + pulsarRow['Template']
+            else:
+                template=None
             
             pulsarDict[pulsarName] = signals.PeriodicXRaySource(
-                pulsarDir + profileDir + pulsarRow['Template'],
+                profile=template,
                 PARFile=pulsarDir + PARDir + pulsarRow['PARFile'],
                 avgPhotonFlux=photonFlux,
-                pulsedFraction=pulsarRow['Pulsed fraction']/100,
+                pulsedFraction=pulsedFraction,
                 name=pulsarName,
                 useProfileColumn=useColumn,
-                observatoryMJDREF=observatoryMJDREF
+                observatoryMJDREF=observatoryMJDREF,
+                detectorArea=detectorArea
             )
     return pulsarDict
