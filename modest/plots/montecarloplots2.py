@@ -7,6 +7,9 @@ from .. utils.spacegeometry import sigmaDeltaT_Theoretical
 def stdMean(vals):
     return np.abs(np.mean(vals)) + np.std(vals)
 
+def meanError(vals):
+    return np.mean(np.abs(vals))
+
 def varVar(vals):
     variance = np.var(vals)
     fourthCentral = moment(vals,4)

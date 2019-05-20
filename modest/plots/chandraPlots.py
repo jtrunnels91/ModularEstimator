@@ -42,6 +42,7 @@ def outputPlots(
         outputFormat='HTML',
         clearOldPlot=True,
         placeLegend=False,
+        logErrorPlot=False,
         colorCounter=0
 ):
     print()
@@ -308,10 +309,18 @@ def outputPlots(
     
     if clearOldPlot:
         tdoaAxis.clear()
+
+    propOnlyRange = truePos - (velocityOnlyRange) - truePos[0]
+    rangeError = truePos - estimatedPos
+    if logErrorPlot:
+        tdoaAxis.set_yscale('log')
+        propOnlyRange = np.abs(propOnlyRange)
+        rangeError = np.abs(rangeError)
+        
     
     tdoaLine, = tdoaAxis.plot(
         estimatedT,
-        truePos - estimatedPos,
+        rangeError,
         color=umnSecondaryDark[0+colorCounter],        
         lw=lineWeight
     )
@@ -327,14 +336,15 @@ def outputPlots(
     )
     legendLineList.append(sigmaLine)
     legendLabelList.append(r'estimated standard deviation (\$1\sigma\$)')
-    
-    tdoaAxis.plot(
-        estimatedT,
-        -estimatedPosStdDev,
-        color=stdDevColor,
-        ls='dotted',
-        lw=lineWeight        
-    )
+
+    if not logErrorPlot:
+        tdoaAxis.plot(
+            estimatedT,
+            -estimatedPosStdDev,
+            color=stdDevColor,
+            ls='dotted',
+            lw=lineWeight        
+        )
     tdoaAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%0.e'))
     tdoaAxis.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0.e'))
 
@@ -358,12 +368,11 @@ def outputPlots(
 
     tdoaAxis.set_xlabel('time (s)')
     tdoaAxis.set_ylabel('(km)')
+        
     if plotPropagationError:
         tdoaPropOnlyLine, = tdoaAxis.plot(
             estimatedT,
-            truePos -
-            (velocityOnlyRange)
-            - truePos[0],
+            propOnlyRange,
             color=umnSecondaryDark[1 + colorCounter],
             ls='dashdot',
             lw=lineWeight
@@ -410,10 +419,14 @@ def outputPlots(
             velocityAxis = axisDict['velocityAxis']
         if clearOldPlot:
             velocityAxis.clear()
-        
+        velError = trueVel - navVel
+        if logErrorPlot:
+            velError = np.abs(velError)
+            velocityAxis.set_yscale('log')
+            
         velocityAxis.plot(
             estimatedT,
-            trueVel - navVel,
+            velError,
             label=(
                 r'velocity error (\$\sigma = %s\$)'
                 %np.std(trueVel - navVel)                
@@ -422,7 +435,9 @@ def outputPlots(
             lw=lineWeight
         )
         velocityAxis.plot(estimatedT, navVelStd,ls='dotted', lw=lineWeight, color=[0.5,0.5,0.5], label='velocity std dev')
-        velocityAxis.plot(estimatedT, -navVelStd, color=[0.5,0.5,0.5],ls='dotted', lw=lineWeight,)
+
+        if not logErrorPlot:
+            velocityAxis.plot(estimatedT, -navVelStd, color=[0.5,0.5,0.5],ls='dotted', lw=lineWeight,)
         if scaleByStdDev:
             myStdDev = np.std(trueVel-navVel)
             myMean = np.mean(trueVel-navVel)
@@ -449,10 +464,14 @@ def outputPlots(
             accelerationAxis = axisDict['accelerationAxis']
         if clearOldPlot:
             accelerationAxis.clear()
-        
+        accError = trueAcc - navAcc
+
+        if logErrorPlot:
+            accError = np.abs(accError)
+            accelerationAxis.set_yscale('log')
         accelerationAxis.plot(
             estimatedT,
-            trueAcc - navAcc,
+            accError,
             label=(
                 r'acceleration error (\$\sigma = %s\$)'
                 %np.std(trueAcc - navAcc)
@@ -461,7 +480,8 @@ def outputPlots(
             lw=lineWeight            
         )
         accelerationAxis.plot(estimatedT, navAccStd, color=[0.5,0.5,0.5], label='acceleration std dev',ls='dotted', lw=lineWeight,)
-        accelerationAxis.plot(estimatedT, -navAccStd, color=[0.5,0.5,0.5],ls='dotted', lw=lineWeight,)
+        if not logErrorPlot:
+            accelerationAxis.plot(estimatedT, -navAccStd, color=[0.5,0.5,0.5],ls='dotted', lw=lineWeight,)
         accelerationAxis.legend()
         if scaleByStdDev:
             myStdDev = np.std(trueAcc-navAcc)
