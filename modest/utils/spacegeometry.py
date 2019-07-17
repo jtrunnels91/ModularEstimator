@@ -347,15 +347,22 @@ def sigmaDeltaT_Theoretical(period,
 
     
 
-def acceleration(position, tCurrent=None):
-    if not tCurrent:
+def acceleration(position, tCurrent=None, coordinates='equatorial'):
+    if tCurrent == None:
         tCurrent = timeObj.now()
     acceleration = np.zeros(3)
     for planetName in planetaryMasses.keys():
         # Get the current position of the planet
-        planetPosition = (
-            planets[planetName].at(tCurrent).position.km
-        )
+        if coordinates == 'equatorial':
+            planetPosition = (
+                planets[planetName].at(tCurrent).position.km
+            )
+        elif coordinates == 'ecliptic':
+            planetPosition = (
+                planets[planetName].at(tCurrent).ecliptic_position().km
+            )
+        else:
+            raise ValueError('Unknown coordinate system: %s' %coordinates)
 
         # Compute the distance between spacecraft and planet, and convert
         # to meters
@@ -376,7 +383,7 @@ def acceleration(position, tCurrent=None):
     return acceleration
 
 
-def accelerationGradient(position, tCurrent=None):
+def accelerationGradient(position, tCurrent=None, coordinates='equatorial'):
     if tCurrent == None:
         tCurrent = timeObj.now()
     aGrad = np.zeros([3,3])
@@ -384,9 +391,16 @@ def accelerationGradient(position, tCurrent=None):
     for planetName in planetaryMasses.keys():
         GMCurrent = planetaryMasses[planetName] * G
         # Get the current position of the planet
-        planetPosition = (
-            planets[planetName].at(tCurrent).position.km
-        )
+        if coordinates == 'equatorial':
+            planetPosition = (
+                planets[planetName].at(tCurrent).position.km
+            )
+        elif coordinates == 'ecliptic':
+            planetPosition = (
+                planets[planetName].at(tCurrent).ecliptic_position().km
+            )
+        else:
+            raise ValueError('Unknown coordinate system: %s' %coordinates)
 
         # Compute the distance between spacecraft and planet, and convert
         # to meters
@@ -422,5 +436,5 @@ def accelerationGradient(position, tCurrent=None):
     aGrad[2, 0] = aGrad[0, 2]
     aGrad[2, 1] = aGrad[1, 2]
 
-    aGrad = aGrad/1000
+    aGrad = aGrad
     return aGrad

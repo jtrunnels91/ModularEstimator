@@ -293,6 +293,8 @@ class CorrelationVector(substate.SubState):
             else:
                 self.acceleration = aInitial['value']
                 self.accelerationStdDev = np.sqrt(aInitial['var'])
+                self.gradient = gradInitial['value']
+                self.gradientStdDev = np.sqrt(gradInitial['var'])
                 
                 self.navVectorLength = 3
                 navVector = np.zeros(3)
@@ -303,7 +305,7 @@ class CorrelationVector(substate.SubState):
                 navVar = np.zeros([3,3])
                 navVar[0,0] = vInitial['var']
                 navVar[1,1] = aInitial['var']
-                navVar[2,2] = aInitial['var']
+                navVar[2,2] = gradInitial['var']
                 
             stateVector = np.append(stateVector,navVector)
             svCovariance = block_diag(svCovariance, navVar)
@@ -514,8 +516,8 @@ class CorrelationVector(substate.SubState):
                 currentGrad = self.stateVector[fO+2]
                 currentGradStdDev = np.sqrt(self.correlationVectorCovariance[fO+2,fO+2].value)
                 svDict['aGradient'] = {'value':currentGrad, 'stddev': currentGradStdDev}
-                self.aGrad = currentGrad
-                self.aGradStdDev = currentGradStdDev
+                self.gradient = currentGrad
+                self.gradientStdDev = currentGradStdDev
                 
         elif self.INF_type == 'external':
             self.velocity = self.navState.currentVelocity
@@ -637,30 +639,30 @@ class CorrelationVector(substate.SubState):
             self.peakCenteringDT + self.stateVector[self.__filterOrder__] * dT 
         )
         
-        # if self.navVectorLength > 1:
-        #     # Acceleration term (if acceleration is being estimated)
-        #     self.peakCenteringDT = (
-        #         self.peakCenteringDT +
-        #         self.stateVector[self.__filterOrder__ + 1] * np.power(dT,2)/2
-        #     )
-        #     peakShift = (
-        #         peakShift + self.stateVector[self.__filterOrder__ + 1]*np.power(indexDiff,2)/2
-        #     )
+        if self.navVectorLength > 1:
+            # Acceleration term (if acceleration is being estimated)
+            self.peakCenteringDT = (
+                self.peakCenteringDT +
+                self.stateVector[self.__filterOrder__ + 1] * np.power(dT,2)/2
+            )
+            peakShift = (
+                peakShift + self.stateVector[self.__filterOrder__ + 1]*np.power(indexDiff,2)/2
+            )
             
-        # if self.navVectorLength > 2:
-        #     # Acceleration gradient term
-        #     self.peakCenteringDT = (
-        #         self.peakCenteringDT +
-        #         self.stateVector[self.__filterOrder__] *
-        #         self.stateVector[self.__filterOrder__ + 2] *
-        #         np.power(dT,3)/6
-        #     )
-        #     peakShift = (
-        #         peakShift +
-        #         self.stateVector[self.__filterOrder__] *
-        #         self.stateVector[self.__filterOrder__ + 2] *
-        #         np.power(indexDiff,3)/6
-        #     )
+        if self.navVectorLength > 2:
+            # Acceleration gradient term
+            self.peakCenteringDT = (
+                self.peakCenteringDT +
+                self.stateVector[self.__filterOrder__] *
+                self.stateVector[self.__filterOrder__ + 2] *
+                np.power(dT,3)/6
+            )
+            peakShift = (
+                peakShift +
+                self.stateVector[self.__filterOrder__] *
+                self.stateVector[self.__filterOrder__ + 2] *
+                np.power(indexDiff,3)/6
+            )
             
             
         self.peakCenteringDT = self.peakCenteringDT + (self.peakOffsetFromCenter*self.__dT__)
@@ -741,7 +743,6 @@ class CorrelationVector(substate.SubState):
             L[filterOrder + 1] = vCurrent * np.power(dT,2)/2
             L[filterOrder + 2] = dT
             
-        
         
         diffBase = np.zeros_like(sincBase)
 

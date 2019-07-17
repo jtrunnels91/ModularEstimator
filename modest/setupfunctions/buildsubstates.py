@@ -37,11 +37,6 @@ def buildPulsarCorrelationSubstate(
         traj.correlationFilter.internalNavFilter.defaultNavProcessNoise.value *
         ureg(traj.correlationFilter.internalNavFilter.defaultNavProcessNoise.unit)
     )
-    navProcessNoiseUnits = (
-        ureg.speed_of_light *
-        (ureg.seconds ** (navProcessNoise.dimensionality['[time]']+1))
-    )
-    navProcessNoise = navProcessNoise.to(navProcessNoiseUnits).magnitude
 
     if 'initialVelocityStdDev' in traj.correlationFilter.internalNavFilter:
         vStdDev = (
@@ -56,6 +51,11 @@ def buildPulsarCorrelationSubstate(
                 vStdDev),
             'var': np.square(vStdDev)
         }
+        navProcessNoiseUnits = (
+            ureg.speed_of_light *
+            (ureg.seconds ** (navProcessNoise.dimensionality['[time]']+1))
+        )
+        
     else:
         vInitial=None
 
@@ -71,25 +71,45 @@ def buildPulsarCorrelationSubstate(
                 aStdDev),
             'var': np.square(aStdDev)
         }
+        navProcessNoiseUnits = (
+            ureg.speed_of_light *
+            (ureg.seconds ** (navProcessNoise.dimensionality['[time]']+1))
+        )
         
     else:
         aInitial=None
         
     if ('initialGradientStdDev' in traj.correlationFilter.internalNavFilter) and aInitial:
-        lightSecond = ureg.speed_of_light * ureg.second
         
         gStdDev = (
             traj.correlationFilter.internalNavFilter.initialGradientStdDev.value *
             ureg(traj.correlationFilter.internalNavFilter.initialGradientStdDev.unit)
-        ).to(ureg.speed_of_light/(ureg.second * lightSecond)).magnitude
-        
+        ).to(1/ureg.seconds**2).magnitude
+        gTrue = pulsarObject.unitVec().dot(
+                    mySpacecraft.dynamics.gradient(mySpacecraft.tStart)
+                ).dot(pulsarObject.unitVec())
         gInitial = {
-            'value': 0,
+            'value': np.random.normal(
+                gTrue,
+                gStdDev
+            ),
             'var': np.square(gStdDev)
         }
+        print("Gradient Initial:")
+        print(gInitial)
+        print("True Gradient:")
+        print(gTrue)
+        print("Gradient Error:")
+        print(gTrue - gInitial['value'])
+        print("Gradient Error Z score:")
+        print((gTrue - gInitial['value'])/gStdDev)
+        navProcessNoiseUnits = (
+            1/ureg.seconds**2
+        )
     else:
         gInitial=None
 
+    navProcessNoise = navProcessNoise.to(navProcessNoiseUnits).magnitude
         
     if traj.correlationFilter.internalNavFilter.INF_Type.value == 'external':
         internalNavFilter = ModularFilter()
@@ -196,14 +216,6 @@ def buildPulsarCorrelationSubstate(
         pulsarObject,
         nFilterTaps,
         myPulsarPeriod/(nFilterTaps+1),
-        signalTDOA=0,
-        TDOAVar=myPulsarPeriod/12,
-        measurementNoiseScaleFactor=measurementNoiseScaleFactor,
-        processNoise=processNoise,
-        centerPeak=True,
-        peakLockThreshold=peakLockThreshold,
-        t=mySpacecraft.tStart,
-        internalNavFilter=internalNavFilter,
         tdoaStdDevThreshold=tdoaStdDevThreshold,
         velStdDevThreshold=velStdDevThreshold,
         tdoaNoiseScaleFactor=tdoaNoiseScaleFactor,
@@ -214,9 +226,10 @@ def buildPulsarCorrelationSubstate(
         vInitial=vInitial,
         aInitial=aInitial,
         gradInitial=gInitial,
-        peakEstimator=peakEstimator
+        peakEstimator=peakEstimator,
+        internalNavFilter=internalNavFilter
     )
-    
+    print(gInitial)
     return correlationSubstate, vInitial['value']
 
 

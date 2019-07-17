@@ -379,7 +379,6 @@ class PeriodicXRaySource(
                     # Extract the order of derivative of the phase.
                     # e.g. F0 is the 1st derivative of phase, F1 is the
                     # 2nd derivative of phase, etc.
-                    print('Found fitted phase derivative')
                     freqOrder = int(splitLine[0][1]) + 1
                     PARFittedPhaseDerivatives[freqOrder] = float(splitLine[1])
 
@@ -429,14 +428,12 @@ class PeriodicXRaySource(
                     covRA = float(splitLine[1])
                     if (not self.covRA) or (replaceCurrentValues):
                         self.covRA = covRA
-                        print('found cov ra')
                         
                 # Spatial covariance matrix, declination
                 elif (splitLine[0] == 'COV_DEC'):
                     covDEC = float(splitLine[1])
                     if (not self.covDEC) or (replaceCurrentValues):
                         self.covDEC = covDEC
-                        print('found cov dec')
                         
                         
                 # Spatial covariance matrix, cross correlation
@@ -444,7 +441,6 @@ class PeriodicXRaySource(
                     covX = float(splitLine[1])
                     if (not self.covX) or (replaceCurrentValues):
                         self.covX = covX
-                        print('found cov x')
 
                 # Pulsar Name
                 elif ((splitLine[0] == 'PSRJ')
@@ -476,7 +472,6 @@ class PeriodicXRaySource(
                 # Profile (assumed to be in order
                 elif (splitLine[0] == 'PROFILE'):
                     newProfile.append(float(splitLine[1]))
-                    print(float(splitLine[1]))
                     
                         
         if (
@@ -1037,13 +1032,18 @@ It is up to the user to verify the validity of the results.
             self,
             tMax,
             t0=0,
-            position=None,
-            attitude=None,
-            FOV=None,
-            AOA_StdDev=None,
-            TOA_StdDev=None
+            timeOffset=None,
+            spacecraft=None,
             ):
+        """
+        Generate photon arrival measurements
 
+        This function generates photon arrivals from the pulsar signal based on the parameters of the simulation.  The
+        """
+
+        if not timeOffset:
+            timeOffset = 0
+            
         nCandidates = np.int((tMax - t0) * self.peakAmplitude * 1.1)
 
         # Generate a batch of candidate arrival times (more efficient than generating on the fly)
@@ -1054,13 +1054,42 @@ It is up to the user to verify the validity of the results.
         photonArrivalTimes = []
         tLastCandidate = t0
 
-        # If we have a position, then we want to get the signal at T0 at that
-        # position, not the SSB.  So, shift T0 accordingly.
-        if position is not None:
-            rangeDeltaT = self.unitVec().dot(position(t0)) / self.speedOfLight()
-            tLastCandidate = tLastCandidate + rangeDeltaT
-        
+        # # If we have a position, then we want to get the signal at T0 at that
+        # # position, not the SSB.  So, shift T0 accordingly.
+        # if position is not None:
+        #     rangeDeltaT = self.unitVec().dot(position(t0)) / self.speedOfLight()
+        #     tLastCandidate = tLastCandidate + rangeDeltaT
+        attitude = None
+        if spacecraft is not None:
+            if hasattr(spacecraft, 'dynamics'):
+                myRangeFunction = spacecraft.dynamics.getRangeFunction(
+                    self.unitVec(),
+                    tMax
+                )
+                attitude = spacecraft.dynamics.attitude
+            else:
+                def myRangeFunction(t):
+                    return (0)
+            if hasattr(spacecraft, 'detector'):
+                TOA_StdDev = spacecraft.detector.TOA_StdDev
+                AOA_StdDev = spacecraft.detector.AOA_StdDev
+                FOV = spacecraft.detector.FOV
+            else:
+                TOA_StdDev = None
+                AOA_StdDev = None
+                FOV = None
+        else:
+            def myRangeFunction(t):
+                return 0
+            TOA_StdDev = None
+            AOA_StdDev = None
+            attitude = None
+            FOV = None
+            
         candidateIndex = 0
+        # plt.figure()
+        # plt.plot(np.linspace(0,tMax,1000), myRangeFunction(np.linspace(0,tMax,1000)))
+        # plt.show(block=False)
         while tLastCandidate < tMax:
             # Draw the next arrival time and selection variable from our
             # pre-generated arrays
@@ -1071,28 +1100,32 @@ It is up to the user to verify the validity of the results.
             else:
                 nextCandidate = np.random.exponential(1.0/self.peakAmplitude)
                 selectionVariable = np.random.uniform(0, 1)
-                print('Generating on the fly!')
             tNextCandidate = (
                 tLastCandidate +
                 nextCandidate
-                )
+            )
+            
+            rangeDeltaT = myRangeFunction(tNextCandidate) / self.speedOfLight()
+            # rangeDeltaT = 0
             currentFluxNormalized = (
-                self.getSignal(tNextCandidate)/self.peakAmplitude
+                self.getSignal(tNextCandidate + rangeDeltaT)/self.peakAmplitude
                 )
             # This if statement uses a uniform variable to determine whether
             # the next generated photon arrival time is a real photon arrival
             # time.
             if selectionVariable <= currentFluxNormalized:
-                if position is not None:
-                    rangeDeltaT = (
-                        self.unitVec().dot(position(tNextCandidate)) /
-                        self.speedOfLight()
-                        )
-                    newPhotonArrivalTime = tNextCandidate - rangeDeltaT
-                    photonArrivalTimes.append(tNextCandidate - rangeDeltaT)
-                else:
-                    newPhotonArrivalTime = tNextCandidate
-                    photonArrivalTimes.append(tNextCandidate)
+                # if position is not None:
+                #     rangeDeltaT = (
+                #         self.unitVec().dot(position(tNextCandidate - rangeDeltaT)) /
+                #         self.speedOfLight()
+                #     )
+                # else:
+                #     rangeDeltaT = 0
+                
+                # newPhotonArrivalTime = tNextCandidate - rangeDeltaT
+                # photonArrivalTimes.append(tNextCandidate - rangeDeltaT)
+                newPhotonArrivalTime = tNextCandidate
+                photonArrivalTimes.append(tNextCandidate)
 
                 if TOA_StdDev:
                     newPhotonArrivalTime = (
@@ -1100,14 +1133,14 @@ It is up to the user to verify the validity of the results.
                     )
                     measurementDict = {
                         't': {
-                            'value': newPhotonArrivalTime,
+                            'value': newPhotonArrivalTime - timeOffset,
                             'var': np.square(TOA_StdDev)
                         },
                         'name': self.name
                     }
                 else:
                     measurementDict = {
-                        't': {'value': newPhotonArrivalTime},
+                        't': {'value': newPhotonArrivalTime - timeOffset},
                         'name': self.name
                     }
 

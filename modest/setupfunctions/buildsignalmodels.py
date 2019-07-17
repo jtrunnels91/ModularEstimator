@@ -1,6 +1,17 @@
 import numpy as np
 from .. import substates, signals, utils
 
+def getPulsarCoordinates(pulsarName, traj):
+    pulsarObjectDict = utils.loadPulsarData(
+        detectorArea=1,
+        pulsarDir=traj.filesAndDirs.baseDirectory.value,
+        pulsarCatalogFileName=traj.filesAndDirs.pulsarDataFile.value,
+        PARDir=traj.filesAndDirs.ParFileDirectory.value,
+        profileDir=traj.filesAndDirs.profileDirectory.value,
+    )
+    return pulsarObjectDict[pulsarName].RaDec()
+    
+
 def buildPulsarModel(
         traj,
         mySpacecraft,
