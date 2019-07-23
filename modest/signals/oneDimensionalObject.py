@@ -1,5 +1,6 @@
 from . signalsource import SignalSource
 from .. utils import covarianceContainer
+from scipy.linalg import block_diag
 import numpy as np
 
 class oneDObjectMeasurement(SignalSource):
