@@ -169,7 +169,7 @@ class ModularFilter():
     def timeUpdateEKF(
             self,
             dT,
-            dynamics=None
+            dynamics={}
             ):
         """
         Performs a standard extended Kalman filter time-update using information found in dynamcs, and over time-interval dT.

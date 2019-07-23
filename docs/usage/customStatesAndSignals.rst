@@ -32,9 +32,11 @@ In order to function as a substate, there are seven methods which a class must h
 
 .. code-block:: python
 		  
-   import modest as md
+   from ModularFilter import modest as md
    import numpy as np
    from scipy.linalg import block_diag
+
+   # Define our class
    class twoDPositionVelocity(md.substates.SubState):
 
 
@@ -43,12 +45,19 @@ Now we need to define our methods, including the initialization method.  The ini
 Initialization Method
 =======================================
 
-.. code-block:: python   
-
-   def __init__ (self, stateVector, covariance, objectID='', time=0):
-       stateVectorHistory = {'stateVector': stateVector, 'covariance': covariance, 't': time, 'stateVectorID':0}
-       self.objectID = objectID
-       super().__init___(stateDimension=4, stateVectorHistory=stateVectorHistory)
+.. code-block:: python
+    
+    def __init__ (self, stateVector, covariance, objectID='', time=0):
+        stateVectorHistory = {
+            'stateVector': stateVector,
+            'covariance': covariance,
+            't': time,
+            'stateVectorID':0,
+            'aPriori':True
+        }
+        
+        super().__init__(stateDimension=4,stateVectorHistory=stateVectorHistory, objectID=objectID)
+   
 
 This initialization function is pretty rudimentary, in part because :class:`~modest.substates.substate.SubState` does a lot of the work for us (like checking dimensionality).  Of course in a more complicated substate we might have to do more initialization.
 
@@ -61,18 +70,17 @@ Time Update Method
 
 .. code-block:: python   
 
-    from scipy.linalg import block_diag
-    def timeUpdate(self, dT, dynamics=None):
+    def timeUpdate(self, dT, dynamics={}):
       subF = np.array([[1, dT],[0, 1]])
       F = block_diag(subF, subF)
-   
-      accelerationKey = self.objectID + 'accleration'
+
+      accelerationKey = str(self) + 'acceleration'
       if accelerationKey in dynamics:
-         subQ = np.array([[dT4/4, dT3/2],[dT3/2, dT2]])
+         subQ = np.array([[dT/4, dT/2],[dT/2, dT]])
          Q = block_diag(subQ, subQ) * dynamics[accelerationKey]['var']
       else:
          Q = np.zeros([self.dimension(), self.dimension()])
-   
+
       return {'F': F, 'Q': Q}
 
 The main job of this relatively simple function is to generate the time-update equations for an object in two-dimensional motion with acceleration as an input, and pass them out to the caller in a standard dictionary format.
@@ -86,58 +94,59 @@ The other method that we need to define is the measurement update method.  This 
 
 .. code-block:: python
 
-   def getMeasurementMatrices(self, measurement, source=None):
+    def getMeasurementMatrices(self, measurement, source=None):
 
-       if not source:
-           return
+        if not source:
+            return
 
-       HDict = {}
-       RDict = {}
-       dYDict = {}
-        
-       currentStateVector = self.stateVectorHistory[-1]['stateVector']
-       currentX = currentStateVector[0]
-       currentY = currentStateVector[2] 
-       measurementPosition = source.position
-       positionDifference = np.array([currentX, currentY]) - measurementPosition
-       predictedRange = np.linalg.norm(positionDifference)
-       
-       if 'range' in measurement:
+        HDict = {}
+        RDict = {}
+        dYDict = {}
 
-           H = np.array([[
-               positionDifference[0] / predictedRange,
-               0,
-               positionDifference[1] / predictedRange,
-               0
-           ]])
+        currentStateVector = self.stateVectorHistory[-1]['stateVector']
+        currentX = currentStateVector[0]
+        currentY = currentStateVector[2]
+        measurementPosition = source.position
+        positionDifference = np.array([currentX, currentY]) - measurementPosition
+        predictedRange = np.linalg.norm(positionDifference)
+        predictedAngle = np.arctan2(positionDifference[1],positionDifference[0])
 
-           R = np.array([[measurement['position']['var']]])
+        if 'range' in measurement:
 
-           dY = measurement['position']['value'] - H.dot(currentStateVector)
-           matrixKey = self.objectID + ' ' + source.signalID() + ' range'
-           HDict[matrixKey] = H
-           RDict[matrixKey] = R
-           dYDict[matrixKey] = dY
+            H = np.array([[
+                positionDifference[0] / predictedRange,
+                0,
+                positionDifference[1] / predictedRange,
+                0
+            ]])
 
-       if 'bearingAngle' in measurement:
-           H = np.array([[
-               positionDifference[1]/np.square(predictedRange),
-               0,
-               positionDifference[0]/np.square(predictedRange),
-               0
-           ]])
-            
-           R = np.array([[measurement['bearingAngle']['var']]])
+            R = np.array([[measurement['range']['var']]])
 
-           dY = measurement['bearingAngle']['value'] - H.dot(currentStateVector)
-       
-           matrixKey = self.objectID + ' ' + source.signalID() + ' bearingAngle'
-            
-           HDict[matrixKey] = H
-           RDict[matrixKey] = R
-           dYDict[matrixKey] = dY
-            
-       return {'H': HDict, 'R': RDict, 'dY': dYDict}
+            dY = measurement['range']['value'] - H.dot(currentStateVector)
+            matrixKey = str(self) + ' ' + str(source.signalID()) + ' range'
+            HDict[matrixKey] = H
+            RDict[matrixKey] = R
+            dYDict[matrixKey] = dY
+
+        if 'bearingAngle' in measurement:
+            H = np.array([[
+                -positionDifference[1]/np.square(predictedRange),
+                0,
+                positionDifference[0]/np.square(predictedRange),
+                0
+            ]])
+
+            R = np.array([[measurement['bearingAngle']['var']]])
+
+            dY = measurement['bearingAngle']['value'] - predictedAngle
+
+            matrixKey = str(self) + ' ' + str(source.signalID()) + ' bearingAngle'
+
+            HDict[matrixKey] = H
+            RDict[matrixKey] = R
+            dYDict[matrixKey] = dY
+
+        return {'H': HDict, 'R': RDict, 'dY': dYDict}  
 
 
 There is a lot going on in this method, so let's unpack it a little bit at a time.  First, note the inputs.  Any time the :meth:`getMeasurementUpdateMatrices` method is called, the method expects to receive as arguments the measurement itself, as well as some kind of information about the signal source.  (At some point during development, I envisioned instances where this method would be called when no signal source information was present, so this was left as an optional argument.  However I don't think there are currently any actual implementations where this is the case).
@@ -220,73 +229,28 @@ As with substates, there are a few methods which a signal object *must* have if 
 - :meth:`computeAssociationProbability`
   Computes a non-normalized probability that a given measurement originated from the signal source
 
-And again, as with substates, there is a base class :class:`~modest.signals.signalsource.SignalSource` which handles some of the boiler-plate code.  We begin our class definition as follows:
+  And again, as with substates, there is a base class :class:`~modest.signals.signalsource.SignalSource` which handles some of the boiler-plate code.  In fact, it is possible to initialize a signal source as an instance of the base class :class:`~modest.signals.signalsource.SignalSource` and use it without any modification. However, in most cases we generally need to make at least some modification.  In this case the modifications we need to make are relatively minor, and take place entirely in the initialization method.
 
-.. code-block:: python
-		  
-   import modest as md
-   import numpy as np
-   from scipy.linalg import block_diag
-   class rangeAndBearing(md.signals.signalsource.SignalSource):
-
-
-It turns out that both of these methods are defined 
 Initialization Method
 =======================================
 
 .. code-block:: python   
+   class rangeAndBearing(md.signals.signalsource.SignalSource):
+       def __init__ (self, stateObjectID, position=[0,0]):
+           self.position=position
+           super().__init__(stateObjectID=stateObjectID)
+           return    
 
-   def __init__ (self, stateObjectID, position=[0,0]):
-       self.position=position
-       self.stateObjectID = stateObjectID
-       super().__init___()
-       return
 
 This initialization method is pretty rudimentary.  Again, this is in part because the base class :class:`~modest.signals.signalsource.SignalSource` does some of the work for us.  There are two extra bits that we had to take care of.
 
 The first bit of house-keeping is the storing of the state object ID.  As currently implemented, each signal source corresponds to a signal associated with a given substate.  So, for instance, if you have two objects tracked by a single radar station, you need two signal sources: one to represent a measurement of the first object and one to represent a measurement of the second object.  If you had two radar stations, you'd need four signal sources, and so on.  Thus, the stateObjectID is the identifier by which the substate associated with this signal source can be located.
 
 .. note::
-   This requirement that signal sources be uniquely associated with one state is probably not nescessary. I will look into removing it in a later version.
+   It is possible to have a signal source object that is associated with multiple substates.  This might be desirable in cases where you have a single object represented by more than one substate.  For example, a single spacecraft might be represented by both a position and an attitude substate.
 
 The second house-keeping item is the storing of the "position" attribute.  For the type of signal we wish to model, the position from which the measurement is an essential bit of information needed to compute the measurement update.  We allow the user to set this position from the beginning.
 
 Of course, any other attributes associated with the signal source could be stored during the initialization function as well.
 
-
-Association Probability Method
-=======================================
-The other method which must be defined is the association probability.  It should be noted from the outset that this method is only used in some cases.  If, for instance, you're trying to implement a basic EKF in which you can uniquely associate signals with the correct sources (for instance radar tracking of aircraft with transponders), then you could get away without writing this method.  The association probability method is only required for cases in which the data association is uncertain.  Modest won't complain if you try to add a signal that doesn't have this method; it will complain if you try to do an update that requires this method.
-
-.. code-block:: python
-
-    def computeAssociationProbability(self, measurement, stateDict, validationThreshold=0):
-        myMeasMat = stateDict[self.objectID]['stateObject'].getMeasurementMatrices(measurement, source=self)
-        dY = None
-        R = None
-        H = None
-        for key in myMeasMat['dY']:
-            if H is None:
-                H = myMeasMat['H'][key]
-                R = myMeasMat['R'][key]
-                dY = myMeasMat['dY'][key]
-            else:
-                H = np.vstack([H, myMeasMat['H'][key]])
-                R = block_diag(R, myMeasMat['R'][key])
-                dY = np.append(dY, myMeasMat['dY'][key])
-
-        if dY is not None:
-            P = stateDict[self.objectID]['stateObject'].covariance()
-            Pval = P.convertCovariance('covariance').value
-            # if P.form == 'cholesky':
-            #     Pval = P.value.dot(P.value.transpose())
-            # elif P.form == 'covariance':
-            #     Pval = P.value
-            # else:
-            #     raise ValueError('Unrecougnized covariance specifier %s' %P.form)
-            S = H.dot(Pval).dot(H.transpose()) + R
-
-            myProbability = mvn.pdf(dY, cov=S)
-        else:
-            myProbability = 0
-        return myProbability
+For this class, this is the only method we need to explicitely define.  The rest is taken care of by the base class.  However, this may not be the case in all instances.  For example, we might want to modify the association probability method to represent measurement noise other than Gaussian.  Or, we might want to give the signal source additional methods, such as the ability to generate measurements for simulation purposes.  It is up to the user to decide what methods will be beneficial for the particular class.

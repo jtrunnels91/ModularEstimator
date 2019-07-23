@@ -6,6 +6,7 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 # import matplotlib as mp
 import matplotlib.pyplot as plt
+from .. utils import covarianceContainer
 
 class SubState():
     """
@@ -35,6 +36,7 @@ class SubState():
     provide in a derived class.
     """
     __metaclass__ = ABCMeta
+    nextSubstateObjectID = 0
 
     ## @fun #__init__ initializes a SubState object
     #
@@ -58,6 +60,7 @@ class SubState():
             stateDimension=None,
             stateVectorHistory=None,
             storeLastStateVectors=0,
+            objectID=''
     ):
         if stateDimension is None:
             stateDimension = len(stateVectorHistory['stateVector'])
@@ -91,6 +94,11 @@ class SubState():
             raise ValueError(
                 "State vector history must contain state vector id key, labeled \"stateVectorID\""
                 )
+
+        if 'covariance' not in stateVectorHistory:
+            raise ValueError(
+                "State vector history must contain covariance matrix labeled \"covariance\""
+                )
         
         if len(stateVectorHistory['stateVector']) != self.__dimension__:
             raise ValueError(
@@ -103,7 +111,9 @@ class SubState():
             raise ValueError(
                 "\"covariance\" must be a %i x %i matrix" %(self.__dimension__, self.__dimension__)
             )
-            
+
+        if not isinstance(stateVectorHistory['covariance'], covarianceContainer):
+            stateVectorHistory['covariance'] = covarianceContainer(stateVectorHistory['covariance'],'covariance')
         
         ## @brief Stores the time-history of the sub-state state vector.
         # self.stateVectorHistory = SmartPanda(data=stateVectorHistory)
@@ -121,6 +131,10 @@ class SubState():
         (int) Determines how far back the state vector history may go.  If zero, then the entire state vector history is stored
         """
 
+        self.__objectIDSTR__ = objectID
+        self.__objectID__ = SubState.nextSubstateObjectID
+        SubState.nextSubstateObjectID += 1
+        
         return
 
     ##
@@ -420,7 +434,7 @@ class SubState():
             
             self.THPlotObjectList[stateCounter].set_data(
                 self.THPlotDataList[stateCounter]['x'],
-                self.THPlotDataList[stateCounter]['x']
+                self.THPlotDataList[stateCounter]['y']
             )
             
         self.THPlotHandle.canvas.draw()
@@ -443,22 +457,26 @@ class SubState():
         self.THPaxisList = []
         self.THPlotDataList = []
         self.THPlotObjectList = []
+        self.THSigmaPlotObjectList = []
         for stateCounter in range(self.dimension()):
             newAxis = plt.subplot2grid(
                 (self.dimension(), 1), (stateCounter, 0)
             )
             self.THPaxisList.append(newAxis)
-            newAxisX = [self.stateVectorHistory[0]['t'], self.stateVectorHistory[-1]['t']]
-            newAxisY = [
-                self.stateVectorHistory[0]['stateVector'][stateCounter],
-                self.stateVectorHistory[-1]['stateVector'][stateCounter]
-            ]
+            newAxisX = [svh['t'] for svh in self.stateVectorHistory]
+            newAxisY = [svh['stateVector'][stateCounter] for svh in self.stateVectorHistory]
+            newOneSigma = [np.sqrt(svh['covariance'].convertCovariance('covariance')[stateCounter][stateCounter].value) for svh in self.stateVectorHistory]
             newPlot, = plt.plot(newAxisX, newAxisY)
+            # newSigmaPlotTop, = plt.plot(newAxisX, newOneSigma, ls='dotted',color='grey')
+            # newSigmaPlotBottom, = plt.plot(newAxisX, -np.array(newOneSigma),  ls='dotted',color='grey')
+            # newOneSigmaPlot = (newSigmaPlotTop, newSigmaPlotBottom)
             self.THPlotObjectList.append(newPlot)
+            # self.THSigmaPlotObjectList.append(newOneSigmaPlot)
             self.THPlotDataList.append(
                 {
                     'x': newAxisX,
-                    'y': newAxisY
+                    'y': newAxisY,
+                    # 'sigma': newOneSigma
                 }
             )
                 
@@ -467,4 +485,10 @@ class SubState():
         plt.show(block=False)
         return
         
+        
+    def objectID(self):
+        return self.__objectID__
+
+    def __repr__(self):
+        return 'SubState(' + self.__objectIDSTR__ + 'substate ID: %s)' %self.__objectID__
         
