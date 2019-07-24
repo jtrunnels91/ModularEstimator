@@ -205,7 +205,7 @@ latex_elements = {
 html_theme="classic"
 
 # import mock
-autodoc_mock_imports =  ["pypet", "skyfield.api"]
+autodoc_mock_imports =  ["pypet", "skyfield.api", "pandas"]
 # MOCK_MODULES = ['pypet']
 # # for mod_name in MOCK_MODULES:
 # #     sys.modules[mod_name] = mock.Mock()
