@@ -2,7 +2,7 @@ from . buildsubstates import buildPulsarCorrelationSubstate, buildAttitudeSubsta
 
 from . buildsignalmodels import buildPulsarModel, buildStaticSources
 
-from . builduserdata import buildEnvironment, addParameterGroup, buildUserData, UserData
+from . builduserdata import buildUserData, UserData
 
 from . import montecarlo
 __all__ = [
@@ -11,8 +11,6 @@ __all__ = [
     "buildAttitudeSubstate",
     "buildPulsarModel",
     "buildStaticSources",
-    "buildEnvironment",
-    "addParameterGroup",
     "buildUserData",
     "montecarlo"
 ]
