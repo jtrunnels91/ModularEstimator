@@ -4,7 +4,7 @@ import pickle
 import multiprocessing as mp
 import copy
 np.random.seed()
-def findUniqueParameters(resultsDict, parameterString):
+def findUniqueParameters(resultsDict, parameterString, approxEqual=0):
     parameterList = parameterString.split('.')
     uniqueParameterValues = []
 
@@ -12,8 +12,16 @@ def findUniqueParameters(resultsDict, parameterString):
         for parameter in parameterList:
             result = result[parameter]
         result = result['value']
-        if result not in uniqueParameterValues:
-            uniqueParameterValues.append(result)
+        if not(isinstance(result,float)) or approxEqual == 0:
+            if result not in uniqueParameterValues:
+                uniqueParameterValues.append(result)
+        else:
+            newValIsUnique = True
+            for uniqueVal in uniqueParameterValues:
+                if np.abs(uniqueVal - result) < uniqueVal * approxEqual:
+                    newValIsUnique = False
+            if newValIsUnique:
+                uniqueParameterValues.append(result)
     return uniqueParameterValues
 
 def findExplorationParameters(myUserData):
@@ -82,7 +90,7 @@ def executeSimulation(
             )
     else:
         if useMultiProcessing:
-            myPool = mp.Pool(mp.cpu_count())
+            myCPUCount = mp.cpu_count()
             myParameterList = []
         
         for subval in value:
@@ -131,26 +139,34 @@ def executeSimulation(
                         myPickle
                     )
         if useMultiProcessing:
-            newResults = myPool.map(myFunction, myParameterList)
-            newResults = [
-                {
-                    'parameters': parameter.toDict(),
-                    'results': result
-                }
-                for parameter, result in zip(myParameterList,newResults)
-            ]
-            resultList = resultList + newResults
-            
-            myPool.close()
-            myPool.join()
-            with open( outputFileName, "wb" ) as myPickle:
-                pickle.dump(
+            currentRunNumber = 0
+            while myParameterList:
+                print("Starting sub runs %i through %i" %(currentRunNumber,currentRunNumber + myCPUCount-1))
+                myPool = mp.Pool(mp.cpu_count())
+                
+                currentRunNumber += myCPUCount
+                currentParameterList = myParameterList[:myCPUCount]
+                myParameterList = myParameterList[myCPUCount:]
+                newResults = myPool.map(myFunction, currentParameterList)
+                newResults = [
                     {
-                        'results':resultList,
-                        'explorationParameters': totalExplorationParameters
-                    },
-                    myPickle
-                )
+                        'parameters': parameter.toDict(),
+                        'results': result
+                    }
+                    for parameter, result in zip(currentParameterList,newResults)
+                ]
+                resultList = resultList + newResults
+            
+                myPool.close()
+                myPool.join()
+                with open( outputFileName, "wb" ) as myPickle:
+                    pickle.dump(
+                        {
+                            'results':resultList,
+                            'explorationParameters': totalExplorationParameters
+                        },
+                        myPickle
+                    )
             
     return resultList
 

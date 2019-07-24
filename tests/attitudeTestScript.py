@@ -17,11 +17,12 @@ plt.close('all')
 FOV = 10
 useUnitVector=False
 # Function defining angular velocity
-euler0 = np.random.uniform(-np.pi/2, np.pi/2, 3)
-
+euler0 = np.random.uniform(-np.pi, np.pi, 3)
+euler0[1] = np.random.uniform(-np.pi/2, np.pi/2)
 # euler0 = np.array([np.pi/2,np.pi/4,np.pi/2])
+# euler0 = np.array([0,0,0])
+# euler0 = np.array([0, 1.2100470620888801, 1.483962756901154])
 # euler0 = np.array([3.046710761327998, 1.2100470620888801, 1.483962756901154])
-#euler0 = np.array([0, 1.2100470620888801, 1.483962756901154])
 def omega(t):
     
     # omegaT = np.array([sin(pi * t/4), cos(pi * t/12), sin(pi * t/16)])
@@ -40,16 +41,16 @@ lastPrintTime=0
 # Dynamics info
 tCurrent = 0
 timeStep = 0.01
-tMax = 100
+tMax = 20
 
 biasSTD = 1e-100
 eulerT0True = attitude(0, returnQ=False)
 biasTrue = np.random.normal(np.zeros(3), scale=biasSTD)
 biasTrue=np.array([0,0,0])
 
-rollErrorStd = 1e-2
-RAErrorStd = 1e-2
-DecErrorStd = 1e-2
+rollErrorStd = 1e-3
+RAErrorStd = 1e-3
+DecErrorStd = 1e-3
 biasErrorSTD = 1e-100
 eulerT0Est = eulerT0True
 eulerT0Est = np.array([
@@ -117,7 +118,7 @@ myEKF.addStates('attitude', EKFAtt)
 myTUOnly.addStates('attitude', TUOnlyAtt)
 
 # Star and background info
-backgroundFlux = 100
+backgroundFlux = 10
 nStars = 3
 starVecs = np.random.normal(np.zeros([nStars, 3]))
 starCoordinates = np.zeros([nStars, 2])

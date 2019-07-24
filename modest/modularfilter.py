@@ -169,7 +169,7 @@ class ModularFilter():
     def timeUpdateEKF(
             self,
             dT,
-            dynamics=None
+            dynamics={}
             ):
         """
         Performs a standard extended Kalman filter time-update using information found in dynamcs, and over time-interval dT.
@@ -525,7 +525,10 @@ class ModularFilter():
         PMinus = self.covarianceMatrix
 
         xPlus = np.zeros(self.totalDimension)
-        PPlus = None
+        if self.covarianceMatrix.form == 'cholesky':
+            PPlus = None
+        else:
+            PPlus = np.zeros([self.totalDimension, self.totalDimension])
         # print('Started measurement update')
 
         validAssociationsDict = {}
@@ -574,19 +577,9 @@ class ModularFilter():
                     )
 
                 if self.covarianceMatrix.form == 'covariance':
-                    if PPlus is not None:
-
-                        # print('PPlus is not none')
-                        # print(signalName)
-                        PPlus = (
-                            PPlus + (currentPR * updateDict['PPlus'].value)
-                        )
-                    else:
-                        # print('PPlus is none')
-                        # print(signalName)
-                        # print(PMinus.value - updateDict['PPlus'].value)
-                        
-                        PPlus = currentPR * updateDict['PPlus'].value
+                    PPlus = (
+                        PPlus + (currentPR * updateDict['PPlus'].value)
+                    )
                         
                 elif self.covarianceMatrix.form == 'cholesky':
                     # If we're doing square root filtering, then we can't
@@ -611,10 +604,7 @@ class ModularFilter():
             #     signalAssociationProbability[signalName]=0
 
 
-        # Here, we compute the spread of means.  Note that we compute it the
-        # same way regardless of which covariance storage we're using.  If
-        # square root filtering, we'll just take the cholesky decomposition
-        # after the computation is finished.
+        # Here, we compute the spread of means.
         #
         # Also note that we only need to compute the spread of means term if
         # there was more than one valid association.  Otherwise we essentially

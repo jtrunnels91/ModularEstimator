@@ -27,7 +27,7 @@ Create Substates
 
 Right now, ``myFilter`` is just a filter; it doesn't have any states it's trying to estimate or any signals it's filtering.  We want to change this.  Let's add a one-dimensional position estimation state.
 
->>> positionSubstate1 = md.substates.oneDimensionalPositionandVelocity()
+>>> positionSubstate1 = md.substates.oneDimensionalPositionVelocity()
 >>> myFilter.addStates('object1', positionSubstate1)
 
 Here, we did two things.  First, we initialized a :class:`~modest.modularfilter.ModularFilter` object.  Then, we passed that object to myFilter and told it that we are going to be estimating a state with name "object1".  The name we choose for the state doesn't matter too much, as long as it's unique (:class:`~modest.modularfilter.ModularFilter` will raise an error if you try to give it two substates of the same name).

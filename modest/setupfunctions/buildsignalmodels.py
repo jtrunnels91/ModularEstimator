@@ -1,6 +1,17 @@
 import numpy as np
 from .. import substates, signals, utils
 
+def getPulsarCoordinates(pulsarName, traj):
+    pulsarObjectDict = utils.loadPulsarData(
+        detectorArea=1,
+        pulsarDir=traj.filesAndDirs.baseDirectory.value,
+        pulsarCatalogFileName=traj.filesAndDirs.pulsarDataFile.value,
+        PARDir=traj.filesAndDirs.ParFileDirectory.value,
+        profileDir=traj.filesAndDirs.profileDirectory.value,
+    )
+    return pulsarObjectDict[pulsarName].RaDec()
+    
+
 def buildPulsarModel(
         traj,
         mySpacecraft,
@@ -20,7 +31,8 @@ def buildPulsarModel(
         pulsarCatalogFileName=traj.filesAndDirs.pulsarDataFile.value,
         PARDir=traj.filesAndDirs.ParFileDirectory.value,
         profileDir=traj.filesAndDirs.profileDirectory.value,
-        observatoryMJDREF=mySpacecraft.dynamics.MJDREF
+        observatoryMJDREF=mySpacecraft.dynamics.MJDREF,
+        energyRange=mySpacecraft.detector.energyRange
     )
 
     try:
@@ -28,10 +40,16 @@ def buildPulsarModel(
             mySpacecraft.detector.targetObject.strip('PSR').strip(' ')
         ]
     except:
-        myPulsarObject = pulsarObjectDict[
-            traj.filesAndDirs.targetObject.value
-        ]    
-        myPulsarObject.lastTime = mySpacecraft.tStart
+        if 'targetObject' in traj.filesAndDirs:
+            myPulsarObject = pulsarObjectDict[
+                traj.filesAndDirs.targetObject.value
+            ]
+        else:
+            myPulsarObject = pulsarObjectDict[
+                traj.simulation.pulsarName.value
+            ]
+    
+    myPulsarObject.lastTime = mySpacecraft.tStart
     if traj.attitudeFilter.probabilityMeasMat.value == 'unitVec':
         myPulsarObject.useUnitVector = True
     else:
@@ -62,7 +80,7 @@ def buildStaticSources(
     pointSources = utils.accessPSC.localCatalog_coneSearch(
         RA={'value': startingRA, 'unit': 'rad'},
         DEC={'value': startingDEC, 'unit': 'rad'},
-        FOV={'value': mySpacecraft.detector.FOV*2, 'unit': 'degrees'},
+        FOV={'value': mySpacecraft.detector.FOV, 'unit': 'degrees'},
         catalogName=traj.filesAndDirs.pointSourceCatalog.value,
         removeNaNs=False,
         fluxKey=myFluxKey,

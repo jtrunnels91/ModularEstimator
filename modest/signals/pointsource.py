@@ -153,9 +153,14 @@ class PointSource(signalsource.SignalSource):
             # If we were given a value for angle of arrival standard deviation,
             # then corrupt the measurements with noise.  Otherwise, simply
             # return the true values.
+            
             if AOA_StdDev:
-                RaMeas = RaMeas + _np.random.normal(scale=AOA_StdDev)
-                DecMeas = DecMeas + _np.random.normal(scale=AOA_StdDev)
+                if _np.isscalar(self.extent):
+                    RaMeas = RaMeas + _np.random.normal(scale=(AOA_StdDev + self.extent))
+                    DecMeas = DecMeas + _np.random.normal(scale=(AOA_StdDev + self.extent))
+                else:
+                    RaMeas = RaMeas + _np.random.normal(scale=(AOA_StdDev + _np.sqrt(self.extent[0,0])))
+                    DecMeas = DecMeas + _np.random.normal(scale=(AOA_StdDev + _np.sqrt(self.extent[1,1])))
                 measurement = {
                     'unitVec': {'value': sg.sidUnitVec(RaMeas, DecMeas)},
                     'RA': {

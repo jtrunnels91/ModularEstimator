@@ -1,28 +1,92 @@
 import numpy as np
+import matplotlib as mp
 import matplotlib.pyplot as plt, mpld3
+import matplotlib.ticker as ticker
+
 import pickle
 from .. import utils
+
+umnPrimaryColors = [[122 / 225, 0 / 225, 25 / 225],
+                    [255 / 255, 204 / 225, 51 / 255]]
+
+umnSecondaryDark = [[0 / 255, 61 / 255, 76 / 255],
+                    [202 / 255, 119 / 255, 0 / 255],
+                    [114 / 255, 110 / 255, 32 / 255],
+                    [97 / 255, 99 / 255, 101 / 255],
+                    [145 / 255, 120 / 255, 91 / 255],
+                    [91 / 255, 0 / 255, 19 / 255],
+                    [255 / 255, 183 / 255, 30 / 255]]
+
+
+umnSecondaryLight = [[0 / 255, 185 / 255, 228 / 255],
+                     [233 / 255, 131 / 255, 0 / 255],
+                     [190 / 255, 214 / 255, 0 / 255],
+                     [204 / 255, 204 / 255, 204 / 255],
+                     [226 / 255, 211 / 255, 164 / 255],
+                     [144 / 255, 0 / 255, 33 / 255],
+                     [255 / 255, 222 / 255, 122 / 255]]
+
 
 def outputPlots(
         useINF,
         resultsDict,
         saveOutput=True,
         outputDir=None,
-        figureDict=None
+        axisDict=None,
+        plotPropagationError=False,
+        scaleByStdDev=None,
+        lineWeight=2,
+        legendFont=14,
+        legendLineLength=10,
+        legendBorderPad=2,
+        outputFormat='HTML',
+        clearOldPlot=True,
+        placeLegend=False,
+        logErrorPlot=False,
+        colorCounter=0,
+        colorList=None
 ):
+    if not colorList:
+        colorList = umnSecondaryDark
+        
     print()
     print("||=================================================||")    
     print("Plotting current results and saving output")
     print("||=================================================||")    
     print()
+    legendDict = {}
 
-    if figureDict is None:
-        attFig = plt.figure(2, figsize=(16,9))
+    if axisDict == None:
+        axisDict = {}
+
+    if saveOutput and outputFormat == 'SVG':
+        mp.rcParams['svg.fonttype'] = 'none'
+        mp.rcParams['axes.unicode_minus'] = False
+        plt.rc('text', usetex=False)
+
+    if axisDict is None or 'attAxis' not in axisDict:
+        attitudeFigure=plt.figure(figsize=(16,9))
+        print("generating new attitude figure")
+        if placeLegend:
+            rollAxis = plt.subplot2grid((3,4), (0,0),colspan=3)
+            pitchAxis = plt.subplot2grid((3,4), (1,0),colspan=3)
+            yawAxis = plt.subplot2grid((3,4), (2,0),colspan=3)
+        else:
+            rollAxis = plt.subplot2grid((3,1), (0,0))
+            pitchAxis = plt.subplot2grid((3,1), (1,0))
+            yawAxis = plt.subplot2grid((3,1), (2,0))
     else:
-        attFig = figureDict['attFigure']
-    attFig.clear()
-    plt.figure(2)
-    
+        rollAxis = axisDict['attAxis']['roll']
+        pitchAxis = axisDict['attAxis']['pitch']
+        yawAxis = axisDict['attAxis']['yaw']
+        
+        # plt.sca(attAxis)
+
+    if clearOldPlot:
+        rollAxis.clear()
+        pitchAxis.clear()
+        yawAxis.clear()
+        
     estimatedT = resultsDict['estimatedT']['value']
     rollSigma = resultsDict['estimatedAttitudeSigma_DEG']['value'][0]
     pitchSigma = resultsDict['estimatedAttitudeSigma_DEG']['value'][1]
@@ -44,224 +108,631 @@ def outputPlots(
     estimatedPosStdDev = resultsDict['estimatedPosStdDev']['value']
     estimatedPosStdDev_calc = resultsDict['estimatedPosStdDev_calc']['value']
 
-    if useINF:
-        navPos = resultsDict['navPos']['value']
+    if 'navVel' in resultsDict:
         navVel = resultsDict['navVel']['value']
         navVelStd = resultsDict['navVelStd']['value']
+    else:
+        navVel = None
+    if 'navAcc' in resultsDict:
+        navAcc = resultsDict['navAcc']['value']
+        navAccStd = resultsDict['navAccStd']['value']
+    else:
+        navAcc=None
 
-        navBiasState = resultsDict['navBiasState']['value']
-        navPosStd = resultsDict['navPosStd']['value']
-        navPosErrorStdDev = resultsDict['navPosErrorStdDev']['value']
 
     truePos = resultsDict['truePos']['value']
     trueVel = resultsDict['trueVel']['value']
+    trueAcc = resultsDict['trueAcc']['value']
 
     velocityOnlyRange = resultsDict['velocityOnlyRange']['value']
                                      
     
     stdDevColor = [0.5, 0.5, 0.5]
-    plt.subplot2grid((3,1), (0,0))
-    plt.title('Roll error, standard dev')
-    plt.plot(
+    legendLabelList = []
+    legendLineList = []
+        
+    # rollAxis.set_title(r'Roll error, \$\pm 1 \sigma\$ bounds')
+    estLine, = rollAxis.plot(
         estimatedT - estimatedT[0],
-        rollError
+        rollError,
+        color=colorList[0 + colorCounter],
+        lw=lineWeight
     )
-    if attPO:
-        plt.plot(
+    legendLineList.append(estLine)
+    legendLabelList.append('attitude estimate error')
+    if attPO and plotPropagationError:
+        propLine,=rollAxis.plot(
             estimatedT - estimatedT[0],
-            rollError_PO
+            rollError_PO,
+            color=colorList[1 + colorCounter],
+            ls='dashdot',
+            lw=lineWeight
         )
-    plt.plot(
+        legendLineList.append(propLine)
+        legendLabelList.append('inertial propagation error')
+        
+    sigmaLine,=rollAxis.plot(
         estimatedT-estimatedT[0],
         -rollSigma,
-        color=stdDevColor
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight
     )
-    plt.plot(
+    legendLineList.append(sigmaLine)
+    legendLabelList.append(r'\$\pm 1 \sigma\$')
+        
+    
+    rollAxis.plot(
         estimatedT-estimatedT[0],
         rollSigma,
-        color=stdDevColor
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight
     )
-    plt.ylabel('deg')
+    rollAxis.set_ylabel(r'roll error \$(deg)\$')
+    rollAxis.grid()
 
-    plt.subplot2grid((3,1), (1,0))
-    plt.title('Pitch error, standard dev')
+    if scaleByStdDev:
+        myStdDev = np.std(rollError)
+        myMean = np.mean(rollError)
+        rollAxis.set_ylim([-scaleByStdDev*myStdDev + myMean, scaleByStdDev*myStdDev + myMean])
+    
+    
+    # if placeLegend:
+    #     pitchAxis=plt.subplot2grid((3,4), (1,0),colspan=3)
+    # else:
+    #     pitchAxis=plt.subplot2grid((3,1), (1,0))
+        
+    # pitchAxis.set_title(r'Pitch error, \$\pm 1 \sigma\$ bounds')
 
-    plt.plot(
+    pitchAxis.plot(
         estimatedT-estimatedT[0],
-        pitchError
+        pitchError,
+        color=colorList[0+colorCounter],
+        lw=lineWeight
     )
-    if attPO:
-        plt.plot(
+    if attPO and plotPropagationError:
+        pitchAxis.plot(
             estimatedT - estimatedT[0],
-            pitchError_PO
+            pitchError_PO,
+            color=colorList[1+ colorCounter],
+            lw=lineWeight,
+            ls='dashdot'
         )
     
-    plt.plot(
+    pitchAxis.plot(
         estimatedT-estimatedT[0],
         pitchSigma,
-        color=stdDevColor
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight
     )
-    plt.plot(
+    pitchAxis.plot(
         estimatedT-estimatedT[0],
         -pitchSigma,
-        color=stdDevColor
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight
     )
-    plt.ylabel('deg')
+    pitchAxis.set_ylabel(r'pitch error \$(deg)\$')
 
-    plt.subplot2grid((3,1), (2,0))
-    plt.title('Yaw error, standard dev')
-    plt.plot(
+    if scaleByStdDev:
+        myStdDev = np.std(pitchError)
+        myMean = np.mean(pitchError)
+        pitchAxis.set_ylim([-scaleByStdDev*myStdDev + myMean, scaleByStdDev*myStdDev + myMean])
+    
+    pitchAxis.grid()
+    
+    # if placeLegend:
+    #     yawAxis=plt.subplot2grid((3,4), (2,0),colspan=3)
+    # else:
+    #     yawAxis=plt.subplot2grid((3,1), (2,0))
+        
+    # yawAxis.set_title(r'Yaw error, \$\pm 1 \sigma\$ bounds')
+    yawAxis.plot(
         estimatedT-estimatedT[0],
-        yawError
+        yawError,
+        color=colorList[0 + colorCounter],
+        lw=lineWeight        
     )
-    if attPO:
-        plt.plot(
+    if attPO and plotPropagationError:
+        yawAxis.plot(
             estimatedT - estimatedT[0],
-            yawError_PO
+            yawError_PO,
+            color=colorList[1 + colorCounter],
+            lw=lineWeight,
+            ls='dashdot'            
         )
     
-    plt.plot(
+    yawAxis.plot(
         estimatedT-estimatedT[0],
         yawSigma,
-        color=stdDevColor
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight
     )
-    plt.plot(
+    yawAxis.plot(
         estimatedT-estimatedT[0],
         -yawSigma,
-        color=stdDevColor
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight    
     )
-    plt.ylabel('deg')
-    plt.xlabel('time (s)')
-    plt.subplots_adjust(hspace=.5)
+    yawAxis.grid()
+    yawAxis.set_ylabel(r'yaw error \$(deg)\$')
+    yawAxis.set_xlabel(r'time \$(s)\$')
+    if scaleByStdDev:
+        myStdDev = np.std(yawError)
+        myMean = np.mean(yawError)
+        yawAxis.set_ylim([-scaleByStdDev*myStdDev + myMean, scaleByStdDev*myStdDev + myMean])
+    # plt.subplots_adjust(hspace=.5)
 
+
+    rollAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%2.2f'))
+    pitchAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%2.2f'))
+    yawAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%2.2f'))
+
+    rollAxis.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0.f'))
+    pitchAxis.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0.f'))
+    yawAxis.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0.f'))
+    
+    rollAxis.yaxis.set_minor_formatter(ticker.FormatStrFormatter('%2.2f'))
+    pitchAxis.yaxis.set_minor_formatter(ticker.FormatStrFormatter('%2.2f'))
+    yawAxis.yaxis.set_minor_formatter(ticker.FormatStrFormatter('%2.2f'))
+
+    rollAxis.xaxis.set_minor_formatter(ticker.FormatStrFormatter('%0.f'))
+    pitchAxis.xaxis.set_minor_formatter(ticker.FormatStrFormatter('%0.f'))
+    yawAxis.xaxis.set_minor_formatter(ticker.FormatStrFormatter('%0.f'))
+    plt.tight_layout()
+
+    if placeLegend:
+        # plt.subplot2grid((3,4), (3,0),colspan=3) 
+        legendPlot = plt.subplot2grid((3,4), (0,3),rowspan=3)
+        legendPlot.axis('off')
+        myLegend=legendPlot.legend(
+            legendLineList,
+            legendLabelList,
+            bbox_to_anchor=(1, 1),
+            fancybox=True,
+            shadow=True,
+            handlelength=legendLineLength,
+            borderpad=legendBorderPad,
+        )
+        plt.setp(myLegend.get_texts(), fontsize=30)
+        
+    else:
+        legendDict['attitude'] = {'lines': legendLineList, 'labels': legendLabelList}
+    
     if saveOutput:
-        mpld3.save_html(attFig, outputDir + '/attitude.html')
+        if outputFormat == 'HTML':
+            mpld3.save_html(rollAxis.get_figure(), outputDir + '/attitude.html')
+        elif outputFormat == 'SVG':
+            plt.savefig(outputDir + '/acceleration.svg')
+            
     plt.show(block=False)
     
-    if figureDict is None:
-        tdoaFigure = plt.figure(3, figsize=(16,9))
+    if axisDict is None or 'tdoaAxis' not in axisDict:
+        tdoaFigure=plt.figure(figsize=(16,9))
+        tdoaAxis = plt.gca()
     else:
-        tdoaFigure = figureDict['tdoaFigure']
-    tdoaFigure.clear()
-    plt.figure(3)
+        tdoaAxis = axisDict['tdoaAxis']
+    legendLineList = []
+    legendLabelList = []
     
-    plt.plot(
+    if clearOldPlot:
+        tdoaAxis.clear()
+
+    propOnlyRange = truePos - (velocityOnlyRange) - truePos[0]
+    rangeError = truePos - estimatedPos
+    if logErrorPlot:
+        tdoaAxis.set_yscale('log')
+        propOnlyRange = np.abs(propOnlyRange)
+        rangeError = np.abs(rangeError)
+        
+    
+    tdoaLine, = tdoaAxis.plot(
         estimatedT,
-        truePos - estimatedPos,
-        label=(
-            'unfiltered delay error ($\sigma=%s$)'
-            %estimatedPosStdDev_calc
-            )
+        rangeError,
+        color=colorList[0+colorCounter],        
+        lw=lineWeight
     )
-    plt.plot(estimatedT, estimatedPosStdDev, ls='-.', color=[0.5,0.5,0.5], label = 'unfiltered standard deviation')
-    plt.plot(estimatedT, -estimatedPosStdDev, ls='-.', color=[0.5,0.5,0.5])
+    legendLineList.append(tdoaLine)
+    legendLabelList.append(r'range error (\$\sigma=%.2f\$)'%estimatedPosStdDev_calc)
 
-
-    if useINF:
-        plt.plot(
-            estimatedT,
-            truePos - navPos,
-            label=(
-                'nav filter delay error, ($\sigma = %s$)'
-                %navPosErrorStdDev
-            )
-        )
-        plt.plot(
-            estimatedT,
-            navBiasState,
-            label='bias state'
-        )
-        plt.plot(estimatedT, navPosStd, color=[0.9,0.9,0.9], label='nav filter standard deviation')
-        plt.plot(estimatedT, -navPosStd, color=[0.9,0.9,0.9])
-
-    plt.legend()
-    plt.xlabel('time (s)')
-    plt.ylabel('(km)')
-    plt.plot(
+    sigmaLine, = tdoaAxis.plot(
         estimatedT,
-        truePos -
-        (velocityOnlyRange)
-        - truePos[0],
-        label='initial velocity error propagation'
+        estimatedPosStdDev,
+        color=stdDevColor,
+        ls='dotted',
+        lw=lineWeight        
     )
+    legendLineList.append(sigmaLine)
+    legendLabelList.append(r'estimated standard deviation (\$1\sigma\$)')
+
+    if not logErrorPlot:
+        tdoaAxis.plot(
+            estimatedT,
+            -estimatedPosStdDev,
+            color=stdDevColor,
+            ls='dotted',
+            lw=lineWeight        
+        )
+    tdoaAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%2.f'))
+    tdoaAxis.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0.f'))
+    
+    tdoaAxis.yaxis.set_minor_formatter(ticker.FormatStrFormatter('%2.f'))
+    tdoaAxis.xaxis.set_minor_formatter(ticker.FormatStrFormatter('%0.f'))
+
+
+    # if useINF:
+        # plt.plot(
+        #     estimatedT,
+        #     truePos - navPos,
+        #     label=(
+        #         'nav filter delay error, ($\sigma = %s$)'
+        #         %navPosErrorStdDev
+        #     )
+        # )
+        # plt.plot(
+        #     estimatedT,
+        #     navBiasState,
+        #     label='bias state'
+        # )
+        # plt.plot(estimatedT, navPosStd, color=[0.9,0.9,0.9], label='nav filter standard deviation')
+        # plt.plot(estimatedT, -navPosStd, color=[0.9,0.9,0.9])
+
+    tdoaAxis.set_xlabel('time \$(s)\$')
+    tdoaAxis.set_ylabel(r'TDOA error \$(km)\$')
+        
+    if plotPropagationError:
+        tdoaPropOnlyLine, = tdoaAxis.plot(
+            estimatedT,
+            propOnlyRange,
+            color=colorList[1 + colorCounter],
+            ls='dashdot',
+            lw=lineWeight
+        )
+        legendLineList.append(tdoaPropOnlyLine)
+        legendLabelList.append('initial velocity error propagation')
+
+    if scaleByStdDev:
+        myStdDev = np.std(truePos-estimatedPos)
+        myMean = np.mean(truePos-estimatedPos)
+        tdoaAxis.set_ylim([-scaleByStdDev*myStdDev + myMean, scaleByStdDev*myStdDev + myMean])
+
+    if placeLegend:
+        tdoaAxis.legend(
+            legendLineList,
+            legendLabelList,
+            bbox_to_anchor=(1, 1),
+            fancybox=True,
+            shadow=True,
+            handlelength=legendLineLength,
+            borderpad=legendBorderPad,
+        )
+    legendDict['tdoa'] = {'lines': legendLineList, 'labels': legendLabelList}
+    
+    tdoaAxis.grid()
     if saveOutput:
-        mpld3.save_html(tdoaFigure, outputDir + '/tdoa.html')
+        if outputFormat == 'HTML':
+            mpld3.save_html(tdoaAxis.get_figure(), outputDir + '/tdoa.html')
+        elif outputFormat == 'SVG':
+            plt.savefig(outputDir + '/tdoa.svg')
         # plt.close(tdoaFigure)
     plt.show(block=False)
-        
+    
+    axisDict['tdoaAxis'] = tdoaAxis
+    axisDict['attAxis'] = {'roll': rollAxis, 'pitch': pitchAxis, 'yaw': yawAxis}
+
+    
     velocityFigure = None
-    if useINF:
-        if figureDict is None:
-            velocityFigure = plt.figure(4, figsize=(16,9))
+    if not np.any(navVel==None):
+        if axisDict is None or 'velocityAxis' not in axisDict:
+            velocityFigure=plt.figure(figsize=(16,9))
+            velocityAxis = plt.gca()
         else:
-            velocityFigure = figureDict['velocityFigure']
-        velocityFigure.clear()
-        plt.figure(4)
-        
-        plt.plot(
+            velocityAxis = axisDict['velocityAxis']
+        if clearOldPlot:
+            velocityAxis.clear()
+        velError = trueVel - navVel
+        if logErrorPlot:
+            velError = np.abs(velError)
+            velocityAxis.set_yscale('log')
+            
+        velocityAxis.plot(
             estimatedT,
-            trueVel - navVel,
+            velError,
             label=(
-                'velocity error ($\sigma = %s$)'
-                %np.std(trueVel - navVel)
-            )
+                r'velocity error (\$\sigma = %s\$)'
+                %np.std(trueVel - navVel)                
+            ),
+            color=colorList[0 + colorCounter],
+            lw=lineWeight
         )
-        plt.plot(estimatedT, navVelStd, color=[0.5,0.5,0.5], label='velocity std dev')
-        plt.plot(estimatedT, -navVelStd, color=[0.5,0.5,0.5])
-        plt.legend()
+        velocityAxis.plot(estimatedT, navVelStd,ls='dotted', lw=lineWeight, color=[0.5,0.5,0.5], label='velocity std dev')
+
+        if not logErrorPlot:
+            velocityAxis.plot(estimatedT, -navVelStd, color=[0.5,0.5,0.5],ls='dotted', lw=lineWeight,)
+        if scaleByStdDev:
+            myStdDev = np.std(trueVel-navVel)
+            myMean = np.mean(trueVel-navVel)
+            velocityAxis.set_ylim([-scaleByStdDev*myStdDev + myMean, scaleByStdDev*myStdDev + myMean])
+        
+        velocityAxis.legend()
 
         if saveOutput:
-            mpld3.save_html(velocityFigure, outputDir + '/velocity.html')
+            if outputFormat == 'HTML':
+                mpld3.save_html(velocityAxis.get_figure(), outputDir + '/velocity.html')
+            elif outputFormat == 'SVG':
+                plt.savefig(outputDir + '/velocity.svg')
+            # plt.close(velocityFigure)
+        # else:
+        velocityAxis.grid()
+        plt.show(block=False)
+        axisDict['velocityAxis'] = velocityAxis
+        
+    legendLineList = []
+    legendLabelList = []
+        
+    if not np.any(navAcc==None):
+        if axisDict is None or 'accelerationAxis' not in axisDict:
+            accelerationFigure=plt.figure(figsize=(16,9))
+            accelerationAxis = plt.gca()
+        else:
+            accelerationAxis = axisDict['accelerationAxis']
+            
+        if clearOldPlot:
+            accelerationAxis.clear()
+        accError = trueAcc - navAcc
+
+        if logErrorPlot:
+            accError = np.abs(accError)
+            accelerationAxis.set_yscale('log')
+        accelerationAxis.yaxis.set_major_formatter(ticker.FormatStrFormatter('%0.e'))
+        accelerationAxis.xaxis.set_major_formatter(ticker.FormatStrFormatter('%0.e'))
+        accLine, = accelerationAxis.plot(
+            estimatedT,
+            accError,
+            label=(
+                r'acceleration error'
+            ),
+            color=colorList[0 + colorCounter],
+            lw=lineWeight            
+        )
+        legendLineList.append(accLine)
+        legendLabelList.append(r'acceleration error')
+        
+        accSigmaLine, = accelerationAxis.plot(estimatedT, navAccStd, color=[0.5,0.5,0.5], label='acceleration std dev',ls='dotted', lw=lineWeight,)
+        if not logErrorPlot:
+            accelerationAxis.plot(estimatedT, -navAccStd, color=[0.5,0.5,0.5],ls='dotted', lw=lineWeight,)
+        legendLineList.append(accSigmaLine)
+        legendLabelList.append(r'estimated standard deviation')
+        accelerationAxis.set_ylabel(r'Acceleration error \$\frac{km}{s^2}\$')
+        accelerationAxis.set_xlabel(r'time \$(s)\$')
+
+        if placeLegend:
+            # plt.subplot2grid((3,4), (3,0),colspan=3) 
+            legendPlot = plt.subplot2grid((3,4), (0,3),rowspan=3)
+            legendPlot.axis('off')
+            myLegend=legendPlot.legend(
+                legendLineList,
+                legendLabelList,
+                bbox_to_anchor=(1, 1),
+                fancybox=True,
+                shadow=True,
+                handlelength=legendLineLength,
+                borderpad=legendBorderPad,
+            )
+            plt.setp(myLegend.get_texts(), fontsize=legendFont)
+
+        else:
+            legendDict['acceleration'] = {'lines': legendLineList, 'labels': legendLabelList}
+        
+        if scaleByStdDev:
+            myStdDev = np.std(trueAcc-navAcc)
+            myMean = np.mean(trueAcc-navAcc)
+            accelerationAxis.set_ylim([-scaleByStdDev*myStdDev + myMean, scaleByStdDev*myStdDev + myMean])
+        accelerationAxis.grid()
+        if saveOutput:
+            if outputFormat == 'HTML':
+                mpld3.save_html(accelerationAxis.get_figure(), outputDir + '/acceleration.html')
+            elif outputFormat == 'SVG':
+                plt.savefig(outputDir + '/acceleration.svg')
             # plt.close(velocityFigure)
         # else:
         plt.show(block=False)
-        figureDict = {
-        'tdoaFigure': tdoaFigure,
-        'velocityFigure': velocityFigure,
-        'attFigure': attFig
-    }
-    return(figureDict)
+        axisDict['accelerationAxis'] = accelerationAxis
+        
+        # figureDict = {
+        #     'tdoaFigure': tdoaFigure,
+        #     'velocityFigure': velocityFigure,
+        #     'attFigure': attFig,
+        #     'accelerationFigure': accelerationFigure
+        # }
+
+    return(axisDict,legendDict)
+
+def createStdDevHeader(
+        inputRecord,
+):
+    
+    myTableString = (
+        r'\begin{tabular}{%' + '\n' +
+        r'>{\raggedright}p{0.1\textwidth}%' + '\n' +
+        r'>{\raggedright}p{0.15\textwidth}%' + '\n' +
+        r'>{\raggedright}p{0.2\textwidth}%' + '\n' +
+        r'>{\raggedright}p{0.12\textwidth}%' + '\n' +
+        r'>{\raggedright}p{0.12\textwidth}%' + '\n' +
+        r'p{0.12\textwidth}}%' + '\n' + r'\toprule'
+    )
+    
+    myTableString += r'\multirow{3}{0.1\textwidth}{Target object} & '
+    
+    
+    myTableString += (
+        r'\multirow{3}{0.15\textwidth}{' +
+        r'Initial velocity error  (' +
+        inputRecord.parameters['parameters']['correlationFilter']['internalNavFilter']['initialVelocityStdDev']['unit'] +
+        ')} & '
+    )
+
+    myTableString += (
+        r'\multirow{3}{0.2\textwidth}{' +
+        r'Angular velocity measurement error (' +
+        inputRecord.parameters['parameters']['dynamicsModel']['omegaStdDev']['unit'] +
+        ')} & '
+    )
+    
+    myTableString += r'\multicolumn{3}{c}{Initial attitude (' + inputRecord.parameters['parameters']['dynamicsModel']['initialAttitudeStdDev']['DEC']['unit'] + r')} \\' + '\n'
+
+    myTableString += r'\cmidrule(l){4-6}' + '\n'
+    myTableString += r'& & & roll & pitch & yaw\\' + '\n'
+    myTableString += r'& & &  &  & \\' + '\n'
+    myTableString += r'\midrule\\' + '\n'
+    return (myTableString)
+
+def addInputToTable(
+        resultsDict,        
+        inputRecord,
+        header
+): 
+    if 'pulsarName' in resultsDict:
+        header += resultsDict['pulsarName'] + r' & '
+    else:  
+        header += inputRecord['parameters']['filesAndDirs']['targetObject']['value'] + r' & '
+      
+    header += r'\multirow{2}{*}{%.2e} &' %inputRecord['parameters']['correlationFilter']['internalNavFilter']['initialVelocityStdDev']['value']
+    
+    header += r'\multirow{2}{*}{%.2e} &' %inputRecord['parameters']['dynamicsModel']['omegaStdDev']['value']
+    
+    header += r'\multirow{2}{*}{%.2e} &' %(inputRecord['parameters']['dynamicsModel']['initialAttitudeStdDev']['roll']['value'])
+    header += r'\multirow{2}{*}{%.2e} &' %(inputRecord['parameters']['dynamicsModel']['initialAttitudeStdDev']['DEC']['value'])
+    header += r'\multirow{2}{*}{%.2e}' %(inputRecord['parameters']['dynamicsModel']['initialAttitudeStdDev']['RA']['value'])
+    
+    header += r'\\'
+    header += '\n'
+    if isinstance(inputRecord['parameters']['filesAndDirs']['observationID']['value'], list):
+        header += r' (Obs. ID '
+        firstObs = True
+        for obsID in inputRecord['parameters']['filesAndDirs']['observationID']['value']:
+            if not firstObs:
+                header+=', '
+            firstObs = False
+            header+= r'%i' %obsID
+            
+        header += r')& & & & &\\'
+        
+    else:
+        header += r' (Obs. ID %i)& & & & &\\' %inputRecord['parameters']['filesAndDirs']['observationID']['value']
+    header += '\n'
+    return header
+   
+
+def createResultsHeader(
+        resultsDict
+):
+    myTableString = (
+        r'\begin{tabular}{%' + '\n' +
+        r'>{\raggedright}p{0.1\textwidth}%' + '\n' +
+        r'>{\raggedright}p{0.15\textwidth}%' + '\n' +
+        r'>{\raggedright}p{0.2\textwidth}%' + '\n' +
+        r'>{\raggedright}p{0.12\textwidth}%' + '\n' +
+        r'>{\raggedright}p{0.12\textwidth}%' + '\n' +
+        r'p{0.12\textwidth}}%' + '\n' + r'\toprule'
+    )
+    
+    # myTableString = (
+    #     r'\begin{tabular}{%' + '\n' +
+    #     r'>{\raggedright}p{0.15\textwidth}%' + '\n' +
+    #     r'>{\raggedright}p{0.1\textwidth}%' + '\n' +
+    #     r'>{\raggedright}p{0.2\textwidth}%' + '\n' +
+    #     r'>{\raggedright}p{0.1\textwidth}%' + '\n' +
+    #     r'>{\raggedright}p{0.1\textwidth}%' + '\n' +
+    #     r'p{0.1\columnwidth}}%' + '\n' + r'\toprule'
+    # )
+
+    myTableString += r'\multirow{3}{0.15\textwidth}{Target object} & '
+    
+    myTableString += (
+        r'\multirow{3}{0.1\textwidth}{' +
+        r'Runtime (' +
+        resultsDict['estimatedT']['unit'] +
+        ')} & '
+    )
+    
+    myTableString += (
+        r'\multirow{3}{0.2\textwidth}{' +
+        r'Range estimate error standard deviation (' +
+        resultsDict['estimatedPosStdDev_calc']['unit'] +
+        ')} & '
+    )
+
+    myTableString += r'\multicolumn{3}{c}{\multirow{2}{0.36\textwidth}{Attitude estimate error standard deviation (' + resultsDict['estimatedAttitudeSigma_DEG']['unit'] + r')}} \\' + '\n'
+
+    myTableString += r'& & &  &  & \\' + '\n'
+    myTableString += r'\cmidrule(l){4-6}' + '\n'
+
+    myTableString += r'& & & roll & pitch & yaw\\' + '\n'
+    myTableString += r'\midrule\\' + '\n'
+    return (myTableString)
+
+def addResultsToTable(
+        resultsDict, inputs, header
+):
+    
+    if 'pulsarName' in resultsDict:
+        header += resultsDict['pulsarName'] + r' & '
+    else:  
+        header += inputs['parameters']['filesAndDirs']['targetObject']['value'] + r' & '
+        
+    header += r'\multirow{2}{*}{%.2e} &' %(resultsDict['estimatedT']['value'][-1] - resultsDict['estimatedT']['value'][0])
+      
+    header += r'\multirow{2}{*}{%.2e} &' %resultsDict['estimatedPosStdDev_calc']['value']
+    header += r'\multirow{2}{*}{%.2e} &' %(np.std(resultsDict['attitudeError_DEG']['value'][0]) + np.abs(np.mean(resultsDict['attitudeError_DEG']['value'][0])))
+    header += r'\multirow{2}{*}{%.2e} &' %(np.std(resultsDict['attitudeError_DEG']['value'][1]) + np.abs(np.mean(resultsDict['attitudeError_DEG']['value'][1])))
+    header += r'\multirow{2}{*}{%.2e}' %(np.std(resultsDict['attitudeError_DEG']['value'][2]) + np.abs(np.mean(resultsDict['attitudeError_DEG']['value'][2])))
+    header += r'\\'
+    header += '\n'
+    if isinstance(inputs['parameters']['filesAndDirs']['observationID']['value'], list):
+        header += r' (Obs. ID '
+        firstObs = True
+        for obsID in inputs['parameters']['filesAndDirs']['observationID']['value']:
+            if not firstObs:
+                header+=', '
+            firstObs = False
+            header+= r'%i' %obsID
+            
+        header += r')& & & &\\'
+        
+    else:
+        header += r' (Obs. ID %i)& & & &\\' %inputs['parameters']['filesAndDirs']['observationID']['value']
+    header += '\n'
+    return header
 
 
 def createResultsDict(
         mySpacecraft,
         ureg,
         estimatedT,
-        peakLock,
-        trueTDOA,
-        trueVel,
-        estimatedTDOA,
-        estimatedTDOAVar,
-        estimatedRoll,
-        estimatedPitch,
-        estimatedYaw,
-        rollSigma,
-        pitchSigma,
-        yawSigma,
-        velocityOnlyRange,
-        roll_PO=None,
-        pitch_PO=None,
-        yaw_PO=None,
+        tdoa,
+        attitude,
+        velocityOnlyRangeTruncated,
+        pulsarName,
+        attitudePO=None,
         useINF=False,
-        navBiasState=None,
-        navTDOA=None,
-        navTDOAStd=None,
-        navVel=None,
-        navVelStd=None,
-        navVelErrorStdDev=None,
         saveOutput=True,
         outputDir=None
 ):
     rad2deg = 180/np.pi
-    estimatedRoll = np.array(estimatedRoll)
-    estimatedPitch = np.array(estimatedPitch)
-    estimatedYaw = np.array(estimatedYaw)
-    rollSigma = np.array(rollSigma)
-    pitchSigma = np.array(pitchSigma)
-    yawSigma = np.array(yawSigma)
+    estimatedRoll = np.array(attitude['roll'])
+    estimatedPitch = np.array(attitude['pitch'])
+    estimatedYaw = np.array(attitude['yaw'])
+    rollSigma = np.array(attitude['rollSigma'])
+    pitchSigma = np.array(attitude['pitchSigma'])
+    yawSigma = np.array(attitude['yawSigma'])
 
     trueAtt = np.array(mySpacecraft.dynamics.attitude(
-        estimatedT+mySpacecraft.tStart,returnQ=False)
+        estimatedT+mySpacecraft.tStart, returnQ=False)
     )
 
     trueAtt_DEG = trueAtt * rad2deg
@@ -285,10 +756,10 @@ def createResultsDict(
 
     attitudeError_DEG = [rollError_DEG, pitchError_DEG, yawError_DEG]
 
-    if roll_PO is not None:
-        roll_PO = np.array(roll_PO)
-        pitch_PO = np.array(pitch_PO)
-        yaw_PO = np.array(yaw_PO)
+    if attitudePO is not None:
+        roll_PO = np.array(attitudePO['roll'])
+        pitch_PO = np.array(attitudePO['pitch'])
+        yaw_PO = np.array(attitudePO['yaw'])
         
         estimateAttitude_DEG_PO = [
             roll_PO*rad2deg,
@@ -304,94 +775,57 @@ def createResultsDict(
     else:
         attitudeError_DEG_PO = None
         
-    estimatedTDOA = np.array(estimatedTDOA)
-    estimatedTDOAVar = np.array(estimatedTDOAVar)
+    estimatedTDOA = np.array(tdoa['TDOA'])
+    estimatedTDOAStd = np.array(tdoa['TDOAStd'])
 
-    if useINF:
-        navTDOA = np.array(navTDOA)
-        navVel = np.array(navVel)
-        navVelStd = np.array(navVelStd)
-
-        navBiasState = np.array(navBiasState)
-        navTDOAStd = np.array(navTDOAStd)
-
-    trueTDOA = np.array(trueTDOA)
-    trueVel = np.array(trueVel)
+    trueTDOA = np.array([
+        mySpacecraft.dynamics.position(t + mySpacecraft.tStart).dot(tdoa['unitVec']) for t in estimatedT
+    ])
+    trueVel = np.array([
+        mySpacecraft.dynamics.velocity(t + mySpacecraft.tStart).dot(tdoa['unitVec']) for t in estimatedT
+    ])
+    
+    trueAcc = np.array([
+        mySpacecraft.dynamics.acceleration(t + mySpacecraft.tStart).dot(tdoa['unitVec']) for t in estimatedT
+    ])
 
     truePos = trueTDOA - trueTDOA[0]
+    
+
+    if len(tdoa['vel'])>0:
+        navVel = np.array(tdoa['vel'])
+        navVelStd = np.array(tdoa['velStd'])
+        navVelErrorStdDev = np.std(navVel - trueVel)
+        
+    if len(tdoa['acc'])>0:
+        navAcc = np.array(tdoa['acc'])
+        navAccStd = np.array(tdoa['accStd'])
+
     estimatedPos = (estimatedTDOA * ureg.seconds * ureg.speed_of_light).to(ureg('km')).magnitude
-    if not np.any(peakLock):
+    if not np.any(tdoa['peakLock']):
         meanDiff = np.mean(estimatedPos - truePos)
     else:
         meanDiff = np.mean(
-            [eP-tP for tP, eP, pL in zip(truePos, estimatedPos, peakLock) if pL]
+            [eP-tP for tP, eP, pL in zip(truePos, estimatedPos, tdoa['peakLock']) if pL]
         )
-    print("Mean DIFF:")
-    print(meanDiff)
+        
     estimatedPos = estimatedPos - meanDiff
     estimatedPosStdDev = (
-        np.sqrt(estimatedTDOAVar) * ureg.seconds * ureg.speed_of_light
+        estimatedTDOAStd * ureg.seconds * ureg.speed_of_light
     ).to(ureg.km).magnitude
 
-    if useINF:
-        navPos = (navTDOA * ureg.seconds * ureg.speed_of_light).to(ureg('km')).magnitude
-        navPosStd = (navTDOAStd * ureg.speed_of_light * ureg.seconds).to(ureg('km')).magnitude
-        finalPosStd = navPosStd[-1]
-        
-        meanNavDiff = np.mean(
-            [nP-tP for tP, nP, pS in zip(truePos, navPos, navPosStd) if pS < finalPosStd*2]
-        )
-        
-        # meanNavDiff = np.mean(navPos - truePos)
-        navPos = navPos - meanNavDiff
-
-        navVel = (navVel * ureg.speed_of_light).to(ureg('km/s')).magnitude
-        navVelStd = (navVelStd * ureg.speed_of_light).to(ureg('km/s')).magnitude
-
-        navBiasState = (navBiasState * ureg.seconds * ureg.speed_of_light).to(ureg('km')).magnitude
-
-        navPosErrorStdDev = np.std(navPos - truePos)
-        navPosErrorStdDev = np.std(
-            [nP-tP for tP, nP, pS in zip(truePos, navPos, navPosStd) if pS < finalPosStd*2]
-        )
-        
-        navVelErrorStdDev = np.std(navVel - trueVel)
 
     estimatedPosStdDev_calc = np.std(
-        [tP - eP for tP, eP, pL in zip(truePos, estimatedPos, peakLock) if pL]
+        [tP - eP for tP, eP, pL in zip(truePos, estimatedPos, tdoa['peakLock']) if pL]
     )
     
     
     resultsDict = {}
 
-    if useINF:
-        resultsDict['navBiasState'] = {
-            'value': navBiasState,
-            'comment': 'Navigation filter measurement bias state estimate',
-            'unit': 'km'
-        }
-        resultsDict['navPos'] = {
-            'value': navPos,
-            'comment': 'Spacecraft range estimated by internal nav filter',
-            'unit': 'km'
-        }
-
-        resultsDict['navPosStd'] = {
-            'value': navPosStd,
-            'comment': 'Spacecraft range standard deviation estimated by internal nav filter',
-            'unit': 'km'
-    }
-
-        resultsDict['navPosErrorStdDev'] = {
-            'value': navPosErrorStdDev,
-            'comment': 'Standard deviation of spacecraft range estimate error',
-            'unit': 'km'
-        }
-
-
+    if len(navVel) > 0:
         resultsDict['navVel'] = {
             'value': navVel,
-            'comment': 'Spacecraft range as estimated by internal nav filter',
+            'comment': 'Spacecraft velocity as estimated by internal nav filter',
             'unit': 'km/s'
         }
 
@@ -407,11 +841,23 @@ def createResultsDict(
             'unit':'km/s'
         }
         
-        resultsDict['velocityOnlyRange'] = {
-            'value': velocityOnlyRange,
-            'comment':'Range from velocity propagation',
-            'unit':'km'
+    if len(navAcc) > 0:
+        resultsDict['navAcc'] = {
+            'value': navAcc,
+            'comment': 'Spacecraft acceleration as estimated by internal nav filter',
+            'unit': 'km/s^2'
         }
+
+        resultsDict['navAccStd'] = {
+            'value': navAccStd,
+            'comment': 'Spacecraft acceleration standard deviation estimated by internal nav filter',
+            'unit': 'km/s^2'
+        }
+    resultsDict['velocityOnlyRange'] = {
+        'value': velocityOnlyRangeTruncated,
+        'comment':'Range from velocity propagation',
+        'unit':'km'
+    }
 
 
 
@@ -424,6 +870,11 @@ def createResultsDict(
         'value': trueVel,
         'comment': 'True Spacecraft velocity',
         'unit': 'km/s'
+    }
+    resultsDict['trueAcc'] = {
+        'value': trueAcc,
+        'comment': 'True Spacecraft acceleration',
+        'unit': 'km/s^2'
     }
     resultsDict['estimatedPos'] = {
         'value': estimatedPos,
@@ -471,7 +922,7 @@ def createResultsDict(
     }
 
     resultsDict['peakLock'] = {
-        'value': peakLock,
+        'value': tdoa['peakLock'],
         'comment': 'Indication of peak lock',
         'unit': ''
     }
@@ -480,6 +931,7 @@ def createResultsDict(
         'comment': 'Time',
         'unit': 's'
     }
+    resultsDict['pulsarName'] = pulsarName
     
     if saveOutput:
         pickle.dump( resultsDict, open( outputDir + "/data.p", "wb" ) )

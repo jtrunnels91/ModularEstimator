@@ -9,6 +9,8 @@ from .. modularfilter import ModularFilter
 from . oneDimensionalPositionVelocity import oneDPositionVelocity
 from .. signals.oneDimensionalObject import oneDObjectMeasurement
 from .. utils import covarianceContainer
+from scipy.linalg import block_diag
+from scipy.special import factorial
 from math import isnan
 
 ## @class CorrelationVector
@@ -126,18 +128,27 @@ class CorrelationVector(substate.SubState):
             peakLockThreshold=1,
             covarianceStorage='covariance',
             internalNavFilter=None,
-            defaultOneDAccelerationVar=1,
+            navProcessNoise=1,
             tdoaStdDevThreshold=None,
             velStdDevThreshold=None,
             tdoaNoiseScaleFactor=None,
             velocityNoiseScaleFactor=None,
-            storeLastStateVectors=0
+            storeLastStateVectors=0,
+            vInitial=None,
+            aInitial=None,
+            gradInitial=None,
+            peakEstimator='EK'
             ):
         print('updated correlation filter')
         self.peakLockThreshold = peakLockThreshold
         self.peakCenteringDT = 0
         
         self.peakOffsetFromCenter = 0
+
+        self.navProcessNoise = navProcessNoise
+        """
+        This is the default process noise that is injected into the navigation states as noise in the derivative of the highest order state.
+        """
         
         ## @brief #__unitVecToSignal__ is a unit vector which points to the signal
         # source
@@ -163,7 +174,6 @@ class CorrelationVector(substate.SubState):
         # (#aPriori = False)
         self.aPriori = aPriori
 
-
         if correlationVector is None:
             correlationVector = (
                 np.ones(self.__filterOrder__) *
@@ -186,10 +196,6 @@ class CorrelationVector(substate.SubState):
                     self.__trueSignal__.peakAmplitude * self.__dT__
                 )
         # Store the correlation vector covariance in a container
-        correlationVectorCovariance = covarianceContainer(
-            correlationVectorCovariance,
-            covarianceStorage
-        )
         ## @brief #correlationVectorCovariance is the covariance matrix of the
         # correlation vector estimate, #correlationVector
         self.correlationVectorCovariance = correlationVectorCovariance
@@ -224,6 +230,12 @@ class CorrelationVector(substate.SubState):
         # measurement noise matrix.  The default value is 1 (no scaling).
         self.measurementNoiseScaleFactor = measurementNoiseScaleFactor
 
+        
+        self.peakEstimator = peakEstimator
+        """
+        String that determines which algorithm is used to estimate peak.  Use either EK (extended Kalman Filter) or UK (Unscented)
+        """
+        
         self.__halfLength__ = int(np.ceil(self.__filterOrder__ / 2))
         self.__halfLengthSeconds__ = self.__halfLength__ * self.__dT__
 
@@ -235,13 +247,82 @@ class CorrelationVector(substate.SubState):
                 self.peakFitPoints * 2, 
                 (self.peakFitPoints * 2) + 1
                 )
+
+        self.internalNavFilter = internalNavFilter
+        print(internalNavFilter)
+        if self.internalNavFilter == 'none':
+            self.internalNavFilter = None
+            self.INF_type = 'none'
+        elif self.internalNavFilter == 'deep':
+            self.INF_type = 'deep'
+        elif self.internalNavFilter:
+            self.INF_type = 'external'
+        else:
+            self.internalNavFilter = None
+            self.INF_type = 'none'
+
+        stateVector = correlationVector
+        svCovariance = correlationVectorCovariance
         
+        if self.INF_type == 'deep':
+            if not vInitial:
+                raise ValueError('In order to use the deep internal navigation filter, you must initialize.  Filter expects to receive at least vInitial, but received None')
+
+            self.velocity = vInitial['value']
+            self.velocityStdDev = np.sqrt(vInitial['var'])
+            if not aInitial:
+                self.navVectorLength = 1
+                navVector = np.zeros(1)
+                navVector[0] = vInitial['value']
+
+                navVar = np.zeros([1,1])
+                navVar[0,0] = vInitial['var']
+                
+            elif not gradInitial:
+                self.acceleration = aInitial['value']
+                self.accelerationStdDev = np.sqrt(aInitial['var'])
+                
+                self.navVectorLength = 2
+                navVector = np.zeros(2)
+                navVector[0] = vInitial['value']
+                navVector[1] = aInitial['value']
+
+                navVar = np.zeros([2,2])
+                navVar[0,0] = vInitial['var']
+                navVar[1,1] = aInitial['var']
+            else:
+                self.acceleration = aInitial['value']
+                self.accelerationStdDev = np.sqrt(aInitial['var'])
+                self.gradient = gradInitial['value']
+                self.gradientStdDev = np.sqrt(gradInitial['var'])
+                
+                self.navVectorLength = 3
+                navVector = np.zeros(3)
+                navVector[0] = vInitial['value']
+                navVector[1] = aInitial['value']
+                navVector[2] = gradInitial['value']
+
+                navVar = np.zeros([3,3])
+                navVar[0,0] = vInitial['var']
+                navVar[1,1] = aInitial['var']
+                navVar[2,2] = gradInitial['var']
+                
+            stateVector = np.append(stateVector,navVector)
+            svCovariance = block_diag(svCovariance, navVar)
+
+        svCovariance = covarianceContainer(
+            svCovariance,
+            covarianceStorage
+        )
+
+        self.mostRecentF = np.eye(self.__filterOrder__)
+        self.stateVector = stateVector
         super().__init__(
-            stateDimension=filterOrder,
+            stateDimension=len(stateVector),
             stateVectorHistory={
                 't': t,
-                'stateVector': correlationVector,
-                'covariance': correlationVectorCovariance,
+                'stateVector': stateVector,
+                'covariance': svCovariance,
                 'aPriori': aPriori,
                 'signalTDOA': signalTDOA,
                 'TDOAVar': TDOAVar,
@@ -251,17 +332,13 @@ class CorrelationVector(substate.SubState):
             storeLastStateVectors=storeLastStateVectors
         )
 
-        self.internalNavFilter = internalNavFilter
-        self.defaultOneDAccelerationVar = defaultOneDAccelerationVar
-        #self.defaultOneDAccelerationVar = np.square(0.01/self.speedOfLight())
-
         self.tdoaStdDevThreshold = tdoaStdDevThreshold
         self.velStdDevThreshold = velStdDevThreshold
 
         self.tdoaNoiseScaleFactor = tdoaNoiseScaleFactor
         self.velocityNoiseScaleFactor = velocityNoiseScaleFactor
 
-        if internalNavFilter:
+        if self.INF_type == 'external':
             self.navState = self.internalNavFilter.subStates['oneDPositionVelocity']['stateObject']
         return
 
@@ -286,16 +363,25 @@ class CorrelationVector(substate.SubState):
 
         # Compute new estimate of delay based on new state vector, store in
         # svDict and local attributes
-        #if False is False:
         if not svDict['aPriori']:
-            self.correlationVector = svDict['stateVector']
+            self.correlationVector = svDict['stateVector'][0:self.__filterOrder__]
             self.correlationVectorCovariance = svDict['covariance']
+            self.stateVector = svDict['stateVector']
 
-            tdoaDict = self.estimateSignalTDOA_UT(
-                self.correlationVector,
-                self.correlationVectorCovariance
-            )
+            if self.peakEstimator == 'UK':
+                tdoaDict = self.estimateSignalTDOA_UT(
+                    self.correlationVector,
+                    self.correlationVectorCovariance
+                )
 
+            elif self.peakEstimator == 'EK':
+                tdoaDict = self.estimateSignalTDOA_EK(
+                    self.correlationVector,
+                    self.correlationVectorCovariance
+                )
+            else:
+                raise ValueError('Unrecougnized peak finding algorithm %s' %self.peakEstimator)
+            
             newTDOA = (
                 (
                     tdoaDict['meanTDOA'] 
@@ -305,27 +391,13 @@ class CorrelationVector(substate.SubState):
             
             newTDOAVar = tdoaDict['varTDOA'] * np.square(self.__dT__)
             if not isnan(newTDOA) and not isnan(newTDOAVar):
-                # if self.peakLock:
-                #     TDOAResidual = newTDOA - self.signalTDOA
-                #     TDOAResidualVar = newTDOAVar + self.TDOAVar
-                #     TDOA_gain = self.TDOAVar/TDOAResidualVar
-                #     self.signalTDOA = self.signalTDOA + TDOA_gain*TDOAResidual
-                #     IMinusKH = 1.0 - TDOA_gain
-                #     self.TDOAVar = (
-                #         np.square(IMinusKH)*self.TDOAVar +
-                #         np.square(TDOA_gain)*newTDOAVar
-                #     )
-                # else:
                 self.signalTDOA = newTDOA
                 self.TDOAVar = newTDOAVar
 
             svDict['signalTDOA'] = self.signalTDOA
             svDict['TDOAVar'] = self.TDOAVar
-            self.sigmaPoints = tdoaDict['sigmaPoints']
-            # xAxis = np.linspace(0, self.__filterOrder__-1, self.__filterOrder__)
-            # xAxis = (xAxis * self.__dT__) - self.peakCenteringDT
 
-            if self.internalNavFilter:
+            if self.INF_type == 'external':
                 if (
                         (np.sqrt(self.TDOAVar) < (self.tdoaStdDevThreshold))
                         or (self.tdoaStdDevThreshold == 0)
@@ -350,6 +422,7 @@ class CorrelationVector(substate.SubState):
                 self.peakOffsetFromCenter = 0
 
         else:
+            
 #            if self.peakLock is True and self.centerPeak is True:
 #                svDict['stateVector'] = self.correlationVector
 #            else:
@@ -362,8 +435,38 @@ class CorrelationVector(substate.SubState):
             #     )
             #     self.correlationVector = FLDict['F'].dot(self.correlationVector)
             #     self.peakOffsetFromCenter = 0
-            self.correlationVector = svDict['stateVector']
+            
+            # self.correlationVector = svDict['stateVector'][0:self.__filterOrder__]
+            self.correlationVector = self.mostRecentF.dot(self.correlationVector)
+            svDict['stateVector'][0:self.__filterOrder__] = self.correlationVector
+            self.stateVector = svDict['stateVector']
             self.correlationVectorCovariance = svDict['covariance']
+
+            if self.peakEstimator == 'UK':
+                tdoaDict = self.estimateSignalTDOA_UT(
+                    self.correlationVector,
+                    self.correlationVectorCovariance
+                )
+
+            elif self.peakEstimator == 'EK':
+                tdoaDict = self.estimateSignalTDOA_EK(
+                    self.correlationVector,
+                    self.correlationVectorCovariance
+                )
+            else:
+                raise ValueError('Unrecougnized peak finding algorithm %s' %self.peakEstimator)
+            # newTDOA = (
+            #     (
+            #         tdoaDict['meanTDOA'] 
+            #     ) *
+            #     self.__dT__
+            # ) + self.peakCenteringDT
+            
+            newTDOAVar = tdoaDict['varTDOA'] * np.square(self.__dT__)
+
+            # self.signalTDOA = newTDOA
+            self.TDOAVar = newTDOAVar
+            
             svDict['signalTDOA'] = self.signalTDOA
             svDict['TDOAVar'] = self.TDOAVar
             self.peakOffsetFromCenter = 0
@@ -388,7 +491,38 @@ class CorrelationVector(substate.SubState):
                 )
                 self.peakLock = False
                 self.peakOffsetFromCenter = 0
-            
+
+        if self.INF_type == 'deep':
+            fO = self.__filterOrder__
+            currentV = self.stateVector[fO]
+            currentVStdDev = np.sqrt(self.correlationVectorCovariance[fO,fO].value)
+            self.velocity = currentV
+            self.velocityStdDev = currentVStdDev
+            svDict['velocity'] = {'value':currentV, 'stddev': currentVStdDev}
+            if self.navVectorLength == 2:
+                currentA = self.stateVector[fO+1]
+                currentAStdDev = np.sqrt(self.correlationVectorCovariance[fO+1,fO+1].value)
+                svDict['acceleration'] = {'value':currentA, 'stddev': currentAStdDev}
+
+                self.acceleration = currentA
+                self.accelerationStdDev = currentAStdDev
+            elif self.navVectorLength == 3:
+                currentA = self.stateVector[fO+1]
+                currentAStdDev = np.sqrt(self.correlationVectorCovariance[fO+1,fO+1].value)
+                svDict['acceleration'] = {'value':currentA, 'stddev': currentAStdDev}
+                self.acceleration = currentA
+                self.accelerationStdDev = currentAStdDev
+                
+                currentGrad = self.stateVector[fO+2]
+                currentGradStdDev = np.sqrt(self.correlationVectorCovariance[fO+2,fO+2].value)
+                svDict['aGradient'] = {'value':currentGrad, 'stddev': currentGradStdDev}
+                self.gradient = currentGrad
+                self.gradientStdDev = currentGradStdDev
+                
+        elif self.INF_type == 'external':
+            self.velocity = self.navState.currentVelocity
+            self.velocityStdDev = np.sqrt(self.navState.velocityVar)
+                
         super().storeStateVector(svDict)
         return
 
@@ -410,54 +544,224 @@ class CorrelationVector(substate.SubState):
             dT,
             dynamics=None
             ):
-        
-        timeUpdateMatrices = self.buildTimeUpdateMatrices(
-            dT, dynamics, self.correlationVector
-        )
-        
-        L = timeUpdateMatrices['L']
-        Q = timeUpdateMatrices['Q']
 
-        Qmat = (
-            np.outer(L, L) * Q +
-            (
-                    np.eye(self.__filterOrder__) * 
-                          self.processNoise * dT * 
-                          np.square(self.__trueSignal__.avgPhotonFlux * self.__dT__)
-            )
-        )
+        if self.INF_type != 'deep':
 
-        if dynamics is not None and 'acceleration' in dynamics:
-            oneDAcceleration = (
-                dynamics['acceleration']['value'].dot(self.__unitVecToSignal__) /
-                self.speedOfLight()
+            timeUpdateMatrices = self.buildTimeUpdateMatrices(
+                dT, dynamics, self.correlationVector
             )
-            
-            oneDAccelerationVar = (
-                self.__unitVecToSignal__.dot(
-                    dynamics['acceleration']['value'].dot(
-                        self.__unitVecToSignal__.transpose()
-                    )
-                ) / np.square(self.speedOfLight())
+
+            L = timeUpdateMatrices['L']
+            Q = timeUpdateMatrices['Q']
+
+            Qmat = (
+                np.outer(L, L) * Q +
+                (
+                        np.eye(self.__filterOrder__) * 
+                              self.processNoise * dT * 
+                              np.square(self.__trueSignal__.peakAmplitude * self.__dT__)
+                )
             )
-        else:
-            oneDAcceleration = 0
-            oneDAccelerationVar = self.defaultOneDAccelerationVar
-            
-        if self.internalNavFilter:
-            self.internalNavFilter.timeUpdateEKF(
-                dT,
-                dynamics = {
-                    'oneDPositionVelocityacceleration': {
-                        'value': oneDAcceleration,
-                        'var': oneDAccelerationVar
+
+            if dynamics is not None and 'acceleration' in dynamics:
+                oneDAcceleration = (
+                    dynamics['acceleration']['value'].dot(self.__unitVecToSignal__) /
+                    self.speedOfLight()
+                )
+
+                oneDAccelerationVar = (
+                    self.__unitVecToSignal__.dot(
+                        dynamics['acceleration']['value'].dot(
+                            self.__unitVecToSignal__.transpose()
+                        )
+                    ) / np.square(self.speedOfLight())
+                )
+            else:
+                oneDAcceleration = 0
+                oneDAccelerationVar = self.navProcessNoise
+
+            if self.INF_type == 'external':
+                self.internalNavFilter.timeUpdateEKF(
+                    dT,
+                    dynamics = {
+                        'oneDPositionVelocityacceleration': {
+                            'value': oneDAcceleration,
+                            'var': oneDAccelerationVar
+                        }
                     }
-                }
+                )
+
+        else:
+            timeUpdateMatrices = self.buildDeepTimeUpdateMatrices(dT, dynamics, self.correlationVector)
+            # if dynamics is not None and 'accelerationGrad' in dynamics:
+            #     navProcessNoise = (
+            #         dynamics['accelerationGrad']['value'].dot(self.__unitVecToSignal__) /
+            #         self.speedOfLight()
+            #     )
+
+            #     oneDAccelerationGradVar = (
+            #         self.__unitVecToSignal__.dot(
+            #             dynamics['accelerationGrad']['value'].dot(
+            #                 self.__unitVecToSignal__.transpose()
+            #             )
+            #         ) / np.square(self.speedOfLight())
+            #     )
+            # else:
+            
+            L = timeUpdateMatrices['L']
+            Qmat = (
+                np.outer(L, L) * self.navProcessNoise  + (
+                    (
+                        block_diag(np.eye(self.__filterOrder__),np.zeros([self.navVectorLength,self.navVectorLength])) * 
+                        self.processNoise * dT * 
+                        np.square(self.__trueSignal__.flux * self.__dT__)
+                    )
+                )
             )
-        
-        
+        self.mostRecentF = timeUpdateMatrices['F'][0:self.__filterOrder__, 0:self.__filterOrder__]
         return {'F': timeUpdateMatrices['F'], 'Q': Qmat}
 
+    def buildDeepTimeUpdateMatrices(self,dT, dynamics, h):
+        
+        FMatrixShift = -self.peakOffsetFromCenter
+        filterOrder = self.__filterOrder__
+        
+        # Initialize empty matricies
+        F = np.zeros([filterOrder + self.navVectorLength, filterOrder+self.navVectorLength])
+        
+        halfLength = self.__halfLength__
+        indexDiff = dT/self.__dT__
+        
+        peakShift = self.stateVector[self.__filterOrder__] * indexDiff
+
+        # Velocity term
+        self.peakCenteringDT = (
+            self.peakCenteringDT + self.stateVector[self.__filterOrder__] * dT 
+        )
+        
+        if self.navVectorLength > 1:
+            # Acceleration term (if acceleration is being estimated)
+            self.peakCenteringDT = (
+                self.peakCenteringDT +
+                self.stateVector[self.__filterOrder__ + 1] * np.power(dT,2)/2
+            )
+            peakShift = (
+                peakShift + self.stateVector[self.__filterOrder__ + 1]*np.power(indexDiff,2)/2
+            )
+            
+        if self.navVectorLength > 2:
+            # Acceleration gradient term
+            self.peakCenteringDT = (
+                self.peakCenteringDT +
+                self.stateVector[self.__filterOrder__] *
+                self.stateVector[self.__filterOrder__ + 2] *
+                np.power(dT,3)/6
+            )
+            peakShift = (
+                peakShift +
+                self.stateVector[self.__filterOrder__] *
+                self.stateVector[self.__filterOrder__ + 2] *
+                np.power(indexDiff,3)/6
+            )
+            
+            
+        self.peakCenteringDT = self.peakCenteringDT + (self.peakOffsetFromCenter*self.__dT__)
+        
+        # Build arrays of indicies from which to form the sinc function
+
+        if np.mod(filterOrder, 2) == 0:
+            baseVec = (
+                np.linspace(
+                1 - halfLength,
+                    halfLength,
+                    filterOrder
+                )
+            )
+
+        else:
+            baseVec = (
+                np.linspace(
+                    1 - halfLength,
+                    halfLength - 1,
+                    filterOrder
+                )
+            )
+
+        # Compute the sinc function of the base vector
+        sincBase = np.sinc(baseVec + FMatrixShift)
+        diffBase = np.zeros_like(sincBase)
+
+        for i in range(len(baseVec)):
+            diffBase[i] = self.sincDiff(baseVec[i] + peakShift)
+
+        sincBase = np.roll(sincBase, 1 - int(halfLength))
+        diffBase = np.roll(diffBase, 1 - int(halfLength))
+
+        for i in range(len(sincBase)):
+            currentDiff = np.roll(diffBase, i).dot(h)
+            F[i, 0:filterOrder] = np.roll(sincBase, i)
+            F[i, filterOrder] = currentDiff * indexDiff
+            
+            if self.navVectorLength > 1:
+                F[i, filterOrder+1] = currentDiff * np.power(indexDiff, 2)/2
+                if self.navVectorLength > 2:
+                    F[i, filterOrder+2] = (
+                        currentDiff *
+                        self.stateVector[filterOrder] *
+                        np.power(indexDiff, 3)/6
+                    )
+
+        L = np.zeros(filterOrder+self.navVectorLength)
+        
+        if self.navVectorLength == 1:
+            F[filterOrder, filterOrder] = 1
+            L[filterOrder] = dT
+            
+        elif self.navVectorLength == 2:
+            F[filterOrder, filterOrder] = 1.0
+            F[filterOrder, filterOrder+1] = dT
+            F[filterOrder+1, filterOrder+1] = 1.0
+            
+            L[filterOrder] = np.power(dT, 2)/2
+            L[filterOrder + 1] = dT
+            
+        elif self.navVectorLength == 3:
+            vCurrent = self.stateVector[filterOrder]
+            aCurrent = self.stateVector[filterOrder + 1]
+            gradCurrent = self.stateVector[filterOrder + 2]
+            
+            F[filterOrder,filterOrder] = 1 + (gradCurrent * np.power(dT,2)/2)
+            F[filterOrder,filterOrder+1] = dT
+            F[filterOrder,filterOrder+2] = vCurrent * np.power(dT,2)/2
+            
+            F[filterOrder+1,filterOrder+1] = 1
+            F[filterOrder+1,filterOrder+2] = vCurrent * dT
+            
+            F[filterOrder+2,filterOrder+2] = 1
+
+            L[filterOrder] = vCurrent * np.power(dT,3)/6
+            L[filterOrder + 1] = vCurrent * np.power(dT,2)/2
+            L[filterOrder + 2] = dT
+            
+        
+        diffBase = np.zeros_like(sincBase)
+
+        for i in range(len(baseVec)):
+            diffBase[i] = self.sincDiff(baseVec[i])
+
+        diffBase = np.roll(diffBase, 1 - int(halfLength))
+        
+        for i in range(len(baseVec)):
+            L[i] = (
+                np.roll(diffBase, i).dot(h) *
+                np.power(indexDiff,self.navVectorLength+1)/factorial(self.navVectorLength+1)
+            )
+        
+        # # Setting L to zero for test purposes only
+        # L = np.zeros(filterOrder+self.navVectorLength)
+
+        return({'F':F, 'L':L})
+        
     def getMeasurementMatrices(
             self,
             measurement,
@@ -544,7 +848,7 @@ class CorrelationVector(substate.SubState):
         if (
                 (dynamics is not None and 'velocity' in dynamics) or
                 (
-                    self.internalNavFilter and
+                    self.INF_type == 'external' and
                     (
                         (np.sqrt(self.navState.velocityVar) < self.velStdDevThreshold) or
                         self.velStdDevThreshold == 0
@@ -577,7 +881,7 @@ class CorrelationVector(substate.SubState):
                     self.__unitVecToSignal__.dot(vVar
                     ).dot(self.__unitVecToSignal__) *
                     np.square(deltaT/self.speedOfLight()))
-            elif self.internalNavFilter:
+            elif self.INF_type=='external':
 
                 peakShift = self.navState.currentVelocity * indexDiff
                 velocityTDOA = self.navState.currentVelocity * deltaT
@@ -587,9 +891,9 @@ class CorrelationVector(substate.SubState):
         else:
             velocityTDOA = 0
             peakShift = 0
-            Q = self.defaultOneDAccelerationVar * np.power(indexDiff,4)/4
+            Q = self.navProcessNoise * np.power(indexDiff,4)/4
             
-            tdoaQ = self.defaultOneDAccelerationVar * np.power(deltaT,4)/4
+            tdoaQ = self.navProcessNoise * np.power(deltaT,4)/4
 
         FMatrixShift = -self.peakOffsetFromCenter # - peakShift
         self.signalTDOA = (
@@ -719,6 +1023,8 @@ class CorrelationVector(substate.SubState):
         
         H = np.eye(self.__filterOrder__)
 
+        if self.INF_type == 'deep':
+            H = np.append(H, np.zeros([self.__filterOrder__, self.navVectorLength]), axis=1)
         timeVector = np.linspace(
             0,
             (self.__filterOrder__ - 1),
@@ -750,11 +1056,13 @@ class CorrelationVector(substate.SubState):
         # plt.plot(signalTimeHistory)
         # plt.show(block=False)
         # 1/0
-
+        # print(corrVec)
+        # print(signalTimeHistory)
         dY = signalTimeHistory - corrVec
 
         R = (
             np.eye(self.__filterOrder__) *
+            #self.__trueSignal__.flux *
             self.__trueSignal__.peakAmplitude *
             self.__dT__ *
             np.dot(corrVec, corrVec) *
@@ -806,37 +1114,10 @@ class CorrelationVector(substate.SubState):
 
         # Next, we "roll" the correlation vector so that the values being
         # fitted quadratically are the first 2 * peakFitPoints + 1 values
-#        rollFactor = self.peakFitPoints - peakLocation
-#
-#        if rollFactor != 0:
-#            slicedC = np.roll(
-#                c,
-#                rollFactor
-#            )
-#            slicedP = (
-#                np.roll(
-#                    np.roll(P,
-#                            rollFactor,
-#                            axis=0),
-#                    rollFactor,
-#                    axis=1
-#                )
-#            )
-#        else:
-#            slicedC = c
-#            slicedP = P
-
-
-        # Extract the portion of the correlation vector used for fitting
-        # quadratic
-#        mySlice = slice(0, self.peakFitPoints * 2 + 1)
-#
-#        slicedC = slicedC[mySlice]
-#        slicedP = slicedP[mySlice, mySlice]
 
         lowerBound = peakLocation - self.peakFitPoints
         upperBound = lowerBound + (self.peakFitPoints * 2) + 1
-        if (lowerBound < 0) or (upperBound > self.__dimension__):
+        if (lowerBound < 0) or (upperBound > self.__filterOrder__):
             mySlice = range(lowerBound, upperBound)
             slicedC = c.take(mySlice, mode='wrap')
             slicedP = P.take(mySlice, axis=0, mode='wrap').take(mySlice, axis=1, mode='wrap')
@@ -844,11 +1125,6 @@ class CorrelationVector(substate.SubState):
             mySlice = slice(lowerBound, upperBound)
             slicedC = c[mySlice]
             slicedP = P[mySlice, mySlice]
-
-        # np.polyfit assumes that the weights will be the inverse standard
-        # deviation
-        # weightVector = np.diag(slicedP)
-        # weightVector = 1 / np.sqrt(weightVector)
 
         # xVec is the vector of "x" values corresponding the "y" values to
         # which the quadratic is being fit.
@@ -858,11 +1134,15 @@ class CorrelationVector(substate.SubState):
 
         # Get the quadratic function that fits the peak and surrounding values,
         # and use it to estimate the location of the max
-        quadraticVec = self.quadraticFit(xVec, slicedC)
-        try:
-            TDOA = (-quadraticVec[1] / (2 * quadraticVec[0]))
-        except:
-            TDOA = xVec[peakLocation]
+        # print(slicedC)
+        if len(xVec) == 3:
+            TDOA = self.peakFinder(xVec, slicedC)
+        else:
+            quadraticVec = self.quadraticFit(xVec, slicedC)
+            try:
+                TDOA = (-quadraticVec[1] / (2 * quadraticVec[0]))
+            except:
+                TDOA = xVec[peakLocation]
 
         return TDOA
 
@@ -903,12 +1183,14 @@ class CorrelationVector(substate.SubState):
         # PRolled = np.roll(np.roll(P.value, rollAmount, axis=0), rollAmount, axis=1)
         # Compute the square root of P.
         if P.form == 'covariance':
-            sqrtP = np.linalg.cholesky(hDimension * P.value)
+            sqrtP = np.linalg.cholesky(
+                hDimension * P.value[0:self.__filterOrder__, 0:self.__filterOrder__]
+            )
         elif P.form == 'cholesky':
             # PVal = P.convertCovariance('covariance').value
             # sqrtP = np.linalg.cholesky(hDimension * PVal)
             
-            sqrtP = P.value * np.sqrt(hDimension)
+            sqrtP = P.value[0:self.__filterOrder__, 0:self.__filterOrder__] * np.sqrt(hDimension)
                 
         sigmaPoints = h + np.append(sqrtP, -sqrtP, axis=0)
 
@@ -939,6 +1221,45 @@ class CorrelationVector(substate.SubState):
 
         return {'meanTDOA': meanTDOA, 'varTDOA': varTDOA, 'sigmaPoints': sigmaPointResults}
 
+    def estimateSignalTDOA_EK(self, h, P):
+
+        if P.form == 'covariance':
+            P = P.value[0:self.__filterOrder__, 0:self.__filterOrder__]
+
+        elif P.form == 'cholesky':
+            P = P.convertCovariance('covariance').value[0:self.__filterOrder__, 0:self.__filterOrder__]
+        
+        # First estimate of peak location is the location of the max value
+        peakLocation = np.argmax(h)
+
+        # Next, we "roll" the correlation vector so that the values being
+        # fitted quadratically are the first 3 values
+
+        lowerBound = peakLocation - 1
+        upperBound = lowerBound + (1 * 2) + 1
+        if (lowerBound < 0) or (upperBound > self.__filterOrder__):
+            mySlice = range(lowerBound, upperBound)
+            slicedC = h.take(mySlice, mode='wrap')
+            slicedP = P.take(mySlice, axis=0, mode='wrap').take(mySlice, axis=1, mode='wrap')
+        else:
+            mySlice = slice(lowerBound, upperBound)
+            slicedC = h[mySlice]
+            slicedP = P[mySlice, mySlice]
+
+        # xVec is the vector of "x" values corresponding the "y" values to
+        # which the quadratic is being fit.
+        xVec = self.__xVec__
+        xVec = xVec + lowerBound
+
+        # Get the quadratic function that fits the peak and surrounding values,
+        # and use it to estimate the location of the max
+        TDOA = self.peakFinder(xVec, slicedC)
+        jacobian = self.peakFinderJacobian(xVec, slicedC)
+
+        variance = jacobian.dot(slicedP).dot(jacobian.transpose())
+        
+        return {'meanTDOA': TDOA, 'varTDOA': variance}
+
     
     def speedOfLight(
             self
@@ -951,12 +1272,14 @@ class CorrelationVector(substate.SubState):
             myDiff = 0.0
 
         else:
-            myDiff = np.pi * (
-                ((np.pi * x) * np.cos(x * np.pi) - np.sin(x * np.pi))
-                /
-                np.square(x * np.pi)
-            )
-
+            piX = np.pi*x
+            # myDiff = np.pi * (
+            #     (((np.pi * x) * np.cos(x * np.pi)) - np.sin(x * np.pi))
+            #     /
+            #     np.square(x * np.pi)
+            # )
+            myDiff = (piX*np.cos(piX) - np.sin(piX))/(np.pi * np.power(x,2))
+            # myDiff
         return myDiff
 
 
@@ -1016,6 +1339,80 @@ class CorrelationVector(substate.SubState):
             ],
             [1,1]
         )
-        super().realTimePlot(normalized)
+        super().realTimePlot(normalized, substateRange = slice(0,self.__filterOrder__))
         return
 
+    @staticmethod
+    def peakFinder(x,y):
+        x1 = x[0]
+        x2 = x[1]
+        x3 = x[2]
+        
+        y1 = y[0]
+        y2 = y[1]
+        y3 = y[2]
+        
+        x0 = (
+            -(y1*(np.square(x3) - np.square(x2)) + y2*(np.square(x1) - np.square(x3)) + y3*(np.square(x2) - np.square(x1)))
+            /
+            (2*(y1*(x2-x3) + y2*(x3-x1) + y3*(x1-x2)))
+        )
+        x0 = (
+            (
+                y1*(np.square(x2)-np.square(x3)) +
+                y2*(np.square(x3)-np.square(x1)) +
+                y3*(np.square(x1)-np.square(x2))
+            )
+            /
+            (2*(y1*(x2-x3) + y2*(x3-x1) + y3*(x1-x2)))
+        )
+        return(x0)
+
+    @staticmethod
+    def peakFinderJacobian(x,y):
+        x1 = x[0]
+        x2 = x[1]
+        x3 = x[2]
+        
+        y1 = y[0]
+        y2 = y[1]
+        y3 = y[2]
+
+        A = np.square(x2) - np.square(x3)
+        B = np.square(x3) - np.square(x1)
+        C = np.square(x1) - np.square(x2)
+
+        D = x2-x3
+        E = x3-x1
+        # E = x1-x2
+        F = x1-x2
+
+        AE = A*E
+        AF = A*F
+        
+        BD = B*D
+        BF = B*F
+
+        CD = C*D
+        CE = C*E
+        denom = 2*np.power(((D*y1) + (E*y2) + (F*y3)),2)
+
+        dT_dy1 = (
+            ((AE - BD)*y2 + (AF - CD)*y3)
+            /
+            denom
+        )
+        
+        dT_dy2 = (
+            ((BD - AE)*y1 + (BF - CE)*y3)
+            /
+            denom
+        )
+        
+        dT_dy3 = (
+            ((CD - AF)*y1 + (CE - BF)*y2)
+            /
+            denom
+        )
+
+        return np.array([dT_dy1, dT_dy2, dT_dy3])
