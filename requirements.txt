@@ -11,4 +11,4 @@ pypet==0.4.2
 requests>=2.20.0
 mpld3==0.3
 setuptools==41.0.1
-PyYAML==5.1.1
+PyYAML==5.4
